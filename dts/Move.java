@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class Move implements Serializable {
     int ox,oy,nx,ny;
-    Move(){
-        //TODO
-    }
+    Move(){ }
     public Move(int aox,int aoy,int anx,int any){
-        //TODO
+        ox=aox;
+        oy=aoy;
+        nx=anx;
+        ny=any;
     }
-    public Move(int Fig,int anx,int any){
-        //TODO
+    public void Make_move(Bufor T){
+        T.write(T.get(ox,oy),nx,ny);
+        T.write(0,ox,oy);
     }
 }
