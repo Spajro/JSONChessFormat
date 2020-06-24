@@ -9,7 +9,7 @@ public class Diagram implements Serializable {
     Annotation Info;
     Bufor T;
     public Diagram(){
-        T=new Bufor();
+        T=new Bufor(8);
         Story=new LinkedList<>();
         Next_moves = new LinkedList<>();
         Info = new Annotation();
@@ -33,5 +33,8 @@ public class Diagram implements Serializable {
         M.Make_move(NT);
         NS.add(M);
         return new Diagram(NT,NS);
+    }
+    void Put(int val, int x,int y){
+        T.write(val,x,y);
     }
 }
