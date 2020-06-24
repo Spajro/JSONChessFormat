@@ -1,10 +1,12 @@
 package dts;
 
+import ant.Annotation;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 
 public class Diagram implements Serializable {
-    LinkedList<Move> Story;
+    LinkedList<Diagram> Story;
     LinkedList<Diagram> Next_moves;
     Annotation Info;
     Bufor T;
@@ -20,7 +22,7 @@ public class Diagram implements Serializable {
         Next_moves = new LinkedList<>();
         Info = new Annotation();
     }
-    public Diagram(Bufor NT, LinkedList<Move> S){
+    public Diagram(Bufor NT, LinkedList<Diagram> S){
         T=NT;
         Story=S;
         Next_moves = new LinkedList<>();
@@ -28,10 +30,10 @@ public class Diagram implements Serializable {
 
     }
     Diagram Make_move(Move M){
-        LinkedList<Move>NS=Story;
+        LinkedList<Diagram>NS=Story;
         Bufor NT=T;
         M.Make_move(NT);
-        NS.add(M);
+        NS.add(this);
         return new Diagram(NT,NS);
     }
     void Put(int val, int x,int y){

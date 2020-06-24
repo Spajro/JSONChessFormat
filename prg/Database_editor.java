@@ -1,6 +1,7 @@
 package prg;
 
 import dts.Diagram;
+import dts.Move;
 import dts.Start_pose;
 
 public class Database_editor implements Mode{
@@ -39,6 +40,12 @@ public class Database_editor implements Mode{
         return null;
     }
     void Save(){
+        //TODO
+    }
+    void Make_move(Move M){
+        //TODO
+    }
+    void Annotate(){
         //TODO
     }
 }
