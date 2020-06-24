@@ -29,14 +29,19 @@ public class Diagram implements Serializable {
         Info = new Annotation();
 
     }
-    Diagram Make_move(Move M){
+    public Diagram Make_move(Move M){
         LinkedList<Diagram>NS=Story;
         Bufor NT=T;
         M.Make_move(NT);
         NS.add(this);
-        return new Diagram(NT,NS);
+        Diagram Next=new Diagram(NT,NS);
+        Next_moves.add(Next);
+    return Next;
     }
     void Put(int val, int x,int y){
         T.write(val,x,y);
+    }
+    public Diagram Original(){
+        return Story.get(0);
     }
 }
