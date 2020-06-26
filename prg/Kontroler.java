@@ -2,17 +2,17 @@ package prg;
 
 public class Kontroler {
     Mode Current;
-    Kontroler(){
+    public Kontroler(){
         Current=null;
     }
-    void Get_cmd(Action_data A){
+    public void Get_cmd(Action_data A){
         if(A.Get_code().length()==3){
             switch (A.Get_code()){
                 case "SEL":
                     Select_Mode((Action_data) A.Get_param()[0]);
                     break;
                 default:
-                    System.out.print("Unknown code");
+                    System.out.print("Unknown code GCMD");
             }
         }
         else{
@@ -25,7 +25,7 @@ public class Kontroler {
                 Current=new Database_editor((String)A.Get_param()[0]);
                 break;
             default:
-                System.out.print("Unknown code");
+                System.out.print("Unknown code SM");
         }
     }
 }

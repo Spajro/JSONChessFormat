@@ -3,7 +3,7 @@ package prg;
 public class Action_data {
     String Code;
     Object[] Parameters;
-    Action_data(String C,Object[] P){
+    public Action_data(String C, Object[] P){
         Code=C;
         Parameters=P;
     }
