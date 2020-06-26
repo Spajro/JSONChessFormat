@@ -36,7 +36,7 @@ public class Database_editor implements Mode{
                 Exit();
                 break;
             case "DL":
-                Delete_move((Move) AD.Parameters[0]);
+                Delete_diagram((Diagram) AD.Parameters[0]);
                 break;
         }
     }
@@ -78,8 +78,21 @@ public class Database_editor implements Mode{
     void Make_move(Move M){
         Base=Base.Make_move(M);
     }
-    void Delete_move(Move M){
-        //TODO
+    void Delete_diagram(Diagram D){
+        Diagram temp = Base.Story.getLast();
+        if(Base.equals(D)){
+            temp.Next_moves.remove(Base);
+            Base=temp;
+        }
+        else{
+            if(Base.T.equals(new Start_pose().T)){
+                System.out.print("Diagram not found");
+            }
+            else{
+                Base=temp;
+                Delete_diagram(D);
+            }
+        }
     }
     void Annotate(){
         //TODO

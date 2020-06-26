@@ -6,10 +6,10 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class Diagram implements Serializable {
-    LinkedList<Diagram> Story;
-    LinkedList<Diagram> Next_moves;
+    public LinkedList<Diagram> Story;
+    public LinkedList<Diagram> Next_moves;
     Annotation Info;
-    Bufor T;
+    public Bufor T;
     public Diagram(){
         T=new Bufor(8);
         Story=new LinkedList<>();
@@ -27,7 +27,6 @@ public class Diagram implements Serializable {
         Story=S;
         Next_moves = new LinkedList<>();
         Info = new Annotation();
-
     }
     public Diagram Make_move(Move M){
         LinkedList<Diagram>NS=Story;
@@ -37,9 +36,6 @@ public class Diagram implements Serializable {
         Diagram Next=new Diagram(NT,NS);
         Next_moves.add(Next);
     return Next;
-    }
-    void Put(int val, int x,int y){
-        T.write(val,x,y);
     }
     public Diagram Original(){
         return Story.get(0);
