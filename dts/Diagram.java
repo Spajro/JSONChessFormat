@@ -29,6 +29,8 @@ public class Diagram implements Serializable {
         Info = new Annotation();
     }
     public Diagram Make_move(Move M){
+        //TODO
+        //poprawka zeby nie się nie dublowalo
         LinkedList<Diagram>NS=Story;
         Bufor NT=T;
         M.Make_move(NT);

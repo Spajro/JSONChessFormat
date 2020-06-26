@@ -11,11 +11,13 @@ public class Kontroler {
                 case "SEL":
                     Select_Mode((Action_data) A.Get_param()[0]);
                     break;
+                    //TODO
                 default:
                     System.out.print("Unknown code GCMD");
             }
         }
         else{
+            //TODO
             Current.Make_action(A);
         }
     }
@@ -24,6 +26,7 @@ public class Kontroler {
             case "DTE":
                 Current=new Database_editor((String)A.Get_param()[0]);
                 break;
+                //TODO
             default:
                 System.out.print("Unknown code SM");
         }

@@ -16,8 +16,6 @@ public class Database_editor implements Mode{
     }
     @Override
     public void Make_action(Action_data AD) {
-        //TODO
-        //dokonczyc switcha
         switch (AD.Get_code()){
             case "LD":
                 Base=Load((String)AD.Parameters[0]);
@@ -38,6 +36,11 @@ public class Database_editor implements Mode{
             case "DL":
                 Delete_diagram((Diagram) AD.Parameters[0]);
                 break;
+            case "GB":
+                Go_back((int) AD.Parameters[0]);
+                break;
+            default:
+                System.out.print("Unknown code MA");
         }
     }
 
@@ -96,5 +99,8 @@ public class Database_editor implements Mode{
     }
     void Annotate(){
         //TODO
+    }
+    void Go_back(int pos){
+        Base=Base.Story.get(pos);
     }
 }

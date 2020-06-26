@@ -22,7 +22,11 @@ public class Main {
                 working=false;
             }
             else{
-
+                Action_data Ad=new Action_data();
+                switch (cmd){
+                    //TODO
+                }
+                Cont.Get_cmd(Ad);
             }
         }
     }

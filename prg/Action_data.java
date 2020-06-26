@@ -3,6 +3,10 @@ package prg;
 public class Action_data {
     String Code;
     Object[] Parameters;
+    public Action_data(){
+        Code="";
+        Parameters=new Object[1];
+    }
     public Action_data(String C, Object[] P){
         Code=C;
         Parameters=P;
