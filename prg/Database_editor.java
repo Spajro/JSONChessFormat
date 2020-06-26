@@ -1,5 +1,6 @@
 package prg;
 
+import dts.Bufor;
 import dts.Diagram;
 import dts.Move;
 import dts.Start_pose;
@@ -18,14 +19,14 @@ public class Database_editor implements Mode{
     public void Make_action(Action_data AD) {
         switch (AD.Get_code()){
             case "LD":
-                Base=Load((String)AD.Parameters[0]);
+                Base=Load((String)AD.Parameter);
                 if(Base==null)System.out.print("Loading failed");
                 break;
             case "SV":
                 Save();
                 break;
             case "MM":
-                Make_move((Move) AD.Parameters[0]);
+                Make_move((Move) AD.Parameter);
                 break;
             case "AN":
                 Annotate();
@@ -34,10 +35,10 @@ public class Database_editor implements Mode{
                 Exit();
                 break;
             case "DL":
-                Delete_diagram((Diagram) AD.Parameters[0]);
+                Delete_diagram((Diagram) AD.Parameter);
                 break;
             case "GB":
-                Go_back((int) AD.Parameters[0]);
+                Go_back((int) AD.Parameter);
                 break;
             default:
                 System.out.print("Unknown code MA");
@@ -54,6 +55,12 @@ public class Database_editor implements Mode{
     public void Exit() {
     //TODO
     }
+
+    @Override
+    public Diagram getDiag() {
+    return  Base;
+    }
+
     Diagram Load(String Namefile){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Namefile+".bin"))) {
             Diagram neu = (Diagram) inputStream.readObject();

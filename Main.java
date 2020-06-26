@@ -1,5 +1,6 @@
 import prg.Action_data;
 import prg.Kontroler;
+import prg.Translator;
 
 import java.util.Scanner;
 
@@ -9,12 +10,8 @@ public class Main {
         Kontroler Cont = new Kontroler();
         Scanner Scan= new Scanner(System.in);
         boolean working = true;
-        Object[] T1 = new Object[1];
-        T1[0]="TEST";
-        Action_data Start = new Action_data("DTE",T1);
-        Object[] T2=new Object[1];
-        T2[0]=Start;
-        Action_data First = new Action_data("SEL",T2);
+        Translator Trans = new Translator();
+        Action_data First = new Action_data("SEL",new Action_data("DTE","TEST"));
         Cont.Get_cmd(First);
         while (working){
             String cmd= Scan.nextLine();
@@ -22,12 +19,37 @@ public class Main {
                 working=false;
             }
             else{
-                Action_data Ad=new Action_data();
+                Action_data Ad=null;
                 switch (cmd){
-                    //TODO
+                    case "LD":
+                        Ad=new Action_data("LD",Scan.nextLine());
+                        break;
+                    case "SV":
+                        Ad=new Action_data("SV",null);
+                        break;
+                    case "MM":
+                        Ad=new Action_data("MM",Trans.Unify_to_move(Cont.GetDiag().T,Scan.nextLine()));
+                        break;
+                    case "AN":
+                        Ad=new Action_data("AN",null);
+                        break;
+                    case "QT":
+                        Ad=new Action_data("QT",null);
+                        break;
+                    case "DLA":
+                        Ad=new Action_data("DL",Cont.GetDiag());
+                        break;
+                    case "GB":
+                        Ad=new Action_data("GB",Scan.nextInt());
+                        break;
+                    default:
+                        System.out.print("Unknown code MAIN");
                 }
+
                 Cont.Get_cmd(Ad);
             }
         }
     }
+
+
 }

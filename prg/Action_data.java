@@ -2,15 +2,11 @@ package prg;
 
 public class Action_data {
     String Code;
-    Object[] Parameters;
-    public Action_data(){
-        Code="";
-        Parameters=new Object[1];
-    }
-    public Action_data(String C, Object[] P){
+    Object Parameter;
+    public Action_data(String C, Object P){
         Code=C;
-        Parameters=P;
+        Parameter =P;
     }
     public String Get_code(){return Code;}
-    public Object[] Get_param(){return Parameters;}
+    public Object Get_param(){return Parameter;}
 }
