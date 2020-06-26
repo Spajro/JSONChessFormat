@@ -15,18 +15,21 @@ public class Diagram implements Serializable {
         Story=new LinkedList<>();
         Next_moves = new LinkedList<>();
         Info = new Annotation();
+        Story.add(this);
     }
     public Diagram(Bufor NT){
         T=NT;
         Story=new LinkedList<>();
         Next_moves = new LinkedList<>();
         Info = new Annotation();
+        Story.add(this);
     }
     public Diagram(Bufor NT, LinkedList<Diagram> S){
         T=NT;
         Story=S;
         Next_moves = new LinkedList<>();
         Info = new Annotation();
+        Story.add(this);
     }
     public Diagram Make_move(Move M){
         //TODO
