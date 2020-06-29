@@ -38,4 +38,8 @@ public class Kontroler {
         return Current.Display();
     }
     public Diagram GetDiag(){return Current.getDiag();}
+
+    public boolean GetColor() {
+        return Current.GetColor();
+    }
 }

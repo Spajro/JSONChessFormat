@@ -29,7 +29,7 @@ public class Main {
                         Ad=new Action_data("SV",null);
                         break;
                     case "MM":
-                        Ad=new Action_data("MM",Trans.Unify_to_move(Cont.GetDiag().T,Scan.nextLine()));
+                        Ad=new Action_data("MM",Trans.Unify_to_move(Cont.GetDiag().T,Scan.nextLine(),Cont.GetColor()));
                         break;
                     case "AN":
                         Ad=new Action_data("AN",null);

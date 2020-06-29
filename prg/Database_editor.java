@@ -61,6 +61,11 @@ public class Database_editor implements Mode{
     return  Base;
     }
 
+    @Override
+    public boolean GetColor() {
+        return Base.Color;
+    }
+
     Diagram Load(String Namefile){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Namefile+".bin"))) {
             Diagram neu = (Diagram) inputStream.readObject();

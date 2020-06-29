@@ -9,4 +9,5 @@ public interface Mode {
     void Exit();
     //tmp
     Diagram getDiag();
+    boolean GetColor();
 }
