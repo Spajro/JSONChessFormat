@@ -32,6 +32,8 @@ public class Move implements Serializable {
         Roszada=R;
     }
     public void Make_move(Bufor T){
+        //TODO
+        //roszada
         T.write(T.get(ox,oy),nx,ny);
         T.write(0,ox,oy);
     }

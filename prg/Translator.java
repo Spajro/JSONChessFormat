@@ -59,7 +59,7 @@ public class Translator {
 
 
             default:
-                System.out.print("Unable to unify");
+                System.out.print("Unable to translate");
                 break;
 
         }
