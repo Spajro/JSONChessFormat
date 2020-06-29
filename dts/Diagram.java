@@ -32,13 +32,16 @@ public class Diagram implements Serializable {
         Story.add(this);
     }
     public Diagram Make_move(Move M){
-        //TODO
-        //poprawka zeby nie się nie dublowalo
         LinkedList<Diagram>NS=Story;
         Bufor NT=T;
         M.Make_move(NT);
         NS.add(this);
         Diagram Next=new Diagram(NT,NS);
+        for(Diagram D : Next_moves){
+            if(D.T== Next.T && D.Story==Next.Story){
+                return D;
+            }
+        }
         Next_moves.add(Next);
     return Next;
     }
