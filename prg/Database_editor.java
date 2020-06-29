@@ -47,8 +47,8 @@ public class Database_editor implements Mode{
 
     @Override
     public Display_data Display() {
-        //TODO
-        return null;
+        Display_data D=new Display_data(Base);
+        return D;
     }
 
     @Override
@@ -65,12 +65,7 @@ public class Database_editor implements Mode{
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Namefile+".bin"))) {
             Diagram neu = (Diagram) inputStream.readObject();
             return neu;
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
         return null;
@@ -79,8 +74,6 @@ public class Database_editor implements Mode{
     void Save(){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Name+".bin"))) {
             outputStream.writeObject(Base.Original());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }

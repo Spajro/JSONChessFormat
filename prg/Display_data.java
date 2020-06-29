@@ -1,5 +1,10 @@
 package prg;
 
+import dts.Diagram;
+
 public class Display_data {
-    //TODO
+    public Diagram Diag;
+    public Display_data(Diagram D){
+        Diag=D;
+    }
 }
