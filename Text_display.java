@@ -12,7 +12,13 @@ public class Text_display {
     public void Print_Pos(){
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                System.out.print(state.T.get(i,j));
+                int temp=state.T.get(j,7-i);
+                if(temp==0){
+                    System.out.print("00");
+                }
+                else {
+                    System.out.print(temp);
+                }
                 System.out.print(" ");
             }
             System.out.println();

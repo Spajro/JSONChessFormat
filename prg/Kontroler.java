@@ -34,5 +34,8 @@ public class Kontroler {
                 System.out.print("Unknown code SM");
         }
     }
+    public Display_data Display(){
+        return Current.Display();
+    }
     public Diagram GetDiag(){return Current.getDiag();}
 }

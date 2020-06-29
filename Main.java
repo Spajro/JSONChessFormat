@@ -11,6 +11,7 @@ public class Main {
         Scanner Scan= new Scanner(System.in);
         boolean working = true;
         Translator Trans = new Translator();
+        Text_display Dis = new Text_display();
         Action_data First = new Action_data("SEL",new Action_data("DTE","TEST"));
         Cont.Get_cmd(First);
         while (working){
@@ -46,7 +47,14 @@ public class Main {
                         System.out.print("Unknown code MAIN");
                 }
 
-                Cont.Get_cmd(Ad);
+                if (Ad != null) {
+                    Cont.Get_cmd(Ad);
+                }
+                else{
+                    System.out.print("Cmd not found -> not executed");
+                }
+                Dis.Update(Cont.Display());
+                Dis.Print_Pos();
             }
         }
     }
