@@ -122,8 +122,34 @@ public class Translator {
         return Result;
     }
     public int Column_to_num(char C){
-        //TODO
-        return 0;
+        switch (C){
+            case 'a' -> {
+                return 7;
+            }
+            case 'b' -> {
+                return 6;
+            }
+            case 'c' -> {
+                return 5;
+            }
+            case 'd' -> {
+                return 4;
+            }
+            case 'e' -> {
+                return 3;
+            }
+            case 'f' -> {
+                return 2;
+            }
+            case 'g' -> {
+                return 1;
+            }
+            case 'h' -> {
+                return 0;
+            }
+            default -> System.out.print("Column_to_num fault");
+        }
+        return -1;
     }
     public String Num_to_Fig(int F){
         //TODO
