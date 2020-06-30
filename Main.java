@@ -1,6 +1,6 @@
 import prg.Action_data;
 import prg.Kontroler;
-import prg.Translator;
+import hlp.Translator;
 
 import java.util.Scanner;
 
@@ -21,30 +21,15 @@ public class Main {
             }
             else{
                 Action_data Ad=null;
-                switch (cmd){
-                    case "LD":
-                        Ad=new Action_data("LD",Scan.nextLine());
-                        break;
-                    case "SV":
-                        Ad=new Action_data("SV",null);
-                        break;
-                    case "MM":
-                        Ad=new Action_data("MM",Trans.Algebraic_to_move(Cont.GetDiag().T,Scan.nextLine(),Cont.GetColor()));
-                        break;
-                    case "AN":
-                        Ad=new Action_data("AN",null);
-                        break;
-                    case "QT":
-                        Ad=new Action_data("QT",null);
-                        break;
-                    case "DLA":
-                        Ad=new Action_data("DL",Cont.GetDiag());
-                        break;
-                    case "GB":
-                        Ad=new Action_data("GB",Scan.nextInt());
-                        break;
-                    default:
-                        System.out.print("Unknown code MAIN");
+                switch (cmd) {
+                    case "LD" -> Ad = new Action_data("LD", Scan.nextLine());
+                    case "SV" -> Ad = new Action_data("SV", null);
+                    case "MM" -> Ad = new Action_data("MM", Trans.Algebraic_to_move(Cont.GetDiag().T, Scan.nextLine(), Cont.GetColor()));
+                    case "AN" -> Ad = new Action_data("AN", null);
+                    case "QT" -> Ad = new Action_data("QT", null);
+                    case "DLA" -> Ad = new Action_data("DL", Cont.GetDiag());
+                    case "GB" -> Ad = new Action_data("GB", Scan.nextInt());
+                    default -> System.out.print("Unknown code MAIN");
                 }
 
                 if (Ad != null) {

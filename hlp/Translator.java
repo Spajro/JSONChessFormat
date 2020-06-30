@@ -1,4 +1,4 @@
-package prg;
+package hlp;
 
 import dts.Bufor;
 import dts.Move;
