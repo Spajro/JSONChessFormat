@@ -1,10 +1,13 @@
 import dts.Diagram;
+import hlp.Translator;
 import prg.Display_data;
 
 public class Text_display {
     Diagram state;
+    Translator Trans;
     public Text_display(){
         state = new Diagram();
+        Trans = new Translator();
     }
     public void Update(Display_data D){
         state=D.Diag;
@@ -17,7 +20,7 @@ public class Text_display {
                     System.out.print("00");
                 }
                 else {
-                    System.out.print(temp);
+                    System.out.print(Trans.Num_to_Fig(temp));
                 }
                 System.out.print(" ");
             }

@@ -5,7 +5,7 @@ import dts.Move;
 
 public class Translator {
     Position_finder Pf;
-    Translator(){
+    public Translator(){
         Pf=new Position_finder();
     }
     public Move Algebraic_to_move(Bufor T, String M, boolean C) {
@@ -152,8 +152,49 @@ public class Translator {
         return -1;
     }
     public String Num_to_Fig(int F){
-        //TODO
-        return null;
+        switch(F){
+            case 11 -> {
+                return "BP";
+            }
+            case 12 -> {
+                return "BW";
+            }
+            case 13 -> {
+                return "BS";
+            }
+            case 14 -> {
+                return "BG";
+            }
+            case 15 -> {
+                return "BH";
+            }
+            case 16 -> {
+                return "BK";
+            }
+            case 21 -> {
+                return "CP";
+            }
+            case 22 -> {
+                return "CW";
+            }
+            case 23 -> {
+                return "CS";
+            }
+            case 24 -> {
+                return "CG";
+            }
+            case 25 -> {
+                return "CH";
+            }
+            case 26 -> {
+                return "CK";
+            }
+            default -> {
+                System.out.print("Num_to_Fig fault");
+                return null;
+            }
+
+        }
     }
 
 }
