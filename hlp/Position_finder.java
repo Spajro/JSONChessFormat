@@ -29,7 +29,68 @@ public class Position_finder {
     }
 
     void Pawn_Capture(boolean Col, Bufor T, int sx, int sy, int hx) {
-        //TODO
+        if(Col){
+            sy++;
+            if(hx==-1){
+                if(sx==0){
+                    x=sx+1;
+                    y=sy;
+                }
+                else if(sx==7){
+                    x=sx-1;
+                    y=sy;
+                }
+                else{
+                    if(T.get(sx+1,sy)==11){
+                        x=sx+1;
+                        y=sy;
+                    }
+                    else if(T.get(sx-1,sy)==11){
+                        x=sx-1;
+                        y=sy;
+                    }
+                    else{
+                        System.out.print("Pawn_capture fault");
+                    }
+                }
+            }
+            else{
+                x=hx;
+                y=sy;
+
+            }
+        }
+        else{
+            sy--;
+            if(hx==-1){
+                if(sx==0){
+                    x=sx+1;
+                    y=sy;
+                }
+                else if(sx==7){
+                    x=sx-1;
+                    y=sy;
+                }
+                else{
+                    if(T.get(sx+1,sy)==21){
+                        x=sx+1;
+                        y=sy;
+                    }
+                    else if(T.get(sx-1,sy)==21){
+                        x=sx-1;
+                        y=sy;
+                    }
+                    else{
+                        System.out.print("Pawn_capture fault");
+                    }
+                }
+            }
+            else{
+                x=hx;
+                y=sy;
+
+            }
+        }
     }
 
     void Pawn(boolean Col, Bufor T, int sx, int sy) {
