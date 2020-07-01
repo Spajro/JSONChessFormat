@@ -29,88 +29,76 @@ public class Position_finder {
     }
 
     void Pawn_Capture(boolean Col, Bufor T, int sx, int sy, int hx) {
-        if(Col){
+        if (Col) {
             sy++;
-            if(hx==-1){
-                if(sx==0){
-                    x=sx+1;
-                    y=sy;
-                }
-                else if(sx==7){
-                    x=sx-1;
-                    y=sy;
-                }
-                else{
-                    if(T.get(sx+1,sy)==11){
-                        x=sx+1;
-                        y=sy;
-                    }
-                    else if(T.get(sx-1,sy)==11){
-                        x=sx-1;
-                        y=sy;
-                    }
-                    else{
+            if (hx == -1) {
+                if (sx == 0) {
+                    x = sx + 1;
+                    y = sy;
+                } else if (sx == 7) {
+                    x = sx - 1;
+                    y = sy;
+                } else {
+                    if (T.get(sx + 1, sy) == 11) {
+                        x = sx + 1;
+                        y = sy;
+                    } else if (T.get(sx - 1, sy) == 11) {
+                        x = sx - 1;
+                        y = sy;
+                    } else {
                         System.out.print("Pawn_capture fault");
                     }
                 }
-            }
-            else{
-                x=hx;
-                y=sy;
+            } else {
+                x = hx;
+                y = sy;
 
             }
-        }
-        else{
+        } else {
             sy--;
-            if(hx==-1){
-                if(sx==0){
-                    x=sx+1;
-                    y=sy;
-                }
-                else if(sx==7){
-                    x=sx-1;
-                    y=sy;
-                }
-                else{
-                    if(T.get(sx+1,sy)==21){
-                        x=sx+1;
-                        y=sy;
-                    }
-                    else if(T.get(sx-1,sy)==21){
-                        x=sx-1;
-                        y=sy;
-                    }
-                    else{
+            if (hx == -1) {
+                if (sx == 0) {
+                    x = sx + 1;
+                    y = sy;
+                } else if (sx == 7) {
+                    x = sx - 1;
+                    y = sy;
+                } else {
+                    if (T.get(sx + 1, sy) == 21) {
+                        x = sx + 1;
+                        y = sy;
+                    } else if (T.get(sx - 1, sy) == 21) {
+                        x = sx - 1;
+                        y = sy;
+                    } else {
                         System.out.print("Pawn_capture fault");
                     }
                 }
-            }
-            else{
-                x=hx;
-                y=sy;
+            } else {
+                x = hx;
+                y = sy;
 
             }
         }
     }
 
     void Pawn(boolean Col, Bufor T, int sx, int sy) {
-        if(Col){
+        if (Col) {
             //biale
-            while(sy>=7){
-                if(T.get(sx,sy)==11){
-                    x=sx;
-                    y=sy;
+            while (sy >= 7) {
+                if (T.get(sx, sy) == 11) {
+                    x = sx;
+                    y = sy;
                     break;
                 }
                 sy--;
             }
-        }
-        else{
+        } else {
             //czarne
-            while(sy>=0){
-                if(T.get(sx,sy)==21){
-                    x=sx;
-                    y=sy;
+            while (sy >= 0) {
+                if (T.get(sx, sy) == 21) {
+                    x = sx;
+                    y = sy;
                     break;
                 }
                 sy++;
@@ -119,7 +107,79 @@ public class Position_finder {
     }
 
     void Rook(boolean Col, Bufor T, int sx, int sy, int hx) {
-        //TODO
+        boolean found=false;
+        int t1x = sx;
+        while (t1x != 0 && !found) {
+            if (Col) {
+                if (T.get(t1x, sy) == 12) {
+                    x=t1x;
+                    y=sy;
+                    found=true;
+                }
+            }
+            else{
+                if (T.get(t1x, sy) == 22) {
+                    x=t1x;
+                    y=sy;
+                    found=true;
+                }
+            }
+            t1x--;
+        }
+        int t2x = sx;
+        while (t2x != 7 && !found) {
+            if (Col) {
+                if (T.get(t2x, sy) == 12) {
+                    x=t2x;
+                    y=sy;
+                    found=true;
+                }
+            }
+            else{
+                if (T.get(t2x, sy) == 22) {
+                    x=t2x;
+                    y=sy;
+                    found=true;
+                }
+            }
+            t2x++;
+        }
+        int t1y = sy;
+        while (t1y != 0 && !found) {
+            if (Col) {
+                if (T.get(sx, t1y) == 12) {
+                    x=sx;
+                    y=t1y;
+                    found=true;
+                }
+            }
+            else{
+                if (T.get(sx, t1y) == 22) {
+                    x=sx;
+                    y=t1y;
+                    found=true;
+                }
+            }
+            t1y--;
+        }
+        int t2y=sy;
+        while (t2y != 7 && !found) {
+            if (Col) {
+                if (T.get(sx, t2y) == 12) {
+                    x=sx;
+                    y=t2y;
+                    found=true;
+                }
+            }
+            else{
+                if (T.get(sx, t2y) == 22) {
+                    x=sx;
+                    y=t2y;
+                    found=true;
+                }
+            }
+            t2y--;
+        }
     }
 
     void Knight(boolean Col, Bufor T, int sx, int sy, int hx) {
@@ -135,6 +195,108 @@ public class Position_finder {
     }
 
     void King(boolean Col, Bufor T, int sx, int sy) {
-        //TODO
+        if(Col){
+            if(In_range(sx+1,sy+1)){
+                if(T.get(sx+1,sy+1)==16){
+                    x=sx+1;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx+1,sy)){
+                if(T.get(sx+1,sy)==16){
+                    x=sx+1;
+                    y=sy;
+                }
+            }
+            if(In_range(sx+1,sy-1)){
+                if(T.get(sx+1,sy-1)==16){
+                    x=sx+1;
+                    y=sy-1;
+                }
+            }
+            if(In_range(sx,sy+1)){
+                if(T.get(sx,sy+1)==16){
+                    x=sx;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx,sy-1)){
+                if(T.get(sx,sy-1)==16){
+                    x=sx;
+                    y=sy-1;
+                }
+            }
+            if(In_range(sx-1,sy+1)){
+                if(T.get(sx-1,sy+1)==16){
+                    x=sx-1;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx-1,sy)){
+                if(T.get(sx-1,sy)==16){
+                    x=sx-1;
+                    y=sy;
+                }
+            }
+            if(In_range(sx-1,sy-1)){
+                if(T.get(sx-1,sy-1)==16){
+                    x=sx-1;
+                    y=sy-1;
+                }
+            }
+        }
+        else{
+            if(In_range(sx+1,sy+1)){
+                if(T.get(sx+1,sy+1)==26){
+                    x=sx+1;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx+1,sy)){
+                if(T.get(sx+1,sy)==26){
+                    x=sx+1;
+                    y=sy;
+                }
+            }
+            if(In_range(sx+1,sy-1)){
+                if(T.get(sx+1,sy-1)==26){
+                    x=sx+1;
+                    y=sy-1;
+                }
+            }
+            if(In_range(sx,sy+1)){
+                if(T.get(sx,sy+1)==26){
+                    x=sx;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx,sy-1)){
+                if(T.get(sx,sy-1)==26){
+                    x=sx;
+                    y=sy-1;
+                }
+            }
+            if(In_range(sx-1,sy+1)){
+                if(T.get(sx-1,sy+1)==26){
+                    x=sx-1;
+                    y=sy+1;
+                }
+            }
+            if(In_range(sx-1,sy)){
+                if(T.get(sx-1,sy)==26){
+                    x=sx-1;
+                    y=sy;
+                }
+            }
+            if(In_range(sx-1,sy-1)){
+                if(T.get(sx-1,sy-1)==26){
+                    x=sx-1;
+                    y=sy-1;
+                }
+            }
+        }
+    }
+    boolean In_range(int x,int y){
+        return x >= 0 && x <= 7 && y >= 0 && y <= 7;
     }
 }
