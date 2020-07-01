@@ -17,31 +17,18 @@ public class Database_editor implements Mode{
     }
     @Override
     public void Make_action(Action_data AD) {
-        switch (AD.Get_code()){
-            case "LD":
-                Base=Load((String)AD.Parameter);
-                if(Base==null)System.out.print("Loading failed");
-                break;
-            case "SV":
-                Save();
-                break;
-            case "MM":
-                Make_move((Move) AD.Parameter);
-                break;
-            case "AN":
-                Annotate();
-                break;
-            case "QT":
-                Exit();
-                break;
-            case "DL":
-                Delete_diagram((Diagram) AD.Parameter);
-                break;
-            case "GB":
-                Go_back((int) AD.Parameter);
-                break;
-            default:
-                System.out.print("Unknown code MA");
+        switch (AD.Get_code()) {
+            case "LD" -> {
+                Base = Load((String) AD.Parameter);
+                if (Base == null) System.out.print("Loading failed");
+            }
+            case "SV" -> Save();
+            case "MM" -> Make_move((Move) AD.Parameter);
+            case "AN" -> Annotate();
+            case "QT" -> Exit();
+            case "DL" -> Delete_diagram((Diagram) AD.Parameter);
+            case "GB" -> Go_back((int) AD.Parameter);
+            default -> System.out.print("Unknown code MA");
         }
     }
 
@@ -68,8 +55,7 @@ public class Database_editor implements Mode{
 
     Diagram Load(String Namefile){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Namefile+".bin"))) {
-            Diagram neu = (Diagram) inputStream.readObject();
-            return neu;
+            return (Diagram) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }

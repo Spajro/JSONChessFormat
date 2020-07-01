@@ -119,6 +119,7 @@ public class Translator {
             Pf.Choose_fig(f,C,T,x,y,hx);
             Result.Update(x,y,Pf.x,Pf.y);
         }
+        Pf.Clean();
         return Result;
     }
     public int Column_to_num(char C){
