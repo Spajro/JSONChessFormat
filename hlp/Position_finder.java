@@ -85,7 +85,7 @@ public class Position_finder {
     void Pawn(boolean Col, Bufor T, int sx, int sy) {
         if (Col) {
             //biale
-            while (sy >= 7) {
+            while (sy <= 7) {
                 if (T.get(sx, sy) == 11) {
                     x = sx;
                     y = sy;
@@ -93,7 +93,8 @@ public class Position_finder {
                 }
                 sy--;
             }
-        } else {
+        }
+        else {
             //czarne
             while (sy >= 0) {
                 if (T.get(sx, sy) == 21) {

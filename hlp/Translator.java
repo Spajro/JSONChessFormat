@@ -14,17 +14,18 @@ public class Translator {
         boolean Rosz=false;
         boolean Fault=false;
         int R_type=-1;
-        int y=-1;
-        char tx=' ';
-        char ty=' ';
-        int x=-1;
-        char f=' ';
-        char thx=' ';
+        int y;
+        char tx=0;
+        char ty=0;
+        int x;
+        char f = 0;
+        char thx = 0;
         int hx=-1;
         switch (M.length()) {
             case 2: //ruch pionka do przodu
                 tx = M.charAt(0);
                 ty = M.charAt(1);
+                f=' ';
                 break;
             case 3: //ruch figury lub bicie pionem lub roszada krotka
                 if (M.equals("O-O")) {
@@ -39,6 +40,7 @@ public class Translator {
                     //bicie pionkiem
                     tx = M.charAt(1);
                     ty = M.charAt(2);
+                    f='X';
                 } else {
                     //ruch figury
                     f = M.charAt(0);
@@ -57,6 +59,7 @@ public class Translator {
                     thx = M.charAt(1);
                     tx = M.charAt(2);
                     ty = M.charAt(3);
+                    f='X';
                 } else {
                     //ruch jednej z mozliwych figur
                     f = M.charAt(0);
@@ -95,12 +98,12 @@ public class Translator {
         }
         else{
             x=Column_to_num(tx);
-            y=Character.getNumericValue(ty);
-            if(thx!=' '){
+            y=Character.getNumericValue(ty)-1;
+            if(thx!=0){
                 hx=Column_to_num(thx);
             }
             Pf.Choose_fig(f,C,T,x,y,hx);
-            Result.Update(x,y,Pf.x,Pf.y);
+            Result.Update(Pf.x,Pf.y,x,y);
         }
         Pf.Clean();
         return Result;
@@ -109,28 +112,28 @@ public class Translator {
     public int Column_to_num(char C){
         switch (C){
             case 'a' -> {
-                return 7;
+                return 0;
             }
             case 'b' -> {
-                return 6;
-            }
-            case 'c' -> {
-                return 5;
-            }
-            case 'd' -> {
-                return 4;
-            }
-            case 'e' -> {
-                return 3;
-            }
-            case 'f' -> {
-                return 2;
-            }
-            case 'g' -> {
                 return 1;
             }
+            case 'c' -> {
+                return 2;
+            }
+            case 'd' -> {
+                return 3;
+            }
+            case 'e' -> {
+                return 4;
+            }
+            case 'f' -> {
+                return 5;
+            }
+            case 'g' -> {
+                return 6;
+            }
             case 'h' -> {
-                return 0;
+                return 7;
             }
             default -> System.out.print("Column_to_num fault");
         }
