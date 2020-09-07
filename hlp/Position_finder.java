@@ -4,10 +4,12 @@ import dts.Bufor;
 
 public class Position_finder {
     public int x, y;
+    Checker Check;
 
     public Position_finder() {
         x = -1;
         y = -1;
+        Check=new Checker();
     }
 
     public void Clean() {
@@ -15,7 +17,7 @@ public class Position_finder {
         y = -1;
     }
 
-    public void Choose_fig(char C, boolean Col, Bufor T, int sx, int sy, int hx) {
+    public void Choose_fig(char C, boolean Col, Bufor T, int sx, int sy, int hx,) {
         switch (C) {
             case ' ' -> Pawn(Col, T, sx, sy);
             case 'X' -> Pawn_Capture(Col, T, sx, sy, hx);
@@ -29,6 +31,7 @@ public class Position_finder {
     }
 
     void Pawn_Capture(boolean Col, Bufor T, int sx, int sy, int hx) {
+        //Manualnie
         if (Col) {
             sy++;
             if (hx == -1) {
@@ -85,6 +88,7 @@ public class Position_finder {
     void Pawn(boolean Col, Bufor T, int sx, int sy) {
         if (Col) {
             //biale
+
             while (sy <= 7) {
                 if (T.get(sx, sy) == 11) {
                     x = sx;

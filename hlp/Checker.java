@@ -3,32 +3,22 @@ package hlp;
 import dts.Bufor;
 
 public class Checker {
-    Bufor T;
-    Checker(Bufor Bf){
-        T=Bf;
+
+    boolean Check_Position(Position P,int FigId,Bufor T){
+        return T.get(P.x,P.y) == FigId;
     }
-    boolean Check_Position(int tx,int ty,int FigId){
-        if(T.get(tx,ty)==FigId){
-            return true;
-        }
-        else return false;
+    boolean OutOfMap(Position P){
+        return P.x >= -1 && P.y >= -1 && P.x <= 7 && P.y <= 7;
     }
-    boolean OutOfMap(int x,int y){
-        if(x<-1 || y<-1 || x>7 || y>7){
-            return false;
-        }
-        else return true;
-    }
-    boolean Check_Line(int tx,int ty,int StepX,int StepY,int FigId){
-        while(!OutOfMap(tx,ty)){
-            if(Check_Position(tx,ty,FigId)){
-                return true;
+    Position Check_Line(Position Temp,Position Step,int FigId,Bufor T){
+        while(!OutOfMap(Temp)){
+            if(Check_Position(Temp,FigId,T)){
+                return Temp;
             }
             else{
-                tx+=StepX;
-                ty+=StepY;
+                Temp.Add(Step);
             }
         }
-        return false;
+        return new Position(-1,-1);
     }
 }
