@@ -17,7 +17,7 @@ public class Position_finder {
 
     public void Choose_fig(char C, boolean Col, Bufor T, Position Start, Position Help) {
         switch (C) {
-            case ' ' -> Pawn(Col, T, Start);
+            case ' ' -> Pawn(Col, T, Start,Help);
             case 'X' -> Pawn_Capture(Col, T, Start, Help);
             case 'W' -> Rook(Col, T, Start, Help);
             case 'S' -> Knight(Col, T, Start, Help);
@@ -88,103 +88,33 @@ public class Position_finder {
     void Pawn(boolean Col, Bufor T, Position Start,Position Help) {
         if (Col) {
             //biale
-
-            while (sy <= 7) {
-                if (T.get(sx, sy) == 11) {
-                    x = sx;
-                    y = sy;
-                    break;
-                }
-                sy--;
-            }
+            Result=Check.Check_Line(Start,new Position(0,-1),11,T);
         }
         else {
             //czarne
-            while (sy >= 0) {
-                if (T.get(sx, sy) == 21) {
-                    x = sx;
-                    y = sy;
-                    break;
-                }
-                sy++;
-            }
+            Result=Check.Check_Line(Start,new Position(0,1),21,T);
         }
     }
 
     void Rook(boolean Col, Bufor T, Position Start,Position Help) {
-        boolean found=false;
-        int t1x = sx;
-        while (t1x != 0 && !found) {
-            if (Col) {
-                if (T.get(t1x, sy) == 12) {
-                    x=t1x;
-                    y=sy;
-                    found=true;
+    if(Help.IsEmpty()){
+        Position[] Steps= {new Position(-1,0),new Position(1,0),new Position(0,1),new Position(0,-1)};
+        Position Temp=new Position((Start));
+            int i=0;
+            while(Result.IsEmpty()) {
+                if (Col) Check.Check_Line(Temp, Steps[i], 12, T);
+                else Check.Check_Line(Temp, Steps[i], 22, T);
+                i++;
+                if (i > 3) {
+                    System.out.print("Rook while fail");
+                    break;
                 }
             }
-            else{
-                if (T.get(t1x, sy) == 22) {
-                    x=t1x;
-                    y=sy;
-                    found=true;
-                }
-            }
-            t1x--;
-        }
-        int t2x = sx;
-        while (t2x != 7 && !found) {
-            if (Col) {
-                if (T.get(t2x, sy) == 12) {
-                    x=t2x;
-                    y=sy;
-                    found=true;
-                }
-            }
-            else{
-                if (T.get(t2x, sy) == 22) {
-                    x=t2x;
-                    y=sy;
-                    found=true;
-                }
-            }
-            t2x++;
-        }
-        int t1y = sy;
-        while (t1y != 0 && !found) {
-            if (Col) {
-                if (T.get(sx, t1y) == 12) {
-                    x=sx;
-                    y=t1y;
-                    found=true;
-                }
-            }
-            else{
-                if (T.get(sx, t1y) == 22) {
-                    x=sx;
-                    y=t1y;
-                    found=true;
-                }
-            }
-            t1y--;
-        }
-        int t2y=sy;
-        while (t2y != 7 && !found) {
-            if (Col) {
-                if (T.get(sx, t2y) == 12) {
-                    x=sx;
-                    y=t2y;
-                    found=true;
-                }
-            }
-            else{
-                if (T.get(sx, t2y) == 22) {
-                    x=sx;
-                    y=t2y;
-                    found=true;
-                }
-            }
-            t2y--;
-        }
+    }
+    else{
+    //TODO
+    }
+
     }
 
     void Knight(boolean Col, Bufor T, Position Start,Position Help) {

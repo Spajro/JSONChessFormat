@@ -23,4 +23,7 @@ public class Position {
         x+=nx;
         y+=ny;
     }
+    boolean IsEmpty(){
+        return x == -1 && y == -1;
+    }
 }
