@@ -3,34 +3,32 @@ package hlp;
 import dts.Bufor;
 
 public class Position_finder {
-    public int x, y;
+    public Position Result;
     Checker Check;
 
     public Position_finder() {
-        x = -1;
-        y = -1;
+        Result= new Position(-1,-1);
         Check=new Checker();
     }
 
     public void Clean() {
-        x = -1;
-        y = -1;
+        Result= new Position(-1,-1);
     }
 
-    public void Choose_fig(char C, boolean Col, Bufor T, int sx, int sy, int hx,) {
+    public void Choose_fig(char C, boolean Col, Bufor T, Position Start, Position Help) {
         switch (C) {
-            case ' ' -> Pawn(Col, T, sx, sy);
-            case 'X' -> Pawn_Capture(Col, T, sx, sy, hx);
-            case 'W' -> Rook(Col, T, sx, sy, hx);
-            case 'S' -> Knight(Col, T, sx, sy, hx);
-            case 'G' -> Bishop(Col, T, sx, sy, hx);
-            case 'H' -> Queen(Col, T, sx, sy, hx);
-            case 'K' -> King(Col, T, sx, sy);
+            case ' ' -> Pawn(Col, T, Start);
+            case 'X' -> Pawn_Capture(Col, T, Start, Help);
+            case 'W' -> Rook(Col, T, Start, Help);
+            case 'S' -> Knight(Col, T, Start, Help);
+            case 'G' -> Bishop(Col, T,Start, Help);
+            case 'H' -> Queen(Col, T, Start, Help);
+            case 'K' -> King(Col, T, ,Start, , Help);
             default -> System.out.print("Choose_fig fault");
         }
     }
 
-    void Pawn_Capture(boolean Col, Bufor T, int sx, int sy, int hx) {
+    void Pawn_Capture(boolean Col, Bufor T, Position Start,Position Help) {
         //Manualnie
         if (Col) {
             sy++;
@@ -85,7 +83,7 @@ public class Position_finder {
         }
     }
 
-    void Pawn(boolean Col, Bufor T, int sx, int sy) {
+    void Pawn(boolean Col, Bufor T, Position Start,Position Help) {
         if (Col) {
             //biale
 
@@ -111,7 +109,7 @@ public class Position_finder {
         }
     }
 
-    void Rook(boolean Col, Bufor T, int sx, int sy, int hx) {
+    void Rook(boolean Col, Bufor T, Position Start,Position Help) {
         boolean found=false;
         int t1x = sx;
         while (t1x != 0 && !found) {
@@ -187,11 +185,11 @@ public class Position_finder {
         }
     }
 
-    void Knight(boolean Col, Bufor T, int sx, int sy, int hx) {
+    void Knight(boolean Col, Bufor T, Position Start,Position Help) {
         //TODO
     }
 
-    void Bishop(boolean Col, Bufor T, int sx, int sy, int hx) {
+    void Bishop(boolean Col, Bufor T, Position Start,Position Help) {
         //TODO
         boolean found=false;
         if(hx==-1) {
@@ -225,11 +223,11 @@ public class Position_finder {
         }
     }
 
-    void Queen(boolean Col, Bufor T, int sx, int sy, int hx) {
+    void Queen(boolean Col, Bufor T, Position Start,Position Help) {
         //TODO
     }
 
-    void King(boolean Col, Bufor T, int sx, int sy) {
+    void King(boolean Col, Bufor T,Position Start,Position Help) {
         if(Col){
             if(In_range(sx+1,sy+1)){
                 if(T.get(sx+1,sy+1)==16){
