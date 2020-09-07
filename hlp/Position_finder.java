@@ -31,54 +31,56 @@ public class Position_finder {
     void Pawn_Capture(boolean Col, Bufor T, Position Start,Position Help) {
         //Manualnie
         if (Col) {
-            sy++;
-            if (hx == -1) {
-                if (sx == 0) {
-                    x = sx + 1;
-                    y = sy;
-                } else if (sx == 7) {
-                    x = sx - 1;
-                    y = sy;
-                } else {
-                    if (T.get(sx + 1, sy) == 11) {
-                        x = sx + 1;
-                        y = sy;
-                    } else if (T.get(sx - 1, sy) == 11) {
-                        x = sx - 1;
-                        y = sy;
+            Start.Add(0,1);
+            if (Help.x == -1) {
+                if (Start.x == 0) {
+                    Result= new Position(Start);
+                    Result.Add(1,0);
+                }
+                else if (Start.x == 7) {
+                    Result= new Position(Start);
+                    Result.Add(-1,0);
+                }
+                else {
+                    if (T.get(Start.x + 1, Start.y) == 11) {
+                        Result= new Position(Start);
+                        Result.Add(1,0);
+                    } else if (T.get(Start.x - 1, Start.y) == 11) {
+                        Result= new Position(Start);
+                        Result.Add(-1,0);
                     } else {
                         System.out.print("Pawn_capture fault");
                     }
                 }
-            } else {
-                x = hx;
-                y = sy;
-
+            }
+            else {
+                Result= new Position(Help.x,Start.y);
             }
         } else {
-            sy--;
-            if (hx == -1) {
-                if (sx == 0) {
-                    x = sx + 1;
-                    y = sy;
-                } else if (sx == 7) {
-                    x = sx - 1;
-                    y = sy;
-                } else {
-                    if (T.get(sx + 1, sy) == 21) {
-                        x = sx + 1;
-                        y = sy;
-                    } else if (T.get(sx - 1, sy) == 21) {
-                        x = sx - 1;
-                        y = sy;
+            Start.Add(0,-1);
+            if (Help.x == -1) {
+                if (Start.x == 0) {
+                    Result= new Position(Start);
+                    Result.Add(1,0);
+                }
+                else if (Start.x == 7) {
+                    Result= new Position(Start);
+                    Result.Add(-1,0);
+                }
+                else {
+                    if (T.get(Start.x + 1, Start.y) == 21) {
+                        Result= new Position(Start);
+                        Result.Add(1,0);
+                    } else if (T.get(Start.x - 1, Start.y) == 21) {
+                        Result= new Position(Start);
+                        Result.Add(-1,0);
                     } else {
                         System.out.print("Pawn_capture fault");
                     }
                 }
-            } else {
-                x = hx;
-                y = sy;
-
+            }
+            else {
+                Result= new Position(Help.x,Start.y);
             }
         }
     }
