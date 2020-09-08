@@ -156,104 +156,21 @@ public class Position_finder {
     }
 
     void King(boolean Col, Bufor T,Position Start,Position Help) {
-        if(Col){
-            if(In_range(sx+1,sy+1)){
-                if(T.get(sx+1,sy+1)==16){
-                    x=sx+1;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx+1,sy)){
-                if(T.get(sx+1,sy)==16){
-                    x=sx+1;
-                    y=sy;
-                }
-            }
-            if(In_range(sx+1,sy-1)){
-                if(T.get(sx+1,sy-1)==16){
-                    x=sx+1;
-                    y=sy-1;
-                }
-            }
-            if(In_range(sx,sy+1)){
-                if(T.get(sx,sy+1)==16){
-                    x=sx;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx,sy-1)){
-                if(T.get(sx,sy-1)==16){
-                    x=sx;
-                    y=sy-1;
-                }
-            }
-            if(In_range(sx-1,sy+1)){
-                if(T.get(sx-1,sy+1)==16){
-                    x=sx-1;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx-1,sy)){
-                if(T.get(sx-1,sy)==16){
-                    x=sx-1;
-                    y=sy;
-                }
-            }
-            if(In_range(sx-1,sy-1)){
-                if(T.get(sx-1,sy-1)==16){
-                    x=sx-1;
-                    y=sy-1;
-                }
-            }
-        }
-        else{
-            if(In_range(sx+1,sy+1)){
-                if(T.get(sx+1,sy+1)==26){
-                    x=sx+1;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx+1,sy)){
-                if(T.get(sx+1,sy)==26){
-                    x=sx+1;
-                    y=sy;
-                }
-            }
-            if(In_range(sx+1,sy-1)){
-                if(T.get(sx+1,sy-1)==26){
-                    x=sx+1;
-                    y=sy-1;
-                }
-            }
-            if(In_range(sx,sy+1)){
-                if(T.get(sx,sy+1)==26){
-                    x=sx;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx,sy-1)){
-                if(T.get(sx,sy-1)==26){
-                    x=sx;
-                    y=sy-1;
-                }
-            }
-            if(In_range(sx-1,sy+1)){
-                if(T.get(sx-1,sy+1)==26){
-                    x=sx-1;
-                    y=sy+1;
-                }
-            }
-            if(In_range(sx-1,sy)){
-                if(T.get(sx-1,sy)==26){
-                    x=sx-1;
-                    y=sy;
-                }
-            }
-            if(In_range(sx-1,sy-1)){
-                if(T.get(sx-1,sy-1)==26){
-                    x=sx-1;
-                    y=sy-1;
-                }
+        Position[] Steps={
+                new Position(1,0),
+                new Position(-1,0),
+                new Position(0,1),
+                new Position(0,-1),
+                new Position(1,1),
+                new Position(1,-1),
+                new Position(-1,1),
+                new Position(-1,-1),
+        };
+        for(Position P : Steps){
+            P.Add(Start);
+            if(!Check.OutOfMap(P)){
+                Result=P;
+                break;
             }
         }
     }
