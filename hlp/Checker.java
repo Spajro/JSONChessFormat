@@ -16,6 +16,10 @@ public class Checker {
                 return Temp;
             }
             else{
+                if(!Check_Position(Temp,0,T)){
+                    //jesli na linii jest inna figura;
+                    break;
+                }
                 Temp.Add(Step);
             }
         }

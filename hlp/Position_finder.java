@@ -112,7 +112,12 @@ public class Position_finder {
             }
     }
     else{
-    //TODO
+        if(Help.x!=-1){
+        //TODO
+        }
+        else{
+        //TODO
+        }
     }
 
     }
@@ -123,36 +128,6 @@ public class Position_finder {
 
     void Bishop(boolean Col, Bufor T, Position Start,Position Help) {
         //TODO
-        boolean found=false;
-        if(hx==-1) {
-            int t1x = sx, t2x = sx,t3x=sx,t4x=sx, t1y = sy, t2y = sy,t3y=sy,t4y=sy;
-
-        }
-        else{
-          x=hx;
-          if(Col){
-              if(T.get(x,sy+sx-x)==14){
-                  y=sy+sx-x;
-              }
-              else if(T.get(x,sy-sx+x)==14){
-                  y=sy-sx+x;
-              }
-              else{
-                  System.out.print("PF->bishop fault");
-              }
-          }
-          else{
-              if(T.get(x,sy+sx-x)==24){
-                  y=sy+sx-x;
-              }
-              else if(T.get(x,sy-sx+x)==24){
-                  y=sy-sx+x;
-              }
-              else{
-                  System.out.print("PF->bishop fault");
-              }
-          }
-        }
     }
 
     void Queen(boolean Col, Bufor T, Position Start,Position Help) {
