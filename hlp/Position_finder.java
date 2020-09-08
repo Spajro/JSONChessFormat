@@ -152,7 +152,29 @@ public class Position_finder {
     }
 
     void Queen(boolean Col, Bufor T, Position Start,Position Help) {
-        //TODO
+        if(Help.IsEmpty()){
+            Position[] Steps={
+                    new Position(1,0),
+                    new Position(-1,0),
+                    new Position(0,1),
+                    new Position(0,-1),
+                    new Position(1,1),
+                    new Position(1,-1),
+                    new Position(-1,1),
+                    new Position(-1,-1),
+            };
+            for(Position P : Steps){
+                Position Temp=new Position(P);
+                if(Col)Check.Check_Line(Temp,P,15,T);
+                else Check.Check_Line(Temp,P,25,T);
+                if(!Result.IsEmpty()){
+                    break;
+                }
+            }
+        }
+        else{
+            //TODO
+        }
     }
 
     void King(boolean Col, Bufor T,Position Start,Position Help) {
@@ -173,8 +195,5 @@ public class Position_finder {
                 break;
             }
         }
-    }
-    boolean In_range(int x,int y){
-        return x >= 0 && x <= 7 && y >= 0 && y <= 7;
     }
 }
