@@ -23,7 +23,7 @@ public class Position_finder {
             case 'S' -> Knight(Col, T, Start, Help);
             case 'G' -> Bishop(Col, T,Start, Help);
             case 'H' -> Queen(Col, T, Start, Help);
-            case 'K' -> King(Col, T, ,Start, , Help);
+            case 'K' -> King(Col, T, Start , Help);
             default -> System.out.print("Choose_fig fault");
         }
     }
@@ -127,7 +127,28 @@ public class Position_finder {
     }
 
     void Bishop(boolean Col, Bufor T, Position Start,Position Help) {
-        //TODO
+        if(Help.IsEmpty()){
+            Position[] Steps= {new Position(-1,-1),new Position(1,1),new Position(-1,1),new Position(1,-1)};
+            Position Temp=new Position((Start));
+            int i=0;
+            while(Result.IsEmpty()) {
+                if (Col) Check.Check_Line(Temp, Steps[i], 14, T);
+                else Check.Check_Line(Temp, Steps[i], 24, T);
+                i++;
+                if (i > 3) {
+                    System.out.print("Rook while fail");
+                    break;
+                }
+            }
+        }
+        else{
+            if(Help.x!=-1){
+                //TODO
+            }
+            else{
+                //TODO
+            }
+        }
     }
 
     void Queen(boolean Col, Bufor T, Position Start,Position Help) {
