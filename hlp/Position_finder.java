@@ -123,7 +123,29 @@ public class Position_finder {
     }
 
     void Knight(boolean Col, Bufor T, Position Start,Position Help) {
-        //TODO
+        if(Help.IsEmpty()){
+            Position[] Steps={
+                    new Position(2,1),
+                    new Position(2,-1),
+                    new Position(1,2),
+                    new Position(1,-2),
+                    new Position(-1,2),
+                    new Position(-1,-2),
+                    new Position(-2,1),
+                    new Position(-2,-1),
+            };
+            for(Position P : Steps){
+                Position Temp=new Position(P);
+                if(Col)Check.Check_Line(Temp,P,15,T);
+                else Check.Check_Line(Temp,P,25,T);
+                if(!Result.IsEmpty()){
+                    break;
+                }
+            }
+        }
+        else{
+            //TODO
+        }
     }
 
     void Bishop(boolean Col, Bufor T, Position Start,Position Help) {
@@ -164,11 +186,11 @@ public class Position_finder {
                     new Position(-1,-1),
             };
             for(Position P : Steps){
-                Position Temp=new Position(P);
-                if(Col)Check.Check_Line(Temp,P,15,T);
-                else Check.Check_Line(Temp,P,25,T);
-                if(!Result.IsEmpty()){
-                    break;
+                P.Add(Start);
+                if(!Check.OutOfMap(P)){
+                    if(Col)Check.Check_Position(P,13,T);
+                    else Check.Check_Position(P,23,T);
+                    if(!Result.IsEmpty())break;
                 }
             }
         }
@@ -191,8 +213,9 @@ public class Position_finder {
         for(Position P : Steps){
             P.Add(Start);
             if(!Check.OutOfMap(P)){
-                Result=P;
-                break;
+                if(Col)Check.Check_Position(P,16,T);
+                else Check.Check_Position(P,26,T);
+                if(!Result.IsEmpty())break;
             }
         }
     }
