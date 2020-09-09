@@ -7,11 +7,12 @@ public class Checker {
     boolean Check_Position(Position P,int FigId,Bufor T){
         return T.get(P.x,P.y) == FigId;
     }
-    boolean OutOfMap(Position P){
-        return P.x >= -1 && P.y >= -1 && P.x <= 7 && P.y <= 7;
+    boolean OnBoard(Position P){
+        return !(P.x < -1 || P.y < -1 || P.x > 7 || P.y > 7);
     }
-    Position Check_Line(Position Temp,Position Step,int FigId,Bufor T){
-        while(!OutOfMap(Temp)){
+    Position Check_Line(Position Start,Position Step,int FigId,Bufor T){
+        Position Temp=new Position(Start);
+        while(OnBoard(Temp)){
             if(Check_Position(Temp,FigId,T)){
                 return Temp;
             }

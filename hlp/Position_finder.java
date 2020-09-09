@@ -26,6 +26,9 @@ public class Position_finder {
             case 'K' -> King(Col, T, Start , Help);
             default -> System.out.print("Choose_fig fault");
         }
+        if(Result.IsEmpty()){
+            System.out.print("Position not found");
+        }
     }
 
     void Pawn_Capture(boolean Col, Bufor T, Position Start,Position Help) {
@@ -187,7 +190,7 @@ public class Position_finder {
             };
             for(Position P : Steps){
                 P.Add(Start);
-                if(!Check.OutOfMap(P)){
+                if(Check.OnBoard(P)){
                     if(Col)Check.Check_Position(P,13,T);
                     else Check.Check_Position(P,23,T);
                     if(!Result.IsEmpty())break;
@@ -212,7 +215,7 @@ public class Position_finder {
         };
         for(Position P : Steps){
             P.Add(Start);
-            if(!Check.OutOfMap(P)){
+            if(Check.OnBoard(P)){
                 if(Col)Check.Check_Position(P,16,T);
                 else Check.Check_Position(P,26,T);
                 if(!Result.IsEmpty())break;
