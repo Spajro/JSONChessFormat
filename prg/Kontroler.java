@@ -37,7 +37,7 @@ public class Kontroler {
     public Display_data Display(){
         return Current.Display();
     }
-    public Diagram GetDiag(){return Current.getDiag();}
+    public Diagram GetDiag(){return Current.GetDiag();}
 
     public boolean GetColor() {
         return Current.GetColor();

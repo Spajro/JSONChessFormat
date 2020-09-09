@@ -11,7 +11,7 @@ public class Database_editor implements Mode{
     Diagram Base;
     String Name;
 
-    Database_editor(String N){
+    public Database_editor(String N){
         Base= new Start_pose();
         Name=N;
     }
@@ -44,7 +44,7 @@ public class Database_editor implements Mode{
     }
 
     @Override
-    public Diagram getDiag() {
+    public Diagram GetDiag() {
     return  Base;
     }
 
