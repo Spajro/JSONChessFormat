@@ -21,6 +21,7 @@ public class Translator {
         char f = 0;
         char thx = 0;
         int hx=-1;
+        int hy=-1;
         switch (M.length()) {
             case 2: //ruch pionka do przodu
                 tx = M.charAt(0);
@@ -102,8 +103,8 @@ public class Translator {
             if(thx!=0){
                 hx=Column_to_num(thx);
             }
-            Pf.Choose_fig(f,C,T,x,y,hx);
-            Result.Update(Pf.x,Pf.y,x,y);
+            Pf.Choose_fig(f,C,T,new Position(x,y),new Position(hx,hy));
+            Result.Update(Pf.Result.x,Pf.Result.y,x,y);
         }
         Pf.Clean();
         return Result;
