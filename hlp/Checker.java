@@ -8,7 +8,7 @@ public class Checker {
         return T.get(P.x,P.y) == FigId;
     }
     boolean OnBoard(Position P){
-        return !(P.x < -1 || P.y < -1 || P.x > 7 || P.y > 7);
+        return !(P.x < 0 || P.y < 0 || P.x > 7 || P.y > 7);
     }
     Position Check_Line(Position Start,Position Step,int FigId,Bufor T){
         Position Temp=new Position(Start);

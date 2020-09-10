@@ -34,7 +34,7 @@ public class Position_finder {
     void Pawn_Capture(boolean Col, Bufor T, Position Start,Position Help) {
         //Manualnie
         if (Col) {
-            Start.Add(0,1);
+            Start.Add(0,-1);
             if (Help.x == -1) {
                 if (Start.x == 0) {
                     Result= new Position(Start);
@@ -60,7 +60,7 @@ public class Position_finder {
                 Result= new Position(Help.x,Start.y);
             }
         } else {
-            Start.Add(0,-1);
+            Start.Add(0,1);
             if (Help.x == -1) {
                 if (Start.x == 0) {
                     Result= new Position(Start);
@@ -138,12 +138,20 @@ public class Position_finder {
                     new Position(-2,-1),
             };
             for(Position P : Steps){
-                Position Temp=new Position(P);
-                if(Col)Check.Check_Line(Temp,P,15,T);
-                else Check.Check_Line(Temp,P,25,T);
-                if(!Result.IsEmpty()){
-                    break;
+                P.Add(Start);
+                if(Col){
+                    if(Check.Check_Position(P,13,T)) {
+                        Result = P;
+                        break;
+                    }
                 }
+                else {
+                    if(Check.Check_Position(P,23,T)) {
+                        Result = P;
+                        break;
+                    }
+                }
+
             }
         }
         else{
@@ -157,11 +165,11 @@ public class Position_finder {
             Position Temp=new Position((Start));
             int i=0;
             while(Result.IsEmpty()) {
-                if (Col) Check.Check_Line(Temp, Steps[i], 14, T);
-                else Check.Check_Line(Temp, Steps[i], 24, T);
+                if (Col) Result=Check.Check_Line(Temp, Steps[i], 14, T);
+                else Result=Check.Check_Line(Temp, Steps[i], 24, T);
                 i++;
                 if (i > 3) {
-                    System.out.print("Rook while fail");
+                    System.out.print("Bishop while fail");
                     break;
                 }
             }
@@ -191,8 +199,8 @@ public class Position_finder {
             for(Position P : Steps){
                 P.Add(Start);
                 if(Check.OnBoard(P)){
-                    if(Col)Check.Check_Position(P,13,T);
-                    else Check.Check_Position(P,23,T);
+                    if(Col)Check.Check_Position(P,15,T);
+                    else Check.Check_Position(P,25,T);
                     if(!Result.IsEmpty())break;
                 }
             }
