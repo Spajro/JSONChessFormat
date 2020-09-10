@@ -28,18 +28,24 @@ public class Diagram implements Serializable {
         Color=C;
     }
     public Diagram Make_move(Move M){
-        LinkedList<Diagram>NS=Story;
-        Bufor NT=T;
-        M.Make_move(NT);
-        NS.add(this);
-        Diagram Next=new Diagram(NT,NS,!Color);
-        for(Diagram D : Next_moves){
-            if(D.T== Next.T && D.Story==Next.Story){
-                return D;
+        if(M.IsCorrect()) {
+            LinkedList<Diagram> NS = Story;
+            Bufor NT = T;
+            M.Make_move(NT);
+            NS.add(this);
+            Diagram Next = new Diagram(NT, NS, !Color);
+            for (Diagram D : Next_moves) {
+                if (D.T == Next.T && D.Story == Next.Story) {
+                    return D;
+                }
             }
+            Next_moves.add(Next);
+            return Next;
         }
-        Next_moves.add(Next);
-    return Next;
+        else{
+            System.out.print("Move Corrupted");
+            return this;
+        }
     }
     public Diagram Original(){
         return Story.get(0);

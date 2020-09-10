@@ -41,4 +41,7 @@ public class Move implements Serializable {
             //Roszady
         }
     }
+    public boolean IsCorrect(){
+        return ox != -1 && oy != -1 && nx != -1 & ny != -1;
+    }
 }

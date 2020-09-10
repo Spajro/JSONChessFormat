@@ -3,12 +3,21 @@ package hlp;
 import dts.Bufor;
 
 public class Position_finder {
-    public Position Result;
+     Position Result;
     Checker Check;
 
     public Position_finder() {
         Result= new Position(-1,-1);
         Check=new Checker();
+    }
+    public Position GetResult(){
+        if(!Result.IsEmpty()){
+            return Result;
+        }
+        else{
+            System.out.print("Result not found");
+            return null;
+        }
     }
 
     public void Clean() {
