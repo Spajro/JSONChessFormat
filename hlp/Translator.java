@@ -11,6 +11,7 @@ public class Translator {
 
     public Move Algebraic_to_move(Bufor T, String M, boolean C) {
         Move Result= new Move();
+        Result.SetName(M);
         boolean Rosz=false;
         boolean Fault=false;
         int R_type=-1;

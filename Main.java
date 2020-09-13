@@ -1,6 +1,6 @@
+import hlp.Text_display;
 import prg.Action_data;
 import prg.Database_editor;
-import prg.Kontroler;
 import hlp.Translator;
 import prg.Mode;
 
@@ -33,6 +33,7 @@ public class Main {
                     case "QT" -> Ad = new Action_data("QT", null);
                     case "DLA" -> Ad = new Action_data("DL", Editor.GetDiag());
                     case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
+                    case "PM" -> Ad = new Action_data("PM", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 

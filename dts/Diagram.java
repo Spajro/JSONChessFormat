@@ -7,6 +7,7 @@ import java.util.LinkedList;
 
 public class Diagram implements Serializable {
     public int MoveId;
+    public String MoveName;
     public Diagram LastMove;
     public LinkedList<Diagram> Next_moves;
     Annotation Info;
@@ -14,6 +15,7 @@ public class Diagram implements Serializable {
     public boolean Color;
     public Diagram(){
         MoveId=0;
+        MoveName=null;
         T=new Bufor(8);
         LastMove=null;
         Next_moves = new LinkedList<>();
@@ -33,8 +35,10 @@ public class Diagram implements Serializable {
             Bufor NT = new Bufor(T);
             M.Make_move(NT);
             Diagram Next = new Diagram(NT, this, !Color,MoveId+1);
+            Next.MoveName=M.GetName();
             for (Diagram D : Next_moves) {
                 if (D.T.equals(Next.T) && D.MoveId==Next.MoveId) {
+                    //TODO
                     return D;
                 }
             }
@@ -60,5 +64,21 @@ public class Diagram implements Serializable {
     }
     public Diagram Original(){
         return FindMove(0);
+    }
+    public String[] GetMoves(){
+        int n=Next_moves.size();
+        if(n==0){
+            System.out.print("No moves");
+            return null;
+        }
+        else{
+            String[] S=new String[n];
+            int i=0;
+            for(Diagram D : Next_moves){
+                S[i]=D.MoveName;
+                i++;
+            }
+            return S;
+        }
     }
 }

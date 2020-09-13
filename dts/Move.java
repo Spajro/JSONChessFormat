@@ -3,6 +3,7 @@ package dts;
 import java.io.Serializable;
 
 public class Move implements Serializable {
+    String Name;
     int ox,oy,nx,ny;
     int Roszada; //0 brak 1 bk 2 bd 3 ck 4 cd
     public Move(){
@@ -43,5 +44,11 @@ public class Move implements Serializable {
     }
     public boolean IsCorrect(){
         return ox != -1 && oy != -1 && nx != -1 & ny != -1;
+    }
+    public void SetName(String N){
+        Name=N;
+    }
+    public String GetName(){
+        return Name;
     }
 }

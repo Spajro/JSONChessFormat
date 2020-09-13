@@ -1,3 +1,5 @@
+package hlp;
+
 import dts.Diagram;
 import hlp.Translator;
 import prg.Display_data;
@@ -13,6 +15,7 @@ public class Text_display {
         state=D.Diag;
     }
     public void Print_Pos(){
+        System.out.println();
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
                 int temp=state.T.get(j,7-i);
