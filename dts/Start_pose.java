@@ -24,9 +24,9 @@ public class Start_pose extends Diagram {
             T.write(24-j,i,7);
             j++;
         }
-        Story=new LinkedList<>();
+        MoveId=0;
+        LastMove=null;
         Next_moves = new LinkedList<>();
         Info = new Annotation();
-        Story.add(this);
     }
 }

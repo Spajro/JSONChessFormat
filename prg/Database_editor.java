@@ -73,7 +73,7 @@ public class Database_editor implements Mode{
         Base=Base.Make_move(M);
     }
     void Delete_diagram(Diagram D){
-        Diagram temp = Base.Story.getLast();
+        Diagram temp = Base.LastMove;
         if(Base.equals(D)){
             temp.Next_moves.remove(Base);
             Base=temp;
@@ -92,6 +92,6 @@ public class Database_editor implements Mode{
         //TODO
     }
     void Go_back(int pos){
-        Base=Base.Story.get(pos);
+        Base=Base.FindMove(pos);
     }
 }

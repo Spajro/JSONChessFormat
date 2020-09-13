@@ -32,7 +32,7 @@ public class Main {
                     case "AN" -> Ad = new Action_data("AN", null);
                     case "QT" -> Ad = new Action_data("QT", null);
                     case "DLA" -> Ad = new Action_data("DL", Editor.GetDiag());
-                    case "GB" -> Ad = new Action_data("GB", Scan.nextInt());
+                    case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
                     default -> System.out.print("Unknown code MAIN");
                 }
 
@@ -41,6 +41,7 @@ public class Main {
                 }
                 else{
                     System.out.print("Cmd not found -> not executed");
+                    System.out.print(cmd);
                 }
                 Dis.Update(Editor.Display());
                 Dis.Print_Pos();
