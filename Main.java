@@ -34,6 +34,7 @@ public class Main {
                     case "DLA" -> Ad = new Action_data("DL", Editor.GetDiag());
                     case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
                     case "PM" -> Ad = new Action_data("PM", null);
+                    case "PH" -> Ad = new Action_data("PH", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 

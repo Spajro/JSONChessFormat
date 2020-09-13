@@ -81,4 +81,19 @@ public class Diagram implements Serializable {
             return S;
         }
     }
+    public String[] GetHistory(){
+        if(MoveId!=0) {
+            Diagram D = this;
+            String[] S = new String[D.MoveId+1];
+            while (D.MoveId >= 0) {
+                S[D.MoveId] = D.MoveName;
+                D = D.LastMove;
+                if(D==null){
+                    break;
+                }
+            }
+            return S;
+        }
+        else return null;
+    }
 }

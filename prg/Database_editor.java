@@ -29,6 +29,7 @@ public class Database_editor implements Mode{
             case "DL" -> Delete_diagram((Diagram) AD.Parameter);
             case "GB" -> Go_back((int) AD.Parameter);
             case "PM" -> PrintMoves();
+            case "PH" -> PrintHistory();
             default -> System.out.print("Unknown code MA");
         }
     }
@@ -100,6 +101,15 @@ public class Database_editor implements Mode{
         if(ToPrint!=null){
             for(String S : ToPrint){
                 System.out.print(S+" ");
+            }
+
+        }
+    }
+    void PrintHistory(){
+        String[] ToPrint=Base.GetHistory();
+        if(ToPrint!=null){
+            for(String S : ToPrint){
+                if(S!=null)System.out.print(S+" ");
             }
 
         }
