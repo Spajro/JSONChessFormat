@@ -35,6 +35,8 @@ public class Main {
                     case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
                     case "PM" -> Ad = new Action_data("PM", null);
                     case "PH" -> Ad = new Action_data("PH", null);
+                    case "JB" -> Ad = new Action_data("JB", null);
+                    case "JF" -> Ad = new Action_data("JF", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 

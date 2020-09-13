@@ -30,6 +30,8 @@ public class Database_editor implements Mode{
             case "GB" -> Go_back((int) AD.Parameter);
             case "PM" -> PrintMoves();
             case "PH" -> PrintHistory();
+            case "JB" -> JumpBack();
+            case "JF" -> JumpForward();
             default -> System.out.print("Unknown code MA");
         }
     }
@@ -114,4 +116,21 @@ public class Database_editor implements Mode{
 
         }
     }
+    void JumpBack(){
+        if(Base.LastMove!=null){
+            Base=Base.LastMove;
+        }
+        else{
+            System.out.print("Cant jump back");
+        }
+    }
+    void JumpForward(){
+        if(!Base.Next_moves.isEmpty()){
+            Base=Base.Next_moves.peekFirst();
+        }
+        else{
+            System.out.print("Cant jump forward");
+        }
+    }
+
 }
