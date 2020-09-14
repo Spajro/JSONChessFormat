@@ -31,12 +31,13 @@ public class Main {
                     case "MM" -> Ad = new Action_data("MM", Trans.Algebraic_to_move(Editor.GetDiag().T, Scan.nextLine(), Editor.GetColor()));
                     case "AN" -> Ad = new Action_data("AN", null);
                     case "QT" -> Ad = new Action_data("QT", null);
-                    case "DLA" -> Ad = new Action_data("DL", Editor.GetDiag());
+                    case "DL" -> Ad = new Action_data("DL",null);
                     case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
                     case "PM" -> Ad = new Action_data("PM", null);
                     case "PH" -> Ad = new Action_data("PH", null);
                     case "JB" -> Ad = new Action_data("JB", null);
                     case "JF" -> Ad = new Action_data("JF", null);
+                    case "Help" -> Ad = new Action_data("HP", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 

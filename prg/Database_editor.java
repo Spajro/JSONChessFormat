@@ -26,12 +26,13 @@ public class Database_editor implements Mode{
             case "MM" -> Make_move((Move) AD.Parameter);
             case "AN" -> Annotate();
             case "QT" -> Exit();
-            case "DL" -> Delete_diagram((Diagram) AD.Parameter);
+            case "DL" -> Delete_diagram();
             case "GB" -> Go_back((int) AD.Parameter);
             case "PM" -> PrintMoves();
             case "PH" -> PrintHistory();
             case "JB" -> JumpBack();
             case "JF" -> JumpForward();
+            case "HP" -> PrintHelp();
             default -> System.out.print("Unknown code MA");
         }
     }
@@ -76,21 +77,16 @@ public class Database_editor implements Mode{
     void Make_move(Move M){
         Base=Base.Make_move(M);
     }
-    void Delete_diagram(Diagram D){
-        Diagram temp = Base.LastMove;
-        if(Base.equals(D)){
-            temp.Next_moves.remove(Base);
-            Base=temp;
-        }
-        else{
-            if(Base.T.equals(new Start_pose().T)){
-                System.out.print("Diagram not found");
-            }
-            else{
-                Base=temp;
-                Delete_diagram(D);
-            }
-        }
+    void Delete_diagram(){
+       if(Base.LastMove!=null){
+           Diagram Temp=Base;
+           Base=Base.LastMove;
+           Base.Next_moves.remove(Temp);
+       }
+       else {
+           System.out.print("Cant delete");
+       }
+
     }
     void Annotate(){
         //TODO
@@ -131,6 +127,21 @@ public class Database_editor implements Mode{
         else{
             System.out.print("Cant jump forward");
         }
+    }
+    void PrintHelp(){
+        System.out.print(
+                "            To make action write code , follow it by parameter if neccesary in next line \n"+
+                "            case \"SV\" -> Save();\n" +
+                "            case \"MM\" -> Makes move from parameter\n" +
+                "            case \"Q\" -> Exit();\n" +
+                "            case \"DL\" -> Delete_diagram();\n" +
+                "            case \"GB\" -> Goes back to position indexed by parameter;\n" +
+                "            case \"PM\" -> PrintMoves();\n" +
+                "            case \"PH\" -> PrintHistory();\n" +
+                "            case \"JB\" -> JumpBack();\n" +
+                "            case \"JF\" -> JumpForward();\n" +
+                "            case \"HP\" -> PrintHelp();");
+
     }
 
 }
