@@ -8,6 +8,6 @@ public interface Mode {
     Display_data Display();
     void Exit();
     //tmp
-    Diagram GetDiag();
-    boolean GetColor();
+   // Diagram GetDiag();
+    //boolean GetColor();
 }
