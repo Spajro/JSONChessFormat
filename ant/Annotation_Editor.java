@@ -4,15 +4,24 @@ import prg.Action_data;
 import prg.BoardDisplayData;
 import prg.Mode;
 
-public class Annotation_Editor implements Mode {
+import java.io.Serializable;
+
+public class Annotation_Editor implements Mode, Serializable {
+    Annotation Ant;
+    public Annotation_Editor(){
+    Ant=new Annotation();
+    }
+    public Annotation_Editor(Annotation A){
+        Ant=A;
+    }
     @Override
     public void Make_action(Action_data AD) {
         //TODO
     }
 
     @Override
-    public BoardDisplayData Display() {
-        return null;
+    public AnnotationDisplayData Display() {
+        return new AnnotationDisplayData(Ant);
     }
 
     @Override

@@ -1,4 +1,4 @@
-import hlp.Text_display;
+import hlp.TextDisplay;
 import prg.Action_data;
 import prg.Database_editor;
 import hlp.Translator;
@@ -13,7 +13,7 @@ public class Main {
         Scanner Scan= new Scanner(System.in);
         boolean working = true;
         Translator Trans = new Translator();
-        Text_display Dis = new Text_display();
+        TextDisplay Dis = new TextDisplay();
         //Action_data First = new Action_data("SEL",new Action_data("DTE","TEST"));
         //Cont.Get_cmd(First);
 

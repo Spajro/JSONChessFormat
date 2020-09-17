@@ -3,10 +3,10 @@ package hlp;
 import dts.Diagram;
 import prg.BoardDisplayData;
 
-public class Text_display {
+public class TextDisplay {
     Diagram state;
     Translator Trans;
-    public Text_display(){
+    public TextDisplay(){
         state = new Diagram();
         Trans = new Translator();
     }

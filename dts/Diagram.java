@@ -1,6 +1,7 @@
 package dts;
 
 import ant.Annotation;
+import ant.Annotation_Editor;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -10,7 +11,7 @@ public class Diagram implements Serializable {
     public String MoveName;
     public Diagram LastMove;
     public LinkedList<Diagram> Next_moves;
-    Annotation Info;
+    Annotation_Editor Info;
     public Bufor T;
     public boolean Color;
     public Diagram(){
@@ -19,7 +20,7 @@ public class Diagram implements Serializable {
         T=new Bufor(8);
         LastMove=null;
         Next_moves = new LinkedList<>();
-        Info = new Annotation();
+        Info = new Annotation_Editor();
         Color=true;
     }
     public Diagram(Bufor NT, Diagram Last, boolean C,int Id){
@@ -27,7 +28,7 @@ public class Diagram implements Serializable {
         T= new Bufor(NT);
         LastMove=Last;
         Next_moves = new LinkedList<>();
-        Info = new Annotation();
+        Info = new Annotation_Editor();
         Color=C;
     }
     public Diagram Make_move(Move M){
