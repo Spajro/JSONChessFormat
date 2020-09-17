@@ -1,6 +1,5 @@
 package prg;
 
-import dts.Bufor;
 import dts.Diagram;
 
 public class Kontroler {
@@ -34,7 +33,7 @@ public class Kontroler {
                 System.out.print("Unknown code SM");
         }
     }
-    public Display_data Display(){
+    public BoardDisplayData Display(){
         return Current.Display();
     }
     public Diagram GetDiag(){return Current.GetDiag();}

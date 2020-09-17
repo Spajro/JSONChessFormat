@@ -1,6 +1,5 @@
 package prg;
 
-import dts.Bufor;
 import dts.Diagram;
 import dts.Move;
 import dts.Start_pose;
@@ -38,8 +37,8 @@ public class Database_editor implements Mode{
     }
 
     @Override
-    public Display_data Display() {
-        return new Display_data(Base);
+    public BoardDisplayData Display() {
+        return new BoardDisplayData(Base);
     }
 
     @Override
@@ -47,15 +46,6 @@ public class Database_editor implements Mode{
     //TODO
     }
 
-    @Override
-    public Diagram GetDiag() {
-    return  Base;
-    }
-
-    @Override
-    public boolean GetColor() {
-        return Base.Color;
-    }
 
     Diagram Load(String Namefile){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(Namefile+".bin"))) {

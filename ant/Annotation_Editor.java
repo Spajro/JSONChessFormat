@@ -1,7 +1,7 @@
 package ant;
 
 import prg.Action_data;
-import prg.Display_data;
+import prg.BoardDisplayData;
 import prg.Mode;
 
 public class Annotation_Editor implements Mode {
@@ -11,7 +11,7 @@ public class Annotation_Editor implements Mode {
     }
 
     @Override
-    public Display_data Display() {
+    public BoardDisplayData Display() {
         return null;
     }
 

@@ -1,5 +1,5 @@
 package ant;
 
-public class SingAnnotation {
+public class SignAnnotation {
     //TODO
 }

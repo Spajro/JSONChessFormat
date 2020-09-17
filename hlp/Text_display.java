@@ -1,8 +1,7 @@
 package hlp;
 
 import dts.Diagram;
-import hlp.Translator;
-import prg.Display_data;
+import prg.BoardDisplayData;
 
 public class Text_display {
     Diagram state;
@@ -11,7 +10,7 @@ public class Text_display {
         state = new Diagram();
         Trans = new Translator();
     }
-    public void Update(Display_data D){
+    public void Update(BoardDisplayData D){
         state=D.Diag;
     }
     public void Print_Pos(){
