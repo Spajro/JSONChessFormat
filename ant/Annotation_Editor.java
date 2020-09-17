@@ -1,7 +1,7 @@
 package ant;
 
+import dis.AnnotationDisplayData;
 import prg.Action_data;
-import prg.BoardDisplayData;
 import prg.Mode;
 
 import java.io.Serializable;

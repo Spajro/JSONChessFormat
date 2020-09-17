@@ -4,6 +4,7 @@ import dts.Diagram;
 
 public class Kontroler {
     Mode Current;
+    /*
     public Kontroler(){
         Current=null;
     }
@@ -41,4 +42,6 @@ public class Kontroler {
     public boolean GetColor() {
         return Current.GetColor();
     }
+
+     */
 }

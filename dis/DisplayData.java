@@ -1,4 +1,4 @@
-package prg;
+package dis;
 
 public abstract class DisplayData {
 

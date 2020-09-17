@@ -1,19 +1,21 @@
-package hlp;
+package dis;
 
 import dts.Diagram;
-import prg.BoardDisplayData;
+import hlp.Translator;
 
-public class TextDisplay {
+public class BoardDisplay implements Display {
     Diagram state;
     Translator Trans;
-    public TextDisplay(){
+    public BoardDisplay(){
         state = new Diagram();
         Trans = new Translator();
     }
-    public void Update(BoardDisplayData D){
-        state=D.Diag;
+    @Override
+    public void Update(DisplayData DD){
+        BoardDisplayData BDD=(BoardDisplayData)DD;
+        state=BDD.Diag;
     }
-    public void Print_Pos(){
+    public void Print(){
         System.out.println();
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){

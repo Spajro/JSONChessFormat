@@ -1,5 +1,6 @@
 package prg;
 
+import dis.BoardDisplayData;
 import dts.Diagram;
 import dts.Move;
 import dts.Start_pose;
@@ -134,4 +135,11 @@ public class Database_editor implements Mode{
 
     }
 
+    public Diagram GetDiag() {
+        return Base;
+    }
+
+    public boolean GetColor() {
+        return Base.Color;
+    }
 }

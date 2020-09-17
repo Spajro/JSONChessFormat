@@ -1,6 +1,6 @@
-package ant;
+package dis;
 
-import prg.DisplayData;
+import ant.Annotation;
 
 public class AnnotationDisplayData extends DisplayData {
     private final Annotation Ant;

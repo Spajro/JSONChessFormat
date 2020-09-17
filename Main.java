@@ -1,8 +1,8 @@
-import hlp.TextDisplay;
+import dis.BoardDisplay;
+import dis.Displayer;
 import prg.Action_data;
 import prg.Database_editor;
 import hlp.Translator;
-import prg.Mode;
 
 import java.util.Scanner;
 
@@ -13,11 +13,11 @@ public class Main {
         Scanner Scan= new Scanner(System.in);
         boolean working = true;
         Translator Trans = new Translator();
-        TextDisplay Dis = new TextDisplay();
+        Displayer Dis= new Displayer();
         //Action_data First = new Action_data("SEL",new Action_data("DTE","TEST"));
         //Cont.Get_cmd(First);
 
-        Mode Editor=new Database_editor("Test");
+        Database_editor Editor=new Database_editor("Test");
         while (working){
             String cmd= Scan.nextLine();
             if(cmd.equals("Q")){
@@ -49,7 +49,7 @@ public class Main {
                     System.out.print(cmd);
                 }
                 Dis.Update(Editor.Display());
-                Dis.Print_Pos();
+                Dis.Print();
             }
         }
     }

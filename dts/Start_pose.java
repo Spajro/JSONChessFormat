@@ -1,6 +1,7 @@
 package dts;
 
 import ant.Annotation;
+import ant.Annotation_Editor;
 
 import java.util.LinkedList;
 
@@ -27,6 +28,6 @@ public class Start_pose extends Diagram {
         MoveId=0;
         LastMove=null;
         Next_moves = new LinkedList<>();
-        Info = new Annotation();
+        Info = new Annotation_Editor();
     }
 }
