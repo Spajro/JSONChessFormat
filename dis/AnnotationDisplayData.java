@@ -4,7 +4,7 @@ import ant.Annotation;
 
 public class AnnotationDisplayData extends DisplayData {
     private final Annotation Ant;
-    AnnotationDisplayData(Annotation A){
+    public AnnotationDisplayData(Annotation A){
         Ant=A;
     }
     public Annotation getAnt() {

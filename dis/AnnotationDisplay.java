@@ -4,6 +4,9 @@ import ant.Annotation;
 
 public class AnnotationDisplay implements Display {
     Annotation A;
+    AnnotationDisplay(){
+        A=new Annotation();
+    }
     @Override
     public void Update(DisplayData DD) {
         AnnotationDisplayData ADD=(AnnotationDisplayData)DD;
@@ -12,6 +15,6 @@ public class AnnotationDisplay implements Display {
 
     @Override
     public void Print() {
-        System.out.print(A.getText());
+        if(A.getText()!=null)System.out.print(A.getText());
     }
 }

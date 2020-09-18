@@ -38,6 +38,8 @@ public class Main {
                     case "JB" -> Ad = new Action_data("JB", null);
                     case "JF" -> Ad = new Action_data("JF", null);
                     case "Help" -> Ad = new Action_data("HP", null);
+                    case "ANT" -> Ad=new Action_data("ANT", Scan.nextLine());
+                    case "ADT" -> Ad=new Action_data("ADT", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 
@@ -49,6 +51,7 @@ public class Main {
                     System.out.print(cmd);
                 }
                 Dis.Update(Editor.Display());
+                Dis.Update(Editor.GetDiag().Info.Display());
                 Dis.Print();
             }
         }

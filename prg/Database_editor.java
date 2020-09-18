@@ -10,6 +10,7 @@ import java.io.*;
 public class Database_editor implements Mode{
     Diagram Base;
     String Name;
+    boolean AnnotatingOn=false;
 
     public Database_editor(String N){
         Base= new Start_pose();
@@ -17,23 +18,31 @@ public class Database_editor implements Mode{
     }
     @Override
     public void Make_action(Action_data AD) {
-        switch (AD.Get_code()) {
-            case "LD" -> {
-                Base = Load((String) AD.Parameter);
-                if (Base == null) System.out.print("Loading failed");
+        if(!AnnotatingOn) {
+            switch (AD.Get_code()) {
+                case "LD" -> {
+                    Base = Load((String) AD.Parameter);
+                    if (Base == null) System.out.print("Loading failed");
+                }
+                case "SV" -> Save();
+                case "MM" -> Make_move((Move) AD.Parameter);
+                case "AN" -> Annotate();
+                case "QT" -> Exit();
+                case "DL" -> Delete_diagram();
+                case "GB" -> Go_back((int) AD.Parameter);
+                case "PM" -> PrintMoves();
+                case "PH" -> PrintHistory();
+                case "JB" -> JumpBack();
+                case "JF" -> JumpForward();
+                case "HP" -> PrintHelp();
+                default -> System.out.print("Unknown code MA");
             }
-            case "SV" -> Save();
-            case "MM" -> Make_move((Move) AD.Parameter);
-            case "AN" -> Annotate();
-            case "QT" -> Exit();
-            case "DL" -> Delete_diagram();
-            case "GB" -> Go_back((int) AD.Parameter);
-            case "PM" -> PrintMoves();
-            case "PH" -> PrintHistory();
-            case "JB" -> JumpBack();
-            case "JF" -> JumpForward();
-            case "HP" -> PrintHelp();
-            default -> System.out.print("Unknown code MA");
+        }
+        else{
+            if(AD.Get_code()=="AN"){
+                Annotate();
+            }
+            else Base.Info.Make_action(AD);
         }
     }
 
@@ -80,7 +89,8 @@ public class Database_editor implements Mode{
 
     }
     void Annotate(){
-        //TODO
+        AnnotatingOn = !AnnotatingOn;
+
     }
     void Go_back(int pos){
         Base=Base.FindMove(pos);

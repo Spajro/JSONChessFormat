@@ -16,7 +16,11 @@ public class Annotation_Editor implements Mode, Serializable {
     }
     @Override
     public void Make_action(Action_data AD) {
-        //TODO
+        switch (AD.Get_code()) {
+        case "ANT" -> AddText((String)AD.Get_param());
+        case "ADT" -> DeleteText();
+            default -> System.out.print("Annotation editor corrupted code");
+        }
     }
 
     @Override
@@ -29,6 +33,12 @@ public class Annotation_Editor implements Mode, Serializable {
 //TODO
     }
 
+    void AddText(String S){
+        Ant.setText(S);
+    }
+    void DeleteText(){
+        Ant.setText(null);
+    }
 
     // edycja i dodawanie annotacji
 }

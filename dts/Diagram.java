@@ -11,7 +11,7 @@ public class Diagram implements Serializable {
     public String MoveName;
     public Diagram LastMove;
     public LinkedList<Diagram> Next_moves;
-    Annotation_Editor Info;
+    public Annotation_Editor Info;
     public Bufor T;
     public boolean Color;
     public Diagram(){

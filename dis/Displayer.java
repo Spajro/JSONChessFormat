@@ -23,5 +23,6 @@ public class Displayer implements Display {
     public void Print() {
         BD.Print();
         AD.Print();
+        System.out.print("\n");
     }
 }
