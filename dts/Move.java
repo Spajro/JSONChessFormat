@@ -3,6 +3,7 @@ package dts;
 import java.io.Serializable;
 
 public class Move implements Serializable {
+    //class representing chess move
     String Name;
     int ox,oy,nx,ny;
     int Roszada; //0 brak 1 bk 2 bd 3 ck 4 cd
@@ -32,7 +33,7 @@ public class Move implements Serializable {
     public void Roszada(int R){
         Roszada=R;
     }
-    public void Make_move(Bufor T){
+    public void Make_move(Board T){
         if(Roszada==0) {
             T.write(T.get(ox, oy), nx, ny);
             T.write(0, ox, oy);

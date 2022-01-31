@@ -7,35 +7,36 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class Diagram implements Serializable {
+    //class representing node of openings tree
     public int MoveId;
     public String MoveName;
     public Diagram LastMove;
     public LinkedList<Diagram> Next_moves;
-    public Annotation_Editor Info;
-    public Bufor T;
-    public boolean Color;
+    public Annotation Info;
+    public Board T;
+    public int Color;
     public Diagram(){
         MoveId=0;
         MoveName=null;
-        T=new Bufor(8);
+        T=Board.getBlank();
         LastMove=null;
         Next_moves = new LinkedList<>();
-        Info = new Annotation_Editor();
-        Color=true;
+        Info = new Annotation();
+        Color=-1;
     }
-    public Diagram(Bufor NT, Diagram Last, boolean C,int Id){
+    public Diagram(Board NT, Diagram Last, int C, int Id){
         MoveId=Id;
-        T= new Bufor(NT);
+        T= Board.getCopy(NT);
         LastMove=Last;
         Next_moves = new LinkedList<>();
-        Info = new Annotation_Editor();
+        Info = new Annotation();
         Color=C;
     }
     public Diagram Make_move(Move M){
         if(M.IsCorrect()) {
-            Bufor NT = new Bufor(T);
+            Board NT =Board.getCopy(T);
             M.Make_move(NT);
-            Diagram Next = new Diagram(NT, this, !Color,MoveId+1);
+            Diagram Next = new Diagram(NT, this, Board.swapColor(Color),MoveId+1);
             Next.MoveName=M.GetName();
             for (Diagram D : Next_moves) {
                 if (D.T.equals(Next.T) && D.MoveId==Next.MoveId) {
