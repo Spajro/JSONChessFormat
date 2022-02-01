@@ -16,19 +16,26 @@ public class Position {
         x=P.x;
         y=P.y;
     }
-    public void Add(Position P){
+    public void add(Position P){
         x+=P.x;
         y+=P.y;
     }
-    public void Add(int nx,int ny){
+    public void add(int nx, int ny){
         x+=nx;
         y+=ny;
     }
-    public boolean IsEmpty(){
+    public boolean isEmpty(){
         return x == -1 && y == -1;
     }
-    public boolean IsOnBoard(){
+    public boolean isOnBoard(){
         return !(x < 1 || y < 1 || x > 8 || y > 8);
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

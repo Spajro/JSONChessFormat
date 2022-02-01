@@ -6,23 +6,23 @@ import java.io.Serializable;
 public class Board implements Serializable {
     //Class representing chess board
     //statics int%3==1 is white, 2 is black
-    private static final int SIZE=8;
-    private static final int EMPTY=0;
-    private static final int WPAWN=1;
-    private static final int WKNIGHT=4;
-    private static final int WBISHOP=7;
-    private static final int WROOK=10;
-    private static final int WQUEEN=13;
-    private static final int WKING=16;
-    private static final int BPAWN=2;
-    private static final int BKNIGHT=5;
-    private static final int BBISHOP=8;
-    private static final int BROOK=11;
-    private static final int BQUEEN=14;
-    private static final int BKING=17;
+    public static final int SIZE=8;
+    public static final int EMPTY=0;
+    public static final int WPAWN=1;
+    public static final int WKNIGHT=4;
+    public static final int WBISHOP=7;
+    public static final int WROOK=10;
+    public static final int WQUEEN=13;
+    public static final int WKING=16;
+    public static final int BPAWN=2;
+    public static final int BKNIGHT=5;
+    public static final int BBISHOP=8;
+    public static final int BROOK=11;
+    public static final int BQUEEN=14;
+    public static final int BKING=17;
     //colors
-    private static final int WHITE=101;
-    private static final int BLACK=102;
+    public static final int WHITE=101;
+    public static final int BLACK=102;
     private final int[][] T;
     private Board(){
         T= new int[SIZE][SIZE];
@@ -104,27 +104,12 @@ public class Board implements Serializable {
         }
         throw new IllegalArgumentException("illegal color code");
     }
-    public Position checkLine(Position start, Position step, int figId){
-        Position temp=new Position(start);
-        while(temp.IsOnBoard()){
-            if(checkPiece(figId,temp)){
-                return temp;
-            }
-            else{
-                if(!checkPiece(0,temp)){
-                    //jesli na linii jest inna figura
-                    break;
-                }
-                temp.Add(step);
-            }
-        }
-        return new Position(-1,-1);
-    }
 
-    boolean checkPiece(int FigId,int x,int y){
+
+    public boolean checkPiece(int FigId, int x, int y){
         return get(x,y) == FigId;
     }
-    boolean checkPiece(int FigId, Position temp){
+    public boolean checkPiece(int FigId, Position temp){
         return checkPiece(FigId,temp.x,temp.y);
     }
 }

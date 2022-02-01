@@ -1,17 +1,14 @@
 package hlp;
 
-import dts.Bufor;
+import dts.Board;
 import dts.Move;
+import dts.Position;
 
 public class Translator {
-    Position_finder Pf;
-    public Translator(){
-        Pf=new Position_finder();
-    }
 
-    public Move Algebraic_to_move(Bufor T, String M, boolean C) {
+    public static Move Algebraic_to_move(Board t, String moveName, int color) {
         Move Result= new Move();
-        Result.SetName(M);
+        Result.SetName(moveName);
         boolean Rosz=false;
         boolean Fault=false;
         int R_type=-1;
@@ -23,68 +20,68 @@ public class Translator {
         char thx = 0;
         int hx=-1;
         int hy=-1;
-        switch (M.length()) {
+        switch (moveName.length()) {
             case 2: //ruch pionka do przodu
-                tx = M.charAt(0);
-                ty = M.charAt(1);
+                tx = moveName.charAt(0);
+                ty = moveName.charAt(1);
                 f=' ';
                 break;
             case 3: //ruch figury lub bicie pionem lub roszada krotka
-                if (M.equals("O-O")) {
+                if (moveName.equals("O-O")) {
                     //roszada krotka
                     Rosz = true;
-                    if (C) {
+                    if (Board.isWhite(color)) {
                         R_type = 1;
                     } else {
                         R_type = 3;
                     }
-                } else if (M.charAt(0) == 'x') {
+                } else if (moveName.charAt(0) == 'x') {
                     //bicie pionkiem
-                    tx = M.charAt(1);
-                    ty = M.charAt(2);
+                    tx = moveName.charAt(1);
+                    ty = moveName.charAt(2);
                     f='X';
                 } else {
                     //ruch figury
-                    f = M.charAt(0);
-                    tx = M.charAt(1);
-                    ty = M.charAt(2);
+                    f = moveName.charAt(0);
+                    tx = moveName.charAt(1);
+                    ty = moveName.charAt(2);
                 }
                 break;
             case 4: //ruch jednej z mozliwych figur lub bicie figurą lub jednym z mozliwych pionkow
-                if (M.charAt(1) == 'x') {
+                if (moveName.charAt(1) == 'x') {
                     //bicie figura
-                    f = M.charAt(0);
-                    tx = M.charAt(2);
-                    ty = M.charAt(3);
-                } else if (M.charAt(0) == 'x') {
+                    f = moveName.charAt(0);
+                    tx = moveName.charAt(2);
+                    ty = moveName.charAt(3);
+                } else if (moveName.charAt(0) == 'x') {
                     //bicie jednym z mozliwych pionkow
-                    thx = M.charAt(1);
-                    tx = M.charAt(2);
-                    ty = M.charAt(3);
+                    thx = moveName.charAt(1);
+                    tx = moveName.charAt(2);
+                    ty = moveName.charAt(3);
                     f='X';
                 } else {
                     //ruch jednej z mozliwych figur
-                    f = M.charAt(0);
-                    thx = M.charAt(1);
-                    tx = M.charAt(2);
-                    ty = M.charAt(3);
+                    f = moveName.charAt(0);
+                    thx = moveName.charAt(1);
+                    tx = moveName.charAt(2);
+                    ty = moveName.charAt(3);
                 }
                 break;
             case 5: //bicie jedną z mozliwych figur lub roszada dluga
-                if (M.equals("O-O-O")) {
+                if (moveName.equals("O-O-O")) {
                     //roszada długa
                     Rosz = true;
-                    if (C) {
+                    if (Board.isWhite(color)) {
                         R_type = 2;
                     } else {
                         R_type = 4;
                     }
                 } else {
                     //bicie jedną z mozliwych figur
-                    f = M.charAt(0);
-                    thx = M.charAt(2);
-                    tx = M.charAt(3);
-                    ty = M.charAt(4);
+                    f = moveName.charAt(0);
+                    thx = moveName.charAt(2);
+                    tx = moveName.charAt(3);
+                    ty = moveName.charAt(4);
                 }
                 break;
             default:
@@ -104,80 +101,79 @@ public class Translator {
             if(thx!=0){
                 hx=Column_to_num(thx);
             }
-            Pf.Choose_fig(f,C,T,new Position(x,y),new Position(hx,hy));
-            Result.Update(Pf.Result.x,Pf.Result.y,x,y);
+            Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
+            Result.Update(temp.getX(),temp.getY(),x,y);
         }
-        Pf.Clean();
         return Result;
     }
 
-    public int Column_to_num(char C){
-        switch (C){
+    public static int Column_to_num(char column){
+        switch (column){
             case 'a' -> {
-                return 0;
-            }
-            case 'b' -> {
                 return 1;
             }
-            case 'c' -> {
+            case 'b' -> {
                 return 2;
             }
-            case 'd' -> {
+            case 'c' -> {
                 return 3;
             }
-            case 'e' -> {
+            case 'd' -> {
                 return 4;
             }
-            case 'f' -> {
+            case 'e' -> {
                 return 5;
             }
-            case 'g' -> {
+            case 'f' -> {
                 return 6;
             }
-            case 'h' -> {
+            case 'g' -> {
                 return 7;
+            }
+            case 'h' -> {
+                return 8;
             }
             default -> System.out.print("Column_to_num fault");
         }
         return -1;
     }
 
-    public String Num_to_Fig(int F){
+    public static String Num_to_Fig(int F){
         switch(F){
-            case 11 -> {
+            case Board.WPAWN -> {
                 return "BP";
             }
-            case 12 -> {
+            case Board.WROOK -> {
                 return "BW";
             }
-            case 13 -> {
+            case Board.WKNIGHT -> {
                 return "BS";
             }
-            case 14 -> {
+            case Board.WBISHOP -> {
                 return "BG";
             }
-            case 15 -> {
+            case Board.WQUEEN -> {
                 return "BH";
             }
-            case 16 -> {
+            case Board.WKING -> {
                 return "BK";
             }
-            case 21 -> {
+            case Board.BPAWN -> {
                 return "CP";
             }
-            case 22 -> {
+            case Board.BROOK -> {
                 return "CW";
             }
-            case 23 -> {
+            case Board.BKNIGHT -> {
                 return "CS";
             }
-            case 24 -> {
+            case Board.BBISHOP -> {
                 return "CG";
             }
-            case 25 -> {
+            case Board.BQUEEN -> {
                 return "CH";
             }
-            case 26 -> {
+            case Board.BKING -> {
                 return "CK";
             }
             default -> {
