@@ -24,7 +24,7 @@ public class BoardDisplay implements Display {
                     System.out.print("00");
                 }
                 else {
-                    System.out.print(Trans.Num_to_Fig(temp));
+                    System.out.print(Trans.numToFig(temp));
                 }
                 System.out.print(" ");
             }

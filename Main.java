@@ -1,4 +1,3 @@
-import dis.BoardDisplay;
 import dis.Displayer;
 import prg.Action_data;
 import prg.Database_editor;
@@ -28,7 +27,7 @@ public class Main {
                 switch (cmd) {
                     case "LD" -> Ad = new Action_data("LD", Scan.nextLine());
                     case "SV" -> Ad = new Action_data("SV", null);
-                    case "MM" -> Ad = new Action_data("MM", Trans.Algebraic_to_move(Editor.GetDiag().T, Scan.nextLine(), Editor.GetColor()));
+                    case "MM" -> Ad = new Action_data("MM", Trans.algebraicToMove(Editor.GetDiag().T, Scan.nextLine(), Editor.GetColor()));
                     case "AN" -> Ad = new Action_data("AN", null);
                     case "QT" -> Ad = new Action_data("QT", null);
                     case "DL" -> Ad = new Action_data("DL",null);

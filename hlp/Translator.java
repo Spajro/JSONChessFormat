@@ -6,7 +6,7 @@ import dts.Position;
 
 public class Translator {
 
-    public static Move Algebraic_to_move(Board t, String moveName, int color) {
+    public static Move algebraicToMove(Board t, String moveName, int color) {
         Move Result= new Move();
         Result.SetName(moveName);
         boolean Rosz=false;
@@ -96,10 +96,10 @@ public class Translator {
             Result.Roszada(R_type);
         }
         else{
-            x=Column_to_num(tx);
+            x= columnToNum(tx);
             y=Character.getNumericValue(ty)-1;
             if(thx!=0){
-                hx=Column_to_num(thx);
+                hx= columnToNum(thx);
             }
             Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
             Result.Update(temp.getX(),temp.getY(),x,y);
@@ -107,7 +107,7 @@ public class Translator {
         return Result;
     }
 
-    public static int Column_to_num(char column){
+    public static int columnToNum(char column){
         switch (column){
             case 'a' -> {
                 return 1;
@@ -138,7 +138,7 @@ public class Translator {
         return -1;
     }
 
-    public static String Num_to_Fig(int F){
+    public static String numToFig(int F){
         switch(F){
             case Board.WPAWN -> {
                 return "BP";
