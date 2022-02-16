@@ -9,7 +9,7 @@ public class DataModel {
 
     public DataModel() {
         tree=new Diagram();
-        actualBoard=tree.T;
+        actualBoard=tree.getBoard();
         name="new datamodel";
     }
 
@@ -19,8 +19,8 @@ public class DataModel {
     }
 
     public void makeMove(Move m){
-        tree=tree.Make_move(m);
-        setActualBoard(tree.T);
+        tree=tree.makeMove(m);
+        setActualBoard(tree.getBoard());
     }
 
     Diagram load(String filename){
@@ -34,7 +34,7 @@ public class DataModel {
 
     void save(){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(name+".bin"))) {
-            outputStream.writeObject(tree.Original());
+            outputStream.writeObject(tree.original());
             System.out.print("Saved sukces");
         } catch (IOException e) {
             e.printStackTrace();
