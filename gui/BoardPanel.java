@@ -32,6 +32,11 @@ public class BoardPanel extends JPanel {
         setImageMap();
     }
 
+    public BoardPanel(Board board) {
+        setImageMap();
+        this.board = board;
+    }
+
     @Override
     public void paint(Graphics g) {
         //TODO update scale
