@@ -12,9 +12,13 @@ public class MouseListener implements MouseInputListener {
     private int x=-1;
     private int y=-1;
 
+    public MouseListener(BoardPanel boardPanel, DataModel model) {
+        this.boardPanel = boardPanel;
+        this.model = model;
+    }
 
     public int findField(int t){
-       return ((t-(t%boardPanel.getScale()))/20)+1;
+       return ((t-(t%boardPanel.getScale()))/boardPanel.getScale())+1;
     }
     @Override
     public void mouseClicked(MouseEvent e) {

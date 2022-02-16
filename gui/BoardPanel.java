@@ -6,8 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 
+import static java.lang.Math.min;
+
 public class BoardPanel extends JPanel {
-    private int scale=20;
+    private int scale=60;
     private Board board;
     private Color colBack=Color.WHITE;
     private Color colWhiteField=Color.LIGHT_GRAY;
@@ -39,13 +41,13 @@ public class BoardPanel extends JPanel {
 
     @Override
     public void paint(Graphics g) {
-        //TODO update scale
+        scale=getScale();
         g.setColor(colBack);
         g.fillRect(0, 0, getWidth(), getHeight());
         if (board != null) {
             boolean temp=true;
-            for (int y = 0; y < Board.SIZE; ++y) {
-                for (int x = 0; x < Board.SIZE; ++x) {
+            for (int y = 0; y < Board.SIZE; y++) {
+                for (int x = 0; x < Board.SIZE; x++) {
                     if (temp) {
                         g.setColor(colWhiteField);
                     }
@@ -54,11 +56,12 @@ public class BoardPanel extends JPanel {
                     }
                     g.fillRect(x * scale, y * scale, scale, scale);
                     temp=!temp;
-                    int fig=board.get(x-1,y-1);
+                    int fig=board.get(x+1,y+1);
                     if(fig!=Board.EMPTY){
-                         g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
+                         //g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
                     }
                 }
+                temp=!temp;
             }
         }
     }
@@ -84,7 +87,10 @@ public class BoardPanel extends JPanel {
         this.board = board;
     }
 
-    public int getScale() {
-        return scale;
+    public int getScale(){
+        int px=getWidth()/Board.SIZE;
+        int py=getHeight()/Board.SIZE;
+        //System.out.print("PX: "+px+"PY: "+py+"\n");
+        return min(px,py);
     }
 }

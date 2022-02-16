@@ -42,10 +42,10 @@ public class Board implements Serializable {
         }
     }
     public void write(int val, int x,int y){
-        T[x+1][y+1]=val;
+        T[x-1][y-1]=val;
     }
     public int get(int x,int y){
-        return T[x+1][y+1];
+        return T[x-1][y-1];
     }
 
     public static Board getBlank(){
