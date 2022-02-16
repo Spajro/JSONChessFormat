@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.HashMap;
 
 public class BoardPanel extends JPanel {
-    private static final int scale=20;
+    private int scale=20;
     private Board board;
     private Color colBack=Color.WHITE;
     private Color colWhiteField=Color.LIGHT_GRAY;
@@ -77,5 +77,9 @@ public class BoardPanel extends JPanel {
 
     public void setBoard(Board board) {
         this.board = board;
+    }
+
+    public int getScale() {
+        return scale;
     }
 }
