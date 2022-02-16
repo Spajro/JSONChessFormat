@@ -3,7 +3,6 @@ package prg;
 import dis.BoardDisplayData;
 import dts.Diagram;
 import dts.Move;
-import dts.Start_pose;
 
 import java.io.*;
 
@@ -13,7 +12,7 @@ public class Database_editor implements Mode{
     boolean AnnotatingOn=false;
 
     public Database_editor(String N){
-        Base= new Start_pose();
+        Base= new Diagram();
         Name=N;
     }
     @Override
@@ -38,12 +37,7 @@ public class Database_editor implements Mode{
                 default -> System.out.print("Unknown code MA");
             }
         }
-        else{
-            if(AD.Get_code()=="AN"){
-                Annotate();
-            }
-            else Base.Info.Make_action(AD);
-        }
+
     }
 
     @Override
@@ -68,20 +62,20 @@ public class Database_editor implements Mode{
 
     void Save(){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Name+".bin"))) {
-            outputStream.writeObject(Base.Original());
+            outputStream.writeObject(Base.original());
             System.out.print("Saved sukces");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
     void Make_move(Move M){
-        Base=Base.Make_move(M);
+        Base=Base.makeMove(M);
     }
     void Delete_diagram(){
-       if(Base.LastMove!=null){
+       if(Base.getLastMove() !=null){
            Diagram Temp=Base;
-           Base=Base.LastMove;
-           Base.Next_moves.remove(Temp);
+           Base=Base.getLastMove();
+           Base.getNextMoves().remove(Temp);
        }
        else {
            System.out.print("Cant delete");
@@ -93,10 +87,10 @@ public class Database_editor implements Mode{
 
     }
     void Go_back(int pos){
-        Base=Base.FindMove(pos);
+        Base=Base.findMove(pos);
     }
     void PrintMoves(){
-        String[] ToPrint=Base.GetMoves();
+        String[] ToPrint=Base.getMoves();
         if(ToPrint!=null){
             for(String S : ToPrint){
                 System.out.print(S+" ");
@@ -105,7 +99,7 @@ public class Database_editor implements Mode{
         }
     }
     void PrintHistory(){
-        String[] ToPrint=Base.GetHistory();
+        String[] ToPrint=Base.getHistory();
         if(ToPrint!=null){
             for(String S : ToPrint){
                 if(S!=null)System.out.print(S+" ");
@@ -114,16 +108,16 @@ public class Database_editor implements Mode{
         }
     }
     void JumpBack(){
-        if(Base.LastMove!=null){
-            Base=Base.LastMove;
+        if(Base.getLastMove() !=null){
+            Base=Base.getLastMove();
         }
         else{
             System.out.print("Cant jump back");
         }
     }
     void JumpForward(){
-        if(!Base.Next_moves.isEmpty()){
-            Base=Base.Next_moves.peekFirst();
+        if(!Base.getNextMoves().isEmpty()){
+            Base=Base.getNextMoves().peekFirst();
         }
         else{
             System.out.print("Cant jump forward");
@@ -149,7 +143,7 @@ public class Database_editor implements Mode{
         return Base;
     }
 
-    public boolean GetColor() {
-        return Base.Color;
+    public int getColor() {
+        return Base.getColor();
     }
 }

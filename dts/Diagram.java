@@ -103,4 +103,20 @@ public class Diagram implements Serializable {
     public Board getBoard() {
         return board;
     }
+
+    public Annotation getAnnotation() {
+        return annotation;
+    }
+
+    public Diagram getLastMove() {
+        return lastMove;
+    }
+
+    public LinkedList<Diagram> getNextMoves() {
+        return nextMoves;
+    }
+
+    public int getColor() {
+        return Color;
+    }
 }

@@ -1,5 +1,7 @@
 package ant;
 
+import dis.AnnotationDisplayData;
+
 import java.io.Serializable;
 import java.util.LinkedList;
 
@@ -31,5 +33,7 @@ public class Annotation implements Serializable {
     public void AddSign(SignAnnotation A){
         Signs.add(A);
     }
-
+    public AnnotationDisplayData Display() {
+        return new AnnotationDisplayData(this);
+    }
 }
