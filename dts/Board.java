@@ -53,7 +53,7 @@ public class Board implements Serializable {
     }
     public static Board getStart(){
         Board b=new Board();
-        for(int i=0;i<8;i++){
+        for(int i=1;i<=8;i++){
             b.write(WPAWN,i,2);
             b.write(BPAWN,i,7);
         }

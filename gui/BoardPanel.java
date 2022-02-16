@@ -1,6 +1,7 @@
 package gui;
 
 import dts.Board;
+import hlp.Translator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +13,7 @@ public class BoardPanel extends JPanel {
     private int scale=60;
     private Board board;
     private Color colBack=Color.WHITE;
-    private Color colWhiteField=Color.LIGHT_GRAY;
+    private Color colWhiteField=Color.WHITE;
     private Color colBlackField=Color.BLACK;
     private HashMap<Integer,ImageIcon> imageMap;
     public static final String FOLDERPATH="";
@@ -42,6 +43,7 @@ public class BoardPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         scale=getScale();
+        g.setFont(new Font("TimesRoman", Font.PLAIN, partOf(0.25,scale)));
         g.setColor(colBack);
         g.fillRect(0, 0, getWidth(), getHeight());
         if (board != null) {
@@ -59,6 +61,10 @@ public class BoardPanel extends JPanel {
                     int fig=board.get(x+1,y+1);
                     if(fig!=Board.EMPTY){
                          //g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
+                        String s=Translator.numToFig(fig);
+                        assert s != null;
+                        g.setColor(Color.green);
+                        g.drawString(s,x*scale+partOf(0.5,scale),y*scale+partOf(0.5,scale));
                     }
                 }
                 temp=!temp;
@@ -92,5 +98,9 @@ public class BoardPanel extends JPanel {
         int py=getHeight()/Board.SIZE;
         //System.out.print("PX: "+px+"PY: "+py+"\n");
         return min(px,py);
+    }
+
+    public int partOf(double a,int b){
+        return (int) (a*b);
     }
 }

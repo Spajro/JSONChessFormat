@@ -18,7 +18,7 @@ public class Diagram implements Serializable {
     public Diagram() {
         moveId = 0;
         moveName = null;
-        board = Board.getBlank();
+        board = Board.getStart();
         lastMove = null;
         nextMoves = new LinkedList<>();
         annotation = new Annotation();
