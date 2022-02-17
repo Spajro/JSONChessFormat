@@ -37,15 +37,23 @@ public class Board implements Serializable {
         T=new int[SIZE][SIZE];
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                write(B.get(i,j),i,j);
+                set(B.get(i,j),i,j);
             }
         }
     }
     public void write(int val, int x,int y){
-        T[x-1][y-1]=val;
+        set(val,x-1,y-1);
     }
-    public int get(int x,int y){
-        return T[x-1][y-1];
+    public int read(int x, int y){
+        return get(x-1,y-1);
+    }
+
+    private void set(int val,int x,int y){
+        T[x][y]=val;
+    }
+
+    private int get(int x,int y){
+        return T[x][y];
     }
 
     public static Board getBlank(){

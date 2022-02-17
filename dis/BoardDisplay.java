@@ -19,7 +19,7 @@ public class BoardDisplay implements Display {
         System.out.println();
         for(int i=0;i<8;i++){
             for(int j=0;j<8;j++){
-                int temp=state.getBoard().get(j,7-i);
+                int temp=state.getBoard().read(j,7-i);
                 if(temp==0){
                     System.out.print("00");
                 }

@@ -58,7 +58,7 @@ public class BoardPanel extends JPanel {
                     }
                     g.fillRect(x * scale, y * scale, scale, scale);
                     temp=!temp;
-                    int fig=board.get(x+1,y+1);
+                    int fig=board.read(x+1,Board.SIZE-y);
                     if(fig!=Board.EMPTY){
                          //g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
                         String s=Translator.numToFig(fig);

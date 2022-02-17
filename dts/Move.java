@@ -35,7 +35,7 @@ public class Move implements Serializable {
     }
     public void Make_move(Board T){
         if(Roszada==0) {
-            T.write(T.get(ox, oy), nx, ny);
+            T.write(T.read(ox, oy), nx, ny);
             T.write(0, ox, oy);
         }
         else{
