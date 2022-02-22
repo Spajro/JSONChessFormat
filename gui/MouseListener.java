@@ -1,5 +1,6 @@
 package gui;
 
+import dts.Board;
 import dts.DataModel;
 import dts.Move;
 
@@ -20,6 +21,9 @@ public class MouseListener implements MouseInputListener {
     public int findField(int t){
        return ((t-(t%boardPanel.getScale()))/boardPanel.getScale())+1;
     }
+    public int reverse(int t){
+        return Board.SIZE-t+1;
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
 
@@ -37,7 +41,10 @@ public class MouseListener implements MouseInputListener {
     public void mouseReleased(MouseEvent e) {
         if(x!=-1 && y!=-1 && x!=e.getX() && y!=e.getY()){
             System.err.print("DRAG\n");
-            model.makeMove(new Move(findField(x),findField(y),findField(e.getX()),findField(e.getY())));
+            System.err.print("( "+findField(x)+", "+reverse(findField(y))+")->( "+findField(e.getX())+", "+reverse(findField(e.getY()))+")\n");
+            model.makeMove(new Move(findField(x),reverse(findField(y)),findField(e.getX()),reverse(findField(e.getY()))));
+            boardPanel.setBoard(model.getActualBoard()); //
+            boardPanel.repaint();
             x=-1;
             y=-1;
         }
