@@ -62,7 +62,7 @@ public class Database_editor implements Mode{
 
     void Save(){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(Name+".bin"))) {
-            outputStream.writeObject(Base.original());
+            outputStream.writeObject(Base.getOriginal());
             System.out.print("Saved sukces");
         } catch (IOException e) {
             e.printStackTrace();
@@ -75,7 +75,7 @@ public class Database_editor implements Mode{
        if(Base.getLastMove() !=null){
            Diagram Temp=Base;
            Base=Base.getLastMove();
-           Base.getNextMoves().remove(Temp);
+           Base.getNextDiagrams().remove(Temp);
        }
        else {
            System.out.print("Cant delete");
@@ -116,8 +116,8 @@ public class Database_editor implements Mode{
         }
     }
     void JumpForward(){
-        if(!Base.getNextMoves().isEmpty()){
-            Base=Base.getNextMoves().peekFirst();
+        if(!Base.getNextDiagrams().isEmpty()){
+            Base=Base.getNextDiagrams().peekFirst();
         }
         else{
             System.out.print("Cant jump forward");

@@ -10,7 +10,7 @@ public class Diagram implements Serializable {
     private final int moveId;
     private String moveName;
     private final Diagram lastMove;
-    private LinkedList<Diagram> nextMoves;
+    private LinkedList<Diagram> nextDiagrams;
     private Annotation annotation;
     private Board board;
     private int Color;
@@ -20,7 +20,7 @@ public class Diagram implements Serializable {
         moveName = null;
         board = Board.getStart();
         lastMove = null;
-        nextMoves = new LinkedList<>();
+        nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         Color = Board.WHITE;
     }
@@ -29,7 +29,7 @@ public class Diagram implements Serializable {
         moveId = Id;
         board = Board.getCopy(NT);
         lastMove = Last;
-        nextMoves = new LinkedList<>();
+        nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         Color = C;
     }
@@ -40,13 +40,13 @@ public class Diagram implements Serializable {
             M.Make_move(NT);
             Diagram Next = new Diagram(NT, this, Board.swapColor(Color), moveId + 1);
             Next.moveName = M.GetName();
-            for (Diagram D : nextMoves) {
+            for (Diagram D : nextDiagrams) {
                 if (D.board.equals(Next.board) && D.moveId == Next.moveId) {
                     //TODO
                     return D;
                 }
             }
-            nextMoves.add(Next);
+            nextDiagrams.add(Next);
             return Next;
         } else {
             System.out.print("Move Corrupted");
@@ -65,19 +65,19 @@ public class Diagram implements Serializable {
         }
     }
 
-    public Diagram original() {
+    public Diagram getOriginal() {
         return findMove(0);
     }
 
     public String[] getMoves() {
-        int n = nextMoves.size();
+        int n = nextDiagrams.size();
         if (n == 0) {
             System.out.print("No moves");
             return null;
         } else {
             String[] S = new String[n];
             int i = 0;
-            for (Diagram D : nextMoves) {
+            for (Diagram D : nextDiagrams) {
                 S[i] = D.moveName;
                 i++;
             }
@@ -112,11 +112,26 @@ public class Diagram implements Serializable {
         return lastMove;
     }
 
-    public LinkedList<Diagram> getNextMoves() {
-        return nextMoves;
+    public LinkedList<Diagram> getNextDiagrams() {
+        return nextDiagrams;
     }
 
     public int getColor() {
         return Color;
+    }
+
+    public Diagram getNextDiagram(int index){
+        if(index>=0 && index< nextDiagrams.size()){
+            return nextDiagrams.get(index);
+        }
+        return null;
+    }
+
+    public int getNextDiagramsCount(){
+        return nextDiagrams.size();
+    }
+
+    public int getIndexInNextDiagrams(Diagram d){
+        return nextDiagrams.indexOf(d);
     }
 }
