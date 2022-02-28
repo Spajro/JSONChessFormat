@@ -80,7 +80,7 @@ public class DataModel implements TreeModel {
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
-        return 0;
+        return ((Diagram) parent).getIndexInNextDiagrams((Diagram) child);
     }
 
     @Override

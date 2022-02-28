@@ -13,16 +13,16 @@ public class Diagram implements Serializable {
     private LinkedList<Diagram> nextDiagrams;
     private Annotation annotation;
     private Board board;
-    private int Color;
+    private int color;
 
     public Diagram() {
         moveId = 0;
-        moveName = null;
+        moveName = "test";
         board = Board.getStart();
         lastMove = null;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        Color = Board.WHITE;
+        color = Board.WHITE;
     }
 
     public Diagram(Board NT, Diagram Last, int C, int Id) {
@@ -31,14 +31,15 @@ public class Diagram implements Serializable {
         lastMove = Last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        Color = C;
+        color = C;
+        moveName="test2";
     }
 
     public Diagram makeMove(Move M) {
         if (M.IsCorrect()) {
             Board NT = Board.getCopy(board);
             M.Make_move(NT);
-            Diagram Next = new Diagram(NT, this, Board.swapColor(Color), moveId + 1);
+            Diagram Next = new Diagram(NT, this, Board.swapColor(color), moveId + 1);
             Next.moveName = M.GetName();
             for (Diagram D : nextDiagrams) {
                 if (D.board.equals(Next.board) && D.moveId == Next.moveId) {
@@ -117,7 +118,7 @@ public class Diagram implements Serializable {
     }
 
     public int getColor() {
-        return Color;
+        return color;
     }
 
     public Diagram getNextDiagram(int index){
@@ -133,5 +134,10 @@ public class Diagram implements Serializable {
 
     public int getIndexInNextDiagrams(Diagram d){
         return nextDiagrams.indexOf(d);
+    }
+
+    @Override
+    public String toString() {
+        return moveName;
     }
 }

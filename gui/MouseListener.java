@@ -26,7 +26,7 @@ public class MouseListener implements MouseInputListener {
     }
     @Override
     public void mouseClicked(MouseEvent e) {
-
+        System.err.print("Click:"+e.getX()+" "+e.getY()+"\n");
         x=-1;
         y=-1;
     }
