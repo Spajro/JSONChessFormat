@@ -7,13 +7,13 @@ import dts.Move;
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
 
-public class MouseListener implements MouseInputListener {
+public class BoardMouseListener implements MouseInputListener {
     BoardPanel boardPanel;
     DataModel model;
     private int x=-1;
     private int y=-1;
 
-    public MouseListener(BoardPanel boardPanel, DataModel model) {
+    public BoardMouseListener(BoardPanel boardPanel, DataModel model) {
         this.boardPanel = boardPanel;
         this.model = model;
     }

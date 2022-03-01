@@ -7,26 +7,30 @@ import java.io.*;
 
 public class DataModel implements TreeModel {
     private Board actualBoard;
-    private Diagram tree;
+    private Diagram actualNode;
     private String name;
 
     public DataModel() {
-        tree=new Diagram();
-        actualBoard=tree.getBoard();
+        actualNode =new Diagram();
+        actualBoard= actualNode.getBoard();
         name="new datamodel";
     }
 
-    public void readDiagramFromFile(String filename){
-        tree=load(filename);
+    public void readDataFromFile(String filename){
+        actualNode =load(filename);
         name=filename;
     }
 
-    public void makeMove(Move m){
-        tree=tree.makeMove(m);
-        setActualBoard(tree.getBoard());
+    public void saveDataToFile(){
+        save();
     }
 
-    Diagram load(String filename){
+    public void makeMove(Move m){
+        actualNode = actualNode.makeMove(m);
+        setActualBoard(actualNode.getBoard());
+    }
+
+    private Diagram load(String filename){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename+".bin"))) {
             return (Diagram) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
@@ -35,9 +39,9 @@ public class DataModel implements TreeModel {
         return null;
     }
 
-    void save(){
+    private void save(){
         try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(name+".bin"))) {
-            outputStream.writeObject(tree.getOriginal());
+            outputStream.writeObject(actualNode.getOriginal());
             System.out.print("Saved sukces");
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,9 +57,13 @@ public class DataModel implements TreeModel {
         this.actualBoard = actualBoard;
     }
 
+    public void setActualNode(Diagram actualNode) {
+        this.actualNode = actualNode;
+    }
+
     @Override
     public Object getRoot() {
-        return tree.getOriginal();
+        return actualNode.getOriginal();
     }
 
     @Override

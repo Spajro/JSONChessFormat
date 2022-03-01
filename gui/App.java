@@ -16,7 +16,7 @@ public class App {
         frame=new JFrame();
         boardPanel=new BoardPanel(dataModel.getActualBoard());
         optionPanel=new OptionPanel(dataModel);
-        boardPanel.addMouseListener(new MouseListener(boardPanel,dataModel));
+        boardPanel.addMouseListener(new BoardMouseListener(boardPanel,dataModel));
         boardPanel.setSize(480,480);
         //optionPanel.setSize(160,480);
         frame.add(boardPanel,BorderLayout.CENTER);

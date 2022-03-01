@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class Diagram implements Serializable {
+    //TODO diagram naming
     //class representing node of openings tree
     private final int moveId;
     private String moveName;
@@ -17,7 +18,7 @@ public class Diagram implements Serializable {
 
     public Diagram() {
         moveId = 0;
-        moveName = "test";
+        moveName = String.valueOf(Board.WHITE);
         board = Board.getStart();
         lastMove = null;
         nextDiagrams = new LinkedList<>();
@@ -27,12 +28,12 @@ public class Diagram implements Serializable {
 
     public Diagram(Board NT, Diagram Last, int C, int Id) {
         moveId = Id;
+        moveName = String.valueOf(C);
         board = Board.getCopy(NT);
         lastMove = Last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         color = C;
-        moveName="test2";
     }
 
     public Diagram makeMove(Move M) {
@@ -40,7 +41,7 @@ public class Diagram implements Serializable {
             Board NT = Board.getCopy(board);
             M.Make_move(NT);
             Diagram Next = new Diagram(NT, this, Board.swapColor(color), moveId + 1);
-            Next.moveName = M.GetName();
+            //Next.moveName = M.GetName();
             for (Diagram D : nextDiagrams) {
                 if (D.board.equals(Next.board) && D.moveId == Next.moveId) {
                     //TODO
