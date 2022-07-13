@@ -2,6 +2,7 @@ package dts;
 
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Board implements Serializable {
     //Class representing chess board
@@ -119,5 +120,20 @@ public class Board implements Serializable {
     }
     public boolean checkPiece(int FigId, Position temp){
         return checkPiece(FigId,temp.x,temp.y);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Board board = (Board) o;
+
+        return Arrays.deepEquals(T, board.T);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(T);
     }
 }
