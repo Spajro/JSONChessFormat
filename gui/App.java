@@ -11,12 +11,13 @@ public class App {
     private JFrame frame;
     private BoardPanel boardPanel;
     private OptionPanel optionPanel;
-
+    private Controller controller;
     public App(DataModel dataModel) {
+        controller=new Controller(dataModel);
         frame=new JFrame();
         boardPanel=new BoardPanel(dataModel.getActualBoard());
-        optionPanel=new OptionPanel(dataModel);
-        boardPanel.addMouseListener(new BoardMouseListener(boardPanel,dataModel));
+        optionPanel=new OptionPanel(controller);
+        boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
         boardPanel.setSize(480,480);
         //optionPanel.setSize(160,480);
         frame.add(boardPanel,BorderLayout.CENTER);

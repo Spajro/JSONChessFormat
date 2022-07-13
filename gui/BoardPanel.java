@@ -91,6 +91,7 @@ public class BoardPanel extends JPanel {
 
     public void setBoard(Board board) {
         this.board = board;
+        this.repaint();
     }
 
     public int getScale(){

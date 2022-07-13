@@ -1,5 +1,6 @@
 package gui;
 
+import com.sun.source.tree.Tree;
 import dts.Board;
 import dts.DataModel;
 import dts.Move;
@@ -8,14 +9,16 @@ import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
 
 public class BoardMouseListener implements MouseInputListener {
+
     BoardPanel boardPanel;
-    DataModel model;
+    Controller controller;
     private int x=-1;
     private int y=-1;
 
-    public BoardMouseListener(BoardPanel boardPanel, DataModel model) {
+    public BoardMouseListener(BoardPanel boardPanel, Controller controller) {
         this.boardPanel = boardPanel;
-        this.model = model;
+        this.controller = controller;
+        controller.setBoardMouseListener(this);
     }
 
     public int findField(int t){
@@ -42,8 +45,8 @@ public class BoardMouseListener implements MouseInputListener {
         if(x!=-1 && y!=-1 && x!=e.getX() && y!=e.getY()){
             System.err.print("DRAG\n");
             System.err.print("( "+findField(x)+", "+reverse(findField(y))+")->( "+findField(e.getX())+", "+reverse(findField(e.getY()))+")\n");
-            model.makeMove(new Move(findField(x),reverse(findField(y)),findField(e.getX()),reverse(findField(e.getY()))));
-            boardPanel.setBoard(model.getActualBoard()); //
+            controller.makeMove(new Move(findField(x),reverse(findField(y)),findField(e.getX()),reverse(findField(e.getY()))));
+            boardPanel.setBoard(controller.getActualBoard()); //
             boardPanel.repaint();
             x=-1;
             y=-1;
@@ -68,5 +71,9 @@ public class BoardMouseListener implements MouseInputListener {
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    public void boardChanged(Board board) {
+        boardPanel.setBoard(board);
     }
 }

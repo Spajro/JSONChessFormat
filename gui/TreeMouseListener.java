@@ -9,12 +9,13 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class TreeMouseListener implements MouseListener {
+    Controller controller;
     JTree tree;
-    DataModel dataModel;
 
-    public TreeMouseListener(JTree tree, DataModel dataModel) {
+    public TreeMouseListener(JTree tree,Controller controller) {
         this.tree = tree;
-        this.dataModel = dataModel;
+        this.controller=controller;
+        controller.setTreeMouseListener(this);
     }
 
     @Override
@@ -22,7 +23,8 @@ public class TreeMouseListener implements MouseListener {
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
         if(selRow != -1 && e.getClickCount() == 2) {
-            dataModel.setActualNode((Diagram) selPath.getLastPathComponent());
+            System.err.print("change node from tree\n");
+            controller.setActualNode((Diagram) selPath.getLastPathComponent());
         }
     }
 
@@ -44,5 +46,9 @@ public class TreeMouseListener implements MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {
 
+    }
+
+    public void treeNodeChanged(){
+        tree.repaint();
     }
 }
