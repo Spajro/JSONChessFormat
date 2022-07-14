@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Move implements Serializable {
     //class representing chess move
     private String name;
-    private int ox,oy,nx,ny;
+    private int oldX, oldY,newX, newY;
     private int castle; //0 brak 1 bk 2 bd 3 ck 4 cd
     public static final int NO_CASTLE=0;
     public static final int WHITE_SHORT_CASTLE=1;
@@ -13,35 +13,35 @@ public class Move implements Serializable {
     public static final int BLACK_SHORT_CASTLE=3;
     public static final int BLACK_LONG_CASTLE=4;
     public Move(){
-        ox=0;
-        oy=0;
-        nx=0;
-        ny=0;
+        oldX =0;
+        oldY =0;
+        newX=0;
+        newY =0;
         castle=0;
     }
     public Move(int aox,int aoy,int anx,int any){
-        ox=aox;
-        oy=aoy;
-        nx=anx;
-        ny=any;
+        oldX =aox;
+        oldY =aoy;
+        newX=anx;
+        newY =any;
         castle=0;
     }
     public Move(int castle){
         this.castle=castle;
     }
     public void update(int aox, int aoy, int anx, int any) {
-        ox = aox;
-        oy = aoy;
-        nx = anx;
-        ny = any;
+        oldX = aox;
+        oldY = aoy;
+        newX = anx;
+        newY = any;
     }
     public void setCastle(int castle){
         this.castle=castle;
     }
     public void makeMove(Board T){
         if(castle==0) {
-            T.write(T.read(ox, oy), nx, ny);
-            T.write(0, ox, oy);
+            T.write(T.read(oldX, oldY), newX, newY);
+            T.write(0, oldX, oldY);
         }
         else{
             //TODO
@@ -49,12 +49,32 @@ public class Move implements Serializable {
         }
     }
     public boolean isCorrect(){
-        return ox != -1 && oy != -1 && nx != -1 & ny != -1;
+        return oldX != -1 && oldY != -1 && newX != -1 & newY != -1;
     }
     public void setName(String name){
         this.name = name;
     }
     public String getName(){
         return name;
+    }
+
+    public int getCastle() {
+        return castle;
+    }
+
+    public int getOldX() {
+        return oldX;
+    }
+
+    public int getOldY() {
+        return oldY;
+    }
+
+    public int getNewX() {
+        return newX;
+    }
+
+    public int getNewY() {
+        return newY;
     }
 }

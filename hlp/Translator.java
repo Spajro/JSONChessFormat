@@ -96,17 +96,45 @@ public class Translator {
             Result.setCastle(R_type);
         }
         else{
-            x= columnToNum(tx);
+            x= columnToNumber(tx);
             y=Character.getNumericValue(ty)-1;
             if(thx!=0){
-                hx= columnToNum(thx);
+                hx= columnToNumber(thx);
             }
             Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
             Result.update(temp.getX(),temp.getY(),x,y);
         }
         return Result;
     }
-    public static int columnToNum(char column){
+    
+    public static String preMoveToAlgebraic(Board board, Move move){
+        if(move.getCastle()==Move.NO_CASTLE){
+            StringBuilder stringBuilder=new StringBuilder();
+            stringBuilder
+                    .append(numberToFigure(board.read(move.getOldX(),move.getOldY())));
+            if(board.read(move.getNewX(),move.getNewY())!=Board.EMPTY){
+                stringBuilder.append("x");
+            }
+            stringBuilder
+                    .append(numberToColumn(move.getNewY()))
+                    .append(move.getNewX());
+            return stringBuilder.toString();
+        }
+        else{
+            switch (move.getCastle()){
+                case Move.WHITE_SHORT_CASTLE, Move.BLACK_SHORT_CASTLE -> {
+                    return "O-O";
+                }
+                case Move.WHITE_LONG_CASTLE, Move.BLACK_LONG_CASTLE -> {
+                    return "O-O-O";
+                }
+                default -> System.out.print("preMoveToAlgebraic fault on castle\n");
+
+            }
+        }
+        return "ERROR";
+    }
+    public static int columnToNumber(char column){
         switch (column){
             case 'a' -> {
                 return 1;
@@ -132,13 +160,13 @@ public class Translator {
             case 'h' -> {
                 return 8;
             }
-            default -> System.out.print("Column_to_num fault");
+            default -> System.out.print("columnToNumber fault\n");
         }
         return -1;
     }
 
-    public static String numToFig(int F){
-        switch(F){
+    public static String numberToFigure(int figure){
+        switch(figure){
             case Board.WPAWN -> {
                 return "BP";
             }
@@ -176,11 +204,41 @@ public class Translator {
                 return "CK";
             }
             default -> {
-                System.out.print("Num_to_Fig fault");
+                System.out.print("numberToFigure fault\n");
                 return null;
             }
 
         }
+    }
+    public static int numberToColumn(int column){
+        switch (column){
+            case 1 -> {
+                return 'a';
+            }
+            case 2 -> {
+                return 'b';
+            }
+            case 3 -> {
+                return 'c';
+            }
+            case 4 -> {
+                return 'd';
+            }
+            case 5 -> {
+                return 'e';
+            }
+            case 6 -> {
+                return 'f';
+            }
+            case 7 -> {
+                return 'g';
+            }
+            case 8 -> {
+                return 'h';
+            }
+            default -> System.out.print("numberToColumn fault\n");
+        }
+        return -1;
     }
 
 }
