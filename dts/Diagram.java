@@ -1,6 +1,7 @@
 package dts;
 
 import ant.Annotation;
+import hlp.Translator;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -26,30 +27,31 @@ public class Diagram implements Serializable {
         color = Board.WHITE;
     }
 
-    public Diagram(Board NT, Diagram Last, int C, int Id) {
+    public Diagram(Board nextBoard, Diagram Last, int C, int Id) {
         moveId = Id;
         moveName = String.valueOf(C);
-        board = Board.getCopy(NT);
+        board = Board.getCopy(nextBoard);
         lastMove = Last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         color = C;
     }
 
-    public Diagram makeMove(Move M) {
-        if (M.isCorrect()) {
-            Board NT = Board.getCopy(board);
-            M.makeMove(NT);
-            Diagram Next = new Diagram(NT, this, Board.swapColor(color), moveId + 1);
-            //Next.moveName = M.GetName();
+    public Diagram makeMove(Move move) {
+        if (move.isCorrect()) {
+            Board nextBoard = Board.getCopy(board);
+            move.setName(Translator.preMoveToAlgebraic(board,move));
+            move.makeMove(nextBoard);
+            Diagram nextDiagram = new Diagram(nextBoard, this, Board.swapColor(color), moveId + 1);
+            nextDiagram.moveName=move.getName();
             for (Diagram D : nextDiagrams) {
-                if (D.board.equals(Next.board) && D.moveId == Next.moveId) {
+                if (D.board.equals(nextDiagram.board) && D.moveId == nextDiagram.moveId) {
                     //TODO
                     return D;
                 }
             }
-            nextDiagrams.add(Next);
-            return Next;
+            nextDiagrams.add(nextDiagram);
+            return nextDiagram;
         } else {
             System.out.print("Move Corrupted");
             return this;

@@ -116,8 +116,8 @@ public class Translator {
                 stringBuilder.append("x");
             }
             stringBuilder
-                    .append(numberToColumn(move.getNewY()))
-                    .append(move.getNewX());
+                    .append(numberToColumn(move.getNewX()))
+                    .append(move.getNewY());
             return stringBuilder.toString();
         }
         else{
@@ -210,7 +210,7 @@ public class Translator {
 
         }
     }
-    public static int numberToColumn(int column){
+    public static char numberToColumn(int column){
         switch (column){
             case 1 -> {
                 return 'a';
@@ -238,7 +238,7 @@ public class Translator {
             }
             default -> System.out.print("numberToColumn fault\n");
         }
-        return -1;
+        return '-';
     }
 
 }
