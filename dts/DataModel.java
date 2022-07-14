@@ -30,6 +30,9 @@ public class DataModel implements TreeModel {
         setActualBoard(actualNode.getBoard());
     }
 
+    public TreePath getTreePathTo(Diagram diagram){
+        return new TreePath(diagram.getPathFromOriginal().toArray());
+    }
     private Diagram load(String filename){
         try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename+".bin"))) {
             return (Diagram) inputStream.readObject();
@@ -64,6 +67,10 @@ public class DataModel implements TreeModel {
     @Override
     public Object getRoot() {
         return actualNode.getOriginal();
+    }
+
+    public Diagram getActualNode() {
+        return actualNode;
     }
 
     @Override

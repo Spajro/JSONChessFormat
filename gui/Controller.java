@@ -19,7 +19,7 @@ public class Controller {
 
     void makeMove(Move move){
         dataModel.makeMove(move);
-        treeMouseListener.treeNodeChanged();
+        treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
 
     }
 

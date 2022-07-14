@@ -72,9 +72,9 @@ public class Database_editor implements Mode{
         Base=Base.makeMove(M);
     }
     void Delete_diagram(){
-       if(Base.getLastMove() !=null){
+       if(Base.getParent() !=null){
            Diagram Temp=Base;
-           Base=Base.getLastMove();
+           Base=Base.getParent();
            Base.getNextDiagrams().remove(Temp);
        }
        else {
@@ -108,8 +108,8 @@ public class Database_editor implements Mode{
         }
     }
     void JumpBack(){
-        if(Base.getLastMove() !=null){
-            Base=Base.getLastMove();
+        if(Base.getParent() !=null){
+            Base=Base.getParent();
         }
         else{
             System.out.print("Cant jump back");

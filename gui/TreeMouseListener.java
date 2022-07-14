@@ -1,6 +1,5 @@
 package gui;
 
-import dts.DataModel;
 import dts.Diagram;
 
 import javax.swing.*;
@@ -48,7 +47,9 @@ public class TreeMouseListener implements MouseListener {
 
     }
 
-    public void treeNodeChanged(){
+    public void treeNodeInserted(TreePath treePath){
+        System.out.print(treePath);
+        tree.setSelectionPath(treePath);
         tree.repaint();
     }
 }

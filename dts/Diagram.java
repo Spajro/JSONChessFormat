@@ -4,14 +4,16 @@ import ant.Annotation;
 import hlp.Translator;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Diagram implements Serializable {
     //TODO diagram naming
     //class representing node of openings tree
     private final int moveId;
     private String moveName;
-    private final Diagram lastMove;
+    private final Diagram parent;
     private LinkedList<Diagram> nextDiagrams;
     private Annotation annotation;
     private Board board;
@@ -21,7 +23,7 @@ public class Diagram implements Serializable {
         moveId = 0;
         moveName = String.valueOf(Board.WHITE);
         board = Board.getStart();
-        lastMove = null;
+        parent = null;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         color = Board.WHITE;
@@ -31,7 +33,7 @@ public class Diagram implements Serializable {
         moveId = Id;
         moveName = String.valueOf(C);
         board = Board.getCopy(nextBoard);
-        lastMove = Last;
+        parent = Last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
         color = C;
@@ -62,7 +64,7 @@ public class Diagram implements Serializable {
         if (moveId == Id) {
             return this;
         } else if (Id < moveId) {
-            return lastMove.findMove(Id);
+            return parent.findMove(Id);
         } else {
             System.out.print("Findmove fail");
             return null;
@@ -95,7 +97,7 @@ public class Diagram implements Serializable {
             String[] S = new String[D.moveId + 1];
             while (D.moveId >= 0) {
                 S[D.moveId] = D.moveName;
-                D = D.lastMove;
+                D = D.parent;
                 if (D == null) {
                     break;
                 }
@@ -112,8 +114,8 @@ public class Diagram implements Serializable {
         return annotation;
     }
 
-    public Diagram getLastMove() {
-        return lastMove;
+    public Diagram getParent() {
+        return parent;
     }
 
     public LinkedList<Diagram> getNextDiagrams() {
@@ -142,5 +144,15 @@ public class Diagram implements Serializable {
     @Override
     public String toString() {
         return moveName;
+    }
+
+    public List<Diagram> getPathFromOriginal(){
+        List<Diagram> list=new ArrayList<>(moveId+1);
+        Diagram temp=this;
+        while(temp!=null){
+            list.add(0,temp);
+            temp=temp.parent;
+        }
+        return list;
     }
 }
