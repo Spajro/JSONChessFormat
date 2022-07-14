@@ -8,7 +8,7 @@ public class Translator {
 
     public static Move algebraicToMove(Board t, String moveName, int color) {
         Move Result= new Move();
-        Result.SetName(moveName);
+        Result.setName(moveName);
         boolean Rosz=false;
         boolean Fault=false;
         int R_type=-1;
@@ -93,7 +93,7 @@ public class Translator {
             return null;
         }
         else if(Rosz){
-            Result.Roszada(R_type);
+            Result.setCastle(R_type);
         }
         else{
             x= columnToNum(tx);
@@ -102,11 +102,10 @@ public class Translator {
                 hx= columnToNum(thx);
             }
             Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
-            Result.Update(temp.getX(),temp.getY(),x,y);
+            Result.update(temp.getX(),temp.getY(),x,y);
         }
         return Result;
     }
-
     public static int columnToNum(char column){
         switch (column){
             case 'a' -> {

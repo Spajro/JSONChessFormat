@@ -4,37 +4,42 @@ import java.io.Serializable;
 
 public class Move implements Serializable {
     //class representing chess move
-    String Name;
-    int ox,oy,nx,ny;
-    int Roszada; //0 brak 1 bk 2 bd 3 ck 4 cd
+    private String name;
+    private int ox,oy,nx,ny;
+    private int castle; //0 brak 1 bk 2 bd 3 ck 4 cd
+    public static final int NO_CASTLE=0;
+    public static final int WHITE_SHORT_CASTLE=1;
+    public static final int WHITE_LONG_CASTLE=2;
+    public static final int BLACK_SHORT_CASTLE=3;
+    public static final int BLACK_LONG_CASTLE=4;
     public Move(){
         ox=0;
         oy=0;
         nx=0;
         ny=0;
-        Roszada=0;
+        castle=0;
     }
     public Move(int aox,int aoy,int anx,int any){
         ox=aox;
         oy=aoy;
         nx=anx;
         ny=any;
-        Roszada=0;
+        castle=0;
     }
-    public Move(int R){
-        Roszada=R;
+    public Move(int castle){
+        this.castle=castle;
     }
-    public void Update(int aox,int aoy,int anx,int any) {
+    public void update(int aox, int aoy, int anx, int any) {
         ox = aox;
         oy = aoy;
         nx = anx;
         ny = any;
     }
-    public void Roszada(int R){
-        Roszada=R;
+    public void setCastle(int castle){
+        this.castle=castle;
     }
-    public void Make_move(Board T){
-        if(Roszada==0) {
+    public void makeMove(Board T){
+        if(castle==0) {
             T.write(T.read(ox, oy), nx, ny);
             T.write(0, ox, oy);
         }
@@ -43,13 +48,13 @@ public class Move implements Serializable {
             //Roszady
         }
     }
-    public boolean IsCorrect(){
+    public boolean isCorrect(){
         return ox != -1 && oy != -1 && nx != -1 & ny != -1;
     }
-    public void SetName(String N){
-        Name=N;
+    public void setName(String name){
+        this.name = name;
     }
-    public String GetName(){
-        return Name;
+    public String getName(){
+        return name;
     }
 }

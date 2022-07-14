@@ -37,9 +37,9 @@ public class Diagram implements Serializable {
     }
 
     public Diagram makeMove(Move M) {
-        if (M.IsCorrect()) {
+        if (M.isCorrect()) {
             Board NT = Board.getCopy(board);
-            M.Make_move(NT);
+            M.makeMove(NT);
             Diagram Next = new Diagram(NT, this, Board.swapColor(color), moveId + 1);
             //Next.moveName = M.GetName();
             for (Diagram D : nextDiagrams) {
