@@ -1,7 +1,7 @@
 package ant;
 
 import dis.AnnotationDisplayData;
-import prg.Action_data;
+import cmdLine.actionData;
 import prg.Mode;
 
 import java.io.Serializable;
@@ -15,9 +15,9 @@ public class Annotation_Editor implements Mode, Serializable {
         Ant=A;
     }
     @Override
-    public void Make_action(Action_data AD) {
-        switch (AD.Get_code()) {
-        case "ANT" -> AddText((String)AD.Get_param());
+    public void Make_action(actionData AD) {
+        switch (AD.getCode()) {
+        case "ANT" -> AddText((String)AD.getParam());
         case "ADT" -> DeleteText();
             default -> System.out.print("Annotation editor corrupted code");
         }
