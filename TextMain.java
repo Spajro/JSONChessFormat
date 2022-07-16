@@ -1,6 +1,5 @@
-import dis.Displayer;
-import prg.Action_data;
-import prg.Database_editor;
+import cmdLine.actionData;
+import cmdLine.CommandLineHandler;
 import hlp.Translator;
 
 import java.util.Scanner;
@@ -8,52 +7,44 @@ import java.util.Scanner;
 public class TextMain {
 
     public static void main(String[] args){
-        //Kontroler Cont = new Kontroler();
-        Scanner Scan= new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         boolean working = true;
-        Displayer Dis= new Displayer();
-        //Action_data First = new Action_data("SEL",new Action_data("DTE","TEST"));
-        //Cont.Get_cmd(First);
 
-        Database_editor Editor=new Database_editor("Test");
+        CommandLineHandler handler=new CommandLineHandler();
         while (working){
-            String cmd= Scan.nextLine();
+            String cmd= scanner.nextLine();
             if(cmd.equals("Q")){
                 working=false;
             }
             else{
-                Action_data Ad=null;
+                actionData data=null;
                 switch (cmd) {
-                    case "LD" -> Ad = new Action_data("LD", Scan.nextLine());
-                    case "SV" -> Ad = new Action_data("SV", null);
-                    case "MM" -> Ad = new Action_data("MM", Translator.algebraicToMove(Editor.GetDiag().getBoard(), Scan.nextLine(), Editor.getColor()));
-                    case "AN" -> Ad = new Action_data("AN", null);
-                    case "QT" -> Ad = new Action_data("QT", null);
-                    case "DL" -> Ad = new Action_data("DL",null);
-                    case "GB" -> Ad = new Action_data("GB", Integer.parseInt(Scan.nextLine()));
-                    case "PM" -> Ad = new Action_data("PM", null);
-                    case "PH" -> Ad = new Action_data("PH", null);
-                    case "JB" -> Ad = new Action_data("JB", null);
-                    case "JF" -> Ad = new Action_data("JF", null);
-                    case "Help" -> Ad = new Action_data("HP", null);
-                    case "ANT" -> Ad=new Action_data("ANT", Scan.nextLine());
-                    case "ADT" -> Ad=new Action_data("ADT", null);
+                    case "LD" -> data = new actionData("LD", scanner.nextLine());
+                    case "SV" -> data = new actionData("SV", null);
+                    case "MM" -> data = new actionData("MM", Translator.algebraicToMove(handler.getDiag().getBoard(), scanner.nextLine(), handler.getcolor()));
+                    case "AN" -> data = new actionData("AN", null);
+                    case "QT" -> data = new actionData("QT", null);
+                    case "DL" -> data = new actionData("DL",null);
+                    case "GB" -> data = new actionData("GB", Integer.parseInt(scanner.nextLine()));
+                    case "PM" -> data = new actionData("PM", null);
+                    case "PH" -> data = new actionData("PH", null);
+                    case "JB" -> data = new actionData("JB", null);
+                    case "JF" -> data = new actionData("JF", null);
+                    case "Help" -> data = new actionData("HP", null);
+                    case "ANT" -> data=new actionData("ANT", scanner.nextLine());
+                    case "ADT" -> data=new actionData("ADT", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 
-                if (Ad != null) {
-                    Editor.Make_action(Ad);
+                if (data != null) {
+                    handler.makeAction(data);
                 }
                 else{
                     System.out.print("Cmd not found -> not executed");
                     System.out.print(cmd);
                 }
-                Dis.Update(Editor.Display());
-                Dis.Update(Editor.GetDiag().getAnnotation().Display());
-                Dis.Print();
+                handler.display();
             }
         }
     }
-
-
 }
