@@ -1,10 +1,10 @@
-import cmdLine.actionData;
-import cmdLine.CommandLineHandler;
-import hlp.Translator;
+import src.cli.actionData;
+import src.cli.CommandLineHandler;
+import src.data.hlp.Translator;
 
 import java.util.Scanner;
 
-public class TextMain {
+public class CliMain {
 
     public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);

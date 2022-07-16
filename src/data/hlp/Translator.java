@@ -1,9 +1,9 @@
-package hlp;
+package src.data.hlp;
 
-import dts.Board;
-import dts.Move;
-import dts.Position;
-import dts.color.Color;
+import src.data.dts.Board;
+import src.data.dts.Move;
+import src.data.dts.Position;
+import src.data.dts.color.Color;
 
 public class Translator {
 

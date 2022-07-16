@@ -1,9 +1,9 @@
-package cmdLine;
+package src.cli;
 
-import dts.Diagram;
-import dts.Move;
-import dts.color.Color;
-import hlp.Translator;
+import src.data.dts.Diagram;
+import src.data.dts.Move;
+import src.data.dts.color.Color;
+import src.data.hlp.Translator;
 
 import java.io.*;
 

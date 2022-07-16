@@ -1,4 +1,4 @@
-package dts;
+package src.data.dts;
 
 import java.io.Serializable;
 

@@ -1,7 +1,7 @@
-package gui;
+package src.gui;
 
-import dts.Board;
-import hlp.Translator;
+import src.data.dts.Board;
+import src.data.hlp.Translator;
 
 import javax.swing.*;
 import java.awt.*;

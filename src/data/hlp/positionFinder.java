@@ -1,10 +1,8 @@
-package hlp;
+package src.data.hlp;
 
-import dts.Board;
-import dts.Position;
-import dts.color.Color;
-
-import java.util.Dictionary;
+import src.data.dts.Board;
+import src.data.dts.Position;
+import src.data.dts.color.Color;
 
 public class positionFinder {
     public static Position[] basicSteps= {new Position(-1,0),new Position(1,0),new Position(0,1),new Position(0,-1)};

@@ -1,10 +1,10 @@
-package gui;
+package src.gui;
 
 
-import dts.Board;
-import dts.DataModel;
-import dts.Diagram;
-import dts.Move;
+import src.data.dts.Board;
+import src.data.dts.DataModel;
+import src.data.dts.Diagram;
+import src.data.dts.Move;
 
 import javax.swing.*;
 

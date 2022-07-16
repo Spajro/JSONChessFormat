@@ -1,9 +1,7 @@
-package gui;
+package src.gui;
 
-import com.sun.source.tree.Tree;
-import dts.Board;
-import dts.DataModel;
-import dts.Move;
+import src.data.dts.Board;
+import src.data.dts.Move;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;

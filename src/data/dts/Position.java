@@ -1,4 +1,4 @@
-package dts;
+package src.data.dts;
 
 public class Position {
     //class representing position on board

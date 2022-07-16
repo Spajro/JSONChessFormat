@@ -1,4 +1,4 @@
-package cmdLine;
+package src.cli;
 
 public class actionData {
     String code;

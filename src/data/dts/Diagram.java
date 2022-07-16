@@ -1,8 +1,8 @@
-package dts;
+package src.data.dts;
 
-import ant.Annotation;
-import dts.color.Color;
-import hlp.Translator;
+import src.data.ant.Annotation;
+import src.data.dts.color.Color;
+import src.data.hlp.Translator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
