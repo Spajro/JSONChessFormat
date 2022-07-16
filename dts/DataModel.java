@@ -1,16 +1,22 @@
 package dts;
 
+import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.io.*;
+import java.util.LinkedList;
+import java.util.stream.IntStream;
 
 public class DataModel implements TreeModel {
     private Board actualBoard;
     private Diagram actualNode;
     private String name;
 
+    private LinkedList<TreeModelListener> treeModelListeners;
+
     public DataModel() {
+        treeModelListeners=new LinkedList<>();
         actualNode =new Diagram();
         actualBoard= actualNode.getBoard();
         name="new datamodel";
@@ -28,6 +34,7 @@ public class DataModel implements TreeModel {
     public void makeMove(Move m){
         actualNode = actualNode.makeMove(m);
         setActualBoard(actualNode.getBoard());
+        notifyListenersOnInsert(actualNode);
     }
 
     public TreePath getTreePathTo(Diagram diagram){
@@ -90,7 +97,7 @@ public class DataModel implements TreeModel {
 
     @Override
     public void valueForPathChanged(TreePath path, Object newValue) {
-
+        System.err.print("valueForPathChanged\n");
     }
 
     @Override
@@ -100,11 +107,27 @@ public class DataModel implements TreeModel {
 
     @Override
     public void addTreeModelListener(TreeModelListener l) {
-
+        treeModelListeners.add(l);
     }
 
     @Override
     public void removeTreeModelListener(TreeModelListener l) {
-
+        treeModelListeners.remove(l);
     }
+
+    public void notifyListenersOnInsert(Diagram newDiagram){
+        int[] childrenArray=new int[1];
+        Object[] objects = new Object[1];
+        objects[0]=newDiagram;
+        childrenArray[0]=newDiagram.getParent().getIndexInNextDiagrams(newDiagram);
+        TreeModelEvent event=new TreeModelEvent(this,
+                getTreePathTo(newDiagram.getParent()),
+                childrenArray,
+                objects
+                );
+        for(TreeModelListener listener : treeModelListeners){
+            listener.treeNodesInserted(event);
+        }
+    }
+
 }
