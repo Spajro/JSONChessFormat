@@ -64,19 +64,19 @@ public class positionFinder {
         //Manualnie
         Position result= new Position(start);
         if (color.isWhite()) {
-            start.add(0,-1);
+            start=start.add(new Position(0,-1));
             if (aux.getX() == -1) {
                 if (start.getX() == 1) {
-                    result.add(1,0);
+                    result=result.add(new Position(1,0));
                 }
                 else if (start.getX() == 8) {
-                    result.add(-1,0);
+                    result=result.add(new Position(-1,0));
                 }
                 else {
                     if (T.checkPiece(Board.WPAWN,start.getX() + 1, start.getY())) {
-                        result.add(1,0);
+                        result=result.add(new Position(1,0));
                     } else if (T.checkPiece(Board.WPAWN,start.getX() - 1, start.getY())) {
-                        result.add(-1,0);
+                        result=result.add(new Position(-1,0));
                     } else {
                         System.out.print("Pawn_capture fault");
                     }
@@ -86,19 +86,19 @@ public class positionFinder {
                 result= new Position(aux.getX(),start.getY());
             }
         } else {
-            start.add(0,1);
+            start=start.add(new Position(0,1));
             if (aux.getX() == -1) {
                 if (start.getX() == 1) {
-                    result.add(1,0);
+                    result=result.add(new Position(1,0));
                 }
                 else if (start.getX()== 8) {
-                    result.add(-1,0);
+                    result=result.add(new Position(-1,0));
                 }
                 else {
                     if(T.checkPiece(Board.BPAWN,start.getX() + 1, start.getY())) {
-                        result.add(1,0);
+                        result=result.add(new Position(1,0));
                     } else if (T.checkPiece(Board.BPAWN,start.getX() - 1, start.getY())){
-                        result.add(-1,0);
+                        result=result.add(new Position(-1,0));
                     } else {
                         System.out.print("Pawn_capture fault");
                     }

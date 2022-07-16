@@ -96,7 +96,7 @@ public class Board implements Serializable {
     }
 
     public boolean checkPiece(int FigId, Position temp) {
-        return checkPiece(FigId, temp.x, temp.y);
+        return checkPiece(FigId, temp.getX(), temp.getY());
     }
 
     @Override

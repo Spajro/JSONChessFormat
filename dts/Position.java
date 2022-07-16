@@ -2,8 +2,8 @@ package dts;
 
 public class Position {
     //class representing position on board
-    int x;
-    int y;
+    private int x;
+    private int y;
     public Position(){
         x=-1;
         y=-1;
@@ -12,17 +12,12 @@ public class Position {
         x=nx;
         y=ny;
     }
-    public Position( Position P){
+    public Position(Position P){
         x=P.x;
         y=P.y;
     }
-    public void add(Position P){
-        x+=P.x;
-        y+=P.y;
-    }
-    public void add(int nx, int ny){
-        x+=nx;
-        y+=ny;
+    public Position add(Position P){
+        return new Position(x+=P.x,y+=P.y);
     }
     public boolean isEmpty(){
         return x == -1 && y == -1;
