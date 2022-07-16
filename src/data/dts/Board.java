@@ -1,5 +1,7 @@
 package src.data.dts;
 
+import src.data.dts.color.Color;
+
 import java.io.Serializable;
 import java.util.Arrays;
 
@@ -90,14 +92,22 @@ public class Board implements Serializable {
         return new Board(b);
     }
 
-    public boolean checkPiece(int FigId, int x, int y) {
-        return get(x, y) == FigId;
+    public boolean checkPiece(int figureId, int x, int y) {
+        return get(x, y) == figureId;
     }
 
-    public boolean checkPiece(int FigId, Position temp) {
-        return checkPiece(FigId, temp.getX(), temp.getY());
+    public boolean checkPiece(int figureId, Position temp) {
+        return checkPiece(figureId, temp.getX(), temp.getY());
     }
 
+    public static Color getPieceColor(int figureId){
+        if(figureId%3==1){
+            return Color.white;
+        } else if (figureId % 3 == 2) {
+            return Color.black;
+        }
+        else throw new IllegalArgumentException("Wrong figureId");
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

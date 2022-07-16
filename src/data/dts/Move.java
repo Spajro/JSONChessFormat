@@ -1,5 +1,7 @@
 package src.data.dts;
 
+import src.data.dts.color.Color;
+
 import java.io.Serializable;
 
 public class Move implements Serializable {
@@ -38,17 +40,21 @@ public class Move implements Serializable {
     public void setCastle(int castle){
         this.castle=castle;
     }
-    public void makeMove(Board T){
+    public void makeMove(Board board){
         if(castle==0) {
-            T.write(T.read(oldX, oldY), newX, newY);
-            T.write(0, oldX, oldY);
+            board.write(board.read(oldX, oldY), newX, newY);
+            board.write(0, oldX, oldY);
         }
         else{
             //TODO
             //Roszady
         }
     }
-    public boolean isCorrect(){
+
+    public boolean isLegal(Board board, Color color){
+        return Board.getPieceColor(board.read(oldX,oldY)).equal(color) && isCorrect();
+    }
+    private boolean isCorrect(){
         return oldX != -1 && oldY != -1 && newX != -1 & newY != -1;
     }
     public void setName(String name){

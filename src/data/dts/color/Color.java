@@ -12,6 +12,10 @@ public interface Color {
         return black;
     }
 
+    default boolean equal(Color color){
+        return this.isWhite()==color.isWhite();
+    }
+
     Color swap();
 
     boolean isWhite();

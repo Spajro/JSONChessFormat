@@ -41,7 +41,7 @@ public class Diagram implements Serializable {
     }
 
     public Diagram makeMove(Move move) {
-        if (move.isCorrect()) {
+        if (move.isLegal(board,color)) {
             Board nextBoard = Board.getCopy(board);
             move.setName(Translator.preMoveToAlgebraic(board,move));
             move.makeMove(nextBoard);
