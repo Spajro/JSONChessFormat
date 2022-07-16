@@ -3,6 +3,7 @@ package prg;
 import dis.BoardDisplayData;
 import dts.Diagram;
 import dts.Move;
+import dts.color.Color;
 
 import java.io.*;
 
@@ -143,7 +144,7 @@ public class Database_editor implements Mode{
         return Base;
     }
 
-    public int getColor() {
+    public Color getColor() {
         return Base.getColor();
     }
 }

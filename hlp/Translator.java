@@ -3,10 +3,11 @@ package hlp;
 import dts.Board;
 import dts.Move;
 import dts.Position;
+import dts.color.Color;
 
 public class Translator {
 
-    public static Move algebraicToMove(Board t, String moveName, int color) {
+    public static Move algebraicToMove(Board t, String moveName, Color color) {
         Move Result= new Move();
         Result.setName(moveName);
         boolean Rosz=false;
@@ -30,7 +31,7 @@ public class Translator {
                 if (moveName.equals("O-O")) {
                     //roszada krotka
                     Rosz = true;
-                    if (Board.isWhite(color)) {
+                    if (color.isWhite()) {
                         R_type = 1;
                     } else {
                         R_type = 3;
@@ -71,7 +72,7 @@ public class Translator {
                 if (moveName.equals("O-O-O")) {
                     //roszada długa
                     Rosz = true;
-                    if (Board.isWhite(color)) {
+                    if (color.isWhite()) {
                         R_type = 2;
                     } else {
                         R_type = 4;

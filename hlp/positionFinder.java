@@ -2,6 +2,7 @@ package hlp;
 
 import dts.Board;
 import dts.Position;
+import dts.color.Color;
 
 import java.util.Dictionary;
 
@@ -28,41 +29,41 @@ public class positionFinder {
             new Position(-1,1),
             new Position(-1,-1),
     };
-    public static Position chooseFig(char C, int  col, Board T, Position start, Position aux) {
+    public static Position chooseFig(char C, Color color, Board T, Position start, Position aux) {
         switch (C) {
             case ' ' -> {
                 if(!aux.isEmpty()){
                     System.err.print("aux for pawn");
                 }
-                return pawn(col, T, start);
+                return pawn(color, T, start);
             }
             case 'X' -> {
-                return pawnCapture(col, T, start, aux);
+                return pawnCapture(color, T, start, aux);
             }
             case 'W' -> {
-                return rook(col, T, start, aux);
+                return rook(color, T, start, aux);
             }
             case 'S' -> {
-                return knight(col, T, start, aux);
+                return knight(color, T, start, aux);
             }
             case 'G' -> {
-                return bishop(col, T,start, aux);
+                return bishop(color, T,start, aux);
             }
             case 'H' -> {
-                return queen(col, T, start, aux);
+                return queen(color, T, start, aux);
             }
             case 'K' -> {
-                return king(col, T, start , aux);
+                return king(color, T, start , aux);
             }
             default -> System.out.print("Choose_fig fault");
         }
         return new Position();
     }
 
-    private static Position pawnCapture(int col, Board T, Position start, Position aux) {
+    private static Position pawnCapture(Color color, Board T, Position start, Position aux) {
         //Manualnie
         Position result= new Position(start);
-        if (Board.isWhite(col)) {
+        if (color.isWhite()) {
             start.add(0,-1);
             if (aux.getX() == -1) {
                 if (start.getX() == 1) {
@@ -110,8 +111,8 @@ public class positionFinder {
         return result;
     }
 
-    private static Position pawn(int col, Board T, Position start) {
-        if (Board.isWhite(col)) {
+    private static Position pawn(Color color, Board T, Position start) {
+        if (color.isWhite()) {
             //biale
             return checkLine(start,new Position(0,-1),Board.WPAWN,T);
         }
@@ -121,13 +122,13 @@ public class positionFinder {
         }
     }
 
-    private static Position rook(int col, Board T, Position start, Position aux) {
+    private static Position rook(Color color, Board T, Position start, Position aux) {
         Position result=new Position();
         if(aux.isEmpty()){
             Position temp=new Position((start));
                 int i=0;
                 while(result.isEmpty()) {
-                    if (Board.isWhite(col)) checkLine(temp, basicSteps[i], Board.WROOK, T);
+                    if (color.isWhite()) checkLine(temp, basicSteps[i], Board.WROOK, T);
                     else checkLine(temp, basicSteps[i], Board.BROOK, T);
                     i++;
                     if (i > 3) {
@@ -147,11 +148,11 @@ public class positionFinder {
         return result;
     }
 
-    private static Position knight(int col, Board T, Position start, Position aux) {
+    private static Position knight(Color color, Board T, Position start, Position aux) {
         if(aux.isEmpty()){
             for(Position p : knightSteps){
                 p.add(start);
-                if(Board.isWhite(col)){
+                if(color.isWhite()){
                     if(T.checkPiece(Board.WKNIGHT,p)) {
                         return p;
                     }
@@ -169,13 +170,13 @@ public class positionFinder {
         return new Position();
     }
 
-    private static Position bishop(int col, Board T, Position start, Position aux) {
+    private static Position bishop(Color color, Board T, Position start, Position aux) {
         Position result=new Position();
         if(aux.isEmpty()){
             Position temp=new Position((start));
             int i=0;
             while(result.isEmpty()) {
-                if(Board.isWhite(col)) result=checkLine(temp, diagonalSteps[i], Board.WBISHOP, T);
+                if(color.isWhite()) result=checkLine(temp, diagonalSteps[i], Board.WBISHOP, T);
                 else result=checkLine(temp, diagonalSteps[i], Board.BBISHOP, T);
                 i++;
                 if (i > 3) {
@@ -195,12 +196,12 @@ public class positionFinder {
         return result;
     }
 
-    private static Position queen(int col, Board T, Position start, Position aux) {
+    private static Position queen(Color color, Board T, Position start, Position aux) {
         if(aux.isEmpty()){
             for(Position p : fullSteps){
                 p.add(start);
                 if(p.isOnBoard()){
-                    if(Board.isWhite(col))if(T.checkPiece(Board.WQUEEN,p))return p;
+                    if(color.isWhite())if(T.checkPiece(Board.WQUEEN,p))return p;
                     else if(T.checkPiece(Board.BQUEEN,p))return p;
                 }
             }
@@ -211,11 +212,11 @@ public class positionFinder {
         return new Position();
     }
 
-    private static Position king(int col, Board T, Position start, Position aux) {
+    private static Position king(Color color, Board T, Position start, Position aux) {
         for(Position p: fullSteps){
             p.add(start);
             if(p.isOnBoard()){
-                if(Board.isWhite(col))if(T.checkPiece(Board.WKING,p))return p;
+                if(color.isWhite())if(T.checkPiece(Board.WKING,p))return p;
                 else if(T.checkPiece(Board.BKING,p))return p;
             }
         }
