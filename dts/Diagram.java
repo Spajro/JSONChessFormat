@@ -1,6 +1,7 @@
 package dts;
 
 import ant.Annotation;
+import dts.color.Color;
 import hlp.Translator;
 
 import java.io.Serializable;
@@ -17,26 +18,26 @@ public class Diagram implements Serializable {
     private LinkedList<Diagram> nextDiagrams;
     private Annotation annotation;
     private Board board;
-    private int color;
+    private Color color;
 
     public Diagram() {
         moveId = 0;
-        moveName = String.valueOf(Board.WHITE);
+        moveName = "Start";
         board = Board.getStart();
         parent = null;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        color = Board.WHITE;
+        color = Color.white;
     }
 
-    public Diagram(Board nextBoard, Diagram Last, int C, int Id) {
-        moveId = Id;
-        moveName = String.valueOf(C);
+    public Diagram(Board nextBoard, Diagram last, Color color, int id) {
+        moveId = id;
+        moveName = "newDiag";
         board = Board.getCopy(nextBoard);
-        parent = Last;
+        parent = last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        color = C;
+        this.color = color;
     }
 
     public Diagram makeMove(Move move) {
@@ -44,7 +45,7 @@ public class Diagram implements Serializable {
             Board nextBoard = Board.getCopy(board);
             move.setName(Translator.preMoveToAlgebraic(board,move));
             move.makeMove(nextBoard);
-            Diagram nextDiagram = new Diagram(nextBoard, this, Board.swapColor(color), moveId + 1);
+            Diagram nextDiagram = new Diagram(nextBoard, this, color.swap(), moveId + 1);
             nextDiagram.moveName=move.getName();
             for (Diagram D : nextDiagrams) {
                 if (D.board.equals(nextDiagram.board) && D.moveId == nextDiagram.moveId) {
@@ -122,7 +123,7 @@ public class Diagram implements Serializable {
         return nextDiagrams;
     }
 
-    public int getColor() {
+    public Color getColor() {
         return color;
     }
 
