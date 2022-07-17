@@ -7,7 +7,8 @@ import java.io.Serializable;
 public class Move implements Serializable {
     //class representing chess move
     private String name;
-    private int oldX, oldY,newX, newY;
+    private Position oldPosition;
+    private Position newPosition;
     private int castle; //0 brak 1 bk 2 bd 3 ck 4 cd
     public static final int NO_CASTLE=0;
     public static final int WHITE_SHORT_CASTLE=1;
@@ -15,47 +16,37 @@ public class Move implements Serializable {
     public static final int BLACK_SHORT_CASTLE=3;
     public static final int BLACK_LONG_CASTLE=4;
     public Move(){
-        oldX =0;
-        oldY =0;
-        newX=0;
-        newY =0;
-        castle=0;
+        oldPosition=new Position();
+        newPosition=new Position();
+        castle=-1;
     }
-    public Move(int aox,int aoy,int anx,int any){
-        oldX =aox;
-        oldY =aoy;
-        newX=anx;
-        newY =any;
+    public Move(Position oldPos, Position newPos){
+        oldPosition=oldPos;
+        newPosition=newPos;
         castle=0;
     }
     public Move(int castle){
         this.castle=castle;
-    }
-    public void update(int aox, int aoy, int anx, int any) {
-        oldX = aox;
-        oldY = aoy;
-        newX = anx;
-        newY = any;
     }
     public void setCastle(int castle){
         this.castle=castle;
     }
     public void makeMove(Board board){
         if(castle==0) {
-            board.write(board.read(oldX, oldY), newX, newY);
-            board.write(0, oldX, oldY);
+            board.write(board.read(oldPosition),newPosition);
+            board.write(0, oldPosition);
         }
         else{
-            //TODO
+            //TODO`
             //Roszady
         }
     }
 
     public boolean isLegal(Board board, Color color){
-        return Board.getPieceColor(board.read(oldX,oldY)).equal(color) && isCorrect();
+        return Board.getPieceColor(board.read(oldPosition)).equal(color) && isCorrect();
     }
     private boolean isCorrect(){
-        return oldX != -1 && oldY != -1 && newX != -1 & newY != -1;
+        return !oldPosition.isEmpty() && !newPosition.isEmpty();
     }
     public void setName(String name){
         this.name = name;
@@ -68,19 +59,11 @@ public class Move implements Serializable {
         return castle;
     }
 
-    public int getOldX() {
-        return oldX;
+    public Position getOldPosition() {
+        return oldPosition;
     }
 
-    public int getOldY() {
-        return oldY;
-    }
-
-    public int getNewX() {
-        return newX;
-    }
-
-    public int getNewY() {
-        return newY;
+    public Position getNewPosition() {
+        return newPosition;
     }
 }

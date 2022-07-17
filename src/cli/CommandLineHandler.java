@@ -2,6 +2,7 @@ package src.cli;
 
 import src.data.dts.Diagram;
 import src.data.dts.Move;
+import src.data.dts.Position;
 import src.data.dts.color.Color;
 import src.data.hlp.Translator;
 
@@ -147,7 +148,7 @@ public class CommandLineHandler {
         System.out.println();
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                int temp = base.getBoard().read(j, i);
+                int temp = base.getBoard().read(new Position(j, i));
                 if (temp == 0) {
                     System.out.print("00");
                 } else {

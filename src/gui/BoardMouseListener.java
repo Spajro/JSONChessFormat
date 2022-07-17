@@ -2,6 +2,7 @@ package src.gui;
 
 import src.data.dts.Board;
 import src.data.dts.Move;
+import src.data.dts.Position;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
@@ -43,7 +44,10 @@ public class BoardMouseListener implements MouseInputListener {
         if(x!=-1 && y!=-1 && x!=e.getX() && y!=e.getY()){
             System.err.print("DRAG\n");
             System.err.print("( "+findField(x)+", "+reverse(findField(y))+")->( "+findField(e.getX())+", "+reverse(findField(e.getY()))+")\n");
-            controller.makeMove(new Move(findField(x),reverse(findField(y)),findField(e.getX()),reverse(findField(e.getY()))));
+            controller.makeMove(new Move(
+                    new Position(findField(x),reverse(findField(y))),
+                    new Position(findField(e.getX()),reverse(findField(e.getY())))
+            ));
             boardPanel.setBoard(controller.getActualBoard()); //
             boardPanel.repaint();
             x=-1;

@@ -43,12 +43,12 @@ public class Board implements Serializable {
         }
     }
 
-    public void write(int val, int x, int y) {
-        set(val, x - 1, y - 1);
+    public void write(int val, Position position) {
+        set(val, position.getX() - 1, position.getY() - 1);
     }
 
-    public int read(int x, int y) {
-        return get(x - 1, y - 1);
+    public int read(Position position) {
+        return get(position.getX() - 1, position.getY() - 1);
     }
 
     private void set(int val, int x, int y) {
@@ -65,26 +65,26 @@ public class Board implements Serializable {
 
     public static Board getStart() {
         Board b = new Board();
-        for (int i = 1; i <= 8; i++) {
-            b.write(WPAWN, i, 2);
-            b.write(BPAWN, i, 7);
+        for (int i = 0; i <= 7; i++) {
+            b.set(WPAWN, i, 1);
+            b.set(BPAWN, i, 6);
         }
-        b.write(WROOK, 1, 1);
-        b.write(WROOK, 8, 1);
-        b.write(WKNIGHT, 2, 1);
-        b.write(WKNIGHT, 7, 1);
-        b.write(WBISHOP, 3, 1);
-        b.write(WBISHOP, 6, 1);
-        b.write(WQUEEN, 4, 1);
-        b.write(WKING, 5, 1);
-        b.write(BROOK, 1, 8);
-        b.write(BROOK, 8, 8);
-        b.write(BKNIGHT, 2, 8);
-        b.write(BKNIGHT, 7, 8);
-        b.write(BBISHOP, 3, 8);
-        b.write(BBISHOP, 6, 8);
-        b.write(BQUEEN, 4, 8);
-        b.write(BKING, 5, 8);
+        b.set(WROOK, 0, 0);
+        b.set(WROOK, 7, 0);
+        b.set(WKNIGHT, 1, 0);
+        b.set(WKNIGHT, 6, 0);
+        b.set(WBISHOP, 2, 0);
+        b.set(WBISHOP, 5, 0);
+        b.set(WQUEEN, 3, 0);
+        b.set(WKING, 4, 0);
+        b.set(BROOK, 0, 7);
+        b.set(BROOK, 7, 7);
+        b.set(BKNIGHT, 1, 7);
+        b.set(BKNIGHT, 6, 7);
+        b.set(BBISHOP, 2, 7);
+        b.set(BBISHOP, 5, 7);
+        b.set(BQUEEN, 3, 7);
+        b.set(BKING, 4, 7);
         return b;
     }
 

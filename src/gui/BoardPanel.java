@@ -1,6 +1,7 @@
 package src.gui;
 
 import src.data.dts.Board;
+import src.data.dts.Position;
 import src.data.hlp.Translator;
 
 import javax.swing.*;
@@ -58,7 +59,7 @@ public class BoardPanel extends JPanel {
                     }
                     g.fillRect(x * scale, y * scale, scale, scale);
                     temp=!temp;
-                    int fig=board.read(x+1,Board.SIZE-y);
+                    int fig=board.read(new Position(x+1,Board.SIZE-y));
                     if(fig!=Board.EMPTY){
                          //g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
                         String s=Translator.numberToFigure(fig);

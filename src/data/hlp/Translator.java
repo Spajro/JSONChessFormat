@@ -103,7 +103,7 @@ public class Translator {
                 hx= columnToNumber(thx);
             }
             Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
-            Result.update(temp.getX(),temp.getY(),x,y);
+            Result=new Move(temp,new Position(x,y));
         }
         return Result;
     }
@@ -112,13 +112,13 @@ public class Translator {
         if(move.getCastle()==Move.NO_CASTLE){
             StringBuilder stringBuilder=new StringBuilder();
             stringBuilder
-                    .append(numberToFigure(board.read(move.getOldX(),move.getOldY())));
-            if(board.read(move.getNewX(),move.getNewY())!=Board.EMPTY){
+                    .append(numberToFigure(board.read(move.getOldPosition())));
+            if(board.read(move.getNewPosition())!=Board.EMPTY){
                 stringBuilder.append("x");
             }
             stringBuilder
-                    .append(numberToColumn(move.getNewX()))
-                    .append(move.getNewY());
+                    .append(numberToColumn(move.getNewPosition().getX()))
+                    .append(move.getNewPosition().getY());
             return stringBuilder.toString();
         }
         else{
