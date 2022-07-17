@@ -1,6 +1,8 @@
 package src.data.dts.color;
 
-public interface Color {
+import java.io.Serializable;
+
+public interface Color extends Serializable {
     White white = new White();
     Black black = new Black();
 
