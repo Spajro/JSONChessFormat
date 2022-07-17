@@ -21,13 +21,13 @@ public class DataModel implements TreeModel {
         name="new datamodel";
     }
 
-    public void readDataFromFile(String filename){
+    public void loadDataFromFile(String filename){
         actualNode =load(filename);
         name=filename;
     }
 
-    public void saveDataToFile(){
-        save();
+    public void saveDataToFile(String filename){
+        save(filename);
     }
 
     public void makeMove(Move m){
@@ -48,8 +48,8 @@ public class DataModel implements TreeModel {
         return null;
     }
 
-    private void save(){
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(name+".bin"))) {
+    private void save(String filename){
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename+".bin"))) {
             outputStream.writeObject(actualNode.getOriginal());
             System.out.print("Saved sukces");
         } catch (IOException e) {
