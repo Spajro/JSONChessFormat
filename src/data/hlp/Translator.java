@@ -102,7 +102,7 @@ public class Translator {
             if(thx!=0){
                 hx= columnToNumber(thx);
             }
-            Position temp=positionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
+            Position temp= PositionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
             Result=new Move(temp,new Position(x,y));
         }
         return Result;
