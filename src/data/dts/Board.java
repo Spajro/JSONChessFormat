@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 public class Board implements Serializable {
-    //Class representing chess board
     //statics int%3==1 is white, 2 is black
     public static final int SIZE = 8;
     public static final int EMPTY = 0;
@@ -22,7 +21,6 @@ public class Board implements Serializable {
     public static final int BROOK = 11;
     public static final int BQUEEN = 14;
     public static final int BKING = 17;
-    //colors
     private final int[][] T;
 
     private Board() {
@@ -59,10 +57,6 @@ public class Board implements Serializable {
         return T[x][y];
     }
 
-    public static Board getBlank() {
-        return new Board();
-    }
-
     public static Board getStart() {
         Board b = new Board();
         for (int i = 0; i <= 7; i++) {
@@ -92,22 +86,18 @@ public class Board implements Serializable {
         return new Board(b);
     }
 
-    public boolean checkPiece(int figureId, int x, int y) {
-        return get(x, y) == figureId;
-    }
-
     public boolean checkPiece(int figureId, Position temp) {
-        return checkPiece(figureId, temp.getX(), temp.getY());
+        return get(temp.getX(), temp.getY()) == figureId;
     }
 
-    public static Color getPieceColor(int figureId){
-        if(figureId%3==1){
+    public static Color getPieceColor(int figureId) {
+        if (figureId % 3 == 1) {
             return Color.white;
         } else if (figureId % 3 == 2) {
             return Color.black;
-        }
-        else throw new IllegalArgumentException("Wrong figureId");
+        } else throw new IllegalArgumentException("Wrong figureId");
     }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
