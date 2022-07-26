@@ -1,6 +1,6 @@
 package src.gui;
 
-import src.data.dts.Board;
+import src.data.dts.board.Board;
 import src.data.dts.Move;
 import src.data.dts.Position;
 

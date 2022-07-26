@@ -1,15 +1,14 @@
 package src.data.dts;
 
-import src.data.dts.color.Color;
+import src.data.dts.board.Board;
 
 import java.io.Serializable;
 
 public class Move implements Serializable {
-    //class representing chess move
     private String name;
     private Position oldPosition;
     private Position newPosition;
-    private int castle; //0 brak 1 bk 2 bd 3 ck 4 cd
+    private int castle;
     public static final int NO_CASTLE = 0;
     public static final int WHITE_SHORT_CASTLE = 1;
     public static final int WHITE_LONG_CASTLE = 2;
@@ -50,11 +49,7 @@ public class Move implements Serializable {
         }
     }
 
-    public boolean isLegal(Board board, Color color) {
-        return Board.getPieceColor(board.read(oldPosition)).equal(color) && isCorrect();
-    }
-
-    private boolean isCorrect() {
+    public boolean isCorrect() {
         return !oldPosition.isEmpty() && !newPosition.isEmpty();
     }
 

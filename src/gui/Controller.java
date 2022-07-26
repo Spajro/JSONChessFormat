@@ -1,7 +1,7 @@
 package src.gui;
 
 
-import src.data.dts.Board;
+import src.data.dts.board.Board;
 import src.data.dts.DataModel;
 import src.data.dts.Diagram;
 import src.data.dts.Move;

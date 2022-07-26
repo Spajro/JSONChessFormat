@@ -1,6 +1,7 @@
 package src.data.dts;
 
 import src.data.ant.Annotation;
+import src.data.dts.board.Board;
 import src.data.dts.color.Color;
 import src.data.hlp.Translator;
 

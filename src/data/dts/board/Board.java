@@ -1,5 +1,6 @@
-package src.data.dts;
+package src.data.dts.board;
 
+import src.data.dts.Position;
 import src.data.dts.color.Color;
 
 import java.io.Serializable;

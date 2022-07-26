@@ -1,12 +1,10 @@
 package src.gui;
 
-import src.data.dts.Board;
+import src.data.dts.board.Board;
 import src.data.dts.DataModel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 
 public class App {

@@ -1,5 +1,7 @@
 package src.data.dts;
 
+import src.data.dts.board.Board;
+
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
