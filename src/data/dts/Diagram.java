@@ -1,8 +1,7 @@
 package src.data.dts;
 
 import src.data.ant.Annotation;
-import src.data.dts.board.Board;
-import src.data.dts.color.Color;
+import src.data.dts.board.ChessBoard;
 import src.data.hlp.Translator;
 
 import java.io.Serializable;
@@ -11,46 +10,39 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Diagram implements Serializable {
-    //TODO diagram naming
-    //class representing node of openings tree
     private final int moveId;
     private String moveName;
     private final Diagram parent;
     private LinkedList<Diagram> nextDiagrams;
     private Annotation annotation;
-    private Board board;
-    private Color color;
+    private final ChessBoard board;
 
     public Diagram() {
         moveId = 0;
         moveName = "Start";
-        board = Board.getStart();
+        board = new ChessBoard();
         parent = null;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        color = Color.white;
     }
 
-    public Diagram(Board nextBoard, Diagram last, Color color, int id) {
+    public Diagram(ChessBoard nextBoard, Diagram last, int id) {
         moveId = id;
         moveName = "newDiag";
-        board = Board.getCopy(nextBoard);
+        board = nextBoard;
         parent = last;
         nextDiagrams = new LinkedList<>();
         annotation = new Annotation();
-        this.color = color;
     }
 
     public Diagram makeMove(Move move) {
-        if (move.isLegal(board,color)) {
-            Board nextBoard = Board.getCopy(board);
-            move.setName(Translator.preMoveToAlgebraic(board,move));
-            move.makeMove(nextBoard);
-            Diagram nextDiagram = new Diagram(nextBoard, this, color.swap(), moveId + 1);
-            nextDiagram.moveName=move.getName();
+        ChessBoard tempBoard = board.makeMove(move);
+        if (board != tempBoard) {
+            move.setName(Translator.preMoveToAlgebraic(tempBoard, move));
+            Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+            nextDiagram.moveName = move.getName();
             for (Diagram D : nextDiagrams) {
                 if (D.board.equals(nextDiagram.board) && D.moveId == nextDiagram.moveId) {
-                    //TODO
                     return D;
                 }
             }
@@ -108,10 +100,6 @@ public class Diagram implements Serializable {
         } else return null;
     }
 
-    public Board getBoard() {
-        return board;
-    }
-
     public Annotation getAnnotation() {
         return annotation;
     }
@@ -124,22 +112,18 @@ public class Diagram implements Serializable {
         return nextDiagrams;
     }
 
-    public Color getColor() {
-        return color;
-    }
-
-    public Diagram getNextDiagram(int index){
-        if(index>=0 && index< nextDiagrams.size()){
+    public Diagram getNextDiagram(int index) {
+        if (index >= 0 && index < nextDiagrams.size()) {
             return nextDiagrams.get(index);
         }
         return null;
     }
 
-    public int getNextDiagramsCount(){
+    public int getNextDiagramsCount() {
         return nextDiagrams.size();
     }
 
-    public int getIndexInNextDiagrams(Diagram d){
+    public int getIndexInNextDiagrams(Diagram d) {
         return nextDiagrams.indexOf(d);
     }
 
@@ -148,12 +132,12 @@ public class Diagram implements Serializable {
         return moveName;
     }
 
-    public List<Diagram> getPathFromOriginal(){
-        List<Diagram> list=new ArrayList<>(moveId+1);
-        Diagram temp=this;
-        while(temp!=null){
-            list.add(0,temp);
-            temp=temp.parent;
+    public List<Diagram> getPathFromOriginal() {
+        List<Diagram> list = new ArrayList<>(moveId + 1);
+        Diagram temp = this;
+        while (temp != null) {
+            list.add(0, temp);
+            temp = temp.parent;
         }
         return list;
     }

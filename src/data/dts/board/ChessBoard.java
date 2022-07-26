@@ -34,4 +34,22 @@ public class ChessBoard {
     private boolean isLegal(Move move) {
         return Board.getPieceColor(board.read(move.getOldPosition())).equal(color) && move.isCorrect();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ChessBoard that = (ChessBoard) o;
+
+        if (!board.equals(that.board)) return false;
+        return color.equals(that.color);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = board.hashCode();
+        result = 31 * result + color.hashCode();
+        return result;
+    }
 }
