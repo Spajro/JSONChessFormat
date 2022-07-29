@@ -3,6 +3,7 @@ package src.data.dts.board;
 import src.data.dts.Move;
 import src.data.dts.Position;
 import src.data.dts.color.Color;
+import src.data.dts.fields.Field;
 
 public class ChessBoard {
     private final Board board;
@@ -18,8 +19,14 @@ public class ChessBoard {
         this.color = color;
     }
 
+    @Deprecated
     public int read(Position position) {
         return board.read(position);
+    }
+
+    public Field getField(Position position){
+        //TODO
+        return null;
     }
 
     public ChessBoard makeMove(Move move) {
