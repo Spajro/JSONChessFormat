@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Knight extends Piece{
-    public Knight(Color color, Position position, ChessBoard chessBoard) {
+    Knight(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 
@@ -16,8 +16,8 @@ public class Knight extends Piece{
     public Set<Position> getPossibleStartPositions() {
         return Steps.knightSteps.stream()
                 .filter(possiblePosition -> {
-                    var field=chessBoard.getField(position.add(possiblePosition));
-                    return field.isEmpty();
+                    var field=getField(position.add(possiblePosition));
+                    return field.isPresent() && field.get().isEmpty();
                 })
                 .collect(Collectors.toSet());
     }
@@ -26,9 +26,10 @@ public class Knight extends Piece{
     public Set<Position> getPossibleEndPositions() {
         return Steps.knightSteps.stream()
                 .filter(possiblePosition -> {
-                    var field=chessBoard.getField(position.add(possiblePosition));
-                    return field.isEmpty() || !field.getPiece().getColor().equal(color);
+                    var field=getField(position.add(possiblePosition));
+                    return field.isEmpty() || !field.get().getPiece().getColor().equal(color);
                 })
                 .collect(Collectors.toSet());
     }
+
 }
