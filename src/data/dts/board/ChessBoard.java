@@ -35,6 +35,10 @@ public class ChessBoard {
         return Board.getPieceColor(board.read(move.getOldPosition())).equal(color) && move.isCorrect();
     }
 
+    public Color getColor() {
+        return color;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

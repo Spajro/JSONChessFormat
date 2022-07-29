@@ -141,4 +141,8 @@ public class Diagram implements Serializable {
         }
         return list;
     }
+
+    public ChessBoard getBoard() {
+        return board;
+    }
 }

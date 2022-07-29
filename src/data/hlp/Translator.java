@@ -3,47 +3,48 @@ package src.data.hlp;
 import src.data.dts.board.Board;
 import src.data.dts.Move;
 import src.data.dts.Position;
+import src.data.dts.board.ChessBoard;
 import src.data.dts.color.Color;
 
 public class Translator {
 
-    public static Move algebraicToMove(Board t, String moveName, Color color) {
-        Move Result= new Move();
-        Result.setName(moveName);
-        boolean Rosz=false;
-        boolean Fault=false;
-        int R_type=-1;
+    public static Move algebraicToMove(ChessBoard board, String moveName) {
+        Move result = new Move();
+        result.setName(moveName);
+        boolean isCastle = false;
+        boolean isFault = false;
+        int castleType = -1;
         int y;
-        char tx=0;
-        char ty=0;
+        char tx = 0;
+        char ty = 0;
         int x;
-        char f = 0;
+        char figure = 0;
         char thx = 0;
-        int hx=-1;
-        int hy=-1;
+        int hx = -1;
+        int hy = -1;
         switch (moveName.length()) {
             case 2: //ruch pionka do przodu
                 tx = moveName.charAt(0);
                 ty = moveName.charAt(1);
-                f=' ';
+                figure = ' ';
                 break;
             case 3: //ruch figury lub bicie pionem lub roszada krotka
                 if (moveName.equals("O-O")) {
                     //roszada krotka
-                    Rosz = true;
-                    if (color.isWhite()) {
-                        R_type = 1;
+                    isCastle = true;
+                    if (board.getColor().isWhite()) {
+                        castleType = 1;
                     } else {
-                        R_type = 3;
+                        castleType = 3;
                     }
                 } else if (moveName.charAt(0) == 'x') {
                     //bicie pionkiem
                     tx = moveName.charAt(1);
                     ty = moveName.charAt(2);
-                    f='X';
+                    figure = 'X';
                 } else {
                     //ruch figury
-                    f = moveName.charAt(0);
+                    figure = moveName.charAt(0);
                     tx = moveName.charAt(1);
                     ty = moveName.charAt(2);
                 }
@@ -51,7 +52,7 @@ public class Translator {
             case 4: //ruch jednej z mozliwych figur lub bicie figurą lub jednym z mozliwych pionkow
                 if (moveName.charAt(1) == 'x') {
                     //bicie figura
-                    f = moveName.charAt(0);
+                    figure = moveName.charAt(0);
                     tx = moveName.charAt(2);
                     ty = moveName.charAt(3);
                 } else if (moveName.charAt(0) == 'x') {
@@ -59,10 +60,10 @@ public class Translator {
                     thx = moveName.charAt(1);
                     tx = moveName.charAt(2);
                     ty = moveName.charAt(3);
-                    f='X';
+                    figure = 'X';
                 } else {
                     //ruch jednej z mozliwych figur
-                    f = moveName.charAt(0);
+                    figure = moveName.charAt(0);
                     thx = moveName.charAt(1);
                     tx = moveName.charAt(2);
                     ty = moveName.charAt(3);
@@ -71,58 +72,55 @@ public class Translator {
             case 5: //bicie jedną z mozliwych figur lub roszada dluga
                 if (moveName.equals("O-O-O")) {
                     //roszada długa
-                    Rosz = true;
-                    if (color.isWhite()) {
-                        R_type = 2;
+                    isCastle = true;
+                    if (board.getColor().isWhite()) {
+                        castleType = 2;
                     } else {
-                        R_type = 4;
+                        castleType = 4;
                     }
                 } else {
                     //bicie jedną z mozliwych figur
-                    f = moveName.charAt(0);
+                    figure = moveName.charAt(0);
                     thx = moveName.charAt(2);
                     tx = moveName.charAt(3);
                     ty = moveName.charAt(4);
                 }
                 break;
             default:
-                Fault = true;
+                isFault = true;
                 System.out.print("Unable to translate");
                 break;
         }
-        if(Fault){
+        if (isFault) {
             return null;
-        }
-        else if(Rosz){
-            Result.setCastle(R_type);
-        }
-        else{
-            x= columnToNumber(tx);
-            y=Character.getNumericValue(ty)-1;
-            if(thx!=0){
-                hx= columnToNumber(thx);
+        } else if (isCastle) {
+            result.setCastle(castleType);
+        } else {
+            x = columnToNumber(tx);
+            y = Character.getNumericValue(ty) - 1;
+            if (thx != 0) {
+                hx = columnToNumber(thx);
             }
-            Position temp= PositionFinder.chooseFig(f,color,t,new Position(x,y),new Position(hx,hy));
-            Result=new Move(temp,new Position(x,y));
+            Position temp = PositionFinder.chooseFig(figure, board, new Position(x, y), new Position(hx, hy));
+            result = new Move(temp, new Position(x, y));
         }
-        return Result;
+        return result;
     }
-    
-    public static String preMoveToAlgebraic(Board board, Move move){
-        if(move.getCastle()==Move.NO_CASTLE){
-            StringBuilder stringBuilder=new StringBuilder();
+
+    public static String preMoveToAlgebraic(ChessBoard board, Move move) {
+        if (move.getCastle() == Move.NO_CASTLE) {
+            StringBuilder stringBuilder = new StringBuilder();
             stringBuilder
                     .append(numberToFigure(board.read(move.getOldPosition())));
-            if(board.read(move.getNewPosition())!=Board.EMPTY){
+            if (board.read(move.getNewPosition()) != Board.EMPTY) {
                 stringBuilder.append("x");
             }
             stringBuilder
                     .append(numberToColumn(move.getNewPosition().getX()))
                     .append(move.getNewPosition().getY());
             return stringBuilder.toString();
-        }
-        else{
-            switch (move.getCastle()){
+        } else {
+            switch (move.getCastle()) {
                 case Move.WHITE_SHORT_CASTLE, Move.BLACK_SHORT_CASTLE -> {
                     return "O-O";
                 }
@@ -135,8 +133,9 @@ public class Translator {
         }
         return "ERROR";
     }
-    public static int columnToNumber(char column){
-        switch (column){
+
+    public static int columnToNumber(char column) {
+        switch (column) {
             case 'a' -> {
                 return 1;
             }
@@ -166,8 +165,8 @@ public class Translator {
         return -1;
     }
 
-    public static String numberToFigure(int figure){
-        switch(figure){
+    public static String numberToFigure(int figure) {
+        switch (figure) {
             case Board.WPAWN -> {
                 return "BP";
             }
@@ -211,8 +210,9 @@ public class Translator {
 
         }
     }
-    public static char numberToColumn(int column){
-        switch (column){
+
+    public static char numberToColumn(int column) {
+        switch (column) {
             case 1 -> {
                 return 'a';
             }
