@@ -7,9 +7,9 @@ import src.data.dts.color.Color;
 import java.util.Set;
 
 public abstract class Piece {
-    private final Color color;
-    private final Position position;
-    private final ChessBoard chessBoard;
+    protected final Color color;
+    protected final Position position;
+    protected final ChessBoard chessBoard;
 
     public Piece(Color color, Position position, ChessBoard chessBoard) {
         this.color = color;

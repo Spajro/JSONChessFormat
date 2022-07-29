@@ -3,31 +3,9 @@ package src.data.hlp;
 import src.data.dts.board.Board;
 import src.data.dts.Position;
 import src.data.dts.color.Color;
+import static src.data.dts.pieces.Steps.*;
 
 public class PositionFinder {
-    public static Position[] basicSteps = {new Position(-1, 0), new Position(1, 0), new Position(0, 1), new Position(0, -1)};
-    public static Position[] knightSteps = {
-            new Position(2, 1),
-            new Position(2, -1),
-            new Position(1, 2),
-            new Position(1, -2),
-            new Position(-1, 2),
-            new Position(-1, -2),
-            new Position(-2, 1),
-            new Position(-2, -1),
-    };
-    public static Position[] diagonalSteps = {new Position(-1, -1), new Position(1, 1), new Position(-1, 1), new Position(1, -1)};
-    public static Position[] fullSteps = {
-            new Position(1, 0),
-            new Position(-1, 0),
-            new Position(0, 1),
-            new Position(0, -1),
-            new Position(1, 1),
-            new Position(1, -1),
-            new Position(-1, 1),
-            new Position(-1, -1),
-    };
-
     public static Position chooseFig(char C, Color color, Board board, Position start, Position aux) {
         switch (C) {
             case ' ' -> {
