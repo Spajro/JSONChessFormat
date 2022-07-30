@@ -8,15 +8,13 @@ import src.data.dts.fields.Field;
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class Piece implements Field {
+public abstract class Piece extends Field {
     protected final Color color;
-    protected final Position position;
-    protected final ChessBoard chessBoard;
+
 
     Piece(Color color, Position position, ChessBoard chessBoard) {
+        super(position, chessBoard);
         this.color = color;
-        this.position = position;
-        this.chessBoard = chessBoard;
     }
 
     public abstract Set<Position> getPossibleStartPositions();
