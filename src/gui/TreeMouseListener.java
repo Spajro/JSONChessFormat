@@ -1,6 +1,6 @@
-package src.gui;
+package gui;
 
-import src.data.dts.Diagram;
+import data.dts.Diagram;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;

@@ -1,4 +1,4 @@
-package src.data.dts.color;
+package data.dts.color;
 
 public class Black implements Color{
     Black() {

@@ -1,11 +1,11 @@
-package src.gui;
+package gui;
 
 
-import src.data.dts.board.Board;
-import src.data.dts.DataModel;
-import src.data.dts.Diagram;
-import src.data.dts.Move;
-import src.data.dts.board.ChessBoard;
+import data.dts.board.Board;
+import data.dts.DataModel;
+import data.dts.Diagram;
+import data.dts.Move;
+import data.dts.board.ChessBoard;
 
 import javax.swing.*;
 

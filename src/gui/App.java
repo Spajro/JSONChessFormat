@@ -1,7 +1,7 @@
-package src.gui;
+package gui;
 
-import src.data.dts.board.Board;
-import src.data.dts.DataModel;
+import data.dts.board.Board;
+import data.dts.DataModel;
 
 import javax.swing.*;
 import java.awt.*;

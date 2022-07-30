@@ -1,8 +1,8 @@
-package src.gui;
+package gui;
 
-import src.data.dts.board.Board;
-import src.data.dts.Position;
-import src.data.hlp.Translator;
+import data.dts.board.Board;
+import data.dts.Position;
+import data.hlp.Translator;
 
 import javax.swing.*;
 import java.awt.*;

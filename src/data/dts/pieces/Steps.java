@@ -1,6 +1,6 @@
-package src.data.dts.pieces;
+package data.dts.pieces;
 
-import src.data.dts.Position;
+import data.dts.Position;
 
 import java.util.HashSet;
 import java.util.Set;

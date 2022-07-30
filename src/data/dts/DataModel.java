@@ -1,7 +1,7 @@
-package src.data.dts;
+package data.dts;
 
-import src.data.dts.board.Board;
-import src.data.dts.board.ChessBoard;
+import data.dts.board.Board;
+import data.dts.board.ChessBoard;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;

@@ -1,8 +1,8 @@
-package src.gui;
+package gui;
 
-import src.data.dts.board.Board;
-import src.data.dts.Move;
-import src.data.dts.Position;
+import data.dts.board.Board;
+import data.dts.Move;
+import data.dts.Position;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;

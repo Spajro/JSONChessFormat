@@ -1,4 +1,4 @@
-package src.data.dts;
+package data.dts;
 
 public class Position {
     //class representing position on board
@@ -17,7 +17,7 @@ public class Position {
         y=P.y;
     }
     public Position add(Position P){
-        return new Position(x+=P.x,y+=P.y);
+        return new Position(x+P.x,y+P.y);
     }
     public boolean isEmpty(){
         return x == -1 && y == -1;

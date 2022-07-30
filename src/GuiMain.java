@@ -1,5 +1,5 @@
-import src.data.dts.DataModel;
-import src.gui.App;
+import data.dts.DataModel;
+import gui.App;
 
 public class GuiMain {
     public static void main(String[] args){

@@ -1,6 +1,6 @@
-import src.cli.actionData;
-import src.cli.CommandLineHandler;
-import src.data.hlp.Translator;
+import cli.actionData;
+import cli.CommandLineHandler;
+import data.hlp.Translator;
 
 import java.util.Scanner;
 

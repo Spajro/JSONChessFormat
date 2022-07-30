@@ -1,8 +1,8 @@
-package src.data.dts;
+package data.dts;
 
-import src.data.ant.Annotation;
-import src.data.dts.board.ChessBoard;
-import src.data.hlp.Translator;
+import data.ant.Annotation;
+import data.dts.board.ChessBoard;
+import data.hlp.Translator;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,9 +36,9 @@ public class Diagram implements Serializable {
     }
 
     public Diagram makeMove(Move move) {
+        move.setName(Translator.preMoveToAlgebraic(board, move));
         ChessBoard tempBoard = board.makeMove(move);
         if (board != tempBoard) {
-            move.setName(Translator.preMoveToAlgebraic(tempBoard, move));
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
             nextDiagram.moveName = move.getName();
             for (Diagram D : nextDiagrams) {

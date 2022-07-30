@@ -1,6 +1,6 @@
-package src.data.dts;
+package data.dts;
 
-import src.data.dts.board.Board;
+import data.dts.board.Board;
 
 import java.io.Serializable;
 

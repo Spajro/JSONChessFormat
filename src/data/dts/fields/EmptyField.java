@@ -1,8 +1,8 @@
-package src.data.dts.fields;
+package data.dts.fields;
 
-import src.data.dts.Position;
-import src.data.dts.board.ChessBoard;
-import src.data.dts.pieces.Piece;
+import data.dts.Position;
+import data.dts.board.ChessBoard;
+import data.dts.pieces.Piece;
 
 public class EmptyField extends Field{
     public EmptyField(Position position, ChessBoard chessBoard) {

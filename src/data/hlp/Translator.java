@@ -1,17 +1,15 @@
-package src.data.hlp;
+package data.hlp;
 
-import src.data.dts.board.Board;
-import src.data.dts.Move;
-import src.data.dts.Position;
-import src.data.dts.board.BoardWrapper;
-import src.data.dts.board.ChessBoard;
-import src.data.dts.color.Color;
+import data.dts.board.Board;
+import data.dts.Move;
+import data.dts.Position;
+import data.dts.board.BoardWrapper;
+import data.dts.board.ChessBoard;
+import data.dts.color.Color;
 
 public class Translator {
 
     public static Move algebraicToMove(ChessBoard board, String moveName, Color color) {
-        Move result = new Move();
-        result.setName(moveName);
         boolean isCastle = false;
         boolean isFault = false;
         int castleType = -1;
@@ -91,14 +89,17 @@ public class Translator {
                 System.out.print("Unable to translate");
                 break;
         }
+        Move result=new Move();
         if (isFault) {
             return null;
         } else if (isCastle) {
+            result.setName(moveName);
             result.setCastle(castleType);
         } else {
             Position endPosition = new Position(columnToNumber(textX), Character.getNumericValue(textY) - 1);
             Position temp = BoardWrapper.createPieceFromId(board, algebraicPieceToBoardId(pieceAlgebraicSymbol, color), endPosition).getPosition();
             result = new Move(temp, endPosition);
+            result.setName(moveName);
         }
         return result;
     }
@@ -200,7 +201,7 @@ public class Translator {
                 return "CK";
             }
             default -> {
-                System.out.print("numberToFigure fault\n");
+                System.out.print(figure+"numberToFigure fault\n");
                 return null;
             }
         }

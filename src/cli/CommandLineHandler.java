@@ -1,10 +1,10 @@
-package src.cli;
+package cli;
 
-import src.data.dts.Diagram;
-import src.data.dts.Move;
-import src.data.dts.Position;
-import src.data.dts.color.Color;
-import src.data.hlp.Translator;
+import data.dts.Diagram;
+import data.dts.Move;
+import data.dts.Position;
+import data.dts.color.Color;
+import data.hlp.Translator;
 
 import java.io.*;
 

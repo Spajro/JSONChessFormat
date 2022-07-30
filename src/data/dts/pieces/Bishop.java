@@ -1,8 +1,8 @@
-package src.data.dts.pieces;
+package data.dts.pieces;
 
-import src.data.dts.Position;
-import src.data.dts.board.ChessBoard;
-import src.data.dts.color.Color;
+import data.dts.Position;
+import data.dts.board.ChessBoard;
+import data.dts.color.Color;
 
 import java.util.Set;
 

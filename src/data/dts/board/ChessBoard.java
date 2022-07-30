@@ -1,9 +1,9 @@
-package src.data.dts.board;
+package data.dts.board;
 
-import src.data.dts.Move;
-import src.data.dts.Position;
-import src.data.dts.color.Color;
-import src.data.dts.fields.Field;
+import data.dts.Move;
+import data.dts.Position;
+import data.dts.color.Color;
+import data.dts.fields.Field;
 
 public class ChessBoard {
     private final Board board;
@@ -38,7 +38,10 @@ public class ChessBoard {
     }
 
     private boolean isLegal(Move move) {
-        return Board.getPieceColor(board.read(move.getOldPosition())).equal(color) && move.isCorrect();
+        return Board.getPieceColor(board.read(move.getOldPosition())).equal(color)
+                && move.isCorrect()
+                && !getField(move.getOldPosition()).isEmpty()
+                && getField(move.getOldPosition()).getPiece().getPossibleEndPositions().contains(move.getNewPosition());
     }
 
     public Color getColor() {

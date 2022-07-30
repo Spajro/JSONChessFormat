@@ -1,7 +1,7 @@
-package src.data.hlp;
+package data.hlp;
 
-import src.data.dts.Position;
-import src.data.dts.pieces.Piece;
+import data.dts.Position;
+import data.dts.pieces.Piece;
 
 import java.util.Set;
 

@@ -1,4 +1,4 @@
-package src.cli;
+package cli;
 
 public class actionData {
     String code;

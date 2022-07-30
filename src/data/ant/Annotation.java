@@ -1,4 +1,4 @@
-package src.data.ant;
+package data.ant;
 
 import java.io.Serializable;
 import java.util.LinkedList;
