@@ -2,6 +2,7 @@ package src.data.dts.fields;
 
 import src.data.dts.Position;
 import src.data.dts.board.ChessBoard;
+import src.data.dts.color.Color;
 import src.data.dts.pieces.Piece;
 
 public abstract class Field {
@@ -15,4 +16,9 @@ public abstract class Field {
 
     public abstract boolean isEmpty();
     public abstract Piece getPiece();
+
+    public boolean isAttackedByColor(Color color){
+        //TODO
+        return false;
+    }
 }
