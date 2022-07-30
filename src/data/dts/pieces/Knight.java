@@ -3,11 +3,13 @@ package data.dts.pieces;
 import data.dts.Position;
 import data.dts.board.ChessBoard;
 import data.dts.color.Color;
+import data.dts.fields.Field;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class Knight extends Piece{
+public class Knight extends Piece {
     public Knight(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
@@ -15,20 +17,24 @@ public class Knight extends Piece{
     @Override
     public Set<Position> getPossibleStartPositions() {
         return Steps.knightSteps.stream()
-                .filter(possiblePosition -> {
-                    var field=getField(position.add(possiblePosition));
-                    return field.isPresent() && field.get().isEmpty();
-                })
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Field::isEmpty)
+                .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Set<Position> getPossibleEndPositions() {
         return Steps.knightSteps.stream()
-                .filter(possiblePosition -> {
-                    var field=getField(position.add(possiblePosition));
-                    return field.isEmpty() || !field.get().getPiece().getColor().equal(color);
-                })
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(field -> field.isEmpty() || !field.getPiece().getColor().equal(color))
+                .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
 

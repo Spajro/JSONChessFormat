@@ -21,4 +21,8 @@ public abstract class Field {
         //TODO
         return false;
     }
+
+    public Position getPosition() {
+        return position;
+    }
 }

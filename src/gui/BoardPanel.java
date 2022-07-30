@@ -98,7 +98,6 @@ public class BoardPanel extends JPanel {
     public int getScale(){
         int px=getWidth()/Board.SIZE;
         int py=getHeight()/Board.SIZE;
-        System.out.print("PX: "+px+"PY: "+py+"\n");
         return min(px,py);
     }
 

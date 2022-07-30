@@ -5,6 +5,8 @@ import data.dts.Position;
 import data.dts.color.Color;
 import data.dts.fields.Field;
 
+import java.awt.*;
+
 public class ChessBoard {
     private final Board board;
     private final Color color;
@@ -34,6 +36,7 @@ public class ChessBoard {
             move.makeMove(tempBoard);
             return new ChessBoard(tempBoard, color.swap());
         }
+        System.out.print("[ChessBoard] -> Move illegal\n");
         return this;
     }
 

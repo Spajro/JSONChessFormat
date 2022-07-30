@@ -36,6 +36,7 @@ public class Diagram implements Serializable {
     }
 
     public Diagram makeMove(Move move) {
+        System.out.print(move);
         move.setName(Translator.preMoveToAlgebraic(board, move));
         ChessBoard tempBoard = board.makeMove(move);
         if (board != tempBoard) {

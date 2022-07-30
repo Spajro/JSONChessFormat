@@ -82,4 +82,14 @@ public class Move implements Serializable {
         new Move(new Position(5, row), new Position(3, row)).makeMove(board);
         new Move(new Position(1, row), new Position(4, row)).makeMove(board);
     }
+
+    @Override
+    public String toString() {
+        return "Move{" +
+                "name='" + name + '\'' +
+                ", oldPosition=" + oldPosition +
+                ", newPosition=" + newPosition +
+                ", castle=" + castle +
+                '}';
+    }
 }
