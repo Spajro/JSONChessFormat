@@ -24,8 +24,8 @@ public class ChessBoard {
         return board.read(position);
     }
 
-    public Field getField(Position position){
-        return BoardWrapper.getField(this,board,position);
+    public Field getField(Position position) {
+        return BoardWrapper.getFieldFromBoard(this, board, position);
     }
 
     public ChessBoard makeMove(Move move) {

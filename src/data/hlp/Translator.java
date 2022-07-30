@@ -3,30 +3,30 @@ package src.data.hlp;
 import src.data.dts.board.Board;
 import src.data.dts.Move;
 import src.data.dts.Position;
+import src.data.dts.board.BoardWrapper;
 import src.data.dts.board.ChessBoard;
 import src.data.dts.color.Color;
 
 public class Translator {
 
-    public static Move algebraicToMove(ChessBoard board, String moveName) {
+    public static Move algebraicToMove(ChessBoard board, String moveName, Color color) {
         Move result = new Move();
         result.setName(moveName);
         boolean isCastle = false;
         boolean isFault = false;
         int castleType = -1;
-        int y;
-        char tx = 0;
-        char ty = 0;
-        int x;
-        char figure = 0;
+        char textX = 0;
+        char textY = 0;
+        char pieceAlgebraicSymbol = 0;
+        //TODO auxilliary information from notation
         char thx = 0;
-        int hx = -1;
-        int hy = -1;
+        int auxiliaryX = -1;
+        int auxiliaryY = -1;
         switch (moveName.length()) {
             case 2: //ruch pionka do przodu
-                tx = moveName.charAt(0);
-                ty = moveName.charAt(1);
-                figure = ' ';
+                textX = moveName.charAt(0);
+                textY = moveName.charAt(1);
+                pieceAlgebraicSymbol = ' ';
                 break;
             case 3: //ruch figury lub bicie pionem lub roszada krotka
                 if (moveName.equals("O-O")) {
@@ -39,34 +39,34 @@ public class Translator {
                     }
                 } else if (moveName.charAt(0) == 'x') {
                     //bicie pionkiem
-                    tx = moveName.charAt(1);
-                    ty = moveName.charAt(2);
-                    figure = 'X';
+                    textX = moveName.charAt(1);
+                    textY = moveName.charAt(2);
+                    pieceAlgebraicSymbol = 'X';
                 } else {
                     //ruch figury
-                    figure = moveName.charAt(0);
-                    tx = moveName.charAt(1);
-                    ty = moveName.charAt(2);
+                    pieceAlgebraicSymbol = moveName.charAt(0);
+                    textX = moveName.charAt(1);
+                    textY = moveName.charAt(2);
                 }
                 break;
             case 4: //ruch jednej z mozliwych figur lub bicie figurą lub jednym z mozliwych pionkow
                 if (moveName.charAt(1) == 'x') {
                     //bicie figura
-                    figure = moveName.charAt(0);
-                    tx = moveName.charAt(2);
-                    ty = moveName.charAt(3);
+                    pieceAlgebraicSymbol = moveName.charAt(0);
+                    textX = moveName.charAt(2);
+                    textY = moveName.charAt(3);
                 } else if (moveName.charAt(0) == 'x') {
                     //bicie jednym z mozliwych pionkow
                     thx = moveName.charAt(1);
-                    tx = moveName.charAt(2);
-                    ty = moveName.charAt(3);
-                    figure = 'X';
+                    textX = moveName.charAt(2);
+                    textY = moveName.charAt(3);
+                    pieceAlgebraicSymbol = 'X';
                 } else {
                     //ruch jednej z mozliwych figur
-                    figure = moveName.charAt(0);
+                    pieceAlgebraicSymbol = moveName.charAt(0);
                     thx = moveName.charAt(1);
-                    tx = moveName.charAt(2);
-                    ty = moveName.charAt(3);
+                    textX = moveName.charAt(2);
+                    textY = moveName.charAt(3);
                 }
                 break;
             case 5: //bicie jedną z mozliwych figur lub roszada dluga
@@ -80,10 +80,10 @@ public class Translator {
                     }
                 } else {
                     //bicie jedną z mozliwych figur
-                    figure = moveName.charAt(0);
+                    pieceAlgebraicSymbol = moveName.charAt(0);
                     thx = moveName.charAt(2);
-                    tx = moveName.charAt(3);
-                    ty = moveName.charAt(4);
+                    textX = moveName.charAt(3);
+                    textY = moveName.charAt(4);
                 }
                 break;
             default:
@@ -96,13 +96,9 @@ public class Translator {
         } else if (isCastle) {
             result.setCastle(castleType);
         } else {
-            x = columnToNumber(tx);
-            y = Character.getNumericValue(ty) - 1;
-            if (thx != 0) {
-                hx = columnToNumber(thx);
-            }
-            Position temp = PositionFinder.chooseFig(figure, board, new Position(x, y), new Position(hx, hy));
-            result = new Move(temp, new Position(x, y));
+            Position endPosition = new Position(columnToNumber(textX), Character.getNumericValue(textY) - 1);
+            Position temp = BoardWrapper.createPieceFromId(board, algebraicPieceToBoardId(pieceAlgebraicSymbol, color), endPosition).getPosition();
+            result = new Move(temp, endPosition);
         }
         return result;
     }
@@ -207,7 +203,6 @@ public class Translator {
                 System.out.print("numberToFigure fault\n");
                 return null;
             }
-
         }
     }
 
@@ -242,4 +237,53 @@ public class Translator {
         return '-';
     }
 
+    public static int algebraicPieceToBoardId(char c, Color color) {
+        if (color.isWhite()) {
+            switch (c) {
+                case ' ' -> {
+                    return Board.WPAWN;
+                }
+                case 'R' -> {
+                    return Board.WROOK;
+                }
+                case 'N' -> {
+                    return Board.WKNIGHT;
+                }
+                case 'B' -> {
+                    return Board.WBISHOP;
+                }
+                case 'Q' -> {
+                    return Board.WQUEEN;
+                }
+                case 'K' -> {
+                    return Board.WKING;
+                }
+            }
+        }
+        if (color.isBlack()) {
+            switch (c) {
+                case ' ' -> {
+                    return Board.BPAWN;
+                }
+                case 'R' -> {
+                    return Board.BROOK;
+                }
+                case 'N' -> {
+                    return Board.BKNIGHT;
+                }
+                case 'B' -> {
+                    return Board.BBISHOP;
+                }
+                case 'Q' -> {
+                    return Board.BQUEEN;
+                }
+                case 'K' -> {
+                    return Board.BKING;
+                }
+            }
+        }
+        return -1;
+    }
 }
+
+
