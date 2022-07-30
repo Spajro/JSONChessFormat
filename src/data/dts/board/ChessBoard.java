@@ -62,4 +62,8 @@ public class ChessBoard {
         result = 31 * result + color.hashCode();
         return result;
     }
+
+    public Board getBoard() {
+        return board;
+    }
 }

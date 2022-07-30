@@ -141,7 +141,7 @@ public class CommandLineHandler {
     }
 
     public Color getcolor() {
-        return base.getColor();
+        return base.getBoard().getColor();
     }
 
     public void display() {

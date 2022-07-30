@@ -48,7 +48,7 @@ public class BoardMouseListener implements MouseInputListener {
                     new Position(findField(x),reverse(findField(y))),
                     new Position(findField(e.getX()),reverse(findField(e.getY())))
             ));
-            boardPanel.setBoard(controller.getActualBoard()); //
+            boardPanel.setBoard(controller.getActualBoard().getBoard()); //
             boardPanel.repaint();
             x=-1;
             y=-1;

@@ -19,7 +19,7 @@ public class App {
         menuBar=new JMenuBar();
         createFileMenu(dataModel);
         frame.setJMenuBar(menuBar);
-        boardPanel=new BoardPanel(dataModel.getActualBoard());
+        boardPanel=new BoardPanel(dataModel.getActualBoard().getBoard());
         optionPanel=new OptionPanel(controller);
         boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
         boardPanel.setSize(480,480);

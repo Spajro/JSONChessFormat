@@ -5,6 +5,7 @@ import src.data.dts.board.Board;
 import src.data.dts.DataModel;
 import src.data.dts.Diagram;
 import src.data.dts.Move;
+import src.data.dts.board.ChessBoard;
 
 import javax.swing.*;
 
@@ -23,7 +24,7 @@ public class Controller {
 
     }
 
-    public Board getActualBoard() {
+    public ChessBoard getActualBoard() {
         return dataModel.getActualBoard();
     }
 
@@ -37,7 +38,7 @@ public class Controller {
 
     public void setActualNode(Diagram lastPathComponent) {
         dataModel.setActualNode(lastPathComponent);
-        boardMouseListener.boardChanged(lastPathComponent.getBoard());
+        boardMouseListener.boardChanged(lastPathComponent.getBoard().getBoard());
     }
 
     public JTree createTreeWithDataModel(){
