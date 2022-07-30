@@ -17,26 +17,31 @@ public class King extends Piece {
     @Override
     public Set<Position> getPossibleStartPositions() {
         return Steps.fullSteps.stream()
-                .filter(possiblePosition -> {
-                    var field = getField(position.add(possiblePosition));
-                    return field.isPresent() && field.get().isEmpty();
-                })
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Field::isEmpty)
+                .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
 
     @Override
     public Set<Position> getPossibleEndPositions() {
         return Steps.fullSteps.stream()
-                .filter(possiblePosition -> {
-                    var field = getField(position.add(possiblePosition));
-                    return isLegal(field);
-                })
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(this::isLegal)
+                .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
 
-    private boolean isLegal(Optional<Field> OptionalField) {
-        if (OptionalField.isEmpty()) return false;
-        Field field = OptionalField.get();
+    private boolean isLegal(Field field) {
+        if (field.isEmpty()) {
+            return true;
+        }
         Piece piece = field.getPiece();
         return (field.isEmpty() || piece.getColor().equal(color)) && field.isAttackedByColor(color.swap());
     }
