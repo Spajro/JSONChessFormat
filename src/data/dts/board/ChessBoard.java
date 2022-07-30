@@ -25,8 +25,7 @@ public class ChessBoard {
     }
 
     public Field getField(Position position){
-        //TODO
-        return null;
+        return BoardWrapper.getField(this,board,position);
     }
 
     public ChessBoard makeMove(Move move) {

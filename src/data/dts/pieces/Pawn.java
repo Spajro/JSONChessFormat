@@ -18,7 +18,7 @@ public class Pawn extends Piece {
     private final HashMap<Step, Position> stepsForward = new HashMap<>();
     private final HashMap<Step, Position> stepsBackward = new HashMap<>();
 
-    Pawn(Color color, Position position, ChessBoard chessBoard) {
+    public Pawn(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
         if (color.isWhite()) {
             populateWhite(stepsForward);

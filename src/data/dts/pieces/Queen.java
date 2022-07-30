@@ -7,7 +7,7 @@ import src.data.dts.color.Color;
 import java.util.Set;
 
 public class Queen extends RestrictedMovementPiece {
-    Queen(Color color, Position position, ChessBoard chessBoard) {
+    public Queen(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 

@@ -12,7 +12,7 @@ public abstract class Piece extends Field {
     protected final Color color;
 
 
-    Piece(Color color, Position position, ChessBoard chessBoard) {
+    public Piece(Color color, Position position, ChessBoard chessBoard) {
         super(position, chessBoard);
         this.color = color;
     }

@@ -8,7 +8,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Knight extends Piece{
-    Knight(Color color, Position position, ChessBoard chessBoard) {
+    public Knight(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 

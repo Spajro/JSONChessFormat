@@ -7,7 +7,7 @@ import src.data.dts.color.Color;
 import java.util.Set;
 
 public class Rook extends RestrictedMovementPiece {
-    Rook(Color color, Position position, ChessBoard chessBoard) {
+    public Rook(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 

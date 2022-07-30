@@ -7,7 +7,7 @@ import src.data.dts.color.Color;
 import java.util.Set;
 
 public class Bishop extends RestrictedMovementPiece {
-    Bishop(Color color, Position position, ChessBoard chessBoard) {
+    public Bishop(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 

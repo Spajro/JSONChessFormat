@@ -10,7 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class King extends Piece {
-    King(Color color, Position position, ChessBoard chessBoard) {
+    public King(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
     }
 
