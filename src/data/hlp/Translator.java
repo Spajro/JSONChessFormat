@@ -89,7 +89,7 @@ public class Translator {
                 System.out.print("Unable to translate");
                 break;
         }
-        Move result=new Move();
+        Move result = new Move();
         if (isFault) {
             return null;
         } else if (isCastle) {
@@ -97,7 +97,12 @@ public class Translator {
             result.setCastle(castleType);
         } else {
             Position endPosition = new Position(columnToNumber(textX), Character.getNumericValue(textY) - 1);
-            Position temp = BoardWrapper.createPieceFromId(board, algebraicPieceToBoardId(pieceAlgebraicSymbol, color), endPosition).getPosition();
+            Position temp;
+            try {
+                temp = PositionFinder.findStartingPosition(BoardWrapper.createPieceFromId(board, algebraicPieceToBoardId(pieceAlgebraicSymbol, color), endPosition));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
             result = new Move(temp, endPosition);
             result.setName(moveName);
         }
@@ -201,7 +206,7 @@ public class Translator {
                 return "CK";
             }
             default -> {
-                System.out.print(figure+"numberToFigure fault\n");
+                System.out.print(figure + "numberToFigure fault\n");
                 return null;
             }
         }
