@@ -15,6 +15,11 @@ public class EmptyField extends Field{
     }
 
     @Override
+    public boolean hasPiece() {
+        return false;
+    }
+
+    @Override
     public Piece getPiece() {
         return null;
     }

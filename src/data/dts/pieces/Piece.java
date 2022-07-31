@@ -27,6 +27,11 @@ public abstract class Piece extends Field {
     }
 
     @Override
+    public boolean hasPiece() {
+        return true;
+    }
+
+    @Override
     public Piece getPiece() {
         return this;
     }

@@ -4,8 +4,12 @@ import data.dts.Move;
 import data.dts.Position;
 import data.dts.color.Color;
 import data.dts.fields.Field;
+import data.dts.pieces.Piece;
 
-import java.awt.*;
+import java.util.*;
+import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class ChessBoard {
     private final Board board;
@@ -71,5 +75,30 @@ public class ChessBoard {
 
     public Board getBoard() {
         return board;
+    }
+
+    public Map<Position, Long> getNumberOfPiecesAttackingFields(Color color) {
+        return getPiecesOfColor(color).stream()
+                .map(Piece::getPossibleEndPositions)
+                .flatMap(Set::stream)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+    }
+
+    public List<Piece> getPiecesOfColor(Color color) {
+        return getAllPositions().stream()
+                .map(this::getField)
+                .filter(Field::hasPiece)
+                .map(Field::getPiece)
+                .toList();
+    }
+
+    public List<Position> getAllPositions() {
+        List<Position> result = new LinkedList<>();
+        for (int x = 1; x <= 8; x++) {
+            for (int y = 1; y <= 8; y++) {
+                result.add(new Position(x, y));
+            }
+        }
+        return result;
     }
 }

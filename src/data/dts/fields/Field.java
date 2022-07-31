@@ -15,11 +15,11 @@ public abstract class Field {
     }
 
     public abstract boolean isEmpty();
+    public abstract boolean hasPiece();
     public abstract Piece getPiece();
 
     public boolean isAttackedByColor(Color color){
-        //TODO
-        return false;
+        return chessBoard.getNumberOfPiecesAttackingFields(color).get(position)>0;
     }
 
     public Position getPosition() {

@@ -43,6 +43,6 @@ public class King extends Piece {
             return true;
         }
         Piece piece = field.getPiece();
-        return (field.isEmpty() || piece.getColor().equal(color)) && field.isAttackedByColor(color.swap());
+        return (field.isEmpty() || piece.getColor().equal(color)) && !field.isAttackedByColor(color.swap());
     }
 }
