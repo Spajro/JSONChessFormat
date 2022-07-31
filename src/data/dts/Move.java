@@ -92,4 +92,8 @@ public class Move implements Serializable {
                 ", castle=" + castle +
                 '}';
     }
+
+    public boolean isCastle() {
+        return castle!=NO_CASTLE;
+    }
 }
