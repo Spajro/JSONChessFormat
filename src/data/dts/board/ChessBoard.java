@@ -3,7 +3,9 @@ package data.dts.board;
 import data.dts.Move;
 import data.dts.Position;
 import data.dts.color.Color;
+import data.dts.exceptions.ChessAxiomViolation;
 import data.dts.fields.Field;
+import data.dts.pieces.King;
 import data.dts.pieces.Piece;
 
 import java.util.*;
@@ -35,20 +37,25 @@ public class ChessBoard {
     }
 
     public ChessBoard makeMove(Move move) {
-        if (isLegal(move)) {
-            Board tempBoard = Board.getCopy(board);
-            move.makeMove(tempBoard);
-            return new ChessBoard(tempBoard, color.swap());
+        try {
+            if (isLegal(move)) {
+                Board tempBoard = Board.getCopy(board);
+                move.makeMove(tempBoard);
+                return new ChessBoard(tempBoard, color.swap());
+            }
+        } catch (ChessAxiomViolation e) {
+            throw new RuntimeException(e);
         }
         System.out.print("[ChessBoard] -> Move illegal\n");
         return this;
     }
 
-    private boolean isLegal(Move move) {
+    private boolean isLegal(Move move) throws ChessAxiomViolation {
         return Board.getPieceColor(board.read(move.getOldPosition())).equal(color)
                 && move.isCorrect()
                 && !getField(move.getOldPosition()).isEmpty()
-                && getField(move.getOldPosition()).getPiece().getPossibleEndPositions().contains(move.getNewPosition());
+                && getField(move.getOldPosition()).getPiece().getPossibleEndPositions().contains(move.getNewPosition())
+                && (!isKingChecked(color) ||  (BoardWrapper.getFieldFromBoard(this,board,move.getOldPosition()) instanceof King && !isPositionAttacked(move.getNewPosition())));
     }
 
     public Color getColor() {
@@ -89,6 +96,7 @@ public class ChessBoard {
                 .map(this::getField)
                 .filter(Field::hasPiece)
                 .map(Field::getPiece)
+                .filter(piece-> piece.getColor().equal(color))
                 .toList();
     }
 
@@ -100,5 +108,21 @@ public class ChessBoard {
             }
         }
         return result;
+    }
+
+    public boolean isKingChecked(Color color) throws ChessAxiomViolation {
+        Optional<Piece> optionalKing =getPiecesOfColor(color).stream()
+                .filter(piece->piece instanceof King)
+                .findFirst();
+        if(optionalKing.isEmpty()){
+            throw new ChessAxiomViolation("No King on Board");
+        }
+        King king= (King) optionalKing.get();
+
+        return isPositionAttacked(king.getPosition());
+    }
+
+    public boolean isPositionAttacked(Position position){
+        return getNumberOfPiecesAttackingFields(color).get(position)>0;
     }
 }
