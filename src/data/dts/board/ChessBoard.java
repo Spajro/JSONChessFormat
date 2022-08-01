@@ -60,13 +60,65 @@ public class ChessBoard {
             return false;
         }
         if (move.isCastle()) {
-            return isCastleLegal(move.getCastle());
+            return isCastleLegal(move);
         } else
             return getField(move.getOldPosition()).getPiece().getPossibleEndPositions().contains(move.getNewPosition())
                     && (!isKingChecked(color) || (BoardWrapper.getFieldFromBoard(this, board, move.getOldPosition()) instanceof King && !isPositionAttacked(move.getNewPosition())));
     }
 
-    private boolean isCastleLegal(int castle) {
+    public boolean isCastleLegal(Move move) {
+        if (!isCastleLegalInRequirements(move.getCastle())) {
+            return false;
+        }
+
+        if (positionsKingPasses(move.getCastle()).stream()
+                .filter(this::isPositionAttacked)
+                .toList()
+                .size() != 0
+        ) {
+            return false;
+        }
+        if (positionsBetweenKingAndRook(move.getCastle()).stream()
+                .map(this::getField)
+                .filter(Field::isEmpty)
+                .toList()
+                .size() != 0
+        ) {
+            return false;
+        }
+        return true;
+    }
+
+    private Set<Position> positionsKingPasses(int castle) {
+        Set<Position> result = new HashSet<>();
+        if (Move.isShortCastle(castle)) {
+            result.add(new Position(5, getStartRow()));
+            result.add(new Position(6, getStartRow()));
+            result.add(new Position(7, getStartRow()));
+        }
+        if (Move.isLongCastle(castle)) {
+            result.add(new Position(5, getStartRow()));
+            result.add(new Position(4, getStartRow()));
+            result.add(new Position(3, getStartRow()));
+        }
+        return result;
+    }
+
+    private Set<Position> positionsBetweenKingAndRook(int castle) {
+        Set<Position> result = new HashSet<>();
+        if (Move.isShortCastle(castle)) {
+            result.add(new Position(6, getStartRow()));
+            result.add(new Position(7, getStartRow()));
+        }
+        if (Move.isLongCastle(castle)) {
+            result.add(new Position(4, getStartRow()));
+            result.add(new Position(3, getStartRow()));
+            result.add(new Position(2, getStartRow()));
+        }
+        return result;
+    }
+
+    private boolean isCastleLegalInRequirements(int castle) {
         return switch (castle) {
             case Move.WHITE_SHORT_CASTLE -> castleRequirements.canCastleWhiteShort();
             case Move.WHITE_LONG_CASTLE -> castleRequirements.canCastleWhiteLong();

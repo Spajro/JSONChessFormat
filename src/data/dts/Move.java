@@ -96,4 +96,12 @@ public class Move implements Serializable {
     public boolean isCastle() {
         return castle!=NO_CASTLE;
     }
+
+    public static boolean isShortCastle(int tempCastle){
+        return tempCastle==WHITE_SHORT_CASTLE || tempCastle==BLACK_SHORT_CASTLE;
+    }
+
+    public static boolean isLongCastle(int tempCastle){
+        return tempCastle==WHITE_LONG_CASTLE || tempCastle==BLACK_LONG_CASTLE;
+    }
 }
