@@ -4,6 +4,7 @@ import data.dts.board.Board;
 
 import java.io.Serializable;
 
+@Deprecated
 public class Move implements Serializable {
     private String name;
     private Position oldPosition;
