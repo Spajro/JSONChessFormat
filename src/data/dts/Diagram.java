@@ -2,6 +2,9 @@ package data.dts;
 
 import data.ant.Annotation;
 import data.dts.board.ChessBoard;
+import data.dts.exceptions.ChessAxiomViolation;
+import data.dts.exceptions.IllegalMoveException;
+import data.dts.moves.RawMove;
 import data.hlp.Translator;
 
 import java.io.Serializable;
@@ -13,8 +16,8 @@ public class Diagram implements Serializable {
     private final int moveId;
     private String moveName;
     private final Diagram parent;
-    private LinkedList<Diagram> nextDiagrams;
-    private Annotation annotation;
+    private final LinkedList<Diagram> nextDiagrams;
+    private final Annotation annotation;
     private final ChessBoard board;
 
     public Diagram() {
@@ -35,13 +38,24 @@ public class Diagram implements Serializable {
         annotation = new Annotation();
     }
 
-    public Diagram makeMove(Move move) {
+    public Diagram makeMove(RawMove move) {
         System.out.print(move);
-        move.setName(Translator.preMoveToAlgebraic(board, move));
-        ChessBoard tempBoard = board.makeMove(move);
+        ChessBoard tempBoard;
+        try {
+            tempBoard = board.makeMove(move);
+        } catch (IllegalMoveException e) {
+            System.out.print("Illegal Move\n");
+            return this;
+        } catch (ChessAxiomViolation e) {
+            throw new RuntimeException(e);
+        }
         if (board != tempBoard) {
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-            nextDiagram.moveName = move.getName();
+            try {
+                nextDiagram.moveName = Translator.preMoveToAlgebraic(this.getBoard(),new ValidMoveFactory(board).createValidMove(move));
+            } catch (IllegalMoveException | ChessAxiomViolation e) {
+                throw new RuntimeException(e);
+            }
             for (Diagram D : nextDiagrams) {
                 if (D.board.equals(nextDiagram.board) && D.moveId == nextDiagram.moveId) {
                     return D;

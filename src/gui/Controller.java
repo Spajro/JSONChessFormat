@@ -2,13 +2,13 @@ package gui;
 
 import data.dts.DataModel;
 import data.dts.Diagram;
-import data.dts.Move;
 import data.dts.board.ChessBoard;
+import data.dts.moves.RawMove;
 
 import javax.swing.*;
 
 public class Controller {
-    private DataModel dataModel;
+    private final DataModel dataModel;
     private BoardMouseListener boardMouseListener;
     private TreeMouseListener treeMouseListener;
 
@@ -16,7 +16,7 @@ public class Controller {
         this.dataModel = dataModel;
     }
 
-    void makeMove(Move move){
+    void makeMove(RawMove move){
         dataModel.makeMove(move);
         treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
 

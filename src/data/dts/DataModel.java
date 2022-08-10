@@ -1,7 +1,7 @@
 package data.dts;
 
-import data.dts.board.Board;
 import data.dts.board.ChessBoard;
+import data.dts.moves.RawMove;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -33,7 +33,7 @@ public class DataModel implements TreeModel {
         save(filename);
     }
 
-    public void makeMove(Move m) {
+    public void makeMove(RawMove m) {
         actualNode = actualNode.makeMove(m);
         setActualBoard(actualNode.getBoard());
         notifyListenersOnInsert(actualNode);

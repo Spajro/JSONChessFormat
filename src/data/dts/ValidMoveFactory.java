@@ -19,7 +19,7 @@ public class ValidMoveFactory {
     }
 
     public ValidMove createValidMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
-        if (!validator.isCorrect(move)) {
+        if (validator.isCorrect(move)) {
             if (validator.isLegalCastle(move)) {
                 return createCastle(move);
             }

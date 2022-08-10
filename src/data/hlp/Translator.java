@@ -1,15 +1,18 @@
 package data.hlp;
 
 import data.dts.board.Board;
-import data.dts.Move;
 import data.dts.Position;
 import data.dts.board.BoardWrapper;
 import data.dts.board.ChessBoard;
 import data.dts.color.Color;
+import data.dts.moves.Castle;
+import data.dts.moves.RawMove;
+import data.dts.moves.SimpleMove;
+import data.dts.moves.ValidMove;
 
 public class Translator {
 
-    public static Move algebraicToMove(ChessBoard board, String moveName, Color color) {
+    public static RawMove algebraicToMove(ChessBoard board, String moveName, Color color) {
         boolean isCastle = false;
         boolean isFault = false;
         int castleType = -1;
@@ -89,12 +92,9 @@ public class Translator {
                 System.out.print("Unable to translate");
                 break;
         }
-        Move result = new Move();
+        RawMove result;
         if (isFault) {
             return null;
-        } else if (isCastle) {
-            result.setName(moveName);
-            result.setCastle(castleType);
         } else {
             Position endPosition = new Position(columnToNumber(textX), Character.getNumericValue(textY) - 1);
             Position temp;
@@ -103,30 +103,31 @@ public class Translator {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
-            result = new Move(temp, endPosition);
-            result.setName(moveName);
+            result = new RawMove(temp, endPosition);
         }
         return result;
     }
 
-    public static String preMoveToAlgebraic(ChessBoard board, Move move) {
-        if (move.getCastle() == Move.NO_CASTLE) {
+    public static String preMoveToAlgebraic(ChessBoard board, ValidMove move) {
+        if (move instanceof SimpleMove) {
+            SimpleMove simpleMove = (SimpleMove) move;
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder
-                    .append(numberToFigure(board.read(move.getOldPosition())));
-            if (board.read(move.getNewPosition()) != Board.EMPTY) {
+                    .append(numberToFigure(board.read(simpleMove.getStartPosition())));
+            if (board.read(simpleMove.getEndPosition()) != Board.EMPTY) {
                 stringBuilder.append("x");
             }
             stringBuilder
-                    .append(numberToColumn(move.getNewPosition().getX()))
-                    .append(move.getNewPosition().getY());
+                    .append(numberToColumn(simpleMove.getEndPosition().getX()))
+                    .append(simpleMove.getEndPosition().getY());
             return stringBuilder.toString();
         } else {
-            switch (move.getCastle()) {
-                case Move.WHITE_SHORT_CASTLE, Move.BLACK_SHORT_CASTLE -> {
+            Castle castle = (Castle) move;
+            switch (castle.getType()) {
+                case SHORT -> {
                     return "O-O";
                 }
-                case Move.WHITE_LONG_CASTLE, Move.BLACK_LONG_CASTLE -> {
+                case LONG -> {
                     return "O-O-O";
                 }
                 default -> System.out.print("preMoveToAlgebraic fault on castle\n");

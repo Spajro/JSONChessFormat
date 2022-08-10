@@ -1,6 +1,5 @@
 package data.dts.board;
 
-import data.dts.Move;
 import data.dts.Position;
 import data.dts.ValidMoveFactory;
 import data.dts.color.Color;

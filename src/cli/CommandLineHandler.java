@@ -1,9 +1,9 @@
 package cli;
 
 import data.dts.Diagram;
-import data.dts.Move;
 import data.dts.Position;
 import data.dts.color.Color;
+import data.dts.moves.RawMove;
 import data.hlp.Translator;
 
 import java.io.*;
@@ -24,7 +24,7 @@ public class CommandLineHandler {
                     if (base == null) System.out.print("Loading failed");
                 }
                 case "SV" -> Save();
-                case "MM" -> makeMove((Move) AD.parameter);
+                case "MM" -> makeMove((RawMove) AD.parameter);
                 case "AN" -> startAnnotating();
                 case "DL" -> deleteDiagram();
                 case "GB" -> goBack((int) AD.parameter);
@@ -59,7 +59,7 @@ public class CommandLineHandler {
         }
     }
 
-    void makeMove(Move M) {
+    void makeMove(RawMove M) {
         base = base.makeMove(M);
     }
 
