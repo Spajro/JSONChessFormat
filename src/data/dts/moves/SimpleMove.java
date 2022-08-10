@@ -10,11 +10,16 @@ public class SimpleMove extends RawMove implements ValidMove{
         this.board=board;
     }
 
+    public SimpleMove(RawMove move,Board board){
+        super(move.getStartPosition(),move.getEndPosition());
+        this.board=board;
+    }
+
     @Override
     public Board makeMove() {
         Board newBoard=Board.getCopy(board);
-        newBoard.write(board.read(getOldPosition()), getNewPosition());
-        newBoard.write(Board.EMPTY, getOldPosition());
+        newBoard.write(board.read(getStartPosition()), getEndPosition());
+        newBoard.write(Board.EMPTY, getStartPosition());
         return newBoard;
     }
 }

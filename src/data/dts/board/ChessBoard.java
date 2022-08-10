@@ -2,10 +2,13 @@ package data.dts.board;
 
 import data.dts.Move;
 import data.dts.Position;
+import data.dts.ValidMoveFactory;
 import data.dts.color.Color;
 import data.dts.exceptions.ChessAxiomViolation;
+import data.dts.exceptions.IllegalMoveException;
 import data.dts.fields.Field;
-import data.dts.pieces.King;
+import data.dts.moves.RawMove;
+import data.dts.moves.ValidMove;
 import data.dts.pieces.Piece;
 
 import java.util.*;
@@ -17,6 +20,8 @@ public class ChessBoard {
     private final Board board;
     private final Color color;
     private final CastleRequirements castleRequirements;
+    private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
+    private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
 
     public ChessBoard() {
         board = Board.getStart();
@@ -36,138 +41,12 @@ public class ChessBoard {
     }
 
     public Field getField(Position position) {
-        return BoardWrapper.getFieldFromBoard(this, board, position);
+        return BoardWrapper.getFieldFromBoard(this, position);
     }
 
-    public ChessBoard makeMove(Move move) {
-        try {
-            if (isLegal(move)) {
-                Board tempBoard = Board.getCopy(board);
-                move.makeMove(tempBoard);
-                return new ChessBoard(tempBoard, color.swap(), getNextRequirements(move));
-            }
-        } catch (ChessAxiomViolation e) {
-            throw new RuntimeException(e);
-        }
-        System.out.print("[ChessBoard] -> Move illegal\n");
-        return this;
-    }
-
-    private boolean isLegal(Move move) throws ChessAxiomViolation {
-        if (!Board.getPieceColor(board.read(move.getOldPosition())).equal(color)
-                || !move.isCorrect()
-                || getField(move.getOldPosition()).isEmpty()) {
-            return false;
-        }
-        if (move.isCastle()) {
-            return isCastleLegal(move);
-        } else
-            return getField(move.getOldPosition()).getPiece().getPossibleEndPositions().contains(move.getNewPosition())
-                    && (!isKingChecked(color) || (BoardWrapper.getFieldFromBoard(this, board, move.getOldPosition()) instanceof King && !isPositionAttacked(move.getNewPosition())));
-    }
-
-    public boolean isCastleLegal(Move move) {
-        if (!isCastleLegalInRequirements(move.getCastle())) {
-            return false;
-        }
-
-        if (positionsKingPasses(move.getCastle()).stream()
-                .filter(this::isPositionAttacked)
-                .toList()
-                .size() != 0
-        ) {
-            return false;
-        }
-        if (positionsBetweenKingAndRook(move.getCastle()).stream()
-                .map(this::getField)
-                .filter(Field::isEmpty)
-                .toList()
-                .size() != 0
-        ) {
-            return false;
-        }
-        return true;
-    }
-
-    private Set<Position> positionsKingPasses(int castle) {
-        Set<Position> result = new HashSet<>();
-        if (Move.isShortCastle(castle)) {
-            result.add(new Position(5, getStartRow()));
-            result.add(new Position(6, getStartRow()));
-            result.add(new Position(7, getStartRow()));
-        }
-        if (Move.isLongCastle(castle)) {
-            result.add(new Position(5, getStartRow()));
-            result.add(new Position(4, getStartRow()));
-            result.add(new Position(3, getStartRow()));
-        }
-        return result;
-    }
-
-    private Set<Position> positionsBetweenKingAndRook(int castle) {
-        Set<Position> result = new HashSet<>();
-        if (Move.isShortCastle(castle)) {
-            result.add(new Position(6, getStartRow()));
-            result.add(new Position(7, getStartRow()));
-        }
-        if (Move.isLongCastle(castle)) {
-            result.add(new Position(4, getStartRow()));
-            result.add(new Position(3, getStartRow()));
-            result.add(new Position(2, getStartRow()));
-        }
-        return result;
-    }
-
-    private boolean isCastleLegalInRequirements(int castle) {
-        return switch (castle) {
-            case Move.WHITE_SHORT_CASTLE -> castleRequirements.canCastleWhiteShort();
-            case Move.WHITE_LONG_CASTLE -> castleRequirements.canCastleWhiteLong();
-            case Move.BLACK_SHORT_CASTLE -> castleRequirements.canCastleBlackShort();
-            case Move.BLACK_LONG_CASTLE -> castleRequirements.canCastleBlackLong();
-            default -> throw new IllegalArgumentException("Wrong castle type");
-        };
-    }
-
-    private CastleRequirements getNextRequirements(Move move) {
-        if (kingMoved(move)) {
-            return castleRequirements.kingMoved(color);
-        } else if (hColumnRookMoved(move)) {
-            return castleRequirements.hColumnRookMoved(color);
-        } else if (aColumnRookMoved(move)) {
-            return castleRequirements.hColumnRookMoved(color);
-        } else {
-            return castleRequirements.copy();
-        }
-    }
-
-    private boolean aColumnRookMoved(Move move) {
-        return isRookOnPosition(move.getOldPosition()) && move.getOldPosition().getX() == 1 && move.getOldPosition().getY() == getStartRow();
-    }
-
-    private boolean hColumnRookMoved(Move move) {
-        return isRookOnPosition(move.getOldPosition()) && move.getOldPosition().getX() == 8 && move.getOldPosition().getY() == getStartRow();
-    }
-
-    private boolean kingMoved(Move move) {
-        return isKingOnPosition(move.getOldPosition()) && move.getOldPosition().getX() == 5 && move.getOldPosition().getY() == getStartRow();
-    }
-
-    private boolean isRookOnPosition(Position position) {
-        Field field = BoardWrapper.getFieldFromBoard(this, board, position);
-        if (field.isEmpty()) {
-            return false;
-        }
-        Piece piece = field.getPiece();
-        return (piece instanceof King) && piece.getColor().equal(color);
-    }
-
-    private boolean isKingOnPosition(Position position) {
-        Field field = BoardWrapper.getFieldFromBoard(this, board, position);
-        if (field.isEmpty()) {
-            return false;
-        }
-        Piece piece = field.getPiece();
-        return (piece instanceof King) && piece.getColor().equal(color);
+    public ChessBoard makeMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
+        ValidMove validMove = validMoveFactory.createValidMove(move);
+        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove));
     }
 
     public Color getColor() {
@@ -203,7 +82,7 @@ public class ChessBoard {
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
     }
 
-    private List<Piece> getPiecesOfColor(Color color) {
+    public List<Piece> getPiecesOfColor(Color color) {
         return getAllPositions().stream()
                 .map(this::getField)
                 .filter(Field::hasPiece)
@@ -212,7 +91,7 @@ public class ChessBoard {
                 .toList();
     }
 
-    private List<Position> getAllPositions() {
+    public static List<Position> getAllPositions() {
         List<Position> result = new LinkedList<>();
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
@@ -222,19 +101,7 @@ public class ChessBoard {
         return result;
     }
 
-    private boolean isKingChecked(Color color) throws ChessAxiomViolation {
-        Optional<Piece> optionalKing = getPiecesOfColor(color).stream()
-                .filter(piece -> piece instanceof King)
-                .findFirst();
-        if (optionalKing.isEmpty()) {
-            throw new ChessAxiomViolation("No King on Board");
-        }
-        King king = (King) optionalKing.get();
-
-        return isPositionAttacked(king.getPosition());
-    }
-
-    private boolean isPositionAttacked(Position position) {
+    public boolean isPositionAttacked(Position position) {
         return getNumberOfPiecesAttackingFields(color).get(position) > 0;
     }
 
@@ -244,5 +111,9 @@ public class ChessBoard {
         } else {
             return 8;
         }
+    }
+
+    public CastleRequirements getCastleRequirements() {
+        return castleRequirements;
     }
 }

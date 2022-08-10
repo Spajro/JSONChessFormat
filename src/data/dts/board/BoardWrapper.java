@@ -6,8 +6,8 @@ import data.dts.fields.*;
 import data.dts.pieces.*;
 
 public class BoardWrapper {
-    public static Field getFieldFromBoard(ChessBoard chessBoard, Board board, Position position) {
-        int valueFromBoard = board.read(position);
+    public static Field getFieldFromBoard(ChessBoard chessBoard, Position position) {
+        int valueFromBoard = chessBoard.getBoard().read(position);
         return convertIdToField(chessBoard, position, valueFromBoard);
     }
 

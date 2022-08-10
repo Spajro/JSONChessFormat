@@ -1,5 +1,6 @@
 package data.dts.moves;
 
+import data.dts.Position;
 import data.dts.board.Board;
 
 public class Castle implements ValidMove{
@@ -16,11 +17,16 @@ public class Castle implements ValidMove{
     @Override
     public Board makeMove() {
         Board newBoard=Board.getCopy(board);
-        newBoard.write(board.read(kingMove.getOldPosition()),kingMove.getNewPosition());
-        newBoard.write(Board.EMPTY,kingMove.getOldPosition());
-        newBoard.write(board.read(rookMove.getOldPosition()),rookMove.getNewPosition());
-        newBoard.write(Board.EMPTY,rookMove.getOldPosition());
+        newBoard.write(board.read(kingMove.getStartPosition()),kingMove.getEndPosition());
+        newBoard.write(Board.EMPTY,kingMove.getStartPosition());
+        newBoard.write(board.read(rookMove.getStartPosition()),rookMove.getEndPosition());
+        newBoard.write(Board.EMPTY,rookMove.getStartPosition());
         return newBoard;
 
+    }
+
+    @Override
+    public Position getStartPosition() {
+        return kingMove.getStartPosition();
     }
 }
