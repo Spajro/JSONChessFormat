@@ -1,10 +1,10 @@
 package cli;
 
-import data.dts.Diagram;
-import data.dts.Position;
-import data.dts.color.Color;
-import data.dts.moves.RawMove;
-import data.hlp.Translator;
+import data.model.Diagram;
+import chess.Position;
+import chess.color.Color;
+import chess.moves.RawMove;
+import chess.hlp.Translator;
 
 import java.io.*;
 

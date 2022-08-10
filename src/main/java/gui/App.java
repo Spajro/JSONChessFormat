@@ -1,7 +1,7 @@
 package gui;
 
-import data.dts.board.Board;
-import data.dts.DataModel;
+import chess.board.Board;
+import data.model.DataModel;
 
 import javax.swing.*;
 import java.awt.*;

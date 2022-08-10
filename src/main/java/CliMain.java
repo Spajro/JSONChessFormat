@@ -1,6 +1,6 @@
 import cli.actionData;
 import cli.CommandLineHandler;
-import data.hlp.Translator;
+import chess.hlp.Translator;
 
 import java.util.Scanner;
 

@@ -1,8 +1,8 @@
 package gui;
 
-import data.dts.board.Board;
-import data.dts.Position;
-import data.hlp.Translator;
+import chess.board.Board;
+import chess.Position;
+import chess.hlp.Translator;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-import data.dts.DataModel;
+import data.model.DataModel;
 import gui.App;
 
 public class GuiMain {

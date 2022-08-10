@@ -1,8 +1,8 @@
 package gui;
 
-import data.dts.board.Board;
-import data.dts.Position;
-import data.dts.moves.RawMove;
+import chess.board.Board;
+import chess.Position;
+import chess.moves.RawMove;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;

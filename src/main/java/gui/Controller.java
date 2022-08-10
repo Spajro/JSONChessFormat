@@ -1,9 +1,9 @@
 package gui;
 
-import data.dts.DataModel;
-import data.dts.Diagram;
-import data.dts.board.ChessBoard;
-import data.dts.moves.RawMove;
+import data.model.DataModel;
+import data.model.Diagram;
+import chess.board.ChessBoard;
+import chess.moves.RawMove;
 
 import javax.swing.*;
 
