@@ -34,9 +34,22 @@ public class ChessBoard {
         this.castleRequirements = castleRequirements;
     }
 
+    public static ChessBoard getBlank(Color color){
+        return new ChessBoard(Board.getBlank(),color,new CastleRequirements());
+    }
+
     @Deprecated
     public int read(Position position) {
         return board.read(position);
+    }
+
+    public ChessBoard put(Piece piece){
+        if(getField(piece.getPosition()).isEmpty()){
+            Board tempBoard=Board.getCopy(board);
+            tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece),piece.getPosition());
+            return new ChessBoard(tempBoard,color,castleRequirements);
+        }
+        throw new IllegalArgumentException("Cant put to board");
     }
 
     public Field getField(Position position) {

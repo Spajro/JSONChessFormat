@@ -16,6 +16,28 @@ public class BoardWrapper {
         return convertIdToField(chessBoard, position, pieceId).getPiece();
     }
 
+    public static int getBoardIdFromPiece(Piece piece){
+        if (piece instanceof Pawn) {
+            return piece.getColor().isWhite() ? Board.WPAWN : Board.BPAWN;
+        }
+        if (piece instanceof Knight) {
+            return piece.getColor().isWhite() ? Board.WKNIGHT : Board.BKNIGHT;
+        }
+        if (piece instanceof Bishop) {
+            return piece.getColor().isWhite() ? Board.WBISHOP : Board.BBISHOP;
+        }
+        if (piece instanceof Rook) {
+            return piece.getColor().isWhite() ? Board.WROOK : Board.BROOK;
+        }
+        if (piece instanceof Queen) {
+            return piece.getColor().isWhite() ? Board.WQUEEN : Board.BQUEEN;
+        }
+        if (piece instanceof King) {
+            return piece.getColor().isWhite() ? Board.WKING : Board.BKING;
+        }
+        throw new IllegalStateException("Should not be throwed");
+    }
+
     private static Field convertIdToField(ChessBoard chessBoard, Position position, int id) {
         return switch (id) {
             case Board.EMPTY -> new EmptyField(position, chessBoard);

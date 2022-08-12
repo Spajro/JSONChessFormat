@@ -26,9 +26,9 @@ public class Board implements Serializable {
 
     private Board() {
         T = new int[SIZE][SIZE];
-        for (int[] i : T) {
-            for (int j : i) {
-                j = EMPTY;
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                set(EMPTY,i,j);
             }
         }
     }
@@ -56,6 +56,10 @@ public class Board implements Serializable {
 
     private int get(int x, int y) {
         return T[x][y];
+    }
+
+    public static Board getBlank(){
+        return new Board();
     }
 
     public static Board getStart() {
