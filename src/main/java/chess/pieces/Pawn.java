@@ -33,10 +33,12 @@ public class Pawn extends Piece {
     @Override
     public Set<Position> getPossibleStartPositions() {
         Set<Position> result = stepsBackward.values().stream()
-                .filter(value -> !value.equals(stepsBackward.get(Step.FAR)))
+                .map(position::add)
+                .filter(value -> !value.equals(position.add(stepsBackward.get(Step.FAR))))
                 .filter(value -> chessBoard.getField(value).isEmpty())
                 .collect(Collectors.toSet());
-        if (isOnStartLine(position.add(stepsBackward.get(Step.FAR)))) {
+        if (isOnStartLine(position.add(stepsBackward.get(Step.FAR)))
+                && chessBoard.getField(position.add(stepsBackward.get(Step.FRONT))).isEmpty()) {
             result.add(position.add(stepsBackward.get(Step.FAR)));
         }
         return result;
@@ -73,7 +75,11 @@ public class Pawn extends Piece {
     }
 
     private boolean isEnemyPieceOnStep(Step step) {
-        Field field = chessBoard.getField(position.add(stepsForward.get(step)));
+        Position positionToCheck = position.add(stepsForward.get(step));
+        if (!positionToCheck.isOnBoard()) {
+            return false;
+        }
+        Field field = chessBoard.getField(positionToCheck);
         if (field.isEmpty()) {
             return false;
         }
