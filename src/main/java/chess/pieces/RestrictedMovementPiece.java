@@ -18,7 +18,6 @@ public abstract class RestrictedMovementPiece extends Piece {
     protected Set<Position> getPossibleNonCollidingPositions(Set<Position> Steps) {
         return Steps.stream()
                 .map(this::getLineOfPossibleNonCollidingPositions)
-                .peek(set-> System.err.print(set.size()+"A\n"))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
     }

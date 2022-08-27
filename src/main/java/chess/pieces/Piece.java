@@ -40,10 +40,6 @@ public abstract class Piece extends Field {
         return color;
     }
 
-    public Position getPosition() {
-        return position;
-    }
-
     protected Optional<Field> getField(Position position){
         if(position.isOnBoard()){
             return Optional.ofNullable(chessBoard.getField(position));
