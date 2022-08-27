@@ -2,8 +2,8 @@ package chess;
 
 public class Position {
     //class representing position on board
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     public Position(){
         x=-1;
         y=-1;

@@ -11,6 +11,11 @@ public class RawMove {
         this.endPosition = endPosition;
     }
 
+    public RawMove(RawMove move){
+        this.startPosition=move.getStartPosition();
+        this.endPosition=move.getEndPosition();
+    }
+
     public Position getStartPosition() {
         return startPosition;
     }

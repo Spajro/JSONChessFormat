@@ -1,7 +1,7 @@
 package data.model;
 
 import chess.ValidMoveFactory;
-import data.annotations.Annotation;
+import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;
@@ -18,7 +18,7 @@ public class Diagram implements Serializable {
     private String moveName;
     private final Diagram parent;
     private final LinkedList<Diagram> nextDiagrams;
-    private final Annotation annotation;
+    private final Annotations annotations;
     private final ChessBoard board;
 
     public Diagram() {
@@ -27,7 +27,7 @@ public class Diagram implements Serializable {
         board = new ChessBoard();
         parent = null;
         nextDiagrams = new LinkedList<>();
-        annotation = new Annotation();
+        annotations = new Annotations();
     }
 
     public Diagram(ChessBoard nextBoard, Diagram last, int id) {
@@ -36,7 +36,7 @@ public class Diagram implements Serializable {
         board = nextBoard;
         parent = last;
         nextDiagrams = new LinkedList<>();
-        annotation = new Annotation();
+        annotations = new Annotations();
     }
 
     public Diagram makeMove(RawMove move) {
@@ -116,8 +116,8 @@ public class Diagram implements Serializable {
         } else return null;
     }
 
-    public Annotation getAnnotation() {
-        return annotation;
+    public Annotations getAnnotation() {
+        return annotations;
     }
 
     public Diagram getParent() {

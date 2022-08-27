@@ -1,5 +1,9 @@
 package data.annotations;
 
-public class GraphicAnnotation {
-    //TODO
+public interface GraphicAnnotation {
+     enum DrawColor{
+        BLUE,RED,GREEN,YELLOw
+    }
+
+    DrawColor getColor();
 }
