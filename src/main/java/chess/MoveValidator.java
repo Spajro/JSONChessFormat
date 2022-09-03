@@ -1,6 +1,5 @@
 package chess;
 
-import chess.board.Board;
 import chess.board.BoardWrapper;
 import chess.board.CastleRequirements;
 import chess.board.ChessBoard;
@@ -27,9 +26,9 @@ public class MoveValidator {
     }
 
     public boolean isCorrect(RawMove move) {
-        return !Board.getPieceColor(chessBoard.read(move.getStartPosition())).equal(chessBoard.getColor())
-                || !move.isEmpty()
-                || chessBoard.getField(move.getStartPosition()).isEmpty();
+        return !move.isEmpty()
+                && chessBoard.getField(move.getStartPosition()).hasPiece()
+                && chessBoard.getField(move.getStartPosition()).getPiece().getColor().equal(chessBoard.getColor());
     }
 
     public boolean isLegalSimpleMove(RawMove move) {
