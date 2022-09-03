@@ -34,8 +34,8 @@ public class ChessBoard {
         this.castleRequirements = castleRequirements;
     }
 
-    public static ChessBoard getBlank(Color color){
-        return new ChessBoard(Board.getBlank(),color,new CastleRequirements());
+    public static ChessBoard getBlank(Color color) {
+        return new ChessBoard(Board.getBlank(), color, new CastleRequirements());
     }
 
     @Deprecated
@@ -43,11 +43,11 @@ public class ChessBoard {
         return board.read(position);
     }
 
-    public ChessBoard put(Piece piece){
-        if(getField(piece.getPosition()).isEmpty()){
-            Board tempBoard=Board.getCopy(board);
-            tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece),piece.getPosition());
-            return new ChessBoard(tempBoard,color,castleRequirements);
+    public ChessBoard put(Piece piece) {
+        if (getField(piece.getPosition()).isEmpty()) {
+            Board tempBoard = Board.getCopy(board);
+            tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece), piece.getPosition());
+            return new ChessBoard(tempBoard, color, castleRequirements);
         }
         throw new IllegalArgumentException("Cant put to board");
     }
@@ -88,10 +88,14 @@ public class ChessBoard {
     }
 
     public Map<Position, Long> getNumberOfPiecesAttackingFields(Color color) {
-        return getPiecesOfColor(color).stream()
+        Map<Position, Long> result = getPiecesOfColor(color).stream()
                 .map(Piece::getPossibleEndPositions)
                 .flatMap(Set::stream)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        getAllPositions().forEach(position -> result.merge(position, 0L, (v1, v2) -> v1));
+
+        return result;
     }
 
     public List<Piece> getPiecesOfColor(Color color) {
@@ -115,14 +119,6 @@ public class ChessBoard {
 
     public boolean isPositionAttacked(Position position) {
         return getNumberOfPiecesAttackingFields(color).get(position) > 0;
-    }
-
-    private int getStartRow() {
-        if (color.isWhite()) {
-            return 1;
-        } else {
-            return 8;
-        }
     }
 
     public CastleRequirements getCastleRequirements() {
