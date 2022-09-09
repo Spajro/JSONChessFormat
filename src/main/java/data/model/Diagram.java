@@ -116,7 +116,7 @@ public class Diagram implements Serializable {
         } else return null;
     }
 
-    public Annotations getAnnotation() {
+    public Annotations getAnnotations() {
         return annotations;
     }
 

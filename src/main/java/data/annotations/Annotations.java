@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class Annotations implements Serializable {
-    private String textAnnotation;
-    private LinkedList<GraphicAnnotation> graphicAnnotations;
-    private LinkedList<SignAnnotation> signAnnotations;
+    private String textAnnotation="";
+    private final LinkedList<GraphicAnnotation> graphicAnnotations=new LinkedList<>();
+    private final LinkedList<SignAnnotation> signAnnotations=new LinkedList<>();
 
     public String getTextAnnotation() {
         return textAnnotation;
