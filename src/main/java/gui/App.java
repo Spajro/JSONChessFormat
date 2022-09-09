@@ -22,6 +22,7 @@ public class App {
         boardPanel=new BoardPanel(dataModel.getActualBoard().getBoard());
         optionPanel=new OptionPanel(controller);
         boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
+        boardPanel.addKeyListener(new KeyboardListener(controller));
         boardPanel.setSize(480,480);
         //optionPanel.setSize(160,480);
         frame.add(boardPanel,BorderLayout.CENTER);

@@ -11,6 +11,8 @@ public class Controller {
     private final DataModel dataModel;
     private BoardMouseListener boardMouseListener;
     private TreeMouseListener treeMouseListener;
+    private KeyboardListener keyboardListener;
+    private boolean isEditingAnnotation=false;
 
     public Controller(DataModel dataModel) {
         this.dataModel = dataModel;
@@ -41,5 +43,13 @@ public class Controller {
 
     public JTree createTreeWithDataModel(){
         return new JTree(dataModel);
+    }
+
+    public void setKeyboardListener(KeyboardListener keyboardListener) {
+        this.keyboardListener = keyboardListener;
+    }
+
+    public void setEditingAnnotation(boolean editingAnnotation) {
+        isEditingAnnotation = editingAnnotation;
     }
 }
