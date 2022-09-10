@@ -12,13 +12,13 @@ public class Controller {
     private BoardMouseListener boardMouseListener;
     private TreeMouseListener treeMouseListener;
     private KeyboardListener keyboardListener;
-    private boolean isEditingAnnotation=false;
+    private boolean isEditingAnnotation = false;
 
     public Controller(DataModel dataModel) {
         this.dataModel = dataModel;
     }
 
-    void makeMove(RawMove move){
+    void makeMove(RawMove move) {
         dataModel.makeMove(move);
         treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
 
@@ -38,10 +38,10 @@ public class Controller {
 
     public void setActualNode(Diagram lastPathComponent) {
         dataModel.setActualNode(lastPathComponent);
-        boardMouseListener.boardChanged(lastPathComponent.getBoard().getBoard());
+        boardMouseListener.diagramChanged(lastPathComponent);
     }
 
-    public JTree createTreeWithDataModel(){
+    public JTree createTreeWithDataModel() {
         return new JTree(dataModel);
     }
 
@@ -51,5 +51,9 @@ public class Controller {
 
     public void setEditingAnnotation(boolean editingAnnotation) {
         isEditingAnnotation = editingAnnotation;
+    }
+
+    public Diagram getActualDiagram() {
+        return dataModel.getActualNode();
     }
 }

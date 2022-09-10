@@ -3,6 +3,7 @@ package gui;
 import chess.board.Board;
 import chess.Position;
 import chess.moves.RawMove;
+import data.model.Diagram;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
@@ -11,8 +12,8 @@ public class BoardMouseListener implements MouseInputListener {
 
     BoardPanel boardPanel;
     Controller controller;
-    private int x=-1;
-    private int y=-1;
+    private int x = -1;
+    private int y = -1;
 
     public BoardMouseListener(BoardPanel boardPanel, Controller controller) {
         this.boardPanel = boardPanel;
@@ -20,38 +21,40 @@ public class BoardMouseListener implements MouseInputListener {
         controller.setBoardMouseListener(this);
     }
 
-    public int findField(int t){
-       return ((t-(t%boardPanel.getScale()))/boardPanel.getScale())+1;
+    public int findField(int t) {
+        return ((t - (t % boardPanel.getScale())) / boardPanel.getScale()) + 1;
     }
-    public int reverse(int t){
-        return Board.SIZE-t+1;
+
+    public int reverse(int t) {
+        return Board.SIZE - t + 1;
     }
+
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.err.print("Click:"+e.getX()+" "+e.getY()+"\n");
-        x=-1;
-        y=-1;
+        System.err.print("Click:" + e.getX() + " " + e.getY() + "\n");
+        x = -1;
+        y = -1;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        x=e.getX();
-        y=e.getY();
+        x = e.getX();
+        y = e.getY();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(x!=-1 && y!=-1 && x!=e.getX() && y!=e.getY()){
+        if (x != -1 && y != -1 && x != e.getX() && y != e.getY()) {
             System.err.print("DRAG\n");
-            System.err.print("( "+findField(x)+", "+reverse(findField(y))+")->( "+findField(e.getX())+", "+reverse(findField(e.getY()))+")\n");
+            System.err.print("( " + findField(x) + ", " + reverse(findField(y)) + ")->( " + findField(e.getX()) + ", " + reverse(findField(e.getY())) + ")\n");
             controller.makeMove(new RawMove(
-                    new Position(findField(x),reverse(findField(y))),
-                    new Position(findField(e.getX()),reverse(findField(e.getY())))
+                    new Position(findField(x), reverse(findField(y))),
+                    new Position(findField(e.getX()), reverse(findField(e.getY())))
             ));
-            boardPanel.setBoard(controller.getActualBoard().getBoard()); //
+            boardPanel.setDiagram(controller.getActualDiagram()); //
             boardPanel.repaint();
-            x=-1;
-            y=-1;
+            x = -1;
+            y = -1;
         }
     }
 
@@ -75,7 +78,7 @@ public class BoardMouseListener implements MouseInputListener {
 
     }
 
-    public void boardChanged(Board board) {
-        boardPanel.setBoard(board);
+    public void diagramChanged(Diagram diagram) {
+        boardPanel.setDiagram(diagram);
     }
 }

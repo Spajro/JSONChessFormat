@@ -1,8 +1,10 @@
 package gui;
 
 import chess.board.Board;
-import chess.Position;
+import chess.board.BoardWrapper;
 import chess.hlp.Translator;
+import chess.pieces.Piece;
+import data.model.Diagram;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,33 +14,15 @@ import static java.lang.Math.min;
 
 public class BoardPanel extends JPanel {
     private int scale = 60;
-    private Board board;
+    private Diagram diagram;
     private Color colBack = Color.WHITE;
     private Color colWhiteField = Color.WHITE;
     private Color colBlackField = Color.BLACK;
     private HashMap<Integer, ImageIcon> imageMap;
-    public static final String FOLDERPATH = "";
-    public static final String WPAWNPATH = "";
-    public static final String WKNIGHTPATH = "";
-    public static final String WBISHOPPATH = "";
-    public static final String WROOKPATH = "";
-    public static final String WQUEENPATH = "";
-    public static final String WKINGPATH = "";
-    public static final String BPAWNPATH = "";
-    public static final String BKNIGHTPATH = "";
-    public static final String BBISHOPPATH = "";
-    public static final String BROOKPATH = "";
-    public static final String BQUEENPATH = "";
-    public static final String BKINGPATH = "";
 
-
-    public BoardPanel() {
-        setImageMap();
-    }
-
-    public BoardPanel(Board board) {
-        setImageMap();
-        this.board = board;
+    public BoardPanel(Diagram diagram) {
+        imageMap=DisplayConfiguration.setImageMap();
+        this.diagram = diagram;
     }
 
     @Override
@@ -47,7 +31,7 @@ public class BoardPanel extends JPanel {
         g.setFont(new Font("TimesRoman", Font.PLAIN, partOf(0.25, scale)));
         g.setColor(colBack);
         g.fillRect(0, 0, getWidth(), getHeight());
-        if (board != null) {
+        if (diagram != null) {
             paintBoard(g);
             paintPieces(g);
         }
@@ -70,39 +54,19 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPieces(Graphics g) {
-        for (int y = 0; y < Board.SIZE; y++) {
-            for (int x = 0; x < Board.SIZE; x++) {
-                int fig = board.read(new Position(x + 1, Board.SIZE - y));
-                if (fig != Board.EMPTY) {
-                    //g.drawImage(imageMap.get(fig).getImage(),x * scale, y * scale, scale, scale,g.getColor(),null);
-                    String s = Translator.numberToFigure(fig);
-                    assert s != null;
-                    g.setColor(Color.green);
-                    g.drawString(s, x * scale + partOf(0.5, scale), y * scale + partOf(0.5, scale));
-                }
-            }
-        }
+        diagram.getBoard().getPiecesOfColor(chess.color.Color.white).forEach(piece -> paintPiece(piece, g));
+        diagram.getBoard().getPiecesOfColor(chess.color.Color.black).forEach(piece -> paintPiece(piece, g));
     }
 
-    private void setImageMap() {
-        // przypisanie obrazka do inta z Board
-        imageMap = new HashMap<>();
-        imageMap.put(Board.WPAWN, new ImageIcon(FOLDERPATH + WPAWNPATH));
-        imageMap.put(Board.WKNIGHT, new ImageIcon(FOLDERPATH + WKNIGHTPATH));
-        imageMap.put(Board.WBISHOP, new ImageIcon(FOLDERPATH + WBISHOPPATH));
-        imageMap.put(Board.WROOK, new ImageIcon(FOLDERPATH + WROOKPATH));
-        imageMap.put(Board.WKING, new ImageIcon(FOLDERPATH + WKINGPATH));
-        imageMap.put(Board.WQUEEN, new ImageIcon(FOLDERPATH + WQUEENPATH));
-        imageMap.put(Board.BPAWN, new ImageIcon(FOLDERPATH + BPAWNPATH));
-        imageMap.put(Board.BKNIGHT, new ImageIcon(FOLDERPATH + BKNIGHTPATH));
-        imageMap.put(Board.BBISHOP, new ImageIcon(FOLDERPATH + BBISHOPPATH));
-        imageMap.put(Board.BROOK, new ImageIcon(FOLDERPATH + BROOKPATH));
-        imageMap.put(Board.BKING, new ImageIcon(FOLDERPATH + BKINGPATH));
-        imageMap.put(Board.BQUEEN, new ImageIcon(FOLDERPATH + BQUEENPATH));
+    private void paintPiece(Piece piece, Graphics g) {
+        String s = Translator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
+        assert s != null;
+        g.setColor(Color.green);
+        g.drawString(s, piece.getPosition().getX() * scale + partOf(0.5, scale), piece.getPosition().getY() * scale + partOf(0.5, scale));
     }
 
-    public void setBoard(Board board) {
-        this.board = board;
+    public void setDiagram(Diagram diagram) {
+        this.diagram = diagram;
         this.repaint();
     }
 

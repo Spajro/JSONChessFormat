@@ -2,24 +2,25 @@ package gui;
 
 import chess.board.Board;
 import data.model.DataModel;
+import data.model.Diagram;
 
 import javax.swing.*;
 import java.awt.*;
 
 
 public class App {
-    private JFrame frame;
-    private BoardPanel boardPanel;
-    private OptionPanel optionPanel;
-    private Controller controller;
-    private JMenuBar menuBar;
+    private final JFrame frame;
+    private final BoardPanel boardPanel;
+    private final OptionPanel optionPanel;
+    private final Controller controller;
+    private final JMenuBar menuBar;
     public App(DataModel dataModel) {
         controller=new Controller(dataModel);
         frame=new JFrame();
         menuBar=new JMenuBar();
         createFileMenu(dataModel);
         frame.setJMenuBar(menuBar);
-        boardPanel=new BoardPanel(dataModel.getActualBoard().getBoard());
+        boardPanel=new BoardPanel(dataModel.getActualNode());
         optionPanel=new OptionPanel(controller);
         boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
         boardPanel.addKeyListener(new KeyboardListener(controller));
@@ -30,8 +31,8 @@ public class App {
         frame.setSize(640,480);
         frame.setVisible(true);
     }
-    public void setBoard(Board board){
-        boardPanel.setBoard(board);
+    public void setDiagram(Diagram diagram){
+        boardPanel.setDiagram(diagram);
     }
 
     private void createFileMenu(DataModel dataModel){
