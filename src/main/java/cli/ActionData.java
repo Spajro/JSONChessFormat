@@ -1,10 +1,10 @@
 package cli;
 
-public class actionData {
-    String code;
-    Object parameter;
+public class ActionData {
+    private final String code;
+    private final Object parameter;
 
-    public actionData(String C, Object P) {
+    public ActionData(String C, Object P) {
         code = C;
         parameter = P;
     }

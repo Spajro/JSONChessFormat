@@ -16,18 +16,18 @@ public class CommandLineHandler {
         base = new Diagram();
     }
 
-    public void makeAction(actionData AD) {
+    public void makeAction(ActionData AD) {
         if (!AnnotatingOn) {
             switch (AD.getCode()) {
                 case "LD" -> {
-                    base = Load((String) AD.parameter);
+                    base = Load((String) AD.getParam());
                     if (base == null) System.out.print("Loading failed");
                 }
                 case "SV" -> Save();
-                case "MM" -> makeMove((RawMove) AD.parameter);
+                case "MM" -> makeMove((RawMove) AD.getParam());
                 case "AN" -> startAnnotating();
                 case "DL" -> deleteDiagram();
-                case "GB" -> goBack((int) AD.parameter);
+                case "GB" -> goBack((int) AD.getParam());
                 case "PM" -> printMoves();
                 case "PH" -> printHistory();
                 case "JB" -> jumpBack();

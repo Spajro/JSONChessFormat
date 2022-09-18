@@ -1,4 +1,4 @@
-import cli.actionData;
+import cli.ActionData;
 import cli.CommandLineHandler;
 import chess.hlp.Translator;
 
@@ -17,22 +17,22 @@ public class CliMain {
                 working=false;
             }
             else{
-                actionData data=null;
+                ActionData data=null;
                 switch (cmd) {
-                    case "LD" -> data = new actionData("LD", scanner.nextLine());
-                    case "SV" -> data = new actionData("SV", null);
-                    case "MM" -> data = new actionData("MM", Translator.algebraicToMove(handler.getDiag().getBoard(), scanner.nextLine(), handler.getcolor()));
-                    case "AN" -> data = new actionData("AN", null);
-                    case "QT" -> data = new actionData("QT", null);
-                    case "DL" -> data = new actionData("DL",null);
-                    case "GB" -> data = new actionData("GB", Integer.parseInt(scanner.nextLine()));
-                    case "PM" -> data = new actionData("PM", null);
-                    case "PH" -> data = new actionData("PH", null);
-                    case "JB" -> data = new actionData("JB", null);
-                    case "JF" -> data = new actionData("JF", null);
-                    case "Help" -> data = new actionData("HP", null);
-                    case "ANT" -> data=new actionData("ANT", scanner.nextLine());
-                    case "ADT" -> data=new actionData("ADT", null);
+                    case "LD" -> data = new ActionData("LD", scanner.nextLine());
+                    case "SV" -> data = new ActionData("SV", null);
+                    case "MM" -> data = new ActionData("MM", Translator.algebraicToMove(handler.getDiag().getBoard(), scanner.nextLine(), handler.getcolor()));
+                    case "AN" -> data = new ActionData("AN", null);
+                    case "QT" -> data = new ActionData("QT", null);
+                    case "DL" -> data = new ActionData("DL",null);
+                    case "GB" -> data = new ActionData("GB", Integer.parseInt(scanner.nextLine()));
+                    case "PM" -> data = new ActionData("PM", null);
+                    case "PH" -> data = new ActionData("PH", null);
+                    case "JB" -> data = new ActionData("JB", null);
+                    case "JF" -> data = new ActionData("JF", null);
+                    case "Help" -> data = new ActionData("HP", null);
+                    case "ANT" -> data=new ActionData("ANT", scanner.nextLine());
+                    case "ADT" -> data=new ActionData("ADT", null);
                     default -> System.out.print("Unknown code MAIN");
                 }
 
