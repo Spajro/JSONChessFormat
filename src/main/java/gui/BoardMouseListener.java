@@ -3,35 +3,23 @@ package gui;
 import chess.board.Board;
 import chess.Position;
 import chess.moves.RawMove;
-import data.model.Diagram;
+import log.Log;
 
 import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
 
 public class BoardMouseListener implements MouseInputListener {
-
-    BoardPanel boardPanel;
-    Controller controller;
+    private final Controller controller;
+    private int scale = 60;
     private int x = -1;
     private int y = -1;
 
-    public BoardMouseListener(BoardPanel boardPanel, Controller controller) {
-        this.boardPanel = boardPanel;
+    public BoardMouseListener(Controller controller) {
         this.controller = controller;
-        controller.setBoardMouseListener(this);
-    }
-
-    public int findField(int t) {
-        return ((t - (t % boardPanel.getScale())) / boardPanel.getScale()) + 1;
-    }
-
-    public int reverse(int t) {
-        return Board.SIZE - t + 1;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.err.print("Click:" + e.getX() + " " + e.getY() + "\n");
         x = -1;
         y = -1;
     }
@@ -44,15 +32,13 @@ public class BoardMouseListener implements MouseInputListener {
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        scale=controller.getScale();
         if (x != -1 && y != -1 && x != e.getX() && y != e.getY()) {
-            System.err.print("DRAG\n");
-            System.err.print("( " + findField(x) + ", " + reverse(findField(y)) + ")->( " + findField(e.getX()) + ", " + reverse(findField(e.getY())) + ")\n");
-            controller.makeMove(new RawMove(
+            Log.log().info("Drag = ( " + findField(x) + ", " + reverse(findField(y)) + ")->( " + findField(e.getX()) + ", " + reverse(findField(e.getY())) + ")\n");
+            controller.executeDragEvent(new RawMove(
                     new Position(findField(x), reverse(findField(y))),
                     new Position(findField(e.getX()), reverse(findField(e.getY())))
             ));
-            boardPanel.setDiagram(controller.getActualDiagram()); //
-            boardPanel.repaint();
             x = -1;
             y = -1;
         }
@@ -78,7 +64,11 @@ public class BoardMouseListener implements MouseInputListener {
 
     }
 
-    public void diagramChanged(Diagram diagram) {
-        boardPanel.setDiagram(diagram);
+    public int findField(int t) {
+        return ((t - (t % scale)) / scale) + 1;
+    }
+
+    public int reverse(int t) {
+        return Board.SIZE - t + 1;
     }
 }

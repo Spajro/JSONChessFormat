@@ -14,14 +14,14 @@ public class App {
     private final Controller controller;
     private final JMenuBar menuBar;
     public App(DataModel dataModel) {
-        controller=new Controller(dataModel);
         frame=new JFrame();
         menuBar=new JMenuBar();
         createFileMenu(dataModel);
         frame.setJMenuBar(menuBar);
         boardPanel=new BoardPanel(dataModel.getActualNode());
+        controller=new Controller(dataModel, boardPanel);
         optionPanel=new OptionPanel(controller);
-        boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
+        boardPanel.addMouseListener(new BoardMouseListener(controller));
         boardPanel.setFocusable(true);
         boardPanel.addKeyListener(new KeyboardListener(controller));
         boardPanel.setSize(480,480);

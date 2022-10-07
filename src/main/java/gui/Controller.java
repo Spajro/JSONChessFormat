@@ -2,34 +2,27 @@ package gui;
 
 import data.model.DataModel;
 import data.model.Diagram;
-import chess.board.ChessBoard;
 import chess.moves.RawMove;
 
 import javax.swing.*;
 
 public class Controller {
     private final DataModel dataModel;
-    private BoardMouseListener boardMouseListener;
+    private final BoardPanel boardPanel;
     private TreeMouseListener treeMouseListener;
     private KeyboardListener keyboardListener;
     private boolean isEditingAnnotation = false;
 
-    public Controller(DataModel dataModel) {
+    public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
+        this.boardPanel = boardPanel;
     }
 
-    void makeMove(RawMove move) {
+    void executeDragEvent(RawMove move) {
         dataModel.makeMove(move);
+        boardPanel.setDiagram(dataModel.getActualNode());
+        boardPanel.repaint();
         treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
-
-    }
-
-    public ChessBoard getActualBoard() {
-        return dataModel.getActualBoard();
-    }
-
-    public void setBoardMouseListener(BoardMouseListener boardMouseListener) {
-        this.boardMouseListener = boardMouseListener;
     }
 
     public void setTreeMouseListener(TreeMouseListener treeMouseListener) {
@@ -38,7 +31,7 @@ public class Controller {
 
     public void setActualNode(Diagram lastPathComponent) {
         dataModel.setActualNode(lastPathComponent);
-        boardMouseListener.diagramChanged(lastPathComponent);
+        boardPanel.setDiagram(lastPathComponent);
     }
 
     public JTree createTreeWithDataModel() {
@@ -53,7 +46,7 @@ public class Controller {
         isEditingAnnotation = editingAnnotation;
     }
 
-    public Diagram getActualDiagram() {
-        return dataModel.getActualNode();
+    public int getScale() {
+        return boardPanel.getScale();
     }
 }
