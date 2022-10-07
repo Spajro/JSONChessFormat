@@ -1,9 +1,8 @@
 package chess;
 
 public class Position {
-    //class representing position on board
-    private final int x;
-    private final int y;
+    protected final int x;
+    protected final int y;
     public Position(){
         x=-1;
         y=-1;

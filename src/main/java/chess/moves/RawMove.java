@@ -11,9 +11,9 @@ public class RawMove {
         this.endPosition = endPosition;
     }
 
-    public RawMove(RawMove move){
-        this.startPosition=move.getStartPosition();
-        this.endPosition=move.getEndPosition();
+    public RawMove(RawMove move) {
+        this.startPosition = move.getStartPosition();
+        this.endPosition = move.getEndPosition();
     }
 
     public Position getStartPosition() {
@@ -24,7 +24,7 @@ public class RawMove {
         return endPosition;
     }
 
-    public boolean isEmpty(){
+    public boolean isEmpty() {
         return startPosition.isEmpty() || endPosition.isEmpty();
     }
 }
