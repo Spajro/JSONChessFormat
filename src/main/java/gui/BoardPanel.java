@@ -62,7 +62,7 @@ public class BoardPanel extends JPanel {
         String s = Translator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
         assert s != null;
         g.setColor(Color.green);
-        g.drawString(s, (piece.getPosition().getX()-1) * scale + partOf(0.5, scale), (piece.getPosition().getY()-1) * scale + partOf(0.5, scale));
+        g.drawString(s, (piece.getPosition().getX()-1) * scale + partOf(0.5, scale), (8-piece.getPosition().getY()) * scale + partOf(0.5, scale));
     }
 
     public void setDiagram(Diagram diagram) {

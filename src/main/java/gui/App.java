@@ -1,6 +1,5 @@
 package gui;
 
-import chess.board.Board;
 import data.model.DataModel;
 import data.model.Diagram;
 
@@ -23,6 +22,7 @@ public class App {
         boardPanel=new BoardPanel(dataModel.getActualNode());
         optionPanel=new OptionPanel(controller);
         boardPanel.addMouseListener(new BoardMouseListener(boardPanel,controller));
+        boardPanel.setFocusable(true);
         boardPanel.addKeyListener(new KeyboardListener(controller));
         boardPanel.setSize(480,480);
         //optionPanel.setSize(160,480);
