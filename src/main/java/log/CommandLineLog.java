@@ -10,20 +10,20 @@ public class CommandLineLog implements Log {
 
     @Override
     public void info(String message) {
-        System.out.print("[INFO] " + message);
+        System.out.println("[INFO] " + message);
     }
 
     @Override
     public void warn(String message) {
         if (logLevel == WARN || logLevel == FAIL) {
-            System.out.print("WARN " + message);
+            System.out.println("WARN " + message);
         }
     }
 
     @Override
     public void fail(String message) {
         if (logLevel == FAIL) {
-            System.err.print("ERROR " + message);
+            System.err.println("ERROR " + message);
         }
     }
 }

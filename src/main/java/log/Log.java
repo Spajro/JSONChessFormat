@@ -5,6 +5,10 @@ public interface Log {
         return new CommandLineLog();
     }
 
+    static void debug(String message) {
+        System.out.println("[DEBUG] " + message);
+    }
+
     void info(String message);
 
     void warn(String message);
