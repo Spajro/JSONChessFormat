@@ -27,4 +27,9 @@ public class RawMove {
     public boolean isEmpty() {
         return startPosition.isEmpty() || endPosition.isEmpty();
     }
+
+    @Override
+    public String toString() {
+        return "<"+startPosition+","+endPosition+">";
+    }
 }
