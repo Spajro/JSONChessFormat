@@ -4,6 +4,9 @@ import chess.board.Board;
 import chess.board.BoardWrapper;
 import chess.hlp.Translator;
 import chess.pieces.Piece;
+import data.annotations.ArrowAnnotation;
+import data.annotations.FieldAnnotation;
+import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 
 import javax.swing.*;
@@ -17,7 +20,7 @@ public class BoardPanel extends JPanel {
     private Diagram diagram;
     private Color colBack = Color.WHITE;
     private Color colWhiteField = Color.WHITE;
-    private Color colBlackField = Color.BLACK;
+    private Color colBlackField = Color.DARK_GRAY;
     private HashMap<Integer, ImageIcon> imageMap;
 
     public BoardPanel(Diagram diagram) {
@@ -34,6 +37,7 @@ public class BoardPanel extends JPanel {
         if (diagram != null) {
             paintBoard(g);
             paintPieces(g);
+            paintAnnotations(g);
         }
     }
 
@@ -63,6 +67,36 @@ public class BoardPanel extends JPanel {
         assert s != null;
         g.setColor(Color.green);
         g.drawString(s, (piece.getPosition().getX()-1) * scale + partOf(0.5, scale), (8-piece.getPosition().getY()) * scale + partOf(0.5, scale));
+    }
+
+    private void paintAnnotations(Graphics g) {
+        diagram.getAnnotations().getArrowAnnotations().forEach(arrow->paintArrow(arrow,g));
+        diagram.getAnnotations().getFieldAnnotations().forEach(field->paintField(field,g));
+    }
+
+    private void paintArrow(ArrowAnnotation arrow, Graphics g) {
+        g.setColor(convertColor(arrow.getColor()));
+        g.drawLine(arrow.getStartPosition().getX()*scale-partOf(0.5,scale),(8-arrow.getStartPosition().getY())*scale+partOf(0.5,scale),
+                arrow.getEndPosition().getX()*scale-partOf(0.5,scale), (8-arrow.getEndPosition().getY())*scale+partOf(0.5,scale));
+        drawArrowHead(arrow,g);
+    }
+
+    private void drawArrowHead(ArrowAnnotation arrow, Graphics g){
+        //TODO
+    }
+
+    private void paintField(FieldAnnotation fieldAnnotation,Graphics g){
+        g.setColor(convertColor(fieldAnnotation.getColor()));
+        g.drawOval((fieldAnnotation.getX()-1)*scale,(8-fieldAnnotation.getY())*scale,scale,scale);
+    }
+
+    private Color convertColor(GraphicAnnotation.DrawColor color) {
+        return switch (color){
+            case BLUE -> Color.blue;
+            case RED -> Color.red;
+            case GREEN -> Color.green;
+            case YELLOW -> Color.yellow;
+        };
     }
 
     public void setDiagram(Diagram diagram) {
