@@ -7,6 +7,7 @@ import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
+import log.Log;
 
 import javax.swing.*;
 
@@ -22,14 +23,16 @@ public class Controller {
         this.boardPanel = boardPanel;
     }
 
-    public void executeDragEvent(RawMove move) {
+    public void executeDragAction(RawMove move) {
         if (isEditingAnnotation) {
             if (arrowAnnotationExists(move)) {
+                Log.log().info("Remove arrow annotation "+move);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getArrowAnnotations()
                         .removeIf(arrowAnnotation -> arrowAnnotation.equals(move));
             } else {
+                Log.log().info("Add arrow annotation "+move);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .addArrowAnnotation(new ArrowAnnotation(move, getDrawColor()));
@@ -38,7 +41,6 @@ public class Controller {
             dataModel.makeMove(move);
             boardPanel.setDiagram(dataModel.getActualNode());
             treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
-
         }
         boardPanel.repaint();
     }
@@ -54,15 +56,18 @@ public class Controller {
     public void executeClickAction(Position position) {
         if (isEditingAnnotation) {
             if (fieldAnnotationExists(position)) {
+                Log.log().info("Remove field annotation "+position);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getFieldAnnotations()
                         .removeIf(fieldAnnotation -> fieldAnnotation.equals(position));
             } else {
+                Log.log().info("Add field annotation "+position);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .addFieldAnnotation(new FieldAnnotation(position, getDrawColor()));
             }
+            boardPanel.repaint();
         }
     }
 
