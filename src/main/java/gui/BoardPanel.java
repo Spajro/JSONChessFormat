@@ -4,10 +4,12 @@ import chess.board.Board;
 import chess.board.BoardWrapper;
 import chess.hlp.Translator;
 import chess.pieces.Piece;
-import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
+import gui.scaling.CenteredScaledArrow;
+import gui.scaling.ScaledArrow;
+import log.Log;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +26,7 @@ public class BoardPanel extends JPanel {
     private HashMap<Integer, ImageIcon> imageMap;
 
     public BoardPanel(Diagram diagram) {
-        imageMap=DisplayConfiguration.setImageMap();
+        imageMap = DisplayConfiguration.setImageMap();
         this.diagram = diagram;
     }
 
@@ -66,32 +68,37 @@ public class BoardPanel extends JPanel {
         String s = Translator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
         assert s != null;
         g.setColor(Color.green);
-        g.drawString(s, (piece.getPosition().getX()-1) * scale + partOf(0.5, scale), (8-piece.getPosition().getY()) * scale + partOf(0.5, scale));
+        g.drawString(s, (piece.getPosition().getX() - 1) * scale + partOf(0.5, scale), (8 - piece.getPosition().getY()) * scale + partOf(0.5, scale));
     }
 
     private void paintAnnotations(Graphics g) {
-        diagram.getAnnotations().getArrowAnnotations().forEach(arrow->paintArrow(arrow,g));
-        diagram.getAnnotations().getFieldAnnotations().forEach(field->paintField(field,g));
+        diagram.getAnnotations().getArrowAnnotations().stream()
+                .map(arrow->new ScaledArrow(arrow,scale))
+                .map(CenteredScaledArrow::new)
+                .forEach(arrow -> paintArrow(arrow, g));
+
+        diagram.getAnnotations().getFieldAnnotations().forEach(field -> paintField(field, g));
     }
 
-    private void paintArrow(ArrowAnnotation arrow, Graphics g) {
+    private void paintArrow(CenteredScaledArrow arrow, Graphics g) {
+        Log.debug(arrow.toString());
         g.setColor(convertColor(arrow.getColor()));
-        g.drawLine(arrow.getStartPosition().getX()*scale-partOf(0.5,scale),(8-arrow.getStartPosition().getY())*scale+partOf(0.5,scale),
-                arrow.getEndPosition().getX()*scale-partOf(0.5,scale), (8-arrow.getEndPosition().getY())*scale+partOf(0.5,scale));
-        drawArrowHead(arrow,g);
+        g.drawLine(arrow.getStart().getX(),arrow.getStart().getY(),
+                arrow.getEnd().getX(), arrow.getEnd().getY());
+        drawArrowHead(arrow, g);
     }
 
-    private void drawArrowHead(ArrowAnnotation arrow, Graphics g){
+    private void drawArrowHead(CenteredScaledArrow line, Graphics g) {
         //TODO
     }
 
-    private void paintField(FieldAnnotation fieldAnnotation,Graphics g){
+    private void paintField(FieldAnnotation fieldAnnotation, Graphics g) {
         g.setColor(convertColor(fieldAnnotation.getColor()));
-        g.drawOval((fieldAnnotation.getX()-1)*scale,(8-fieldAnnotation.getY())*scale,scale,scale);
+        g.drawOval((fieldAnnotation.getX() - 1) * scale, (8 - fieldAnnotation.getY()) * scale, scale, scale);
     }
 
     private Color convertColor(GraphicAnnotation.DrawColor color) {
-        return switch (color){
+        return switch (color) {
             case BLUE -> Color.blue;
             case RED -> Color.red;
             case GREEN -> Color.green;
