@@ -2,8 +2,9 @@ package data.annotations;
 
 import chess.Position;
 import chess.moves.RawMove;
+import data.Jsonable;
 
-public class ArrowAnnotation extends RawMove implements GraphicAnnotation {
+public class ArrowAnnotation extends RawMove implements GraphicAnnotation, Jsonable {
     private final DrawColor color;
 
     public ArrowAnnotation(Position startPosition, Position endPosition, DrawColor color) {
@@ -19,5 +20,19 @@ public class ArrowAnnotation extends RawMove implements GraphicAnnotation {
     @Override
     public DrawColor getColor() {
         return color;
+    }
+
+    @Override
+    public String toJson() {
+        return "{" +
+                "start:{x:" +
+                getStartPosition().getX() +
+                ",y:" +
+                getStartPosition().getY() +
+                "},end:{x:" +
+                getEndPosition().getX() +
+                ",y:" +
+                getEndPosition().getY() +
+                "}}";
     }
 }

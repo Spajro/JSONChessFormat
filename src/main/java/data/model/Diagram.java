@@ -1,6 +1,8 @@
 package data.model;
 
 import chess.ValidMoveFactory;
+import data.Jsonable;
+import data.ListJsonFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
@@ -8,12 +10,11 @@ import chess.exceptions.IllegalMoveException;
 import chess.moves.RawMove;
 import chess.hlp.Translator;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Diagram implements Serializable {
+public class Diagram implements Jsonable {
     private final int moveId;
     private String moveName;
     private final Diagram parent;
@@ -53,7 +54,7 @@ public class Diagram implements Serializable {
         if (board != tempBoard) {
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
             try {
-                nextDiagram.moveName = Translator.preMoveToAlgebraic(this.getBoard(),new ValidMoveFactory(board).createValidMove(move));
+                nextDiagram.moveName = Translator.preMoveToAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
             } catch (IllegalMoveException | ChessAxiomViolation e) {
                 throw new RuntimeException(e);
             }
@@ -160,5 +161,16 @@ public class Diagram implements Serializable {
 
     public ChessBoard getBoard() {
         return board;
+    }
+
+    public String toJson() {
+        return "{moveName:" +
+                moveName +
+                ",moves:" +
+                ListJsonFactory.listToJson(nextDiagrams) +
+                ",annotations:" +
+                annotations.toJson() +
+                "}";
+
     }
 }
