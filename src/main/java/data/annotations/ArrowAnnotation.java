@@ -25,14 +25,14 @@ public class ArrowAnnotation extends RawMove implements GraphicAnnotation, Jsona
     @Override
     public String toJson() {
         return "{" +
-                "start:{x:" +
+                "\"start\":{\"x\":\"" +
                 getStartPosition().getX() +
-                ",y:" +
+                "\",\"y\":\"" +
                 getStartPosition().getY() +
-                "},end:{x:" +
+                "\"},\"end\":{\"x\":" +
                 getEndPosition().getX() +
-                ",y:" +
+                "\",\"y\":\"" +
                 getEndPosition().getY() +
-                "}}";
+                "\"}}";
     }
 }

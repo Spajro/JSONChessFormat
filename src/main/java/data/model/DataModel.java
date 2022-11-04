@@ -2,6 +2,7 @@ package data.model;
 
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
+import log.Log;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;

@@ -18,6 +18,6 @@ public class FieldAnnotation extends Position implements GraphicAnnotation, Json
 
     @Override
     public String toJson() {
-        return "{x:" + x + "," + "y:" + y + "}";
+        return "{\"x\":\"" + x + "\",\"y\":\"" + y + "\"}";
     }
 }

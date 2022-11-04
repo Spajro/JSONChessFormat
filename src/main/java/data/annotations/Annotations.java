@@ -57,13 +57,13 @@ public class Annotations implements Jsonable {
 
     @Override
     public String toJson() {
-        return "{text:" +
+        return "{\"text\":\"" +
                 textAnnotation +
-                ",arrows:" +
+                "\",\"arrows\":" +
                 ListJsonFactory.listToJson(arrowAnnotations) +
-                ",fields:" +
+                ",\"fields\":" +
                 ListJsonFactory.listToJson(fieldAnnotations) +
-                ",signs:" +
+                ",\"signs\":" +
                 ListJsonFactory.listToJson(signAnnotations) +
                 "}";
     }

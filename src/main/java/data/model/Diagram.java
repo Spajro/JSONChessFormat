@@ -13,6 +13,7 @@ import chess.hlp.Translator;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Diagram implements Jsonable {
     private final int moveId;
@@ -164,11 +165,11 @@ public class Diagram implements Jsonable {
     }
 
     public String toJson() {
-        return "{moveName:" +
+        return "{\"moveName\":\"" +
                 moveName +
-                ",moves:" +
+                "\",\"moves\":" +
                 ListJsonFactory.listToJson(nextDiagrams) +
-                ",annotations:" +
+                ",\"annotations\":" +
                 annotations.toJson() +
                 "}";
 
