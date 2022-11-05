@@ -21,7 +21,7 @@ public class CliMain {
                 switch (cmd) {
                     case "LD" -> data = new ActionData("LD", scanner.nextLine());
                     case "SV" -> data = new ActionData("SV", null);
-                    case "MM" -> data = new ActionData("MM", Translator.algebraicToMove(handler.getDiag().getBoard(), scanner.nextLine(), handler.getcolor()));
+                    case "MM" -> data = new ActionData("MM", Translator.algebraicToMove(handler.getDiag().getBoard(), scanner.nextLine(), handler.getColor()));
                     case "AN" -> data = new ActionData("AN", null);
                     case "QT" -> data = new ActionData("QT", null);
                     case "DL" -> data = new ActionData("DL",null);

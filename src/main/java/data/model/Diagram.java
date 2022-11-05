@@ -9,18 +9,19 @@ import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;
 import chess.moves.RawMove;
 import chess.hlp.Translator;
+import log.Log;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+
 public class Diagram implements Jsonable {
     private final int moveId;
-    private String moveName;
+    private String moveName = "diag";
     private final Diagram parent;
-    private final LinkedList<Diagram> nextDiagrams;
-    private final Annotations annotations;
+    private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
+    private final Annotations annotations = new Annotations();
     private final ChessBoard board;
 
     public Diagram() {
@@ -28,26 +29,21 @@ public class Diagram implements Jsonable {
         moveName = "Start";
         board = new ChessBoard();
         parent = null;
-        nextDiagrams = new LinkedList<>();
-        annotations = new Annotations();
     }
 
     public Diagram(ChessBoard nextBoard, Diagram last, int id) {
         moveId = id;
-        moveName = "newDiag";
         board = nextBoard;
         parent = last;
-        nextDiagrams = new LinkedList<>();
-        annotations = new Annotations();
     }
 
     public Diagram makeMove(RawMove move) {
-        System.out.print(move);
+        Log.log().info("Trying to make:" + move);
         ChessBoard tempBoard;
         try {
             tempBoard = board.makeMove(move);
         } catch (IllegalMoveException e) {
-            System.out.print("Illegal Move\n");
+            Log.log().warn("Illegal Move\n");
             return this;
         } catch (ChessAxiomViolation e) {
             throw new RuntimeException(e);
@@ -59,63 +55,47 @@ public class Diagram implements Jsonable {
             } catch (IllegalMoveException | ChessAxiomViolation e) {
                 throw new RuntimeException(e);
             }
-            for (Diagram D : nextDiagrams) {
-                if (D.board.equals(nextDiagram.board) && D.moveId == nextDiagram.moveId) {
-                    return D;
+            for (Diagram diagram : nextDiagrams) {
+                if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+                    return diagram;
                 }
             }
             nextDiagrams.add(nextDiagram);
             return nextDiagram;
         } else {
-            System.out.print("Move Corrupted");
+            Log.log().fail("Corrupted Move:" + move);
             return this;
         }
     }
 
-    public Diagram findMove(int Id) {
-        if (moveId == Id) {
-            return this;
-        } else if (Id < moveId) {
-            return parent.findMove(Id);
+    public Optional<Diagram> getDiagramOfId(int id) {
+        if (moveId == id) {
+            return Optional.of(this);
+        } else if (id > moveId || id < 0) {
+            return Optional.empty();
         } else {
-            System.out.print("Findmove fail");
-            return null;
+            assert parent != null;
+            return parent.getDiagramOfId(id);
         }
     }
 
-    public Diagram getOriginal() {
-        return findMove(0);
+    public Optional<Diagram> getOriginal() {
+        return getDiagramOfId(0);
     }
 
-    public String[] getMoves() {
-        int n = nextDiagrams.size();
-        if (n == 0) {
-            System.out.print("No moves");
-            return null;
+    public List<String> getMoves() {
+        return nextDiagrams.stream().map(Diagram::getMoveName).toList();
+    }
+
+    public List<String> getHistory() {
+        if (moveId == 0) {
+            return new LinkedList<>(List.of(moveName));
         } else {
-            String[] S = new String[n];
-            int i = 0;
-            for (Diagram D : nextDiagrams) {
-                S[i] = D.moveName;
-                i++;
-            }
-            return S;
+            assert parent != null;
+            List<String> result = parent.getHistory();
+            result.add(moveName);
+            return result;
         }
-    }
-
-    public String[] getHistory() {
-        if (moveId != 0) {
-            Diagram D = this;
-            String[] S = new String[D.moveId + 1];
-            while (D.moveId >= 0) {
-                S[D.moveId] = D.moveName;
-                D = D.parent;
-                if (D == null) {
-                    break;
-                }
-            }
-            return S;
-        } else return null;
     }
 
     public Annotations getAnnotations() {
@@ -126,8 +106,16 @@ public class Diagram implements Jsonable {
         return parent;
     }
 
+    public String getMoveName() {
+        return moveName;
+    }
+
     public LinkedList<Diagram> getNextDiagrams() {
         return nextDiagrams;
+    }
+
+    public ChessBoard getBoard() {
+        return board;
     }
 
     public Diagram getNextDiagram(int index) {
@@ -151,17 +139,14 @@ public class Diagram implements Jsonable {
     }
 
     public List<Diagram> getPathFromOriginal() {
-        List<Diagram> list = new ArrayList<>(moveId + 1);
-        Diagram temp = this;
-        while (temp != null) {
-            list.add(0, temp);
-            temp = temp.parent;
+        if (moveId == 0) {
+            return new LinkedList<>(List.of(this));
+        } else {
+            assert parent != null;
+            List<Diagram> result = parent.getPathFromOriginal();
+            result.add(this);
+            return result;
         }
-        return list;
-    }
-
-    public ChessBoard getBoard() {
-        return board;
     }
 
     public String toJson() {

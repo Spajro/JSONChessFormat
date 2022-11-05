@@ -80,27 +80,15 @@ public class CommandLineHandler {
     }
 
     void goBack(int pos) {
-        base = base.findMove(pos);
+        base = base.getDiagramOfId(pos).get();
     }
 
     void printMoves() {
-        String[] ToPrint = base.getMoves();
-        if (ToPrint != null) {
-            for (String S : ToPrint) {
-                System.out.print(S + " ");
-            }
-
-        }
+        base.getMoves().forEach(string -> System.out.print(string + " "));
     }
 
     void printHistory() {
-        String[] ToPrint = base.getHistory();
-        if (ToPrint != null) {
-            for (String S : ToPrint) {
-                if (S != null) System.out.print(S + " ");
-            }
-
-        }
+        base.getHistory().forEach(string -> System.out.print(string + " "));
     }
 
     void jumpBack() {
@@ -140,7 +128,7 @@ public class CommandLineHandler {
         return base;
     }
 
-    public Color getcolor() {
+    public Color getColor() {
         return base.getBoard().getColor();
     }
 

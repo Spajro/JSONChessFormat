@@ -77,7 +77,7 @@ public class DataModel implements TreeModel {
 
     @Override
     public Object getRoot() {
-        return actualNode.getOriginal();
+        return actualNode.getOriginal().get();
     }
 
     public Diagram getActualNode() {
