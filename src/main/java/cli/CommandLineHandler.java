@@ -4,7 +4,7 @@ import data.model.Diagram;
 import chess.Position;
 import chess.color.Color;
 import chess.moves.RawMove;
-import chess.hlp.Translator;
+import chess.utility.AlgebraicTranslator;
 
 import java.io.*;
 
@@ -140,7 +140,7 @@ public class CommandLineHandler {
                 if (temp == 0) {
                     System.out.print("00");
                 } else {
-                    System.out.print(Translator.numberToFigure(temp));
+                    System.out.print(AlgebraicTranslator.numberToFigure(temp));
                 }
                 System.out.print(" ");
             }

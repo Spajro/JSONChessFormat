@@ -8,7 +8,7 @@ import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;
 import chess.moves.RawMove;
-import chess.hlp.Translator;
+import chess.utility.AlgebraicTranslator;
 import log.Log;
 
 import java.util.LinkedList;
@@ -51,7 +51,7 @@ public class Diagram implements Jsonable {
         if (board != tempBoard) {
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
             try {
-                nextDiagram.moveName = Translator.preMoveToAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
+                nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
             } catch (IllegalMoveException | ChessAxiomViolation e) {
                 throw new RuntimeException(e);
             }

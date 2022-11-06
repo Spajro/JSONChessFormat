@@ -2,7 +2,7 @@ package gui;
 
 import chess.board.Board;
 import chess.board.BoardWrapper;
-import chess.hlp.Translator;
+import chess.utility.AlgebraicTranslator;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -65,7 +65,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPiece(Piece piece, Graphics g) {
-        String s = Translator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
+        String s = AlgebraicTranslator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
         assert s != null;
         g.setColor(Color.green);
         g.drawString(s, (piece.getPosition().getX() - 1) * scale + partOf(0.5, scale), (8 - piece.getPosition().getY()) * scale + partOf(0.5, scale));
