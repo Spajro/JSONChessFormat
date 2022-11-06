@@ -1,7 +1,7 @@
 package data.annotations;
 
 import chess.Position;
-import data.Jsonable;
+import data.json.Jsonable;
 
 public class FieldAnnotation extends Position implements GraphicAnnotation, Jsonable {
     private final DrawColor color;

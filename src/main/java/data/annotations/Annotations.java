@@ -1,7 +1,7 @@
 package data.annotations;
 
-import data.Jsonable;
-import data.ListJsonFactory;
+import data.json.Jsonable;
+import data.json.ListJsonFactory;
 
 import java.util.LinkedList;
 

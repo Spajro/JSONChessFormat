@@ -1,6 +1,6 @@
 package data.annotations;
 
-import data.Jsonable;
+import data.json.Jsonable;
 
 public class SignAnnotation implements Jsonable {
     //TODO

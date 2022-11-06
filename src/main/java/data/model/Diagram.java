@@ -1,8 +1,8 @@
 package data.model;
 
 import chess.ValidMoveFactory;
-import data.Jsonable;
-import data.ListJsonFactory;
+import data.json.Jsonable;
+import data.json.ListJsonFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;

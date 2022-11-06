@@ -2,7 +2,7 @@ package data.annotations;
 
 import chess.Position;
 import chess.moves.RawMove;
-import data.Jsonable;
+import data.json.Jsonable;
 
 public class ArrowAnnotation extends RawMove implements GraphicAnnotation, Jsonable {
     private final DrawColor color;
