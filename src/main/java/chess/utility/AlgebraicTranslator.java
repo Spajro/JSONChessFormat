@@ -41,10 +41,10 @@ public class AlgebraicTranslator {
     }
 
     private static Position algebraicToPosition(String position) {
-        if (position.charAt(1) > 8) {
-            throw new IllegalArgumentException("Invalid row number:" + position.charAt(1));
+        if (Character.getNumericValue(position.charAt(1)) > 8) {
+            throw new IllegalArgumentException("Invalid row number:" + Character.getNumericValue(position.charAt(1)));
         }
-        return new Position(columnToNumber(position.charAt(0)), position.charAt(1));
+        return new Position(columnToNumber(position.charAt(0)), Character.getNumericValue(position.charAt(1)));
     }
 
     public static String moveToLongAlgebraic(ChessBoard board, ValidMove move) {
