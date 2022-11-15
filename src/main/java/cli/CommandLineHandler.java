@@ -80,7 +80,7 @@ public class CommandLineHandler {
     }
 
     void goBack(int pos) {
-        base = base.getDiagramOfId(pos).get();
+        base = base.getDiagramOfId(pos);
     }
 
     void printMoves() {

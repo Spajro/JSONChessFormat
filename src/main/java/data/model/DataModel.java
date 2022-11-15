@@ -53,7 +53,7 @@ public class DataModel implements TreeModel, Jsonable {
 
     @Override
     public Object getRoot() {
-        return actualNode.getOriginal().get();
+        return actualNode.getOriginal();
     }
 
     @Override
@@ -119,6 +119,6 @@ public class DataModel implements TreeModel, Jsonable {
 
     @Override
     public String toJson() {
-        return "{\"root\":" + actualNode.getOriginal().get().toJson() + "}";
+        return "{\"root\":" + actualNode.getOriginal().toJson() + "}";
     }
 }
