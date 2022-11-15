@@ -24,7 +24,7 @@ public class DataModel implements TreeModel, Jsonable {
     public void loadDataFromFile(String filename) {
         try {
             actualNode = fileManager.load(filename);
-            actualNode.getNextDiagrams().forEach(this::notifyListenersOnInsert);
+            notifyListenersOnNewTree(actualNode);
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
         }
@@ -103,6 +103,17 @@ public class DataModel implements TreeModel, Jsonable {
         );
         for (TreeModelListener listener : treeModelListeners) {
             listener.treeNodesInserted(event);
+        }
+    }
+
+    public void notifyListenersOnNewTree(Diagram newDiagram) {
+        TreeModelEvent event = new TreeModelEvent(this,
+                getTreePathTo(newDiagram),
+                null,
+                null
+        );
+        for (TreeModelListener listener : treeModelListeners) {
+            listener.treeStructureChanged(event);
         }
     }
 
