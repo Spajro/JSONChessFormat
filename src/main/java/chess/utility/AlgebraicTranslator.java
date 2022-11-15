@@ -62,7 +62,7 @@ public class AlgebraicTranslator {
         throw new IllegalStateException();
     }
 
-    private static char pieceToAlgebraic(Piece piece) {
+    public static char pieceToAlgebraic(Piece piece) {
         if (piece instanceof Pawn) {
             return ' ';
         } else if (piece instanceof Knight) {
