@@ -1,7 +1,7 @@
 package data.model;
 
-import chess.board.ChessBoard;
 import chess.moves.RawMove;
+import data.json.Jsonable;
 import log.Log;
 
 import javax.swing.event.TreeModelEvent;
@@ -11,32 +11,31 @@ import javax.swing.tree.TreePath;
 import java.io.*;
 import java.util.LinkedList;
 
-public class DataModel implements TreeModel {
-    private ChessBoard actualBoard;
+public class DataModel implements TreeModel, Jsonable {
     private Diagram actualNode;
-    private String name;
-
+    private final FileManager fileManager = new FileManager();
     private final LinkedList<TreeModelListener> treeModelListeners;
 
     public DataModel() {
         treeModelListeners = new LinkedList<>();
         actualNode = new Diagram();
-        actualBoard = actualNode.getBoard();
-        name = "new datamodel";
     }
 
     public void loadDataFromFile(String filename) {
-        actualNode = load(filename);
-        name = filename;
+        try {
+            actualNode = fileManager.load(filename);
+            actualNode.getNextDiagrams().forEach(this::notifyListenersOnInsert);
+        } catch (FileNotFoundException e) {
+            Log.log().warn("file not found");
+        }
     }
 
     public void saveDataToFile(String filename) {
-        save(filename);
+        fileManager.save(filename, toJson());
     }
 
     public void makeMove(RawMove m) {
         actualNode = actualNode.makeMove(m);
-        setActualBoard(actualNode.getBoard());
         notifyListenersOnInsert(actualNode);
     }
 
@@ -44,44 +43,17 @@ public class DataModel implements TreeModel {
         return new TreePath(diagram.getPathFromOriginal().toArray());
     }
 
-    private Diagram load(String filename) {
-        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream(filename + ".bin"))) {
-            return (Diagram) inputStream.readObject();
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private void save(String filename) {
-        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream(filename + ".bin"))) {
-            outputStream.writeObject(actualNode.getOriginal());
-            System.out.print("Saved sukces");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    public ChessBoard getActualBoard() {
-        return actualBoard;
-    }
-
-    public void setActualBoard(ChessBoard actualBoard) {
-        this.actualBoard = actualBoard;
-    }
-
     public void setActualNode(Diagram actualNode) {
         this.actualNode = actualNode;
+    }
+
+    public Diagram getActualNode() {
+        return actualNode;
     }
 
     @Override
     public Object getRoot() {
         return actualNode.getOriginal().get();
-    }
-
-    public Diagram getActualNode() {
-        return actualNode;
     }
 
     @Override
@@ -134,4 +106,8 @@ public class DataModel implements TreeModel {
         }
     }
 
+    @Override
+    public String toJson() {
+        return "{\"root\":" + actualNode.getOriginal().get().toJson() + "}";
+    }
 }
