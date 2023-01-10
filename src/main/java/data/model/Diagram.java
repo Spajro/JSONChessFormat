@@ -69,11 +69,11 @@ public class Diagram implements Jsonable {
     }
 
     public Diagram getDiagramOfId(int id) {
-        if(id==moveId){
+        if (id == moveId) {
             return this;
         }
         if (id > moveId || id < 0) {
-            throw new IllegalArgumentException("illegal move id:"+id);
+            throw new IllegalArgumentException("illegal move id:" + id);
         } else {
             assert parent != null;
             return parent.getDiagramOfId(id);

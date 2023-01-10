@@ -1,13 +1,11 @@
 package chess.board;
 
 import chess.Position;
-import chess.color.Color;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
 public class Board implements Serializable {
-    //statics int%3==1 is white, 2 is black
     public static final int SIZE = 8;
     public static final int EMPTY = 0;
     public static final int WPAWN = 1;
@@ -26,39 +24,39 @@ public class Board implements Serializable {
 
     private Board() {
         T = new int[SIZE][SIZE];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                set(EMPTY,i,j);
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                set(EMPTY, i, j);
             }
         }
     }
 
     private Board(Board B) {
         T = new int[SIZE][SIZE];
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
                 set(B.get(i, j), i, j);
             }
         }
     }
 
-    public void write(int val, Position position) {
-        set(val, position.getX() - 1, position.getY() - 1);
+    public void write(int id, Position position) {
+        set(id, position.getX() - 1, position.getY() - 1);
     }
 
     public int read(Position position) {
         return get(position.getX() - 1, position.getY() - 1);
     }
 
-    private void set(int val, int x, int y) {
-        T[x][y] = val;
+    private void set(int id, int x, int y) {
+        T[x][y] = id;
     }
 
     private int get(int x, int y) {
         return T[x][y];
     }
 
-    public static Board getBlank(){
+    public static Board getBlank() {
         return new Board();
     }
 
@@ -89,18 +87,6 @@ public class Board implements Serializable {
 
     public static Board getCopy(Board b) {
         return new Board(b);
-    }
-
-    public boolean checkPiece(int figureId, Position temp) {
-        return get(temp.getX(), temp.getY()) == figureId;
-    }
-
-    public static Color getPieceColor(int figureId) {
-        if (figureId % 3 == 1) {
-            return Color.white;
-        } else if (figureId % 3 == 2) {
-            return Color.black;
-        } else throw new IllegalArgumentException("Wrong figureId");
     }
 
     @Override

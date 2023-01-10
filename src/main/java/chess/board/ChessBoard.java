@@ -38,11 +38,6 @@ public class ChessBoard {
         return new ChessBoard(Board.getBlank(), color, new CastleRequirements());
     }
 
-    @Deprecated
-    public int read(Position position) {
-        return board.read(position);
-    }
-
     public ChessBoard put(Piece piece) {
         if (getField(piece.getPosition()).isEmpty()) {
             Board tempBoard = Board.getCopy(board);

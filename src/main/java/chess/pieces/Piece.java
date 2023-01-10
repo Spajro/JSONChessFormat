@@ -11,7 +11,6 @@ import java.util.Set;
 public abstract class Piece extends Field {
     protected final Color color;
 
-
     public Piece(Color color, Position position, ChessBoard chessBoard) {
         super(position, chessBoard);
         this.color = color;

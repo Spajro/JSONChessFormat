@@ -50,5 +50,4 @@ public abstract class RestrictedMovementPiece extends Piece {
     protected Set<Position> getPossibleEndPositions(Set<Position> steps) {
         return getPossibleNonCollidingPositions(steps);
     }
-
 }
