@@ -7,6 +7,9 @@ import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
+import gui.board.BoardPanel;
+import gui.option.OptionPanel;
+import gui.option.TreeMouseListener;
 import log.Log;
 
 import javax.swing.*;

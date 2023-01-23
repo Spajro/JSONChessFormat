@@ -21,7 +21,6 @@ public class DisplayConfiguration {
     public static final String BKINGPATH = "";
 
     public static HashMap<Integer,ImageIcon> setImageMap() {
-        // przypisanie obrazka do inta z Board
         HashMap<Integer,ImageIcon> imageMap = new HashMap<>();
         imageMap.put(Board.WPAWN, new ImageIcon(FOLDERPATH + WPAWNPATH));
         imageMap.put(Board.WKNIGHT, new ImageIcon(FOLDERPATH + WKNIGHTPATH));

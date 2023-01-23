@@ -1,4 +1,4 @@
-package gui;
+package gui.board;
 
 import chess.board.Board;
 import chess.board.BoardWrapper;
@@ -7,6 +7,7 @@ import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
+import gui.DisplayConfiguration;
 import gui.scaling.CenteredScaledArrow;
 import gui.scaling.ScaledArrow;
 import log.Log;

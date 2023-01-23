@@ -1,8 +1,9 @@
-package gui;
+package gui.board;
 
 import chess.board.Board;
 import chess.Position;
 import chess.moves.RawMove;
+import gui.Controller;
 import log.Log;
 
 import javax.swing.event.MouseInputListener;

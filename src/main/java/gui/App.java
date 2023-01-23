@@ -1,6 +1,9 @@
 package gui;
 
 import data.model.DataModel;
+import gui.board.BoardMouseListener;
+import gui.board.BoardPanel;
+import gui.option.OptionPanel;
 
 import javax.swing.*;
 import java.awt.*;

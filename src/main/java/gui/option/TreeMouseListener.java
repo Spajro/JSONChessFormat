@@ -1,6 +1,7 @@
-package gui;
+package gui.option;
 
 import data.model.Diagram;
+import gui.Controller;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
