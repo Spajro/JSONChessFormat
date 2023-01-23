@@ -20,6 +20,7 @@ public class App {
         boardPanel = new BoardPanel(dataModel.getActualNode());
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
+        controller.setOptionPanel(optionPanel);
         setUpBoardPanel();
         setUpFrame();
     }

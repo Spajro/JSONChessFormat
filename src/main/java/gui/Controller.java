@@ -14,6 +14,7 @@ import javax.swing.*;
 public class Controller {
     private final DataModel dataModel;
     private final BoardPanel boardPanel;
+    private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
     private KeyboardListener keyboardListener;
     private boolean isEditingAnnotation = false;
@@ -41,6 +42,7 @@ public class Controller {
             dataModel.makeMove(move);
             boardPanel.setDiagram(dataModel.getActualNode());
             treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
+            optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
         }
         boardPanel.repaint();
     }
@@ -88,8 +90,10 @@ public class Controller {
     }
 
     public void setActualNode(Diagram lastPathComponent) {
+        Log.log().info(lastPathComponent.toString()+" is set as actual node");
         dataModel.setActualNode(lastPathComponent);
         boardPanel.setDiagram(lastPathComponent);
+        optionPanel.setText(lastPathComponent.getAnnotations().getTextAnnotation());
     }
 
     public JTree createTreeWithDataModel() {
@@ -106,5 +110,13 @@ public class Controller {
 
     public int getScale() {
         return boardPanel.getScale();
+    }
+
+    public void setOptionPanel(OptionPanel optionPanel) {
+        this.optionPanel = optionPanel;
+    }
+
+    public void setTextAnnotation(String text){
+        dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
     }
 }

@@ -22,7 +22,6 @@ public class TreeMouseListener implements MouseListener {
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
         if(selRow != -1 && e.getClickCount() == 2) {
-            System.err.print("change node from tree\n");
             controller.setActualNode((Diagram) selPath.getLastPathComponent());
         }
     }
@@ -48,7 +47,6 @@ public class TreeMouseListener implements MouseListener {
     }
 
     public void treeNodeInserted(TreePath treePath){
-        System.out.print(treePath);
         tree.setSelectionPath(treePath);
         tree.repaint();
     }
