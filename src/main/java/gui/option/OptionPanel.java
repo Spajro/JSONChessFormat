@@ -10,12 +10,11 @@ public class OptionPanel extends JPanel {
     private final JScrollPane jScrollPane;
     private final JTextArea jTextArea;
     public OptionPanel(Controller controller) {
-        setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
+        setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
         jTree=controller.createTreeWithDataModel();
         jTree.addMouseListener(new TreeMouseListener(jTree,controller));
 
         jScrollPane=new JScrollPane(jTree);
-        jScrollPane.setPreferredSize(new Dimension(160,480));
 
         jTextArea=new JTextArea();
         jTextArea.setBackground(Color.lightGray);

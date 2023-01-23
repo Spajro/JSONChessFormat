@@ -30,8 +30,9 @@ public class App {
 
     private void setUpFrame() {
         frame.setJMenuBar(menuBar);
-        frame.add(boardPanel, BorderLayout.CENTER);
-        frame.add(optionPanel, BorderLayout.EAST);
+        frame.setLayout(new GridLayout());
+        frame.add(boardPanel);
+        frame.add(optionPanel);
         frame.setSize(640, 480);
         frame.setVisible(true);
     }
