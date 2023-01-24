@@ -3,25 +3,22 @@ package chess;
 public class Position {
     protected final int x;
     protected final int y;
-    public Position(){
-        x=-1;
-        y=-1;
+
+    public Position(int nx, int ny) {
+        x = nx;
+        y = ny;
     }
-    public Position(int nx, int ny){
-        x=nx;
-        y=ny;
+
+    public Position(Position P) {
+        x = P.x;
+        y = P.y;
     }
-    public Position(Position P){
-        x=P.x;
-        y=P.y;
+
+    public Position add(Position P) {
+        return new Position(x + P.x, y + P.y);
     }
-    public Position add(Position P){
-        return new Position(x+P.x,y+P.y);
-    }
-    public boolean isEmpty(){
-        return x == -1 && y == -1;
-    }
-    public boolean isOnBoard(){
+
+    public boolean isOnBoard() {
         return !(x < 1 || y < 1 || x > 8 || y > 8);
     }
 
@@ -53,6 +50,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return "<"+x+","+y+">";
+        return "<" + x + "," + y + ">";
     }
 }

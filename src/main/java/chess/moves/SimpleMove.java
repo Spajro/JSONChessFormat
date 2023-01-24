@@ -6,7 +6,7 @@ public class SimpleMove extends RawMove implements ValidMove{
     private final Board board;
 
     public SimpleMove(RawMove move,Board board){
-        super(move.getStartPosition(),move.getEndPosition());
+        super(move);
         this.board=board;
     }
 

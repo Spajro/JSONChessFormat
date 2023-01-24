@@ -17,7 +17,6 @@ public class OptionPanel extends JPanel {
         jScrollPane=new JScrollPane(jTree);
 
         jTextArea=new JTextArea();
-        jTextArea.setBackground(Color.lightGray);
         jTextArea.getDocument().addDocumentListener(new TextAreaListener(controller));
 
         add(jScrollPane);
