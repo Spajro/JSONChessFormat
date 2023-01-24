@@ -19,6 +19,8 @@ public class ChessBoard {
     private final Board board;
     private final Color color;
     private final CastleRequirements castleRequirements;
+
+    private final ValidMove lastMove;
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
     private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
 
@@ -26,23 +28,25 @@ public class ChessBoard {
         board = Board.getStart();
         color = Color.white;
         castleRequirements = new CastleRequirements();
+        lastMove=null;
     }
 
-    private ChessBoard(Board board, Color color, CastleRequirements castleRequirements) {
+    private ChessBoard(Board board, Color color, CastleRequirements castleRequirements,ValidMove moveCreatingBoard) {
         this.board = board;
         this.color = color;
         this.castleRequirements = castleRequirements;
+        this.lastMove=moveCreatingBoard;
     }
 
     public static ChessBoard getBlank(Color color) {
-        return new ChessBoard(Board.getBlank(), color, new CastleRequirements());
+        return new ChessBoard(Board.getBlank(), color, new CastleRequirements(),null);
     }
 
     public ChessBoard put(Piece piece) {
         if (getField(piece.getPosition()).isEmpty()) {
             Board tempBoard = Board.getCopy(board);
             tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece), piece.getPosition());
-            return new ChessBoard(tempBoard, color, castleRequirements);
+            return new ChessBoard(tempBoard, color, castleRequirements,lastMove);
         }
         throw new IllegalArgumentException("Cant put to board");
     }
@@ -53,7 +57,7 @@ public class ChessBoard {
 
     public ChessBoard makeMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
         ValidMove validMove = validMoveFactory.createValidMove(move);
-        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove));
+        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove),validMove);
     }
 
     public Color getColor() {
@@ -118,5 +122,9 @@ public class ChessBoard {
 
     public CastleRequirements getCastleRequirements() {
         return castleRequirements;
+    }
+
+    public Optional<ValidMove> getLastMove(){
+        return Optional.ofNullable(lastMove);
     }
 }
