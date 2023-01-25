@@ -4,10 +4,7 @@ import chess.board.Board;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.moves.Castle;
-import chess.moves.RawMove;
-import chess.moves.SimpleMove;
-import chess.moves.ValidMove;
+import chess.moves.*;
 import chess.pieces.*;
 
 public class AlgebraicTranslator {
@@ -58,6 +55,10 @@ public class AlgebraicTranslator {
                 case SHORT -> "O-O";
                 case LONG -> "O-O-O";
             };
+        } else if (move instanceof EnPassantCapture enPassantCapture) {
+            return positionToAlgebraic(enPassantCapture.getStartPosition()) +
+                    "-" +
+                    positionToAlgebraic(enPassantCapture.getEndPosition());
         }
         throw new IllegalStateException();
     }

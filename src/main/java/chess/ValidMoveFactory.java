@@ -4,10 +4,7 @@ import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;
 import chess.exceptions.IllegalMoveException;
-import chess.moves.Castle;
-import chess.moves.RawMove;
-import chess.moves.SimpleMove;
-import chess.moves.ValidMove;
+import chess.moves.*;
 
 public class ValidMoveFactory {
     private final ChessBoard chessBoard;
@@ -26,8 +23,19 @@ public class ValidMoveFactory {
             if (validator.isLegalSimpleMove(move)) {
                 return createSimpleMove(move);
             }
+            if (validator.isLegalEnPassantCapture(move)) {
+                return createEnPassantCapture(move);
+            }
         }
         throw new IllegalMoveException("Move not correct");
+    }
+
+    private SimpleMove createSimpleMove(RawMove move) {
+        return new SimpleMove(move, chessBoard.getBoard());
+    }
+
+    private EnPassantCapture createEnPassantCapture(RawMove move) {
+        return new EnPassantCapture(move, chessBoard.getBoard());
     }
 
     private Castle createCastle(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
@@ -42,10 +50,6 @@ public class ValidMoveFactory {
             return new RawMove(new Position(1, getStartRow()), new Position(4, getStartRow()));
         }
         throw new IllegalStateException("Should not try to create Castle when its not Castle");
-    }
-
-    private SimpleMove createSimpleMove(RawMove move) {
-        return new SimpleMove(move, chessBoard.getBoard());
     }
 
     private int getStartRow() {
