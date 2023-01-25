@@ -1,6 +1,6 @@
 package data.model;
 
-import chess.ValidMoveFactory;
+import chess.validation.ValidMoveFactory;
 import data.json.Jsonable;
 import data.json.ListJsonFactory;
 import data.annotations.Annotations;
@@ -13,7 +13,6 @@ import log.Log;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 
 public class Diagram implements Jsonable {

@@ -1,5 +1,6 @@
-package chess;
+package chess.validation;
 
+import chess.Position;
 import chess.board.BoardWrapper;
 import chess.board.CastleRequirements;
 import chess.board.ChessBoard;

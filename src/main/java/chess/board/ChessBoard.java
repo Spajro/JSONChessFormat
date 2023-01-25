@@ -3,7 +3,7 @@ package chess.board;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;
 import chess.Position;
-import chess.ValidMoveFactory;
+import chess.validation.ValidMoveFactory;
 import chess.color.Color;
 import chess.fields.Field;
 import chess.moves.RawMove;
