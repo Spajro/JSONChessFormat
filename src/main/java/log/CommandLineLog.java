@@ -16,14 +16,14 @@ public class CommandLineLog implements Log {
     @Override
     public void warn(String message) {
         if (logLevel == WARN || logLevel == FAIL) {
-            System.out.println("WARN " + message);
+            System.out.println("[WARN] " + message);
         }
     }
 
     @Override
     public void fail(String message) {
         if (logLevel == FAIL) {
-            System.err.println("ERROR " + message);
+            System.err.println("[ERROR] " + message);
         }
     }
 }

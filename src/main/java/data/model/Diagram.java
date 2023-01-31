@@ -42,12 +42,12 @@ public class Diagram implements Jsonable {
         try {
             tempBoard = board.makeMove(move);
         } catch (IllegalMoveException e) {
-            Log.log().warn("Illegal Move\n");
+            Log.log().warn("Illegal Move");
             return this;
         } catch (ChessAxiomViolation e) {
             throw new RuntimeException(e);
         }
-        if (board != tempBoard) {
+        if (!board.equals(tempBoard)) {
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
             try {
                 nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
@@ -79,23 +79,19 @@ public class Diagram implements Jsonable {
         }
     }
 
-    public Diagram getOriginal() {
-        return getDiagramOfId(0);
-    }
-
-    public List<String> getMoves() {
-        return nextDiagrams.stream().map(Diagram::getMoveName).toList();
-    }
-
-    public List<String> getHistory() {
+    public List<Diagram> getPathFromRoot() {
         if (moveId == 0) {
-            return new LinkedList<>(List.of(moveName));
+            return new LinkedList<>(List.of(this));
         } else {
             assert parent != null;
-            List<String> result = parent.getHistory();
-            result.add(moveName);
+            List<Diagram> result = parent.getPathFromRoot();
+            result.add(this);
             return result;
         }
+    }
+
+    public Diagram getRoot() {
+        return getDiagramOfId(0);
     }
 
     public Annotations getAnnotations() {
@@ -136,17 +132,6 @@ public class Diagram implements Jsonable {
     @Override
     public String toString() {
         return moveName;
-    }
-
-    public List<Diagram> getPathFromOriginal() {
-        if (moveId == 0) {
-            return new LinkedList<>(List.of(this));
-        } else {
-            assert parent != null;
-            List<Diagram> result = parent.getPathFromOriginal();
-            result.add(this);
-            return result;
-        }
     }
 
     public String toJson() {

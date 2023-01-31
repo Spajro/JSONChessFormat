@@ -56,11 +56,16 @@ public class CommandLineHandler {
     }
 
     void printMoves() {
-        node.getMoves().forEach(string -> System.out.print(string + " "));
+        node.getNextDiagrams()
+                .stream()
+                .map(Diagram::getMoveName)
+                .forEach(string -> System.out.print(string + " "));
     }
 
     void printHistory() {
-        node.getHistory().forEach(string -> System.out.print(string + " "));
+        node.getPathFromRoot().stream()
+                .map(Diagram::getMoveName)
+                .forEach(string -> System.out.print(string + " "));
     }
 
     void jumpBack() {

@@ -40,7 +40,7 @@ public class DataModel implements TreeModel, Jsonable {
     }
 
     public TreePath getTreePathTo(Diagram diagram) {
-        return new TreePath(diagram.getPathFromOriginal().toArray());
+        return new TreePath(diagram.getPathFromRoot().toArray());
     }
 
     public void setActualNode(Diagram actualNode) {
@@ -53,7 +53,7 @@ public class DataModel implements TreeModel, Jsonable {
 
     @Override
     public Object getRoot() {
-        return actualNode.getOriginal();
+        return actualNode.getRoot();
     }
 
     @Override
@@ -119,6 +119,6 @@ public class DataModel implements TreeModel, Jsonable {
 
     @Override
     public String toJson() {
-        return "{\"root\":" + actualNode.getOriginal().toJson() + "}";
+        return "{\"root\":" + actualNode.getRoot().toJson() + "}";
     }
 }
