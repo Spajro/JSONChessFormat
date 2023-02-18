@@ -28,25 +28,25 @@ public class ChessBoard {
         board = Board.getStart();
         color = Color.white;
         castleRequirements = new CastleRequirements();
-        lastMove=null;
+        lastMove = null;
     }
 
-    private ChessBoard(Board board, Color color, CastleRequirements castleRequirements,ValidMove moveCreatingBoard) {
+    private ChessBoard(Board board, Color color, CastleRequirements castleRequirements, ValidMove moveCreatingBoard) {
         this.board = board;
         this.color = color;
         this.castleRequirements = castleRequirements;
-        this.lastMove=moveCreatingBoard;
+        this.lastMove = moveCreatingBoard;
     }
 
     public static ChessBoard getBlank(Color color) {
-        return new ChessBoard(Board.getBlank(), color, new CastleRequirements(),null);
+        return new ChessBoard(Board.getBlank(), color, new CastleRequirements(), null);
     }
 
     public ChessBoard put(Piece piece) {
         if (getField(piece.getPosition()).isEmpty()) {
             Board tempBoard = Board.getCopy(board);
             tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece), piece.getPosition());
-            return new ChessBoard(tempBoard, color, castleRequirements,lastMove);
+            return new ChessBoard(tempBoard, color, castleRequirements, lastMove);
         }
         throw new IllegalArgumentException("Cant put to board");
     }
@@ -57,7 +57,11 @@ public class ChessBoard {
 
     public ChessBoard makeMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
         ValidMove validMove = validMoveFactory.createValidMove(move);
-        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove),validMove);
+        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove);
+    }
+
+    public ChessBoard makeMove(ValidMove validMove)  {
+        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove);
     }
 
     public Color getColor() {
@@ -116,6 +120,23 @@ public class ChessBoard {
         return result;
     }
 
+    public List<ValidMove> getAllPossibleValidMoves() {
+        return getPiecesOfColor(color).stream()
+                .flatMap(piece -> piece.getPossibleEndPositions().stream()
+                        .map(position -> new RawMove(piece.getPosition(), position)))
+                .map(move -> {
+                    try {
+                        return Optional.of(validMoveFactory.createValidMove(move));
+                    } catch (IllegalMoveException | ChessAxiomViolation e) {
+                        return Optional.empty();
+                    }
+                })
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(object -> (ValidMove) object)
+                .toList();
+    }
+
     public boolean isPositionAttacked(Position position) {
         return getNumberOfPiecesAttackingFields(color).get(position) > 0;
     }
@@ -124,7 +145,7 @@ public class ChessBoard {
         return castleRequirements;
     }
 
-    public Optional<ValidMove> getLastMove(){
+    public Optional<ValidMove> getLastMove() {
         return Optional.ofNullable(lastMove);
     }
 }
