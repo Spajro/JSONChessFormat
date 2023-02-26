@@ -50,7 +50,7 @@ public class CastleValidator {
 
     private boolean anyPositionKingsPassesIsAttacked(MoveValidator.CastleType castleType) {
         return positionsKingPasses(castleType).stream()
-                .filter(chessBoard::isPositionAttacked)
+                .filter(position -> chessBoard.isPositionAttacked(position,chessBoard.getColor().swap()))
                 .toList()
                 .size() > 0;
     }

@@ -28,13 +28,9 @@ public class MoveValidator {
                 && chessBoard.getField(move.getStartPosition()).getPiece().getColor().equal(chessBoard.getColor());
     }
 
-    public boolean isLegalSimpleMove(RawMove move) {
-        try {
+    public boolean isLegalSimpleMove(RawMove move) throws ChessAxiomViolation {
             return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
                     && (!validationUtility.isKingChecked(chessBoard.getColor()) || validationUtility.isKingEscapingFromCheck(move));
-        } catch (ChessAxiomViolation e) {
-            throw new RuntimeException(e);
-        }
     }
 
     public boolean isLegalEnPassantCapture(RawMove move) {

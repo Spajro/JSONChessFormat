@@ -146,8 +146,8 @@ public class ChessBoard {
                 .toList();
     }
 
-    public boolean isPositionAttacked(Position position) {
-        return getNumberOfPiecesAttackingFields(color).get(position) > 0;
+    public boolean isPositionAttacked(Position position,Color attackingColor) {
+        return getNumberOfPiecesAttackingFields(attackingColor).get(position) > 0;
     }
 
     public CastleRequirements getCastleRequirements() {

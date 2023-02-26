@@ -16,12 +16,12 @@ class ValidationUtility {
     }
 
     public boolean isKingChecked(Color color) throws ChessAxiomViolation {
-        return chessBoard.isPositionAttacked(getKingPosition(color));
+        return chessBoard.isPositionAttacked(getKingPosition(color),color.swap());
     }
 
     public boolean isKingEscapingFromCheck(RawMove move) {
         return BoardWrapper.getFieldFromBoard(chessBoard, move.getStartPosition()) instanceof King
-                && !chessBoard.isPositionAttacked(move.getEndPosition());
+                && !chessBoard.isPositionAttacked(move.getEndPosition(),chessBoard.getColor().swap());
     }
 
     public Position getKingPosition(Color color) throws ChessAxiomViolation {
