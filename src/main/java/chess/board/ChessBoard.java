@@ -3,6 +3,9 @@ package chess.board;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;
 import chess.Position;
+import chess.results.InvalidMoveResult;
+import chess.results.MoveResult;
+import chess.results.ValidMoveResult;
 import chess.validation.ValidMoveFactory;
 import chess.color.Color;
 import chess.fields.Field;
@@ -55,12 +58,18 @@ public class ChessBoard {
         return BoardWrapper.getFieldFromBoard(this, position);
     }
 
-    public ChessBoard makeMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
-        ValidMove validMove = validMoveFactory.createValidMove(move);
-        return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove);
+    public MoveResult makeMove(RawMove move) {
+        try {
+            ValidMove validMove = validMoveFactory.createValidMove(move);
+            return new ValidMoveResult(new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove));
+        } catch (IllegalMoveException e) {
+            return new InvalidMoveResult();
+        } catch (ChessAxiomViolation e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    public ChessBoard makeMove(ValidMove validMove)  {
+    public ChessBoard makeMove(ValidMove validMove) {
         return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove);
     }
 

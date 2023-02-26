@@ -75,7 +75,7 @@ public class AlgebraicTranslator {
         } else if (piece instanceof Queen) {
             return 'Q';
         } else if (piece instanceof King) {
-            return 'N';
+            return 'K';
         }
         throw new IllegalStateException();
     }

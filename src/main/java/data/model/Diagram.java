@@ -1,5 +1,7 @@
 package data.model;
 
+import chess.results.MoveResult;
+import chess.results.ValidMoveResult;
 import chess.validation.ValidMoveFactory;
 import data.json.Jsonable;
 import data.json.ListJsonFactory;
@@ -38,31 +40,29 @@ public class Diagram implements Jsonable {
 
     public Diagram makeMove(RawMove move) {
         Log.log().info("Trying to make:" + move);
-        ChessBoard tempBoard;
-        try {
-            tempBoard = board.makeMove(move);
-        } catch (IllegalMoveException e) {
-            Log.log().warn("Illegal Move");
-            return this;
-        } catch (ChessAxiomViolation e) {
-            throw new RuntimeException(e);
-        }
-        if (!board.equals(tempBoard)) {
-            Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-            try {
-                nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
-            } catch (IllegalMoveException | ChessAxiomViolation e) {
-                throw new RuntimeException(e);
-            }
-            for (Diagram diagram : nextDiagrams) {
-                if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
-                    return diagram;
+        MoveResult moveResult = board.makeMove(move);
+        if (moveResult.isValid()) {
+            ChessBoard tempBoard = ((ValidMoveResult) moveResult).getResult();
+            if (!board.equals(tempBoard)) {
+                Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+                try {
+                    nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
+                } catch (IllegalMoveException | ChessAxiomViolation e) {
+                    throw new RuntimeException(e);
                 }
+                for (Diagram diagram : nextDiagrams) {
+                    if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+                        return diagram;
+                    }
+                }
+                nextDiagrams.add(nextDiagram);
+                return nextDiagram;
+            } else {
+                Log.log().fail("Corrupted Move:" + move);
+                return this;
             }
-            nextDiagrams.add(nextDiagram);
-            return nextDiagram;
         } else {
-            Log.log().fail("Corrupted Move:" + move);
+            Log.log().info("Illegal Move");
             return this;
         }
     }
