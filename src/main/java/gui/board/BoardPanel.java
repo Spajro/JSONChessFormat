@@ -2,7 +2,6 @@ package gui.board;
 
 import chess.board.Board;
 import chess.board.BoardWrapper;
-import chess.utility.AlgebraicTranslator;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -66,15 +65,19 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPiece(Piece piece, Graphics g) {
-        String s = AlgebraicTranslator.numberToFigure(BoardWrapper.getBoardIdFromPiece(piece));
-        assert s != null;
-        g.setColor(Color.green);
-        g.drawString(s, (piece.getPosition().getX() - 1) * scale + partOf(0.5, scale), (8 - piece.getPosition().getY()) * scale + partOf(0.5, scale));
+        ImageIcon image = imageMap.get(BoardWrapper.getBoardIdFromPiece(piece));
+        g.drawImage(image.getImage(),
+                (piece.getPosition().getX() - 1) * scale + partOf(0.1, scale),
+                (8 - piece.getPosition().getY()) * scale + partOf(0.1, scale),
+                partOf(0.8, scale),
+                partOf(0.8, scale),
+                null
+        );
     }
 
     private void paintAnnotations(Graphics g) {
         diagram.getAnnotations().getArrowAnnotations().stream()
-                .map(arrow->new ScaledArrow(arrow,scale))
+                .map(arrow -> new ScaledArrow(arrow, scale))
                 .map(CenteredScaledArrow::new)
                 .forEach(arrow -> paintArrow(arrow, g));
 
@@ -84,7 +87,7 @@ public class BoardPanel extends JPanel {
     private void paintArrow(CenteredScaledArrow arrow, Graphics g) {
         Log.debug(arrow.toString());
         g.setColor(convertColor(arrow.getColor()));
-        g.drawLine(arrow.getStart().getX(),arrow.getStart().getY(),
+        g.drawLine(arrow.getStart().getX(), arrow.getStart().getY(),
                 arrow.getEnd().getX(), arrow.getEnd().getY());
         drawArrowHead(arrow, g);
     }
