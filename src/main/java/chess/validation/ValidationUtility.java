@@ -15,17 +15,17 @@ class ValidationUtility {
         this.chessBoard = chessBoard;
     }
 
-    public boolean isKingChecked(Color color) throws ChessAxiomViolation {
-        return chessBoard.isPositionAttacked(getKingPosition(color),color.swap());
+    public boolean isKingChecked(Color kingColor) throws ChessAxiomViolation {
+        return chessBoard.isPositionAttacked(getKingPosition(kingColor), kingColor.swap());
     }
 
-    public boolean isKingEscapingFromCheck(RawMove move) {
+    public boolean isKingEscapingFromCheck(RawMove move, Color kingColor) {
         return BoardWrapper.getFieldFromBoard(chessBoard, move.getStartPosition()) instanceof King
-                && !chessBoard.isPositionAttacked(move.getEndPosition(),chessBoard.getColor().swap());
+                && !chessBoard.isPositionAttacked(move.getEndPosition(), kingColor.swap());
     }
 
-    public Position getKingPosition(Color color) throws ChessAxiomViolation {
-        return chessBoard.getPiecesOfColor(color).stream()
+    public Position getKingPosition(Color kingColor) throws ChessAxiomViolation {
+        return chessBoard.getPiecesOfColor(kingColor).stream()
                 .filter(piece -> piece instanceof King)
                 .findFirst()
                 .orElseThrow(() -> new ChessAxiomViolation("No King on Board"))

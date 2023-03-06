@@ -62,6 +62,20 @@ public class Pawn extends Piece {
         return result;
     }
 
+    @Override
+    public Set<Position> getAttackedPositions() {
+        Set<Position> result = new HashSet<>();
+        Position left = position.add(stepsForward.get(Step.LEFT));
+        Position right = position.add(stepsForward.get(Step.RIGHT));
+        if (left.isOnBoard()) {
+            result.add(left);
+        }
+        if (right.isOnBoard()) {
+            result.add(right);
+        }
+        return result;
+    }
+
     private boolean isOnStartLine(Position temporaryPosition) {
         return (temporaryPosition.getY() == 2 && color.isWhite()) || (temporaryPosition.getY() == 7 && color.isBlack());
     }

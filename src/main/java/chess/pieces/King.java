@@ -38,6 +38,17 @@ public class King extends Piece {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public Set<Position> getAttackedPositions() {
+        return Steps.fullSteps.stream()
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(Field::getPosition)
+                .collect(Collectors.toSet());
+    }
+
     private boolean isLegal(Field field) {
         if (field.isEmpty()) {
             return true;

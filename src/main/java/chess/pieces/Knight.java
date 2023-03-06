@@ -33,7 +33,18 @@ public class Knight extends Piece {
                 .map(this::getField)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(field -> field.isEmpty() || !field.getPiece().getColor().equal(color))
+                .filter(field -> field.isEmpty() || field.getPiece().getColor().equal(color.swap()))
+                .map(Field::getPosition)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Position> getAttackedPositions() {
+        return Steps.knightSteps.stream()
+                .map(position::add)
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
                 .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }

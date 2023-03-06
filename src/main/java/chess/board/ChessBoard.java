@@ -101,7 +101,7 @@ public class ChessBoard {
 
     public Map<Position, Long> getNumberOfPiecesAttackingFields(Color color) {
         Map<Position, Long> result = getPiecesOfColor(color).stream()
-                .map(Piece::getPossibleEndPositions)
+                .map(Piece::getAttackedPositions)
                 .flatMap(Set::stream)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 

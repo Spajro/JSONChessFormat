@@ -15,7 +15,30 @@ public abstract class RestrictedMovementPiece extends Piece {
         super(color, position, chessBoard);
     }
 
-    protected Set<Position> getPossibleNonCollidingPositions(Set<Position> Steps) {
+    protected Set<Position> getPossibleStartPositions(Set<Position> steps) {
+        return getPossibleNonCollidingPositions(steps).stream()
+                .filter(position -> chessBoard.getField(position).isEmpty())
+                .collect(Collectors.toSet());
+    }
+
+    protected Set<Position> getPossibleEndPositions(Set<Position> steps) {
+        return getPossibleNonCollidingPositions(steps).stream()
+                .filter(position -> {
+                    if (chessBoard.getField(position).isEmpty()) {
+                        return true;
+                    } else {
+                        Piece piece = chessBoard.getField(position).getPiece();
+                        return piece.color.equal(color.swap());
+                    }
+                })
+                .collect(Collectors.toSet());
+    }
+
+    protected Set<Position> getAttackedPositions(Set<Position> steps) {
+        return getPossibleNonCollidingPositions(steps);
+    }
+
+    private Set<Position> getPossibleNonCollidingPositions(Set<Position> Steps) {
         return Steps.stream()
                 .map(this::getLineOfPossibleNonCollidingPositions)
                 .flatMap(Collection::stream)
@@ -27,27 +50,12 @@ public abstract class RestrictedMovementPiece extends Piece {
         Position temporaryPosition = new Position(position).add(step);
         while (temporaryPosition.isOnBoard()) {
             Field field = chessBoard.getField(temporaryPosition);
-            if (field.isEmpty()) {
-                result.add(temporaryPosition);
-            } else {
-                Piece piece = field.getPiece();
-                if (!piece.color.equal(this.color)) {
-                    result.add(temporaryPosition);
-                }
+            result.add(temporaryPosition);
+            if (field.hasPiece()) {
                 break;
             }
-            temporaryPosition=temporaryPosition.add(step);
+            temporaryPosition = temporaryPosition.add(step);
         }
         return result;
-    }
-
-    protected Set<Position> getPossibleStartPositions(Set<Position> steps) {
-        return getPossibleNonCollidingPositions(steps).stream()
-                .filter(position -> chessBoard.getField(position).isEmpty())
-                .collect(Collectors.toSet());
-    }
-
-    protected Set<Position> getPossibleEndPositions(Set<Position> steps) {
-        return getPossibleNonCollidingPositions(steps);
     }
 }

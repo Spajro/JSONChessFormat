@@ -20,4 +20,9 @@ public class Rook extends RestrictedMovementPiece {
     public Set<Position> getPossibleEndPositions() {
         return getPossibleEndPositions(Steps.basicSteps);
     }
+
+    @Override
+    public Set<Position> getAttackedPositions() {
+        return getAttackedPositions(Steps.basicSteps);
+    }
 }
