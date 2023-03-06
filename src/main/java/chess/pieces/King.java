@@ -33,7 +33,14 @@ public class King extends Piece {
                 .map(this::getField)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(this::isLegal)
+                .filter(field -> {
+                    if (field.isEmpty()) {
+                        return true;
+                    } else {
+                        Piece piece = field.getPiece();
+                        return piece.color.equal(color.swap());
+                    }
+                })
                 .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
@@ -47,13 +54,5 @@ public class King extends Piece {
                 .map(Optional::get)
                 .map(Field::getPosition)
                 .collect(Collectors.toSet());
-    }
-
-    private boolean isLegal(Field field) {
-        if (field.isEmpty()) {
-            return true;
-        }
-        Piece piece = field.getPiece();
-        return piece.getColor().equal(color.swap()) && !field.isAttackedByColor(color.swap());
     }
 }
