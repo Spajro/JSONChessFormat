@@ -9,13 +9,35 @@ public class Position {
         y = ny;
     }
 
-    public Position(Position P) {
-        x = P.x;
-        y = P.y;
+    public Position(Position p) {
+        x = p.x;
+        y = p.y;
     }
 
-    public Position add(Position P) {
-        return new Position(x + P.x, y + P.y);
+    public Position add(Position p) {
+        return new Position(x + p.x, y + p.y);
+    }
+
+    public Position subtract(Position p) {
+        return new Position(x - p.x, y - p.y);
+    }
+
+    public boolean isBetween(Position first, Position second) {
+        if (first.x == second.x) {
+            return x == first.x && isBetween(first.y, y, second.y);
+        }
+        if (first.y == second.y) {
+            return y == first.y && isBetween(first.x, x, second.x);
+        } else {
+            Position diff = first.subtract(second);
+            return Math.abs(diff.x) == Math.abs(diff.y)
+                    && isBetween(first.y, y, second.y)
+                    && isBetween(first.x, x, second.x);
+        }
+    }
+
+    private boolean isBetween(int first, int middle, int second) {
+        return (first < middle && middle < second) || (first > middle && middle > second);
     }
 
     public boolean isOnBoard() {
