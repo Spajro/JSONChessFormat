@@ -22,7 +22,6 @@ public class ChessBoard {
     private final Board board;
     private final Color color;
     private final CastleRequirements castleRequirements;
-
     private final ValidMove lastMove;
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
     private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
@@ -99,6 +98,14 @@ public class ChessBoard {
         return board;
     }
 
+    public CastleRequirements getCastleRequirements() {
+        return castleRequirements;
+    }
+
+    public Optional<ValidMove> getLastMove() {
+        return Optional.ofNullable(lastMove);
+    }
+
     public Map<Position, Long> getNumberOfPiecesAttackingFields(Color color) {
         Map<Position, Long> result = getPiecesOfColor(color).stream()
                 .map(Piece::getAttackedPositions)
@@ -146,15 +153,13 @@ public class ChessBoard {
                 .toList();
     }
 
-    public boolean isPositionAttacked(Position position,Color attackingColor) {
+    public boolean isPositionAttacked(Position position, Color attackingColor) {
         return getNumberOfPiecesAttackingFields(attackingColor).get(position) > 0;
     }
 
-    public CastleRequirements getCastleRequirements() {
-        return castleRequirements;
-    }
-
-    public Optional<ValidMove> getLastMove() {
-        return Optional.ofNullable(lastMove);
+    public Set<Piece> getPiecesAttackingPosition(Position kingPosition, Color attackingColor) {
+        return getPiecesOfColor(attackingColor).stream()
+                .filter(piece -> piece.getPossibleEndPositions().contains(kingPosition))
+                .collect(Collectors.toSet());
     }
 }

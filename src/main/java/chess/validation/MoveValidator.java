@@ -30,7 +30,10 @@ public class MoveValidator {
 
     public boolean isLegalSimpleMove(RawMove move) throws ChessAxiomViolation {
         return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
-                && (!validationUtility.isKingChecked(chessBoard.getColor()) || validationUtility.isKingEscapingFromCheck(move, chessBoard.getColor()));
+                &&
+                (!validationUtility.isKingChecked(chessBoard.getColor())
+                        || validationUtility.isKingEscapingFromCheck(move, chessBoard.getColor())
+                        || validationUtility.isRemovingCheck(move, chessBoard.getColor()));
     }
 
     public boolean isLegalEnPassantCapture(RawMove move) {
