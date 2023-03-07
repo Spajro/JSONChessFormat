@@ -60,8 +60,8 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPieces(Graphics g) {
-        diagram.getBoard().getPiecesOfColor(chess.color.Color.white).forEach(piece -> paintPiece(piece, g));
-        diagram.getBoard().getPiecesOfColor(chess.color.Color.black).forEach(piece -> paintPiece(piece, g));
+        diagram.getBoard().getUtility().getPiecesOfColor(chess.color.Color.white).forEach(piece -> paintPiece(piece, g));
+        diagram.getBoard().getUtility().getPiecesOfColor(chess.color.Color.black).forEach(piece -> paintPiece(piece, g));
     }
 
     private void paintPiece(Piece piece, Graphics g) {

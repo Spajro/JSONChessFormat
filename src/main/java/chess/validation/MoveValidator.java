@@ -11,7 +11,7 @@ import chess.pieces.Pawn;
 public class MoveValidator {
     private final ChessBoard chessBoard;
     private final CastleValidator castleValidator;
-    private final ValidationUtility validationUtility;
+    private final CheckValidator checkValidator;
 
     enum CastleType {
         SHORT, LONG
@@ -20,7 +20,7 @@ public class MoveValidator {
     public MoveValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
         castleValidator = new CastleValidator(chessBoard);
-        validationUtility = new ValidationUtility(chessBoard);
+        checkValidator = new CheckValidator(chessBoard.getUtility());
     }
 
     public boolean isCorrect(RawMove move) {
@@ -31,9 +31,9 @@ public class MoveValidator {
     public boolean isLegalSimpleMove(RawMove move) throws ChessAxiomViolation {
         return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
                 &&
-                (!validationUtility.isKingChecked(chessBoard.getColor())
-                        || validationUtility.isKingEscapingFromCheck(move, chessBoard.getColor())
-                        || validationUtility.isRemovingCheck(move, chessBoard.getColor()));
+                (!checkValidator.isKingChecked(chessBoard.getColor())
+                        || checkValidator.isKingEscapingFromCheck(move, chessBoard.getColor())
+                        || checkValidator.isRemovingCheck(move, chessBoard.getColor()));
     }
 
     public boolean isLegalEnPassantCapture(RawMove move) {

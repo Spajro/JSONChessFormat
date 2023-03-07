@@ -13,21 +13,21 @@ import java.util.Set;
 
 public class CastleValidator {
     private final ChessBoard chessBoard;
-    private final ValidationUtility validationUtility;
+    private final CheckValidator checkValidator;
 
     public CastleValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
-        validationUtility = new ValidationUtility(chessBoard);
+        checkValidator = new CheckValidator(chessBoard.getUtility());
     }
 
     public boolean isLegalCastle(RawMove move) throws ChessAxiomViolation {
         try {
             MoveValidator.CastleType castleType = moveToType(move);
-            if (!validationUtility.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
+            if (!checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
                     || !isCastleLegalInRequirements(castleType)
                     || anyPositionKingsPassesIsAttacked(castleType)
                     || anyPositionBetweenKingAndRookIsOccupied(castleType)
-                    || validationUtility.isKingChecked(chessBoard.getColor())) {
+                    || checkValidator.isKingChecked(chessBoard.getColor())) {
                 return false;
             }
         } catch (IllegalCastleException e) {
@@ -37,7 +37,7 @@ public class CastleValidator {
     }
 
     public MoveValidator.CastleType moveToType(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
-        if (move.getStartPosition().equals(validationUtility.getKingPosition(chessBoard.getColor()))) {
+        if (move.getStartPosition().equals(checkValidator.getKingPosition(chessBoard.getColor()))) {
             if (move.getEndPosition().getX() == move.getStartPosition().getX() + 2) {
                 return MoveValidator.CastleType.SHORT;
             }
@@ -50,7 +50,7 @@ public class CastleValidator {
 
     private boolean anyPositionKingsPassesIsAttacked(MoveValidator.CastleType castleType) {
         return positionsKingPasses(castleType).stream()
-                .filter(position -> chessBoard.isPositionAttacked(position,chessBoard.getColor().swap()))
+                .filter(position -> chessBoard.getUtility().isPositionAttacked(position, chessBoard.getColor().swap()))
                 .toList()
                 .size() > 0;
     }
