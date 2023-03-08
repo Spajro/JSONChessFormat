@@ -23,17 +23,14 @@ public class CastleValidator {
     public boolean isLegalCastle(RawMove move) throws ChessAxiomViolation {
         try {
             MoveValidator.CastleType castleType = moveToType(move);
-            if (!checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
-                    || !isCastleLegalInRequirements(castleType)
-                    || anyPositionKingsPassesIsAttacked(castleType)
-                    || anyPositionBetweenKingAndRookIsOccupied(castleType)
-                    || checkValidator.isKingChecked(chessBoard.getColor())) {
-                return false;
-            }
+            return checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
+                    && isCastleLegalInRequirements(castleType)
+                    && !anyPositionKingsPassesIsAttacked(castleType)
+                    && !anyPositionBetweenKingAndRookIsOccupied(castleType)
+                    && !checkValidator.isKingChecked(chessBoard.getColor());
         } catch (IllegalCastleException e) {
             return false;
         }
-        return true;
     }
 
     public MoveValidator.CastleType moveToType(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
@@ -58,7 +55,7 @@ public class CastleValidator {
     private boolean anyPositionBetweenKingAndRookIsOccupied(MoveValidator.CastleType castleType) {
         return positionsBetweenKingAndRook(castleType).stream()
                 .map(chessBoard::getField)
-                .filter(Field::isEmpty)
+                .filter(Field::hasPiece)
                 .toList()
                 .size() > 0;
     }
