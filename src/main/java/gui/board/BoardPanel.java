@@ -23,7 +23,7 @@ public class BoardPanel extends JPanel {
     private Color colBack = Color.WHITE;
     private Color colWhiteField = Color.WHITE;
     private Color colBlackField = Color.DARK_GRAY;
-    private HashMap<Integer, ImageIcon> imageMap;
+    private HashMap<Byte, ImageIcon> imageMap;
 
     public BoardPanel(Diagram diagram) {
         imageMap = DisplayConfiguration.setImageMap();

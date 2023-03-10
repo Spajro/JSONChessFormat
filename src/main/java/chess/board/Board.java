@@ -2,28 +2,27 @@ package chess.board;
 
 import chess.Position;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
-public class Board implements Serializable {
+public class Board {
     public static final int SIZE = 8;
-    public static final int EMPTY = 0;
-    public static final int WPAWN = 1;
-    public static final int WKNIGHT = 4;
-    public static final int WBISHOP = 7;
-    public static final int WROOK = 10;
-    public static final int WQUEEN = 13;
-    public static final int WKING = 16;
-    public static final int BPAWN = 2;
-    public static final int BKNIGHT = 5;
-    public static final int BBISHOP = 8;
-    public static final int BROOK = 11;
-    public static final int BQUEEN = 14;
-    public static final int BKING = 17;
-    private final int[][] T;
+    public static final byte EMPTY = 0;
+    public static final byte WPAWN = 1;
+    public static final byte WKNIGHT = 4;
+    public static final byte WBISHOP = 7;
+    public static final byte WROOK = 10;
+    public static final byte WQUEEN = 13;
+    public static final byte WKING = 16;
+    public static final byte BPAWN = 2;
+    public static final byte BKNIGHT = 5;
+    public static final byte BBISHOP = 8;
+    public static final byte BROOK = 11;
+    public static final byte BQUEEN = 14;
+    public static final byte BKING = 17;
+    private final byte[][] T;
 
     private Board() {
-        T = new int[SIZE][SIZE];
+        T = new byte[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 set(EMPTY, i, j);
@@ -32,7 +31,7 @@ public class Board implements Serializable {
     }
 
     private Board(Board B) {
-        T = new int[SIZE][SIZE];
+        T = new byte[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 set(B.get(i, j), i, j);
@@ -40,19 +39,19 @@ public class Board implements Serializable {
         }
     }
 
-    public void write(int id, Position position) {
+    public void write(byte id, Position position) {
         set(id, position.getX() - 1, position.getY() - 1);
     }
 
-    public int read(Position position) {
+    public byte read(Position position) {
         return get(position.getX() - 1, position.getY() - 1);
     }
 
-    private void set(int id, int x, int y) {
+    private void set(byte id, int x, int y) {
         T[x][y] = id;
     }
 
-    private int get(int x, int y) {
+    private byte get(int x, int y) {
         return T[x][y];
     }
 

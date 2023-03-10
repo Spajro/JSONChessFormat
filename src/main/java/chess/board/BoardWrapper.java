@@ -12,7 +12,7 @@ public class BoardWrapper {
         return convertIdToField(chessBoard, position, valueFromBoard);
     }
 
-    public static int getBoardIdFromPiece(Piece piece){
+    public static byte getBoardIdFromPiece(Piece piece){
         if (piece instanceof Pawn) {
             return piece.getColor().isWhite() ? Board.WPAWN : Board.BPAWN;
         }

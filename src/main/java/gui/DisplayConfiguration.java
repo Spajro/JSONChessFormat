@@ -25,8 +25,8 @@ public class DisplayConfiguration {
     public static final String BKINGPATH = "/black/king";
     public static final String FORMAT = ".bmp";
 
-    public static HashMap<Integer, ImageIcon> setImageMap() {
-        HashMap<Integer, ImageIcon> imageMap = new HashMap<>();
+    public static HashMap<Byte, ImageIcon> setImageMap() {
+        HashMap<Byte, ImageIcon> imageMap = new HashMap<>();
         imageMap.put(Board.WPAWN, getImageFromResources(WPAWNPATH));
         imageMap.put(Board.WKNIGHT, getImageFromResources(WKNIGHTPATH));
         imageMap.put(Board.WBISHOP, getImageFromResources(WBISHOPPATH));
