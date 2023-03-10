@@ -30,13 +30,13 @@ public class Controller {
     public void executeDragAction(RawMove move) {
         if (isEditingAnnotation) {
             if (arrowAnnotationExists(move)) {
-                Log.log().info("Remove arrow annotation "+move);
+                Log.log().info("Remove arrow annotation " + move);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getArrowAnnotations()
-                        .removeIf(arrowAnnotation -> arrowAnnotation.equals(move));
+                        .removeIf(arrowAnnotation -> arrowAnnotation.moveEquals(move));
             } else {
-                Log.log().info("Add arrow annotation "+move);
+                Log.log().info("Add arrow annotation " + move);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .addArrowAnnotation(new ArrowAnnotation(move, getDrawColor()));
@@ -55,19 +55,19 @@ public class Controller {
                 .getAnnotations()
                 .getArrowAnnotations()
                 .stream()
-                .anyMatch(arrowAnnotation -> arrowAnnotation.equals(move));
+                .anyMatch(arrowAnnotation -> arrowAnnotation.moveEquals(move));
     }
 
     public void executeClickAction(Position position) {
         if (isEditingAnnotation) {
             if (fieldAnnotationExists(position)) {
-                Log.log().info("Remove field annotation "+position);
+                Log.log().info("Remove field annotation " + position);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getFieldAnnotations()
-                        .removeIf(fieldAnnotation -> fieldAnnotation.equals(position));
+                        .removeIf(fieldAnnotation -> fieldAnnotation.positionEquals(position));
             } else {
-                Log.log().info("Add field annotation "+position);
+                Log.log().info("Add field annotation " + position);
                 dataModel.getActualNode()
                         .getAnnotations()
                         .addFieldAnnotation(new FieldAnnotation(position, getDrawColor()));
@@ -81,7 +81,7 @@ public class Controller {
                 .getAnnotations()
                 .getFieldAnnotations()
                 .stream()
-                .anyMatch(fieldAnnotation -> fieldAnnotation.equals(position));
+                .anyMatch(fieldAnnotation -> fieldAnnotation.positionEquals(position));
     }
 
     private GraphicAnnotation.DrawColor getDrawColor() {
@@ -93,7 +93,7 @@ public class Controller {
     }
 
     public void setActualNode(Diagram lastPathComponent) {
-        Log.log().info(lastPathComponent.toString()+" is set as actual node");
+        Log.log().info(lastPathComponent.toString() + " is set as actual node");
         dataModel.setActualNode(lastPathComponent);
         boardPanel.setDiagram(lastPathComponent);
         optionPanel.setText(lastPathComponent.getAnnotations().getTextAnnotation());
@@ -119,7 +119,11 @@ public class Controller {
         this.optionPanel = optionPanel;
     }
 
-    public void setTextAnnotation(String text){
+    public void setTextAnnotation(String text) {
         dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
+    }
+
+    public boolean isEditingAnnotation() {
+        return isEditingAnnotation;
     }
 }

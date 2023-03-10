@@ -11,6 +11,10 @@ public class FieldAnnotation extends Position implements GraphicAnnotation, Json
         this.color = color;
     }
 
+    public boolean positionEquals(Position position) {
+        return getX() == position.getX() && getY() == position.getY();
+    }
+
     @Override
     public DrawColor getColor() {
         return color;

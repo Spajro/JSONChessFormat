@@ -1,5 +1,7 @@
 package gui;
 
+import log.Log;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -13,20 +15,24 @@ public class KeyboardListener implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-
+        if (e.getKeyChar() == 'z') {
+            if (!controller.isEditingAnnotation()) {
+                Log.log().info("Start Editing Annotation");
+                controller.setEditingAnnotation(true);
+            } else {
+                Log.log().info("Stop Editing Annotation");
+                controller.setEditingAnnotation(false);
+            }
+        }
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_CONTROL){
-            controller.setEditingAnnotation(true);
-        }
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if(e.getKeyCode()==KeyEvent.VK_CONTROL){
-            controller.setEditingAnnotation(false);
-        }
+
     }
 }
