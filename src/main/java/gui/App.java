@@ -20,6 +20,7 @@ public class App {
         frame = new JFrame();
         menuBar = new JMenuBar();
         createFileMenu(dataModel);
+        createFeatureMenu();
         boardPanel = new BoardPanel(dataModel.getActualNode());
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
@@ -46,6 +47,14 @@ public class App {
         fileMenu.add(saveMenuItem);
         fileMenu.add(loadMenuItem);
         menuBar.add(fileMenu);
+    }
+
+    private void createFeatureMenu() {
+        JMenu featureMenu = new JMenu("Features");
+        JMenuItem coverageMenuItem = new JMenuItem("Coverage");
+        coverageMenuItem.addActionListener(e -> boardPanel.swapDoPaintCoverage());
+        featureMenu.add(coverageMenuItem);
+        menuBar.add(featureMenu);
     }
 
     private void setUpBoardPanel() {

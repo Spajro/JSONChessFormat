@@ -1,7 +1,9 @@
 package gui.board;
 
+import chess.Position;
 import chess.board.Board;
 import chess.board.BoardWrapper;
+import chess.board.ChessBoardCoverageAnalyzer;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -14,6 +16,7 @@ import log.Log;
 import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.Math.min;
 
@@ -24,6 +27,8 @@ public class BoardPanel extends JPanel {
     private Color colWhiteField = Color.WHITE;
     private Color colBlackField = Color.DARK_GRAY;
     private HashMap<Byte, ImageIcon> imageMap;
+
+    private boolean doPaintCoverage = false;
 
     public BoardPanel(Diagram diagram) {
         imageMap = DisplayConfiguration.setImageMap();
@@ -40,6 +45,9 @@ public class BoardPanel extends JPanel {
             paintBoard(g);
             paintPieces(g);
             paintAnnotations(g);
+            if (doPaintCoverage) {
+                paintCoverage(g);
+            }
         }
     }
 
@@ -101,6 +109,22 @@ public class BoardPanel extends JPanel {
         g.drawOval((fieldAnnotation.getX() - 1) * scale, (8 - fieldAnnotation.getY()) * scale, scale, scale);
     }
 
+    private void paintCoverage(Graphics g) {
+        Map<Position, ChessBoardCoverageAnalyzer.Coverage> coverage = new ChessBoardCoverageAnalyzer(diagram.getBoard()).getBoardCoverage(chess.color.Color.white);
+        coverage.forEach((position, coverage1) -> paintFieldCoverage(position, coverage1, g));
+    }
+
+    private void paintFieldCoverage(Position position, ChessBoardCoverageAnalyzer.Coverage coverage, Graphics g) {
+        if (coverage == ChessBoardCoverageAnalyzer.Coverage.STRONG) {
+            g.setColor(Color.green);
+            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale), (8 - position.getY()) * scale + partOf(0.05, scale), partOf(0.9, scale), partOf(0.9, scale));
+        }
+        if (coverage == ChessBoardCoverageAnalyzer.Coverage.WEAK) {
+            g.setColor(Color.red);
+            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale), (8 - position.getY()) * scale + partOf(0.05, scale), partOf(0.9, scale), partOf(0.9, scale));
+        }
+    }
+
     private Color convertColor(GraphicAnnotation.DrawColor color) {
         return switch (color) {
             case BLUE -> Color.blue;
@@ -115,6 +139,11 @@ public class BoardPanel extends JPanel {
         this.repaint();
     }
 
+    public void swapDoPaintCoverage() {
+        doPaintCoverage = !doPaintCoverage;
+        this.repaint();
+    }
+
     public int getScale() {
         int px = getWidth() / Board.SIZE;
         int py = getHeight() / Board.SIZE;
@@ -124,4 +153,5 @@ public class BoardPanel extends JPanel {
     public int partOf(double a, int b) {
         return (int) (a * b);
     }
+
 }
