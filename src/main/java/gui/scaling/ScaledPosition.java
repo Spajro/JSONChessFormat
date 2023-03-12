@@ -13,6 +13,12 @@ public class ScaledPosition {
         y = (9 - position.getY()) * scale;
     }
 
+    public ScaledPosition(int x, int y, int scale) {
+        this.x = x;
+        this.y = y;
+        this.scale = scale;
+    }
+
     public int getX() {
         return x;
     }

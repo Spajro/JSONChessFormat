@@ -14,6 +14,12 @@ public class ScaledArrow {
         end = new ScaledPosition(arrow.getEndPosition(), scale);
     }
 
+    public ScaledArrow(ScaledPosition start, ScaledPosition end, GraphicAnnotation.DrawColor drawColor) {
+        this.start = start;
+        this.end = end;
+        this.drawColor = drawColor;
+    }
+
     public ScaledPosition getStart() {
         return start;
     }

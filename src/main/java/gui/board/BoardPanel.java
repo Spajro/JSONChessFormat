@@ -11,6 +11,7 @@ import data.model.Diagram;
 import gui.DisplayConfiguration;
 import gui.scaling.CenteredScaledArrow;
 import gui.scaling.ScaledArrow;
+import gui.scaling.Vector;
 import log.Log;
 
 import javax.swing.*;
@@ -84,24 +85,31 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintAnnotations(Graphics g) {
+        Graphics2D g2d = (Graphics2D) g;
+        ((Graphics2D) g).setStroke(new BasicStroke(4));
         diagram.getAnnotations().getArrowAnnotations().stream()
                 .map(arrow -> new ScaledArrow(arrow, scale))
                 .map(CenteredScaledArrow::new)
-                .forEach(arrow -> paintArrow(arrow, g));
+                .forEach(arrow -> paintArrows(arrow, g2d));
 
-        diagram.getAnnotations().getFieldAnnotations().forEach(field -> paintField(field, g));
+        diagram.getAnnotations().getFieldAnnotations().forEach(field -> paintField(field, g2d));
     }
 
-    private void paintArrow(CenteredScaledArrow arrow, Graphics g) {
+    private void paintArrows(CenteredScaledArrow arrow, Graphics g) {
         Log.debug(arrow.toString());
         g.setColor(convertColor(arrow.getColor()));
-        g.drawLine(arrow.getStart().getX(), arrow.getStart().getY(),
-                arrow.getEnd().getX(), arrow.getEnd().getY());
-        drawArrowHead(arrow, g);
+        Vector vector = arrow.toVector().normalize().toVector(partOf(0.2, scale));
+        ScaledArrow firstLine = arrow.moveByVector(vector.getFirstPerpendicular());
+        ScaledArrow secondLine = arrow.moveByVector(vector.getSecondPerpendicular());
+        paintLine(firstLine, g);
+        paintLine(secondLine, g);
+        paintLine(new ScaledArrow(firstLine.getEnd(), arrow.getEnd().moveByVector(vector), arrow.getColor()), g);
+        paintLine(new ScaledArrow(secondLine.getEnd(), arrow.getEnd().moveByVector(vector), arrow.getColor()), g);
     }
 
-    private void drawArrowHead(CenteredScaledArrow line, Graphics g) {
-        //TODO
+    private void paintLine(ScaledArrow arrow, Graphics g) {
+        g.drawLine(arrow.getStart().getX(), arrow.getStart().getY(),
+                arrow.getEnd().getX(), arrow.getEnd().getY());
     }
 
     private void paintField(FieldAnnotation fieldAnnotation, Graphics g) {

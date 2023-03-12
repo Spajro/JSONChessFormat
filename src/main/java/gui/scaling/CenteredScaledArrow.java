@@ -26,6 +26,14 @@ public class CenteredScaledArrow {
         return drawColor;
     }
 
+    public Vector toVector() {
+        return new Vector(end.getX() - start.getX(), end.getY() - start.getY());
+    }
+
+    public ScaledArrow moveByVector(Vector vector) {
+        return new ScaledArrow(start.moveByVector(vector), end.moveByVector(vector), drawColor);
+    }
+
     @Override
     public String toString() {
         return "CS<" + start + ">,<" + end + ">";
