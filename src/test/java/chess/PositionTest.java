@@ -45,4 +45,9 @@ class PositionTest {
     void isBetweenDiagonalFalse2Test(){
         assertFalse(new Position(3,1).isBetween(new Position(1,2),new Position(5,6)));
     }
+
+    @Test
+    void isBetweenAnyFalseTest(){
+        assertFalse(new Position(4,6).isBetween(new Position(2,5),new Position(5,8)));
+    }
 }

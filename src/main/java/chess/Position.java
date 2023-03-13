@@ -1,5 +1,7 @@
 package chess;
 
+import static java.lang.Math.*;
+
 public class Position {
     protected final int x;
     protected final int y;
@@ -30,9 +32,18 @@ public class Position {
             return y == first.y && isBetween(first.x, x, second.x);
         } else {
             Position diff = first.subtract(second);
-            return Math.abs(diff.x) == Math.abs(diff.y)
-                    && isBetween(first.y, y, second.y)
-                    && isBetween(first.x, x, second.x);
+            if (abs(diff.x) == abs(diff.y)) {
+                Position direction = new Position(diff.x / abs(diff.x), diff.y / abs(diff.y));
+                Position temp = second;
+                while (!temp.equals(first)) {
+                    if (temp.equals(this)) {
+                        return true;
+                    } else {
+                        temp = temp.add(direction);
+                    }
+                }
+            }
+            return false;
         }
     }
 
