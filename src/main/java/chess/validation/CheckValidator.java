@@ -1,19 +1,24 @@
 package chess.validation;
 
 import chess.Position;
+import chess.board.ChessBoard;
 import chess.board.ChessBoardUtility;
 import chess.color.Color;
 import chess.exceptions.ChessAxiomViolation;
 import chess.moves.RawMove;
+import chess.moves.SimpleMove;
+import chess.moves.ValidMove;
 import chess.pieces.King;
 import chess.pieces.Piece;
 import chess.pieces.RestrictedMovementPiece;
 
 class CheckValidator {
     private final ChessBoardUtility utility;
+    private final ChessBoard chessBoard;
 
-    CheckValidator(ChessBoardUtility utility) {
-        this.utility = utility;
+    CheckValidator(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
+        this.utility = chessBoard.getUtility();
     }
 
     public boolean isKingChecked(Color kingColor) throws ChessAxiomViolation {
@@ -48,9 +53,14 @@ class CheckValidator {
                     return true;
                 }
             } else if (attackingPiece instanceof RestrictedMovementPiece) {
-                return move.getEndPosition().isBetween(attackingPiece.getPosition(), kingPosition);
+                return move.getEndPosition().isBetween(attackingPiece.getPosition(), kingPosition) && !move.getStartPosition().equals(kingPosition);
             }
         }
         return false;
+    }
+
+    public boolean isMovingPinnedPiece(RawMove move, Color kingColor) throws ChessAxiomViolation {
+        ChessBoard tempBoard = chessBoard.makeMove((ValidMove) new SimpleMove(move, chessBoard.getBoard()));
+        return !isKingChecked(kingColor) && (new CheckValidator(tempBoard).isKingChecked(kingColor));
     }
 }

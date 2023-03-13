@@ -20,7 +20,7 @@ public class MoveValidator {
     public MoveValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
         castleValidator = new CastleValidator(chessBoard);
-        checkValidator = new CheckValidator(chessBoard.getUtility());
+        checkValidator = new CheckValidator(chessBoard);
     }
 
     public boolean isCorrect(RawMove move) {
@@ -33,7 +33,9 @@ public class MoveValidator {
                 &&
                 (!checkValidator.isKingChecked(chessBoard.getColor())
                         || checkValidator.isKingEscapingFromCheck(move, chessBoard.getColor())
-                        || checkValidator.isRemovingCheck(move, chessBoard.getColor()));
+                        || checkValidator.isRemovingCheck(move, chessBoard.getColor()))
+                &&
+                !checkValidator.isMovingPinnedPiece(move, chessBoard.getColor());
     }
 
     public boolean isLegalEnPassantCapture(RawMove move) {

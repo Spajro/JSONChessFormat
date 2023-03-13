@@ -17,7 +17,7 @@ public class CastleValidator {
 
     public CastleValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
-        checkValidator = new CheckValidator(chessBoard.getUtility());
+        checkValidator = new CheckValidator(chessBoard);
     }
 
     public boolean isLegalCastle(RawMove move) throws ChessAxiomViolation {
