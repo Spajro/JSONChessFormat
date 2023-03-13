@@ -2,7 +2,7 @@ package gui.scaling;
 
 import data.annotations.GraphicAnnotation;
 
-public class CenteredScaledArrow {
+public class CenteredScaledArrow implements DrawableLine {
     private final CenteredScaledPosition start;
     private final CenteredScaledPosition end;
     private final GraphicAnnotation.DrawColor drawColor;
@@ -28,10 +28,6 @@ public class CenteredScaledArrow {
 
     public Vector toVector() {
         return new Vector(end.getX() - start.getX(), end.getY() - start.getY());
-    }
-
-    public ScaledArrow moveByVector(Vector vector) {
-        return new ScaledArrow(start.moveByVector(vector), end.moveByVector(vector), drawColor);
     }
 
     @Override

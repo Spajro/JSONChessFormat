@@ -1,6 +1,6 @@
 package gui.scaling;
 
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 public class Vector {
     private final int x;
@@ -27,13 +27,8 @@ public class Vector {
         return y;
     }
 
-    public Vector getFirstPerpendicular() {
-        return new Vector(-y, x);
-    }
-
-    public Vector getSecondPerpendicular() {
-        return new Vector(y, -x);
+    public Vector rotate(int degrees) {
+        double angle = degrees * PI / 180;
+        return new Vector((int) (x * cos(angle) - y * sin(angle)), (int) (x * sin(angle) + y * cos(angle)));
     }
 }
-
-

@@ -10,6 +10,7 @@ import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import gui.DisplayConfiguration;
 import gui.scaling.CenteredScaledArrow;
+import gui.scaling.DrawableLine;
 import gui.scaling.ScaledArrow;
 import gui.scaling.Vector;
 import log.Log;
@@ -99,17 +100,18 @@ public class BoardPanel extends JPanel {
         Log.debug(arrow.toString());
         g.setColor(convertColor(arrow.getColor()));
         Vector vector = arrow.toVector().normalize().toVector(partOf(0.2, scale));
-        ScaledArrow firstLine = arrow.moveByVector(vector.getFirstPerpendicular());
-        ScaledArrow secondLine = arrow.moveByVector(vector.getSecondPerpendicular());
+        DrawableLine firstLine = new ScaledArrow(arrow.getEnd().toScaledPosition(),
+                arrow.getEnd().moveByVector(vector.rotate(150)), arrow.getColor());
+        DrawableLine secondLine = new ScaledArrow(arrow.getEnd().toScaledPosition(),
+                arrow.getEnd().moveByVector(vector.rotate(210)), arrow.getColor());
+        paintLine(arrow, g);
         paintLine(firstLine, g);
         paintLine(secondLine, g);
-        paintLine(new ScaledArrow(firstLine.getEnd(), arrow.getEnd().moveByVector(vector), arrow.getColor()), g);
-        paintLine(new ScaledArrow(secondLine.getEnd(), arrow.getEnd().moveByVector(vector), arrow.getColor()), g);
     }
 
-    private void paintLine(ScaledArrow arrow, Graphics g) {
-        g.drawLine(arrow.getStart().getX(), arrow.getStart().getY(),
-                arrow.getEnd().getX(), arrow.getEnd().getY());
+    private void paintLine(DrawableLine line, Graphics g) {
+        g.drawLine(line.getStart().getX(), line.getStart().getY(),
+                line.getEnd().getX(), line.getEnd().getY());
     }
 
     private void paintField(FieldAnnotation fieldAnnotation, Graphics g) {

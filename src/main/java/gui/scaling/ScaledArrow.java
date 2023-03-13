@@ -3,7 +3,7 @@ package gui.scaling;
 import data.annotations.ArrowAnnotation;
 import data.annotations.GraphicAnnotation;
 
-public class ScaledArrow {
+public class ScaledArrow implements DrawableLine {
     private final ScaledPosition start;
     private final ScaledPosition end;
     private final GraphicAnnotation.DrawColor drawColor;
@@ -20,14 +20,17 @@ public class ScaledArrow {
         this.drawColor = drawColor;
     }
 
+    @Override
     public ScaledPosition getStart() {
         return start;
     }
 
+    @Override
     public ScaledPosition getEnd() {
         return end;
     }
 
+    @Override
     public GraphicAnnotation.DrawColor getColor() {
         return drawColor;
     }

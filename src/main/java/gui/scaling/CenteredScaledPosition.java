@@ -1,6 +1,6 @@
 package gui.scaling;
 
-public class CenteredScaledPosition {
+public class CenteredScaledPosition implements DrawablePoint {
     private final int x;
     private final int y;
     private final int scale;
@@ -11,10 +11,12 @@ public class CenteredScaledPosition {
         this.scale = position.getScale();
     }
 
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
@@ -22,6 +24,10 @@ public class CenteredScaledPosition {
 
     public ScaledPosition moveByVector(Vector vector) {
         return new ScaledPosition(x + vector.getX(), y + vector.getY(), scale);
+    }
+
+    public ScaledPosition toScaledPosition(){
+        return new ScaledPosition(x,y,scale);
     }
 
     @Override

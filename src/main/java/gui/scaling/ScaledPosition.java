@@ -2,7 +2,7 @@ package gui.scaling;
 
 import chess.Position;
 
-public class ScaledPosition {
+public class ScaledPosition implements DrawablePoint {
     private final int x;
     private final int y;
     private final int scale;
@@ -19,10 +19,12 @@ public class ScaledPosition {
         this.scale = scale;
     }
 
+    @Override
     public int getX() {
         return x;
     }
 
+    @Override
     public int getY() {
         return y;
     }
