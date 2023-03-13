@@ -26,6 +26,6 @@ public class RawMove {
 
     @Override
     public String toString() {
-        return "<"+startPosition+","+endPosition+">";
+        return "<" + startPosition + "," + endPosition + ">";
     }
 }

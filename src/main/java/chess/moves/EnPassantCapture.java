@@ -19,4 +19,9 @@ public class EnPassantCapture extends RawMove implements ValidMove {
         newBoard.write(Board.EMPTY, new Position(getEndPosition().getX(), getStartPosition().getY()));
         return newBoard;
     }
+
+    @Override
+    public RawMove getRepresentation() {
+        return this;
+    }
 }

@@ -41,4 +41,10 @@ public class Castle implements ValidMove {
             return Type.SHORT;
         }
     }
+
+
+    @Override
+    public RawMove getRepresentation() {
+        return kingMove;
+    }
 }

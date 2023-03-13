@@ -54,6 +54,9 @@ public class App {
         JMenuItem coverageMenuItem = new JMenuItem("Coverage");
         coverageMenuItem.addActionListener(e -> boardPanel.swapDoPaintCoverage());
         featureMenu.add(coverageMenuItem);
+        JMenuItem legalMovesMenuItem=new JMenuItem("Legal moves");
+        legalMovesMenuItem.addActionListener(e->boardPanel.swapDoPaintLegalMoves());
+        featureMenu.add(legalMovesMenuItem);
         menuBar.add(featureMenu);
     }
 

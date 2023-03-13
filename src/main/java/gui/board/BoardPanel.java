@@ -4,15 +4,13 @@ import chess.Position;
 import chess.board.Board;
 import chess.board.BoardWrapper;
 import chess.board.ChessBoardCoverageAnalyzer;
+import chess.moves.ValidMove;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import gui.DisplayConfiguration;
-import gui.scaling.CenteredScaledArrow;
-import gui.scaling.DrawableLine;
-import gui.scaling.ScaledArrow;
-import gui.scaling.Vector;
+import gui.scaling.*;
 import log.Log;
 
 import javax.swing.*;
@@ -31,6 +29,7 @@ public class BoardPanel extends JPanel {
     private HashMap<Byte, ImageIcon> imageMap;
 
     private boolean doPaintCoverage = false;
+    private boolean doPaintLegalMoves = false;
 
     public BoardPanel(Diagram diagram) {
         imageMap = DisplayConfiguration.setImageMap();
@@ -49,6 +48,9 @@ public class BoardPanel extends JPanel {
             paintAnnotations(g);
             if (doPaintCoverage) {
                 paintCoverage(g);
+            }
+            if (doPaintLegalMoves) {
+                paintLegalMoves(g);
             }
         }
     }
@@ -98,7 +100,6 @@ public class BoardPanel extends JPanel {
 
     private void paintArrows(CenteredScaledArrow arrow, Graphics g) {
         Log.debug(arrow.toString());
-        g.setColor(convertColor(arrow.getColor()));
         Vector vector = arrow.toVector().normalize().toVector(partOf(0.2, scale));
         DrawableLine firstLine = new ScaledArrow(arrow.getEnd().toScaledPosition(),
                 arrow.getEnd().moveByVector(vector.rotate(150)), arrow.getColor());
@@ -110,6 +111,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintLine(DrawableLine line, Graphics g) {
+        g.setColor(convertColor(line.getColor()));
         g.drawLine(line.getStart().getX(), line.getStart().getY(),
                 line.getEnd().getX(), line.getEnd().getY());
     }
@@ -135,6 +137,17 @@ public class BoardPanel extends JPanel {
         }
     }
 
+    private void paintLegalMoves(Graphics g) {
+        diagram.getBoard().getAllPossibleValidMoves().stream()
+                .map(ValidMove::getRepresentation)
+                .map(rawMove -> new ScaledArrow(
+                        new ScaledPosition(rawMove.getStartPosition(), scale),
+                        new ScaledPosition(rawMove.getEndPosition(), scale),
+                        GraphicAnnotation.DrawColor.RED))
+                .map(CenteredScaledArrow::new)
+                .forEach(scaledArrow -> paintLine(scaledArrow, g));
+    }
+
     private Color convertColor(GraphicAnnotation.DrawColor color) {
         return switch (color) {
             case BLUE -> Color.blue;
@@ -151,7 +164,12 @@ public class BoardPanel extends JPanel {
 
     public void swapDoPaintCoverage() {
         doPaintCoverage = !doPaintCoverage;
-        this.repaint();
+        repaint();
+    }
+
+    public void swapDoPaintLegalMoves() {
+        doPaintLegalMoves = !doPaintLegalMoves;
+        repaint();
     }
 
     public int getScale() {
@@ -163,5 +181,4 @@ public class BoardPanel extends JPanel {
     public int partOf(double a, int b) {
         return (int) (a * b);
     }
-
 }
