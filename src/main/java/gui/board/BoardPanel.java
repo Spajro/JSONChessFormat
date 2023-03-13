@@ -93,12 +93,12 @@ public class BoardPanel extends JPanel {
         diagram.getAnnotations().getArrowAnnotations().stream()
                 .map(arrow -> new ScaledArrow(arrow, scale))
                 .map(CenteredScaledArrow::new)
-                .forEach(arrow -> paintArrows(arrow, g2d));
+                .forEach(arrow -> paintArrow(arrow, g2d));
 
         diagram.getAnnotations().getFieldAnnotations().forEach(field -> paintField(field, g2d));
     }
 
-    private void paintArrows(CenteredScaledArrow arrow, Graphics g) {
+    private void paintArrow(CenteredScaledArrow arrow, Graphics g) {
         Log.debug(arrow.toString());
         Vector vector = arrow.toVector().normalize().toVector(partOf(0.2, scale));
         DrawableLine firstLine = new ScaledArrow(arrow.getEnd().toScaledPosition(),
@@ -143,9 +143,9 @@ public class BoardPanel extends JPanel {
                 .map(rawMove -> new ScaledArrow(
                         new ScaledPosition(rawMove.getStartPosition(), scale),
                         new ScaledPosition(rawMove.getEndPosition(), scale),
-                        GraphicAnnotation.DrawColor.RED))
+                        GraphicAnnotation.DrawColor.GREEN))
                 .map(CenteredScaledArrow::new)
-                .forEach(scaledArrow -> paintLine(scaledArrow, g));
+                .forEach(scaledArrow -> paintArrow(scaledArrow, g));
     }
 
     private Color convertColor(GraphicAnnotation.DrawColor color) {
