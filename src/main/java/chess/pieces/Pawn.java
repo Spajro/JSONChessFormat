@@ -47,7 +47,7 @@ public class Pawn extends Piece {
     @Override
     public Set<Position> getPossibleEndPositions() {
         Set<Position> result = new HashSet<>();
-        if (!isPieceInFront()) {
+        if (isFrontEmpty()) {
             result.add(position.add(stepsForward.get(Step.FRONT)));
         }
         if (canCaptureRight()) {
@@ -56,7 +56,7 @@ public class Pawn extends Piece {
         if (canCaptureLeft()) {
             result.add((position.add(stepsForward.get(Step.LEFT))));
         }
-        if (isOnStartLine(position)) {
+        if (isOnStartLine(position) && isFrontEmpty() && isFarEmpty()) {
             result.add(position.add(stepsForward.get(Step.FAR)));
         }
         return result;
@@ -101,8 +101,12 @@ public class Pawn extends Piece {
         return !piece.getColor().equal(color);
     }
 
-    private boolean isPieceInFront() {
-        return !chessBoard.getField(position.add(stepsForward.get(Step.FRONT))).isEmpty();
+    private boolean isFrontEmpty() {
+        return !chessBoard.getField(position.add(stepsForward.get(Step.FRONT))).hasPiece();
+    }
+
+    private boolean isFarEmpty() {
+        return !chessBoard.getField(position.add(stepsForward.get(Step.FAR))).hasPiece();
     }
 
     private void populateWhite(HashMap<Step, Position> map) {

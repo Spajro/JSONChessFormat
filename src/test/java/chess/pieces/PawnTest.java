@@ -107,4 +107,12 @@ class PawnTest {
                 new Position(6, 3)
         )));
     }
+
+    @Test
+    void shouldReturn0PositionsWhenBlockedOnStartRow(){
+        ChessBoard chessBoard=ChessBoard.getBlank(Color.white)
+                .put(new Pawn(Color.white,new Position(2,2),null))
+                .put(new Pawn(Color.white,new Position(2,3),null));
+        assertEquals(0,new Pawn(Color.white,new Position(2,2),chessBoard).getPossibleEndPositions().size());
+    }
 }
