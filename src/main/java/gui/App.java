@@ -51,12 +51,19 @@ public class App {
 
     private void createFeatureMenu() {
         JMenu featureMenu = new JMenu("Features");
+
         JMenuItem coverageMenuItem = new JMenuItem("Coverage");
         coverageMenuItem.addActionListener(e -> boardPanel.swapDoPaintCoverage());
         featureMenu.add(coverageMenuItem);
-        JMenuItem legalMovesMenuItem=new JMenuItem("Legal moves");
-        legalMovesMenuItem.addActionListener(e->boardPanel.swapDoPaintLegalMoves());
+
+        JMenuItem legalMovesMenuItem = new JMenuItem("Legal moves");
+        legalMovesMenuItem.addActionListener(e -> boardPanel.swapDoPaintLegalMoves());
         featureMenu.add(legalMovesMenuItem);
+
+        JMenuItem weakPointsMenuItem = new JMenuItem("Weak points");
+        weakPointsMenuItem.addActionListener(e -> boardPanel.swapDoPaintWeakPoints());
+        featureMenu.add(weakPointsMenuItem);
+
         menuBar.add(featureMenu);
     }
 

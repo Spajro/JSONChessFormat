@@ -4,6 +4,7 @@ import chess.Position;
 import chess.board.Board;
 import chess.board.BoardWrapper;
 import chess.board.ChessBoardCoverageAnalyzer;
+import chess.board.ChessBoardWeakPointsAnalyzer;
 import chess.moves.ValidMove;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
@@ -30,6 +31,7 @@ public class BoardPanel extends JPanel {
 
     private boolean doPaintCoverage = false;
     private boolean doPaintLegalMoves = false;
+    private boolean doPaintWeakPoints = false;
 
     public BoardPanel(Diagram diagram) {
         imageMap = DisplayConfiguration.setImageMap();
@@ -51,6 +53,9 @@ public class BoardPanel extends JPanel {
             }
             if (doPaintLegalMoves) {
                 paintLegalMoves(g);
+            }
+            if(doPaintWeakPoints){
+                paintWeakPoints(g);
             }
         }
     }
@@ -129,11 +134,17 @@ public class BoardPanel extends JPanel {
     private void paintFieldCoverage(Position position, ChessBoardCoverageAnalyzer.Coverage coverage, Graphics g) {
         if (coverage == ChessBoardCoverageAnalyzer.Coverage.STRONG) {
             g.setColor(Color.green);
-            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale), (8 - position.getY()) * scale + partOf(0.05, scale), partOf(0.9, scale), partOf(0.9, scale));
+            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale),
+                    (8 - position.getY()) * scale + partOf(0.05, scale),
+                    partOf(0.9, scale),
+                    partOf(0.9, scale));
         }
         if (coverage == ChessBoardCoverageAnalyzer.Coverage.WEAK) {
             g.setColor(Color.red);
-            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale), (8 - position.getY()) * scale + partOf(0.05, scale), partOf(0.9, scale), partOf(0.9, scale));
+            g.drawRect((position.getX() - 1) * scale + partOf(0.05, scale),
+                    (8 - position.getY()) * scale + partOf(0.05, scale),
+                    partOf(0.9, scale),
+                    partOf(0.9, scale));
         }
     }
 
@@ -146,6 +157,22 @@ public class BoardPanel extends JPanel {
                         GraphicAnnotation.DrawColor.GREEN))
                 .map(CenteredScaledArrow::new)
                 .forEach(scaledArrow -> paintArrow(scaledArrow, g));
+    }
+
+    private void paintWeakPoints(Graphics g) {
+        new ChessBoardWeakPointsAnalyzer(diagram.getBoard()).getWeakPoints(chess.color.Color.white).forEach(position -> paintWeakPoint(position, g, Color.RED));
+        new ChessBoardWeakPointsAnalyzer(diagram.getBoard()).getWeakPoints(chess.color.Color.black).forEach(position -> paintWeakPoint(position, g, Color.GREEN));
+    }
+
+    private void paintWeakPoint(Position position, Graphics g, Color color) {
+        g.setColor(color);
+        g.drawRoundRect((position.getX() - 1) * scale + partOf(0.1, scale),
+                (8 - position.getY()) * scale + partOf(0.1, scale),
+                partOf(0.8, scale),
+                partOf(0.8, scale),
+                partOf(0.1, scale),
+                partOf(0.1, scale)
+        );
     }
 
     private Color convertColor(GraphicAnnotation.DrawColor color) {
@@ -169,6 +196,11 @@ public class BoardPanel extends JPanel {
 
     public void swapDoPaintLegalMoves() {
         doPaintLegalMoves = !doPaintLegalMoves;
+        repaint();
+    }
+
+    public void swapDoPaintWeakPoints() {
+        doPaintWeakPoints = !doPaintWeakPoints;
         repaint();
     }
 
