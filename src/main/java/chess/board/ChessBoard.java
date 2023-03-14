@@ -14,7 +14,6 @@ import chess.moves.ValidMove;
 import chess.pieces.Piece;
 
 import java.util.*;
-import java.util.List;
 
 public class ChessBoard {
     private final Board board;
@@ -24,12 +23,14 @@ public class ChessBoard {
     private final ChessBoardUtility utility = new ChessBoardUtility(this);
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
     private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
+    private final ValidMoveGenerator generator;
 
     public ChessBoard() {
         board = Board.getStart();
         color = Color.white;
         castleRequirements = new CastleRequirements();
         lastMove = null;
+        generator = new ValidMoveGenerator(this);
     }
 
     private ChessBoard(Board board, Color color, CastleRequirements castleRequirements, ValidMove moveCreatingBoard) {
@@ -37,6 +38,7 @@ public class ChessBoard {
         this.color = color;
         this.castleRequirements = castleRequirements;
         this.lastMove = moveCreatingBoard;
+        generator = new ValidMoveGenerator(this);
     }
 
     public static ChessBoard getBlank(Color color) {
@@ -109,20 +111,7 @@ public class ChessBoard {
         return utility;
     }
 
-    public List<ValidMove> getAllPossibleValidMoves() {
-        return utility.getPiecesOfColor(color).stream()
-                .flatMap(piece -> piece.getPossibleEndPositions().stream()
-                        .map(position -> new RawMove(piece.getPosition(), position)))
-                .map(move -> {
-                    try {
-                        return Optional.of(validMoveFactory.createValidMove(move));
-                    } catch (IllegalMoveException | ChessAxiomViolation e) {
-                        return Optional.empty();
-                    }
-                })
-                .filter(Optional::isPresent)
-                .map(Optional::get)
-                .map(object -> (ValidMove) object)
-                .toList();
+    public ValidMoveGenerator getGenerator() {
+        return generator;
     }
 }
