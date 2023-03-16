@@ -54,7 +54,7 @@ public class BoardPanel extends JPanel {
             if (doPaintLegalMoves) {
                 paintLegalMoves(g);
             }
-            if(doPaintWeakPoints){
+            if (doPaintWeakPoints) {
                 paintWeakPoints(g);
             }
         }
@@ -104,7 +104,6 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintArrow(CenteredScaledArrow arrow, Graphics g) {
-        Log.debug(arrow.toString());
         Vector vector = arrow.toVector().normalize().toVector(partOf(0.2, scale));
         DrawableLine firstLine = new ScaledArrow(arrow.getEnd().toScaledPosition(),
                 arrow.getEnd().moveByVector(vector.rotate(150)), arrow.getColor());
