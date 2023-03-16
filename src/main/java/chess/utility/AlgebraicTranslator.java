@@ -1,6 +1,5 @@
 package chess.utility;
 
-import chess.board.Board;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
@@ -9,14 +8,14 @@ import chess.pieces.*;
 
 public class AlgebraicTranslator {
     public static RawMove longAlgebraicToMove(String move, Color color) {
-        if (move.equals("0-0")) {
+        if (move.equals("O-O")) {
             if (color.isWhite()) {
                 return new RawMove(new Position(5, 1), new Position(7, 1));
             } else {
                 return new RawMove(new Position(5, 8), new Position(7, 8));
             }
         }
-        if (move.equals("0-0-0")) {
+        if (move.equals("O-O-O")) {
             if (color.isWhite()) {
                 return new RawMove(new Position(5, 1), new Position(3, 1));
             } else {
@@ -95,24 +94,6 @@ public class AlgebraicTranslator {
             case 'g' -> 7;
             case 'h' -> 8;
             default -> throw new IllegalArgumentException("Not valid column:" + column);
-        };
-    }
-
-    public static String numberToFigure(int figure) {
-        return switch (figure) {
-            case Board.WPAWN -> "BP";
-            case Board.WROOK -> "BW";
-            case Board.WKNIGHT -> "BS";
-            case Board.WBISHOP -> "BG";
-            case Board.WQUEEN -> "BH";
-            case Board.WKING -> "BK";
-            case Board.BPAWN -> "CP";
-            case Board.BROOK -> "CW";
-            case Board.BKNIGHT -> "CS";
-            case Board.BBISHOP -> "CG";
-            case Board.BQUEEN -> "CH";
-            case Board.BKING -> "CK";
-            default -> throw new IllegalArgumentException("Not a board figure id:" + figure);
         };
     }
 
