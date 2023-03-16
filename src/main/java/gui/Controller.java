@@ -19,16 +19,14 @@ public class Controller {
     private final BoardPanel boardPanel;
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
-    private KeyboardListener keyboardListener;
-    private boolean isEditingAnnotation = false;
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
         this.boardPanel = boardPanel;
     }
 
-    public void executeDragAction(RawMove move) {
-        if (isEditingAnnotation) {
+    public void executeDragAction(RawMove move, boolean isControlDown) {
+        if (isControlDown) {
             if (arrowAnnotationExists(move)) {
                 Log.log().info("Remove arrow annotation " + move);
                 dataModel.getActualNode()
@@ -59,8 +57,8 @@ public class Controller {
                 .anyMatch(arrowAnnotation -> arrowAnnotation.moveEquals(move));
     }
 
-    public void executeClickAction(Position position) {
-        if (isEditingAnnotation) {
+    public void executeClickAction(Position position, boolean isControlDown) {
+        if (isControlDown) {
             if (fieldAnnotationExists(position)) {
                 Log.log().info("Remove field annotation " + position);
                 dataModel.getActualNode()
@@ -105,14 +103,6 @@ public class Controller {
         return new JTree(dataModel);
     }
 
-    public void setKeyboardListener(KeyboardListener keyboardListener) {
-        this.keyboardListener = keyboardListener;
-    }
-
-    public void setEditingAnnotation(boolean editingAnnotation) {
-        isEditingAnnotation = editingAnnotation;
-    }
-
     public int getScale() {
         return boardPanel.getScale();
     }
@@ -123,9 +113,5 @@ public class Controller {
 
     public void setTextAnnotation(String text) {
         dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
-    }
-
-    public boolean isEditingAnnotation() {
-        return isEditingAnnotation;
     }
 }

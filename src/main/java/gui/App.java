@@ -70,7 +70,6 @@ public class App {
     private void setUpBoardPanel() {
         boardPanel.addMouseListener(new BoardMouseListener(controller));
         boardPanel.setFocusable(true);
-        boardPanel.addKeyListener(new KeyboardListener(controller));
         boardPanel.setSize(480, 480);
     }
 
