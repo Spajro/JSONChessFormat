@@ -1,6 +1,6 @@
 package gui.board;
 
-import chess.board.Board;
+import chess.board.lowlevel.Board;
 import chess.Position;
 import chess.moves.RawMove;
 import gui.Controller;

@@ -1,5 +1,6 @@
-package chess.board;
+package chess.board.lowlevel;
 
+import chess.board.ChessBoard;
 import chess.fields.EmptyField;
 import chess.fields.Field;
 import chess.pieces.*;

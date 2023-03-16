@@ -1,6 +1,6 @@
 package gui;
 
-import chess.board.Board;
+import chess.board.lowlevel.Board;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

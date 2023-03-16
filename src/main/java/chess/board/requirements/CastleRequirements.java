@@ -1,4 +1,4 @@
-package chess.board;
+package chess.board.requirements;
 
 import chess.color.Color;
 

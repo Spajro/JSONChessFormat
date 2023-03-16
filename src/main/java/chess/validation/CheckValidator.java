@@ -2,7 +2,7 @@ package chess.validation;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.board.ChessBoardUtility;
+import chess.board.features.ChessBoardUtility;
 import chess.color.Color;
 import chess.exceptions.ChessAxiomViolation;
 import chess.moves.RawMove;

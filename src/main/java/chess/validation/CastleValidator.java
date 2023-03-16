@@ -1,7 +1,7 @@
 package chess.validation;
 
 import chess.Position;
-import chess.board.CastleRequirements;
+import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;

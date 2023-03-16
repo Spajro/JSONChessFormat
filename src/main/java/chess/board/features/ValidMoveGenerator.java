@@ -1,6 +1,7 @@
-package chess.board;
+package chess.board.features;
 
 import chess.Position;
+import chess.board.ChessBoard;
 import chess.color.Color;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalMoveException;

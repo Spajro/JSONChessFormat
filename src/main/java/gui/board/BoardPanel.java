@@ -1,10 +1,10 @@
 package gui.board;
 
 import chess.Position;
-import chess.board.Board;
-import chess.board.BoardWrapper;
-import chess.board.ChessBoardCoverageAnalyzer;
-import chess.board.ChessBoardWeakPointsAnalyzer;
+import chess.board.lowlevel.Board;
+import chess.board.lowlevel.BoardWrapper;
+import chess.board.features.ChessBoardCoverageAnalyzer;
+import chess.board.features.ChessBoardWeakPointsAnalyzer;
 import chess.moves.ValidMove;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;

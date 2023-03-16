@@ -1,6 +1,6 @@
 package chess.moves;
 
-import chess.board.Board;
+import chess.board.lowlevel.Board;
 import chess.Position;
 
 public class Castle implements ValidMove {

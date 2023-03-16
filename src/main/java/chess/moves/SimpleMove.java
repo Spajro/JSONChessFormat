@@ -1,6 +1,6 @@
 package chess.moves;
 
-import chess.board.Board;
+import chess.board.lowlevel.Board;
 
 public class SimpleMove extends RawMove implements ValidMove {
     private final Board board;
