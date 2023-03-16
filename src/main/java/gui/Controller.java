@@ -39,7 +39,8 @@ public class Controller {
                 Log.log().info("Add arrow annotation " + move);
                 dataModel.getActualNode()
                         .getAnnotations()
-                        .addArrowAnnotation(new ArrowAnnotation(move, getDrawColor()));
+                        .getArrowAnnotations()
+                        .add(new ArrowAnnotation(move, getDrawColor()));
             }
         } else {
             dataModel.makeMove(move);
@@ -70,7 +71,8 @@ public class Controller {
                 Log.log().info("Add field annotation " + position);
                 dataModel.getActualNode()
                         .getAnnotations()
-                        .addFieldAnnotation(new FieldAnnotation(position, getDrawColor()));
+                        .getFieldAnnotations()
+                        .add(new FieldAnnotation(position, getDrawColor()));
             }
             boardPanel.repaint();
         }
