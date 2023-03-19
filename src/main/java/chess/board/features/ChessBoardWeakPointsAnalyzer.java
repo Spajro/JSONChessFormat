@@ -3,7 +3,8 @@ package chess.board.features;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.fields.Field;
+import chess.board.lowlevel.Field;
+import chess.pieces.Piece;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class ChessBoardWeakPointsAnalyzer {
                 .filter(Field::hasPiece)
                 .map(Field::getPiece)
                 .filter(piece -> piece.getColor().equal(color))
-                .map(Field::getPosition)
+                .map(Piece::getPosition)
                 .collect(Collectors.toSet());
     }
 }

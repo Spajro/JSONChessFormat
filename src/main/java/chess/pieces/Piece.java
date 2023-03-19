@@ -1,18 +1,21 @@
 package chess.pieces;
 
 import chess.board.ChessBoard;
-import chess.fields.Field;
+import chess.board.lowlevel.Field;
 import chess.Position;
 import chess.color.Color;
 
 import java.util.Optional;
 import java.util.Set;
 
-public abstract class Piece extends Field {
+public abstract class Piece {
+    protected final Position position;
+    protected final ChessBoard chessBoard;
     protected final Color color;
 
     public Piece(Color color, Position position, ChessBoard chessBoard) {
-        super(position, chessBoard);
+        this.position = position;
+        this.chessBoard = chessBoard;
         this.color = color;
     }
 
@@ -31,21 +34,6 @@ public abstract class Piece extends Field {
      */
     public abstract Set<Position> getAttackedPositions();
 
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public boolean hasPiece() {
-        return true;
-    }
-
-    @Override
-    public Piece getPiece() {
-        return this;
-    }
-
     public Color getColor() {
         return color;
     }
@@ -55,5 +43,9 @@ public abstract class Piece extends Field {
             return Optional.ofNullable(chessBoard.getField(position));
         }
         return Optional.empty();
+    }
+
+    public Position getPosition() {
+        return position;
     }
 }

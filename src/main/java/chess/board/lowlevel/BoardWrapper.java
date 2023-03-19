@@ -1,8 +1,6 @@
 package chess.board.lowlevel;
 
 import chess.board.ChessBoard;
-import chess.fields.EmptyField;
-import chess.fields.Field;
 import chess.pieces.*;
 import chess.Position;
 import chess.color.Color;
@@ -13,7 +11,7 @@ public class BoardWrapper {
         return convertIdToField(chessBoard, position, valueFromBoard);
     }
 
-    public static byte getBoardIdFromPiece(Piece piece){
+    public static byte getBoardIdFromPiece(Piece piece) {
         if (piece instanceof Pawn) {
             return piece.getColor().isWhite() ? Board.WPAWN : Board.BPAWN;
         }
@@ -36,8 +34,8 @@ public class BoardWrapper {
     }
 
     private static Field convertIdToField(ChessBoard chessBoard, Position position, int id) {
-        return switch (id) {
-            case Board.EMPTY -> new EmptyField(position, chessBoard);
+        return new Field(position, switch (id) {
+            case Board.EMPTY -> null;
             case Board.WPAWN -> new Pawn(Color.white, position, chessBoard);
             case Board.WROOK -> new Rook(Color.white, position, chessBoard);
             case Board.WBISHOP -> new Bishop(Color.white, position, chessBoard);
@@ -51,6 +49,6 @@ public class BoardWrapper {
             case Board.BKING -> new King(Color.black, position, chessBoard);
             case Board.BKNIGHT -> new Knight(Color.black, position, chessBoard);
             default -> throw new IllegalArgumentException("unknown board figure id");
-        };
+        });
     }
 }

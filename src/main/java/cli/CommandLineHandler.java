@@ -1,6 +1,6 @@
 package cli;
 
-import chess.fields.Field;
+import chess.board.lowlevel.Field;
 import data.model.Diagram;
 import chess.Position;
 import chess.color.Color;

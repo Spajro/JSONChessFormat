@@ -5,7 +5,7 @@ import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
 import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;
-import chess.fields.Field;
+import chess.board.lowlevel.Field;
 import chess.moves.RawMove;
 
 import java.util.HashSet;

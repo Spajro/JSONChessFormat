@@ -19,9 +19,29 @@ public class PerftTest {
         }
     }
 
+    long threadedPerft(ChessBoard board, int n) {
+        if (n == 1) {
+            return board.getGenerator().getAllPossibleValidMoves().size();
+        } else {
+            return board.getGenerator().getAllPossibleValidMoves().stream()
+                    .map(board::makeMove)
+                    .map(chessBoard -> new PerftThread(chessBoard, n-1))
+                    .peek(PerftThread::run)
+                    .peek(perftThread -> {
+                        try {
+                            perftThread.join();
+                        } catch (InterruptedException e) {
+                            throw new RuntimeException(e);
+                        }
+                    })
+                    .mapToLong(PerftThread::getResult)
+                    .sum();
+        }
+    }
+
     long timedPerft(ChessBoard board, int n) {
         long startTime = System.nanoTime();
-        long result = perft(board, n);
+        long result = threadedPerft(board, n);
         long endTime = System.nanoTime();
 
         long nanoDuration = (endTime - startTime);
@@ -75,5 +95,25 @@ public class PerftTest {
         long score = timedPerft(new ChessBoard(), 6);
         System.out.println("Deviation for n = " + 6 + " is " + deviation(119060324, score));
         assertEquals(119060324, score);
+    }
+
+    class PerftThread extends Thread {
+        private long result = 0;
+        private final ChessBoard chessBoard;
+        private final int n;
+
+        public PerftThread(ChessBoard chessBoard, int n) {
+            this.chessBoard = chessBoard;
+            this.n = n;
+        }
+
+        @Override
+        public void run() {
+            result = perft(chessBoard, n);
+        }
+
+        public long getResult() {
+            return result;
+        }
     }
 }
