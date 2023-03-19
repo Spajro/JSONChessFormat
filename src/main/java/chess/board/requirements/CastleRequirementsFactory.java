@@ -1,7 +1,6 @@
 package chess.board.requirements;
 
 import chess.Position;
-import chess.board.lowlevel.BoardWrapper;
 import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
 import chess.moves.ValidMove;
@@ -14,7 +13,7 @@ public class CastleRequirementsFactory {
     public CastleRequirementsFactory(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
     }
-    
+
     public CastleRequirements getNextRequirements(ValidMove move) {
         if (kingMoved(move)) {
             return chessBoard.getCastleRequirements().kingMoved(chessBoard.getColor());
@@ -26,6 +25,7 @@ public class CastleRequirementsFactory {
             return chessBoard.getCastleRequirements().copy();
         }
     }
+
     private boolean aColumnRookMoved(ValidMove move) {
         return isRookOnPosition(move.getStartPosition()) && move.getStartPosition().getX() == 1 && move.getStartPosition().getY() == getStartRow();
     }
@@ -39,7 +39,7 @@ public class CastleRequirementsFactory {
     }
 
     private boolean isRookOnPosition(Position position) {
-        Field field = BoardWrapper.getFieldFromBoard(chessBoard, position);
+        Field field = chessBoard.getField(position);
         if (field.isEmpty()) {
             return false;
         }
@@ -48,15 +48,16 @@ public class CastleRequirementsFactory {
     }
 
     private boolean isKingOnPosition(Position position) {
-        Field field = BoardWrapper.getFieldFromBoard(chessBoard, position);
+        Field field = chessBoard.getField(position);
         if (field.isEmpty()) {
             return false;
         }
         Piece piece = field.getPiece();
         return (piece instanceof King) && piece.getColor().equal(chessBoard.getColor());
     }
+
     private int getStartRow() {
-        if(chessBoard.getColor().isWhite()) {
+        if (chessBoard.getColor().isWhite()) {
             return 1;
         } else {
             return 8;

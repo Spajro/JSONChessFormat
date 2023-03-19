@@ -26,6 +26,7 @@ public class ChessBoard {
     private final Color color;
     private final CastleRequirements castleRequirements;
     private final ValidMove lastMove;
+    private final BoardWrapper boardWrapper = new BoardWrapper(this);
     private final ChessBoardUtility utility = new ChessBoardUtility(this);
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
     private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
@@ -53,15 +54,13 @@ public class ChessBoard {
 
     public ChessBoard put(Piece piece) {
         if (getField(piece.getPosition()).isEmpty()) {
-            Board tempBoard = Board.getCopy(board);
-            tempBoard.write(BoardWrapper.getBoardIdFromPiece(piece), piece.getPosition());
-            return new ChessBoard(tempBoard, color, castleRequirements, lastMove);
+            return new ChessBoard(boardWrapper.putFieldToBoard(new Field(piece.getPosition(), piece)), color, castleRequirements, lastMove);
         }
         throw new IllegalArgumentException("Cant put to board");
     }
 
     public Field getField(Position position) {
-        return BoardWrapper.getFieldFromBoard(this, position);
+        return boardWrapper.getFieldFromBoard(position);
     }
 
     public MoveResult makeMove(RawMove move) {

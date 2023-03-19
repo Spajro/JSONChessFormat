@@ -6,12 +6,27 @@ import chess.Position;
 import chess.color.Color;
 
 public class BoardWrapper {
-    public static Field getFieldFromBoard(ChessBoard chessBoard, Position position) {
-        int valueFromBoard = chessBoard.getBoard().read(position);
-        return convertIdToField(chessBoard, position, valueFromBoard);
+    private final ChessBoard chessBoard;
+
+    public BoardWrapper(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
     }
 
-    public static byte getBoardIdFromPiece(Piece piece) {
+    public Field getFieldFromBoard(Position position) {
+        return convertIdToField(position, chessBoard.getBoard().read(position));
+    }
+
+    public Board putFieldToBoard(Field field) {
+        Board tempBoard = Board.getCopy(chessBoard.getBoard());
+        if (field.isEmpty()) {
+            tempBoard.write(Board.EMPTY, field.getPosition());
+        } else {
+            tempBoard.write(getBoardIdFromPiece(field.getPiece()), field.getPosition());
+        }
+        return tempBoard;
+    }
+
+    private byte getBoardIdFromPiece(Piece piece) {
         if (piece instanceof Pawn) {
             return piece.getColor().isWhite() ? Board.WPAWN : Board.BPAWN;
         }
@@ -30,10 +45,10 @@ public class BoardWrapper {
         if (piece instanceof King) {
             return piece.getColor().isWhite() ? Board.WKING : Board.BKING;
         }
-        throw new IllegalStateException("Should not be throwed");
+        throw new IllegalStateException();
     }
 
-    private static Field convertIdToField(ChessBoard chessBoard, Position position, int id) {
+    private Field convertIdToField(Position position, int id) {
         return new Field(position, switch (id) {
             case Board.EMPTY -> null;
             case Board.WPAWN -> new Pawn(Color.white, position, chessBoard);
