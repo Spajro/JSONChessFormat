@@ -1,6 +1,6 @@
 package gui;
 
-import chess.board.lowlevel.Board;
+import chess.pieces.Piece;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -24,25 +24,25 @@ public class DisplayConfiguration {
     public static final String BQUEENPATH = "black/queen";
     public static final String BKINGPATH = "/black/king";
     public static final String FORMAT = ".bmp";
+    HashMap<Piece.Type, ImageIcon> whiteImageMap = new HashMap<>();
+    HashMap<Piece.Type, ImageIcon> blackImageMap = new HashMap<>();
 
-    public static HashMap<Byte, ImageIcon> setImageMap() {
-        HashMap<Byte, ImageIcon> imageMap = new HashMap<>();
-        imageMap.put(Board.WPAWN, getImageFromResources(WPAWNPATH));
-        imageMap.put(Board.WKNIGHT, getImageFromResources(WKNIGHTPATH));
-        imageMap.put(Board.WBISHOP, getImageFromResources(WBISHOPPATH));
-        imageMap.put(Board.WROOK, getImageFromResources(WROOKPATH));
-        imageMap.put(Board.WKING, getImageFromResources(WKINGPATH));
-        imageMap.put(Board.WQUEEN, getImageFromResources(WQUEENPATH));
-        imageMap.put(Board.BPAWN, getImageFromResources(BPAWNPATH));
-        imageMap.put(Board.BKNIGHT, getImageFromResources(BKNIGHTPATH));
-        imageMap.put(Board.BBISHOP, getImageFromResources(BBISHOPPATH));
-        imageMap.put(Board.BROOK, getImageFromResources(BROOKPATH));
-        imageMap.put(Board.BKING, getImageFromResources(BKINGPATH));
-        imageMap.put(Board.BQUEEN, getImageFromResources(BQUEENPATH));
-        return imageMap;
+    public DisplayConfiguration() {
+        whiteImageMap.put(Piece.Type.PAWN, getImageFromResources(WPAWNPATH));
+        whiteImageMap.put(Piece.Type.KNIGHT, getImageFromResources(WKNIGHTPATH));
+        whiteImageMap.put(Piece.Type.BISHOP, getImageFromResources(WBISHOPPATH));
+        whiteImageMap.put(Piece.Type.ROOK, getImageFromResources(WROOKPATH));
+        whiteImageMap.put(Piece.Type.KING, getImageFromResources(WKINGPATH));
+        whiteImageMap.put(Piece.Type.QUEEN, getImageFromResources(WQUEENPATH));
+        blackImageMap.put(Piece.Type.PAWN, getImageFromResources(BPAWNPATH));
+        blackImageMap.put(Piece.Type.KNIGHT, getImageFromResources(BKNIGHTPATH));
+        blackImageMap.put(Piece.Type.BISHOP, getImageFromResources(BBISHOPPATH));
+        blackImageMap.put(Piece.Type.ROOK, getImageFromResources(BROOKPATH));
+        blackImageMap.put(Piece.Type.KING, getImageFromResources(BKINGPATH));
+        blackImageMap.put(Piece.Type.QUEEN, getImageFromResources(BQUEENPATH));
     }
 
-    private static ImageIcon getImageFromResources(String path) {
+    private ImageIcon getImageFromResources(String path) {
         URL url = DisplayConfiguration.class.getResource(fullPieceImagePath(path));
         try {
             if (url == null) {
@@ -55,7 +55,15 @@ public class DisplayConfiguration {
         }
     }
 
-    private static String fullPieceImagePath(String piecePath) {
+    private String fullPieceImagePath(String piecePath) {
         return FOLDERPATH + piecePath + FORMAT;
+    }
+
+    public ImageIcon getImage(Piece piece) {
+        if (piece.getColor().isWhite()) {
+            return whiteImageMap.get(piece.getType());
+        } else {
+            return blackImageMap.get(piece.getType());
+        }
     }
 }

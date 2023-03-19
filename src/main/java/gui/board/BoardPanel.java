@@ -2,7 +2,6 @@ package gui.board;
 
 import chess.Position;
 import chess.board.lowlevel.Board;
-import chess.board.lowlevel.BoardWrapper;
 import chess.board.features.ChessBoardCoverageAnalyzer;
 import chess.board.features.ChessBoardWeakPointsAnalyzer;
 import chess.moves.ValidMove;
@@ -12,11 +11,9 @@ import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import gui.DisplayConfiguration;
 import gui.scaling.*;
-import log.Log;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Math.min;
@@ -27,14 +24,14 @@ public class BoardPanel extends JPanel {
     private Color colBack = Color.WHITE;
     private Color colWhiteField = Color.WHITE;
     private Color colBlackField = Color.DARK_GRAY;
-    private HashMap<Byte, ImageIcon> imageMap;
+    private DisplayConfiguration displayConfiguration;
 
     private boolean doPaintCoverage = false;
     private boolean doPaintLegalMoves = false;
     private boolean doPaintWeakPoints = false;
 
     public BoardPanel(Diagram diagram) {
-        imageMap = DisplayConfiguration.setImageMap();
+        displayConfiguration = new DisplayConfiguration();
         this.diagram = diagram;
     }
 
@@ -82,7 +79,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPiece(Piece piece, Graphics g) {
-        ImageIcon image = imageMap.get(BoardWrapper.getBoardIdFromPiece(piece));
+        ImageIcon image = displayConfiguration.getImage(piece);
         g.drawImage(image.getImage(),
                 (piece.getPosition().getX() - 1) * scale + partOf(0.1, scale),
                 (8 - piece.getPosition().getY()) * scale + partOf(0.1, scale),
