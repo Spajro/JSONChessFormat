@@ -8,6 +8,7 @@ import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
 import gui.board.BoardPanel;
+import gui.board.SpecialKeysMap;
 import gui.option.OptionPanel;
 import gui.option.TreeMouseListener;
 import log.Log;
@@ -25,8 +26,8 @@ public class Controller {
         this.boardPanel = boardPanel;
     }
 
-    public void executeDragAction(RawMove move, boolean isControlDown) {
-        if (isControlDown) {
+    public void executeDragAction(RawMove move, SpecialKeysMap keysMap) {
+        if (keysMap.isAnyPressed()) {
             if (arrowAnnotationExists(move)) {
                 Log.log().info("Remove arrow annotation " + move);
                 dataModel.getActualNode()
@@ -38,7 +39,7 @@ public class Controller {
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getArrowAnnotations()
-                        .add(new ArrowAnnotation(move, getDrawColor()));
+                        .add(new ArrowAnnotation(move, getDrawColor(keysMap)));
             }
         } else {
             dataModel.makeMove(move);
@@ -57,8 +58,8 @@ public class Controller {
                 .anyMatch(arrowAnnotation -> arrowAnnotation.moveEquals(move));
     }
 
-    public void executeClickAction(Position position, boolean isControlDown) {
-        if (isControlDown) {
+    public void executeClickAction(Position position, SpecialKeysMap keysMap) {
+        if (keysMap.isAnyPressed()) {
             if (fieldAnnotationExists(position)) {
                 Log.log().info("Remove field annotation " + position);
                 dataModel.getActualNode()
@@ -70,7 +71,7 @@ public class Controller {
                 dataModel.getActualNode()
                         .getAnnotations()
                         .getFieldAnnotations()
-                        .add(new FieldAnnotation(position, getDrawColor()));
+                        .add(new FieldAnnotation(position, getDrawColor(keysMap)));
             }
             boardPanel.repaint();
         }
@@ -84,8 +85,17 @@ public class Controller {
                 .anyMatch(fieldAnnotation -> fieldAnnotation.positionEquals(position));
     }
 
-    private GraphicAnnotation.DrawColor getDrawColor() {
-        return GraphicAnnotation.DrawColor.BLUE;
+    private GraphicAnnotation.DrawColor getDrawColor(SpecialKeysMap keysMap) {
+        if (keysMap.areAnyTwoPressed()) {
+            return GraphicAnnotation.DrawColor.YELLOW;
+        } else if (keysMap.isControlPressed()) {
+            return GraphicAnnotation.DrawColor.BLUE;
+        } else if (keysMap.isAltPressed()) {
+            return GraphicAnnotation.DrawColor.RED;
+        } else if (keysMap.isShiftPressed()) {
+            return GraphicAnnotation.DrawColor.GREEN;
+        }
+        throw new IllegalStateException("No special keys pressed when choosing annotation color");
     }
 
     public void setTreeMouseListener(TreeMouseListener treeMouseListener) {
