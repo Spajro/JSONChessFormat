@@ -13,6 +13,15 @@ public abstract class Piece {
     protected final ChessBoard chessBoard;
     protected final Color color;
 
+    public enum Type {
+        PAWN,
+        KNIGHT,
+        BISHOP,
+        ROOK,
+        QUEEN,
+        KING,
+    }
+
     public Piece(Color color, Position position, ChessBoard chessBoard) {
         this.position = position;
         this.chessBoard = chessBoard;
@@ -48,4 +57,6 @@ public abstract class Piece {
     public Position getPosition() {
         return position;
     }
+
+    public abstract Type getType();
 }

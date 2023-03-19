@@ -25,4 +25,9 @@ public class Queen extends RestrictedMovementPiece {
     public Set<Position> getAttackedPositions() {
         return getAttackedPositions(Steps.fullSteps);
     }
+
+    @Override
+    public Type getType() {
+        return Type.QUEEN;
+    }
 }

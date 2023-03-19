@@ -25,4 +25,9 @@ public class Bishop extends RestrictedMovementPiece {
     public Set<Position> getAttackedPositions() {
         return getAttackedPositions(Steps.diagonalSteps);
     }
+
+    @Override
+    public Type getType() {
+        return Type.BISHOP;
+    }
 }

@@ -49,4 +49,9 @@ public class Knight extends Piece {
                 .collect(Collectors.toSet());
     }
 
+    @Override
+    public Type getType() {
+        return Type.KNIGHT;
+    }
+
 }

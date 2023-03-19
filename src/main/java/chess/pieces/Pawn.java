@@ -76,6 +76,11 @@ public class Pawn extends Piece {
         return result;
     }
 
+    @Override
+    public Type getType() {
+        return Type.PAWN;
+    }
+
     private boolean isOnStartLine(Position temporaryPosition) {
         return (temporaryPosition.getY() == 2 && color.isWhite()) || (temporaryPosition.getY() == 7 && color.isBlack());
     }

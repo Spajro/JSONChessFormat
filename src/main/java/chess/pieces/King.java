@@ -55,4 +55,9 @@ public class King extends Piece {
                 .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Type getType() {
+        return Type.KING;
+    }
 }
