@@ -27,7 +27,7 @@ public class MoveValidator {
 
     public boolean isLegalSimpleMove(RawMove move) {
         return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
-                && checkValidator.kingIsNotCheckedAfterMove(move, chessBoard.getColor());
+                && checkValidator.kingIsNotCheckedAfterSimpleMove(move, chessBoard.getColor());
     }
 
     public boolean isLegalEnPassantCapture(RawMove move) {
@@ -36,8 +36,9 @@ public class MoveValidator {
             if (lastMove instanceof SimpleMove simpleMove) {
                 if (chessBoard.getField(simpleMove.getEndPosition()).getPiece() instanceof Pawn) {
                     if (isFarPawnMove(simpleMove) && simpleMove.getStartPosition().getX() == move.getEndPosition().getX()) {
-                        return (move.getEndPosition().getY() == 6 && simpleMove.getStartPosition().getY() == 7)
-                                || (move.getEndPosition().getY() == 3 && simpleMove.getStartPosition().getY() == 2);
+                        return ((move.getEndPosition().getY() == 6 && simpleMove.getStartPosition().getY() == 7)
+                                || (move.getEndPosition().getY() == 3 && simpleMove.getStartPosition().getY() == 2))
+                                && checkValidator.kingIsNotCheckedAfterEnPassantCapture(move, chessBoard.getColor());
                     }
                 }
             }
