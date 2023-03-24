@@ -2,7 +2,6 @@ package chess.validation;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;
 import chess.exceptions.IllegalMoveException;
 import chess.moves.*;
@@ -16,7 +15,7 @@ public class ValidMoveFactory {
         validator = new MoveValidator(chessBoard);
     }
 
-    public ValidMove createValidMove(RawMove move) throws IllegalMoveException, ChessAxiomViolation {
+    public ValidMove createValidMove(RawMove move) throws IllegalMoveException {
         if (validator.isCorrect(move)) {
             if (validator.isLegalCastle(move)) {
                 return createCastle(move);
@@ -39,11 +38,11 @@ public class ValidMoveFactory {
         return new EnPassantCapture(move, chessBoard.getBoard());
     }
 
-    private Castle createCastle(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
+    private Castle createCastle(RawMove move) throws IllegalCastleException {
         return new Castle(move, getRookMove(move), chessBoard.getBoard());
     }
 
-    private RawMove getRookMove(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
+    private RawMove getRookMove(RawMove move) throws IllegalCastleException {
         if (validator.moveToType(move).equals(MoveValidator.CastleType.SHORT)) {
             return new RawMove(new Position(8, getStartRow()), new Position(6, getStartRow()));
         }

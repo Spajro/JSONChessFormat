@@ -1,7 +1,6 @@
 package chess.validation;
 
 import chess.board.ChessBoard;
-import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;
 import chess.moves.RawMove;
 import chess.moves.SimpleMove;
@@ -28,7 +27,7 @@ public class MoveValidator {
                 && chessBoard.getField(move.getStartPosition()).getPiece().getColor().equal(chessBoard.getColor());
     }
 
-    public boolean isLegalSimpleMove(RawMove move) throws ChessAxiomViolation {
+    public boolean isLegalSimpleMove(RawMove move) {
         return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
                 && checkValidator.kingIsNotCheckedAfterMove(move, chessBoard.getColor());
     }
@@ -48,7 +47,7 @@ public class MoveValidator {
         return false;
     }
 
-    public boolean isLegalCastle(RawMove move) throws ChessAxiomViolation {
+    public boolean isLegalCastle(RawMove move) {
         return castleValidator.isLegalCastle(move);
     }
 
@@ -57,7 +56,7 @@ public class MoveValidator {
                 || (simpleMove.getStartPosition().getY() == 7 && simpleMove.getEndPosition().getY() == 5);
     }
 
-    public CastleType moveToType(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
+    public CastleType moveToType(RawMove move) throws IllegalCastleException {
         return castleValidator.moveToType(move);
     }
 }

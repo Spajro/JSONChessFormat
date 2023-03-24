@@ -3,7 +3,6 @@ package chess.validation;
 import chess.Position;
 import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
-import chess.exceptions.ChessAxiomViolation;
 import chess.exceptions.IllegalCastleException;
 import chess.board.lowlevel.Field;
 import chess.moves.RawMove;
@@ -20,7 +19,7 @@ public class CastleValidator {
         checkValidator = new CheckValidator(chessBoard);
     }
 
-    public boolean isLegalCastle(RawMove move) throws ChessAxiomViolation {
+    public boolean isLegalCastle(RawMove move) {
         try {
             MoveValidator.CastleType castleType = moveToType(move);
             return checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
@@ -33,7 +32,7 @@ public class CastleValidator {
         }
     }
 
-    public MoveValidator.CastleType moveToType(RawMove move) throws ChessAxiomViolation, IllegalCastleException {
+    public MoveValidator.CastleType moveToType(RawMove move) throws IllegalCastleException {
         if (move.getStartPosition().equals(checkValidator.getKingPosition(chessBoard.getColor()))) {
             if (move.getEndPosition().getX() == move.getStartPosition().getX() + 2) {
                 return MoveValidator.CastleType.SHORT;
