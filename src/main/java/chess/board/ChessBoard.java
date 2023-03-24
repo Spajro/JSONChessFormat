@@ -7,7 +7,6 @@ import chess.board.lowlevel.BoardWrapper;
 import chess.board.lowlevel.Field;
 import chess.board.requirements.CastleRequirements;
 import chess.board.requirements.CastleRequirementsFactory;
-import chess.exceptions.IllegalMoveException;
 import chess.Position;
 import chess.results.InvalidMoveResult;
 import chess.results.MoveResult;
@@ -63,10 +62,16 @@ public class ChessBoard {
     }
 
     public MoveResult makeMove(RawMove move) {
-        try {
-            ValidMove validMove = validMoveFactory.createValidMove(move);
-            return new ValidMoveResult(new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove));
-        } catch (IllegalMoveException e) {
+        Optional<ValidMove> optionalValidMove = validMoveFactory.createValidMove(move);
+        if (optionalValidMove.isPresent()) {
+            ValidMove validMove = optionalValidMove.get();
+            return new ValidMoveResult(
+                    new ChessBoard(validMove.makeMove(),
+                            color.swap(),
+                            castleRequirementsFactory.getNextRequirements(validMove),
+                            validMove)
+            );
+        } else {
             return new InvalidMoveResult();
         }
     }

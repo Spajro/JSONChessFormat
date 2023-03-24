@@ -3,8 +3,9 @@ package chess.validation;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.exceptions.IllegalCastleException;
-import chess.exceptions.IllegalMoveException;
 import chess.moves.*;
+
+import java.util.Optional;
 
 public class ValidMoveFactory {
     private final ChessBoard chessBoard;
@@ -15,19 +16,23 @@ public class ValidMoveFactory {
         validator = new MoveValidator(chessBoard);
     }
 
-    public ValidMove createValidMove(RawMove move) throws IllegalMoveException {
+    public Optional<ValidMove> createValidMove(RawMove move) {
         if (validator.isCorrect(move)) {
             if (validator.isLegalCastle(move)) {
-                return createCastle(move);
+                try {
+                    return Optional.of(createCastle(move));
+                } catch (IllegalCastleException e) {
+                    return Optional.empty();
+                }
             }
             if (validator.isLegalSimpleMove(move)) {
-                return createSimpleMove(move);
+                return Optional.of(createSimpleMove(move));
             }
             if (validator.isLegalEnPassantCapture(move)) {
-                return createEnPassantCapture(move);
+                return Optional.of(createEnPassantCapture(move));
             }
         }
-        throw new IllegalMoveException("Move not correct");
+        return Optional.empty();
     }
 
     private SimpleMove createSimpleMove(RawMove move) {

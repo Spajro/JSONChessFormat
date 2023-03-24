@@ -7,7 +7,6 @@ import data.json.Jsonable;
 import data.json.ListJsonFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
-import chess.exceptions.IllegalMoveException;
 import chess.moves.RawMove;
 import chess.utility.AlgebraicTranslator;
 import log.Log;
@@ -44,11 +43,8 @@ public class Diagram implements Jsonable {
             ChessBoard tempBoard = ((ValidMoveResult) moveResult).getResult();
             if (!board.equals(tempBoard)) {
                 Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-                try {
-                    nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), new ValidMoveFactory(board).createValidMove(move));
-                } catch (IllegalMoveException e) {
-                    throw new RuntimeException(e);
-                }
+                nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(),
+                        new ValidMoveFactory(board).createValidMove(move).orElseThrow(RuntimeException::new));
                 for (Diagram diagram : nextDiagrams) {
                     if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
                         return diagram;

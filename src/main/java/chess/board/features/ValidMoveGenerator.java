@@ -3,7 +3,6 @@ package chess.board.features;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.exceptions.IllegalMoveException;
 import chess.moves.*;
 import chess.pieces.Pawn;
 import chess.validation.ValidMoveFactory;
@@ -37,13 +36,7 @@ public class ValidMoveGenerator {
         return utility.getPiecesOfColor(color).stream()
                 .flatMap(piece -> piece.getPossibleEndPositions().stream()
                         .map(position -> new RawMove(piece.getPosition(), position)))
-                .map(move -> {
-                    try {
-                        return Optional.of(validMoveFactory.createValidMove(move));
-                    } catch (IllegalMoveException e) {
-                        return Optional.empty();
-                    }
-                })
+                .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(object -> object instanceof SimpleMove)
@@ -58,13 +51,8 @@ public class ValidMoveGenerator {
                 new RawMove(new Position(5, 1), new Position(7, 1)),
                 new RawMove(new Position(5, 1), new Position(3, 1))
         );
-        return legalCastleRawMoves.stream().map(move -> {
-                    try {
-                        return Optional.of(validMoveFactory.createValidMove(move));
-                    } catch (IllegalMoveException e) {
-                        return Optional.empty();
-                    }
-                })
+        return legalCastleRawMoves.stream()
+                .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(object -> object instanceof Castle)
@@ -77,13 +65,7 @@ public class ValidMoveGenerator {
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
                 .flatMap(pawn -> pawn.getAttackedPositions().stream().map(position -> new RawMove(pawn.getPosition(), position)))
-                .map(move -> {
-                    try {
-                        return Optional.of(validMoveFactory.createValidMove(move));
-                    } catch (IllegalMoveException e) {
-                        return Optional.empty();
-                    }
-                })
+                .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(object -> object instanceof EnPassantCapture)
