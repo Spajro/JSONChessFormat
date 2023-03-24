@@ -40,12 +40,19 @@ public class App {
 
     private void createFileMenu(DataModel dataModel) {
         JMenu fileMenu = new JMenu("File");
+
         JMenuItem saveMenuItem = new JMenuItem("Save");
         saveMenuItem.addActionListener(e -> dataModel.saveDataToFile(getFilename()));
+        fileMenu.add(saveMenuItem);
+
         JMenuItem loadMenuItem = new JMenuItem("Load");
         loadMenuItem.addActionListener(e -> dataModel.loadDataFromFile(getFilename()));
-        fileMenu.add(saveMenuItem);
         fileMenu.add(loadMenuItem);
+
+        JMenuItem loadFENMenuItem = new JMenuItem("Load FEN");
+        loadFENMenuItem.addActionListener(e -> dataModel.loadChessBoardFromFEN(getFEN()));
+        fileMenu.add(loadFENMenuItem);
+
         menuBar.add(fileMenu);
     }
 
@@ -75,5 +82,9 @@ public class App {
 
     private String getFilename() {
         return JOptionPane.showInputDialog(frame, "What is name of file?", null);
+    }
+
+    private String getFEN() {
+        return JOptionPane.showInputDialog(frame, "Write FEN you want to import", null);
     }
 }

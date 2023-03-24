@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.RawMove;
+import chess.utility.FENTranslator;
 import data.json.Jsonable;
 import log.Log;
 
@@ -14,6 +15,7 @@ import java.util.LinkedList;
 public class DataModel implements TreeModel, Jsonable {
     private Diagram actualNode;
     private final FileManager fileManager = new FileManager();
+    private final FENTranslator fenTranslator = new FENTranslator();
     private final LinkedList<TreeModelListener> treeModelListeners;
 
     public DataModel() {
@@ -32,6 +34,11 @@ public class DataModel implements TreeModel, Jsonable {
 
     public void saveDataToFile(String filename) {
         fileManager.save(filename, toJson());
+    }
+
+    public void loadChessBoardFromFEN(String fen) {
+        actualNode = new Diagram(fenTranslator.parseFEN(fen), null, 0);
+        notifyListenersOnNewTree(actualNode);
     }
 
     public void makeMove(RawMove m) {
