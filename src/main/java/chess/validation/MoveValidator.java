@@ -1,11 +1,12 @@
 package chess.validation;
 
 import chess.board.ChessBoard;
-import chess.exceptions.IllegalCastleException;
 import chess.moves.RawMove;
 import chess.moves.SimpleMove;
 import chess.moves.ValidMove;
 import chess.pieces.Pawn;
+
+import java.util.Optional;
 
 public class MoveValidator {
     private final ChessBoard chessBoard;
@@ -56,7 +57,7 @@ public class MoveValidator {
                 || (simpleMove.getStartPosition().getY() == 7 && simpleMove.getEndPosition().getY() == 5);
     }
 
-    public CastleType moveToType(RawMove move) throws IllegalCastleException {
+    public Optional<CastleType> moveToType(RawMove move) {
         return castleValidator.moveToType(move);
     }
 }

@@ -3,11 +3,11 @@ package chess.validation;
 import chess.Position;
 import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
-import chess.exceptions.IllegalCastleException;
 import chess.board.lowlevel.Field;
 import chess.moves.RawMove;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class CastleValidator {
@@ -20,28 +20,29 @@ public class CastleValidator {
     }
 
     public boolean isLegalCastle(RawMove move) {
-        try {
-            MoveValidator.CastleType castleType = moveToType(move);
+        Optional<MoveValidator.CastleType> optionalCastleType = moveToType(move);
+        if (optionalCastleType.isPresent()) {
+            MoveValidator.CastleType castleType = optionalCastleType.get();
             return checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
                     && isCastleLegalInRequirements(castleType)
                     && !anyPositionKingsPassesIsAttacked(castleType)
                     && !anyPositionBetweenKingAndRookIsOccupied(castleType)
                     && !checkValidator.isKingChecked(chessBoard.getColor());
-        } catch (IllegalCastleException e) {
+        } else {
             return false;
         }
     }
 
-    public MoveValidator.CastleType moveToType(RawMove move) throws IllegalCastleException {
+    public Optional<MoveValidator.CastleType> moveToType(RawMove move) {
         if (move.getStartPosition().equals(checkValidator.getKingPosition(chessBoard.getColor()))) {
             if (move.getEndPosition().getX() == move.getStartPosition().getX() + 2) {
-                return MoveValidator.CastleType.SHORT;
+                return Optional.of(MoveValidator.CastleType.SHORT);
             }
             if (move.getEndPosition().getX() == move.getStartPosition().getX() - 2) {
-                return MoveValidator.CastleType.LONG;
+                return Optional.of(MoveValidator.CastleType.LONG);
             }
         }
-        throw new IllegalCastleException("Move is not a castle");
+        return Optional.empty();
     }
 
     private boolean anyPositionKingsPassesIsAttacked(MoveValidator.CastleType castleType) {
@@ -59,7 +60,7 @@ public class CastleValidator {
                 .size() > 0;
     }
 
-    private boolean isCastleLegalInRequirements(MoveValidator.CastleType castleType) throws IllegalCastleException {
+    private boolean isCastleLegalInRequirements(MoveValidator.CastleType castleType) {
         CastleRequirements castleRequirements = chessBoard.getCastleRequirements();
         if (chessBoard.getColor().isWhite()) {
             if (castleType.equals(MoveValidator.CastleType.SHORT)) {

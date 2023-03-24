@@ -2,7 +2,6 @@ package chess.validation;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.exceptions.IllegalCastleException;
 import chess.moves.*;
 
 import java.util.Optional;
@@ -19,11 +18,7 @@ public class ValidMoveFactory {
     public Optional<ValidMove> createValidMove(RawMove move) {
         if (validator.isCorrect(move)) {
             if (validator.isLegalCastle(move)) {
-                try {
-                    return Optional.of(createCastle(move));
-                } catch (IllegalCastleException e) {
-                    return Optional.empty();
-                }
+                return Optional.of(createCastle(move));
             }
             if (validator.isLegalSimpleMove(move)) {
                 return Optional.of(createSimpleMove(move));
@@ -43,15 +38,16 @@ public class ValidMoveFactory {
         return new EnPassantCapture(move, chessBoard.getBoard());
     }
 
-    private Castle createCastle(RawMove move) throws IllegalCastleException {
+    private Castle createCastle(RawMove move) {
         return new Castle(move, getRookMove(move), chessBoard.getBoard());
     }
 
-    private RawMove getRookMove(RawMove move) throws IllegalCastleException {
-        if (validator.moveToType(move).equals(MoveValidator.CastleType.SHORT)) {
+    private RawMove getRookMove(RawMove move) {
+        MoveValidator.CastleType moveType = validator.moveToType(move).orElseThrow();
+        if (moveType.equals(MoveValidator.CastleType.SHORT)) {
             return new RawMove(new Position(8, getStartRow()), new Position(6, getStartRow()));
         }
-        if (validator.moveToType(move).equals(MoveValidator.CastleType.LONG)) {
+        if (moveType.equals(MoveValidator.CastleType.LONG)) {
             return new RawMove(new Position(1, getStartRow()), new Position(4, getStartRow()));
         }
         throw new IllegalStateException("Should not try to create Castle when its not Castle");
