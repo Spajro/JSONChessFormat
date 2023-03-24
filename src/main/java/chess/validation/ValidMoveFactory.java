@@ -43,11 +43,11 @@ public class ValidMoveFactory {
     }
 
     private RawMove getRookMove(RawMove move) {
-        MoveValidator.CastleType moveType = validator.moveToType(move).orElseThrow();
-        if (moveType.equals(MoveValidator.CastleType.SHORT)) {
+        CastleValidator.CastleType moveType = validator.moveToType(move).orElseThrow();
+        if (moveType.equals(CastleValidator.CastleType.SHORT)) {
             return new RawMove(new Position(8, getStartRow()), new Position(6, getStartRow()));
         }
-        if (moveType.equals(MoveValidator.CastleType.LONG)) {
+        if (moveType.equals(CastleValidator.CastleType.LONG)) {
             return new RawMove(new Position(1, getStartRow()), new Position(4, getStartRow()));
         }
         throw new IllegalStateException("Should not try to create Castle when its not Castle");

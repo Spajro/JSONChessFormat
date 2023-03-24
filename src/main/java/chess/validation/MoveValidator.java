@@ -13,9 +13,6 @@ public class MoveValidator {
     private final CastleValidator castleValidator;
     private final CheckValidator checkValidator;
 
-    enum CastleType {
-        SHORT, LONG
-    }
 
     public MoveValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
@@ -57,7 +54,7 @@ public class MoveValidator {
                 || (simpleMove.getStartPosition().getY() == 7 && simpleMove.getEndPosition().getY() == 5);
     }
 
-    public Optional<CastleType> moveToType(RawMove move) {
+    public Optional<CastleValidator.CastleType> moveToType(RawMove move) {
         return castleValidator.moveToType(move);
     }
 }
