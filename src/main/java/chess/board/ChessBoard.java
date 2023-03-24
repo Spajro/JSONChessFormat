@@ -38,7 +38,7 @@ public class ChessBoard {
         generator = new ValidMoveGenerator(this);
     }
 
-    private ChessBoard(Board board, Color color, CastleRequirements castleRequirements, ValidMove moveCreatingBoard) {
+    public ChessBoard(Board board, Color color, CastleRequirements castleRequirements, ValidMove moveCreatingBoard) {
         this.board = board;
         this.color = color;
         this.castleRequirements = castleRequirements;
@@ -91,8 +91,7 @@ public class ChessBoard {
 
         ChessBoard that = (ChessBoard) o;
 
-        if (!board.equals(that.board)) return false;
-        return color.equals(that.color);
+        return board.equals(that.board) && color.equal(that.color) && castleRequirements.equals(that.castleRequirements);
     }
 
     @Override
