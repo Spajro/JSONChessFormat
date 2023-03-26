@@ -9,8 +9,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @Disabled
 public class PerftTest {
-
     private static final String END_FEN = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - ";
+    private static final String MID_FEN = "r3k2r/Pppp1ppp/1b3nbN/nP6/BBP1P3/q4N2/Pp1P2PP/R2Q1RK1 w kq -";
 
     long perft(ChessBoard board, int n) {
         if (n == 1) {
@@ -114,5 +114,33 @@ public class PerftTest {
         long score = timedPerft(new FENTranslator().parseFEN(END_FEN), 5);
         System.out.println("Deviation for n = " + 5 + " is " + deviation(674624, score));
         assertEquals(674624, score);
+    }
+
+    @Test
+    void perftMid1Test() {
+        long score = timedPerft(new FENTranslator().parseFEN(MID_FEN), 1);
+        System.out.println("Deviation for n = " + 1 + " is " + deviation(6, score));
+        assertEquals(6, score);
+    }
+
+    @Test
+    void perftMid2Test() {
+        long score = timedPerft(new FENTranslator().parseFEN(MID_FEN), 2);
+        System.out.println("Deviation for n = " + 2 + " is " + deviation(264, score));
+        assertEquals(264, score);
+    }
+
+    @Test
+    void perftMid3Test() {
+        long score = timedPerft(new FENTranslator().parseFEN(MID_FEN), 3);
+        System.out.println("Deviation for n = " + 3 + " is " + deviation(9467, score));
+        assertEquals(9467, score);
+    }
+
+    @Test
+    void perftMid4Test() {
+        long score = timedPerft(new FENTranslator().parseFEN(END_FEN), 4);
+        System.out.println("Deviation for n = " + 4 + " is " + deviation(422333, score));
+        assertEquals(422333, score);
     }
 }
