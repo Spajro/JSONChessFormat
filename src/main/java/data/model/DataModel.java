@@ -1,44 +1,21 @@
 package data.model;
 
 import chess.moves.RawMove;
-import chess.utility.FENTranslator;
 import data.json.Jsonable;
-import log.Log;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.io.*;
 import java.util.LinkedList;
 
 public class DataModel implements TreeModel, Jsonable {
     private Diagram actualNode;
-    private final FileManager fileManager = new FileManager();
-    private final FENTranslator fenTranslator = new FENTranslator();
     private final LinkedList<TreeModelListener> treeModelListeners;
 
     public DataModel() {
         treeModelListeners = new LinkedList<>();
         actualNode = new Diagram();
-    }
-
-    public void loadDataFromFile(String filename) {
-        try {
-            actualNode = fileManager.load(filename);
-            notifyListenersOnNewTree(actualNode);
-        } catch (FileNotFoundException e) {
-            Log.log().warn("file not found");
-        }
-    }
-
-    public void saveDataToFile(String filename) {
-        fileManager.save(filename, toJson());
-    }
-
-    public void loadChessBoardFromFEN(String fen) {
-        actualNode = new Diagram(fenTranslator.parseFEN(fen), null, 0);
-        notifyListenersOnNewTree(actualNode);
     }
 
     public void makeMove(RawMove m) {

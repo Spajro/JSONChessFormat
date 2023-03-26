@@ -42,15 +42,15 @@ public class App {
         JMenu fileMenu = new JMenu("File");
 
         JMenuItem saveMenuItem = new JMenuItem("Save");
-        saveMenuItem.addActionListener(e -> dataModel.saveDataToFile(getFilename()));
+        saveMenuItem.addActionListener(e -> controller.saveDataToFile(getFilename()));
         fileMenu.add(saveMenuItem);
 
         JMenuItem loadMenuItem = new JMenuItem("Load");
-        loadMenuItem.addActionListener(e -> dataModel.loadDataFromFile(getFilename()));
+        loadMenuItem.addActionListener(e -> controller.loadDataFromFile(getFilename()));
         fileMenu.add(loadMenuItem);
 
         JMenuItem loadFENMenuItem = new JMenuItem("Load FEN");
-        loadFENMenuItem.addActionListener(e -> dataModel.loadChessBoardFromFEN(getFEN()));
+        loadFENMenuItem.addActionListener(e -> controller.loadChessBoardFromFEN(getFEN()));
         fileMenu.add(loadFENMenuItem);
 
         menuBar.add(fileMenu);

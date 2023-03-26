@@ -1,12 +1,14 @@
 package gui;
 
 import chess.Position;
+import chess.utility.FENTranslator;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
+import data.model.FileManager;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
 import gui.option.OptionPanel;
@@ -14,12 +16,15 @@ import gui.option.TreeMouseListener;
 import log.Log;
 
 import javax.swing.*;
+import java.io.FileNotFoundException;
 
 public class Controller {
     private final DataModel dataModel;
     private final BoardPanel boardPanel;
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
+    private final FileManager fileManager = new FileManager();
+    private final FENTranslator fenTranslator = new FENTranslator();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -123,5 +128,25 @@ public class Controller {
 
     public void setTextAnnotation(String text) {
         dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
+    }
+
+    public void loadDataFromFile(String filename) {
+        try {
+            dataModel.setActualNode(fileManager.load(filename));
+            dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+            boardPanel.setDiagram(dataModel.getActualNode());
+        } catch (FileNotFoundException e) {
+            Log.log().warn("file not found");
+        }
+    }
+
+    public void saveDataToFile(String filename) {
+        fileManager.save(filename, dataModel.toJson());
+    }
+
+    public void loadChessBoardFromFEN(String fen) {
+        dataModel.setActualNode(new Diagram(fenTranslator.parseFEN(fen), null, 0));
+        dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+        boardPanel.setDiagram(dataModel.getActualNode());
     }
 }
