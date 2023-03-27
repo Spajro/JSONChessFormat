@@ -5,6 +5,7 @@ import chess.moves.RawMove;
 import chess.moves.SimpleMove;
 import chess.moves.ValidMove;
 import chess.pieces.Pawn;
+import chess.pieces.Piece;
 
 import java.util.Optional;
 
@@ -48,6 +49,17 @@ public class MoveValidator {
 
     public boolean isLegalCastle(RawMove move) {
         return castleValidator.isLegalCastle(move);
+    }
+
+    public boolean isLegalPromotion(RawMove move) {
+        if (chessBoard.getField(move.getStartPosition()).getPiece().getType().equals(Piece.Type.PAWN)) {
+            if (chessBoard.getColor().isWhite()) {
+                return move.getStartPosition().getY() == 7 && move.getEndPosition().getY() == 8;
+            } else {
+                return move.getStartPosition().getY() == 2 && move.getEndPosition().getY() == 1;
+            }
+        }
+        return false;
     }
 
     private boolean isFarPawnMove(SimpleMove simpleMove) {
