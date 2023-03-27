@@ -14,9 +14,9 @@ public class PerftTest {
 
     long perft(ChessBoard board, int n) {
         if (n == 1) {
-            return board.getGenerator().getAllPossibleValidMoves().size();
+            return board.getGenerator().getAllPossibleExecutableMoves().size();
         } else {
-            return board.getGenerator().getAllPossibleValidMoves().stream()
+            return board.getGenerator().getAllPossibleExecutableMoves().stream()
                     .mapToLong(move -> perft(board.makeMove(move), n - 1))
                     .sum();
         }

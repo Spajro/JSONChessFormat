@@ -1,13 +1,14 @@
 package chess.board;
 
 import chess.board.features.ChessBoardUtility;
-import chess.board.features.ValidMoveGenerator;
+import chess.board.features.ExecutableMoveGenerator;
 import chess.board.lowlevel.Board;
 import chess.board.lowlevel.BoardWrapper;
 import chess.board.lowlevel.Field;
 import chess.board.requirements.CastleRequirements;
 import chess.board.requirements.CastleRequirementsFactory;
 import chess.Position;
+import chess.moves.ExecutableMove;
 import chess.results.InvalidMoveResult;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
@@ -28,14 +29,14 @@ public class ChessBoard {
     private final ChessBoardUtility utility = new ChessBoardUtility(this);
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
     private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
-    private final ValidMoveGenerator generator;
+    private final ExecutableMoveGenerator generator;
 
     public ChessBoard() {
         board = Board.getStart();
         color = Color.white;
         castleRequirements = new CastleRequirements();
         lastMove = null;
-        generator = new ValidMoveGenerator(this);
+        generator = new ExecutableMoveGenerator(this);
     }
 
     public ChessBoard(Board board, Color color, CastleRequirements castleRequirements, ValidMove moveCreatingBoard) {
@@ -43,7 +44,7 @@ public class ChessBoard {
         this.color = color;
         this.castleRequirements = castleRequirements;
         this.lastMove = moveCreatingBoard;
-        generator = new ValidMoveGenerator(this);
+        generator = new ExecutableMoveGenerator(this);
     }
 
     public static ChessBoard getBlank(Color color) {
@@ -65,18 +66,20 @@ public class ChessBoard {
         Optional<ValidMove> optionalValidMove = validMoveFactory.createValidMove(move);
         if (optionalValidMove.isPresent()) {
             ValidMove validMove = optionalValidMove.get();
-            return new ValidMoveResult(
-                    new ChessBoard(validMove.makeMove(),
-                            color.swap(),
-                            castleRequirementsFactory.getNextRequirements(validMove),
-                            validMove)
-            );
-        } else {
-            return new InvalidMoveResult();
+            if (validMove.isExecutable()) {
+                ExecutableMove executableMove= (ExecutableMove) validMove;
+                return new ValidMoveResult(
+                        new ChessBoard(executableMove.makeMove(),
+                                color.swap(),
+                                castleRequirementsFactory.getNextRequirements(validMove),
+                                validMove)
+                );
+            }
         }
+        return new InvalidMoveResult();
     }
 
-    public ChessBoard makeMove(ValidMove validMove) {
+    public ChessBoard makeMove(ExecutableMove validMove) {
         return new ChessBoard(validMove.makeMove(), color.swap(), castleRequirementsFactory.getNextRequirements(validMove), validMove);
     }
 
@@ -117,7 +120,7 @@ public class ChessBoard {
         return utility;
     }
 
-    public ValidMoveGenerator getGenerator() {
+    public ExecutableMoveGenerator getGenerator() {
         return generator;
     }
 }

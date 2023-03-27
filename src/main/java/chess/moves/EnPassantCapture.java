@@ -3,7 +3,7 @@ package chess.moves;
 import chess.Position;
 import chess.board.lowlevel.Board;
 
-public class EnPassantCapture extends RawMove implements ValidMove {
+public class EnPassantCapture extends RawMove implements ExecutableMove {
     private final Board board;
 
     public EnPassantCapture(RawMove move, Board board) {

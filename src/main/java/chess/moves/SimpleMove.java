@@ -2,7 +2,7 @@ package chess.moves;
 
 import chess.board.lowlevel.Board;
 
-public class SimpleMove extends RawMove implements ValidMove {
+public class SimpleMove extends RawMove implements ExecutableMove {
     private final Board board;
 
     public SimpleMove(RawMove move, Board board) {

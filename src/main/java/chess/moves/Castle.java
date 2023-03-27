@@ -3,7 +3,7 @@ package chess.moves;
 import chess.board.lowlevel.Board;
 import chess.Position;
 
-public class Castle implements ValidMove {
+public class Castle implements ExecutableMove {
     private final RawMove kingMove;
     private final RawMove rookMove;
     private final Board board;

@@ -11,18 +11,18 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class ValidMoveGenerator {
+public class ExecutableMoveGenerator {
     private final Color color;
     private final ChessBoardUtility utility;
     private final ValidMoveFactory validMoveFactory;
 
-    public ValidMoveGenerator(ChessBoard chessBoard) {
+    public ExecutableMoveGenerator(ChessBoard chessBoard) {
         this.color = chessBoard.getColor();
         utility = new ChessBoardUtility(chessBoard);
         validMoveFactory = new ValidMoveFactory(chessBoard);
     }
 
-    public List<ValidMove> getAllPossibleValidMoves() {
+    public List<ExecutableMove> getAllPossibleExecutableMoves() {
         return Stream.concat(
                 Stream.concat(
                         getAllPossibleSimpleMoves().stream(),

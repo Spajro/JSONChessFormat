@@ -145,7 +145,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintLegalMoves(Graphics g) {
-        diagram.getBoard().getGenerator().getAllPossibleValidMoves().stream()
+        diagram.getBoard().getGenerator().getAllPossibleExecutableMoves().stream()
                 .map(ValidMove::getRepresentation)
                 .map(rawMove -> new ScaledArrow(
                         new ScaledPosition(rawMove.getStartPosition(), scale),
