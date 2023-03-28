@@ -12,6 +12,7 @@ import java.util.LinkedList;
 public class DataModel implements TreeModel, Jsonable {
     private Diagram actualNode;
     private final LinkedList<TreeModelListener> treeModelListeners;
+    private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
         treeModelListeners = new LinkedList<>();
@@ -19,7 +20,7 @@ public class DataModel implements TreeModel, Jsonable {
     }
 
     public void makeMove(RawMove m) {
-        actualNode = actualNode.makeMove(m);
+        actualNode = actualNode.makeMove(m,promotionTypeProvider);
         notifyListenersOnInsert(actualNode);
     }
 
@@ -33,6 +34,10 @@ public class DataModel implements TreeModel, Jsonable {
 
     public Diagram getActualNode() {
         return actualNode;
+    }
+
+    public void setPromotionTypeProvider(PromotionTypeProvider promotionTypeProvider) {
+        this.promotionTypeProvider = promotionTypeProvider;
     }
 
     @Override

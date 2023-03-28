@@ -59,7 +59,24 @@ public class AlgebraicTranslator {
                     "-" +
                     positionToAlgebraic(enPassantCapture.getEndPosition());
         }
+        else if (move instanceof Promotion promotion){
+            return positionToAlgebraic(promotion.getStartPosition()) +
+                    "-" +
+                    positionToAlgebraic(promotion.getEndPosition())+
+                    "="+
+                    typeToPiece(promotion.getType());
+        }
         throw new IllegalStateException();
+    }
+
+    private static char typeToPiece(Piece.Type type) {
+        return switch (type){
+            case KNIGHT -> 'N';
+            case BISHOP -> 'B';
+            case ROOK -> 'R';
+            case QUEEN -> 'Q';
+            default -> throw new IllegalStateException("Unexpected value: " + type);
+        };
     }
 
     public static char pieceToAlgebraic(Piece piece) {

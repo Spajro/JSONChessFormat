@@ -37,7 +37,7 @@ public class CommandLineHandler {
     }
 
     void makeMove(RawMove M) {
-        node = node.makeMove(M);
+        node = node.makeMove(M,null);//TODO
     }
 
     void deleteDiagram() {

@@ -1,6 +1,7 @@
 package gui;
 
 import chess.Position;
+import chess.pieces.Piece;
 import chess.utility.FENTranslator;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -9,6 +10,7 @@ import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
 import data.model.FileManager;
+import data.model.PromotionTypeProvider;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
 import gui.option.OptionPanel;
@@ -29,6 +31,7 @@ public class Controller {
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
         this.boardPanel = boardPanel;
+        dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
     }
 
     public void executeDragAction(RawMove move, SpecialKeysMap keysMap) {
@@ -116,6 +119,12 @@ public class Controller {
 
     public JTree createTreeWithDataModel() {
         return new JTree(dataModel);
+    }
+
+    private PromotionTypeProvider getPromotionTypeProvider() {
+        return () -> {
+            return Piece.Type.QUEEN;//TODO
+        };
     }
 
     public int getScale() {

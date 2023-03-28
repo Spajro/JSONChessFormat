@@ -9,8 +9,10 @@ import chess.board.requirements.CastleRequirements;
 import chess.board.requirements.CastleRequirementsFactory;
 import chess.Position;
 import chess.moves.ExecutableMove;
+import chess.moves.UnTypedPromotion;
 import chess.results.InvalidMoveResult;
 import chess.results.MoveResult;
+import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.validation.ValidMoveFactory;
 import chess.color.Color;
@@ -67,13 +69,16 @@ public class ChessBoard {
         if (optionalValidMove.isPresent()) {
             ValidMove validMove = optionalValidMove.get();
             if (validMove.isExecutable()) {
-                ExecutableMove executableMove= (ExecutableMove) validMove;
+                ExecutableMove executableMove = (ExecutableMove) validMove;
                 return new ValidMoveResult(
                         new ChessBoard(executableMove.makeMove(),
                                 color.swap(),
                                 castleRequirementsFactory.getNextRequirements(validMove),
                                 validMove)
                 );
+            }
+            if (validMove instanceof UnTypedPromotion promotion) {
+                return new PromotionResult(this, promotion);
             }
         }
         return new InvalidMoveResult();

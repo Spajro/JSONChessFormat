@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.results.MoveResult;
+import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.validation.ValidMoveFactory;
 import data.json.Jsonable;
@@ -36,11 +37,20 @@ public class Diagram implements Jsonable {
         parent = last;
     }
 
-    public Diagram makeMove(RawMove move) {
+    public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
         Log.log().info("Trying to make:" + move);
+
         MoveResult moveResult = board.makeMove(move);
         if (moveResult.isValid()) {
-            ChessBoard tempBoard = ((ValidMoveResult) moveResult).getResult();
+
+            ValidMoveResult validMoveResult;
+            if (moveResult instanceof PromotionResult promotionResult) {
+                validMoveResult = promotionResult.type(typeProvider.getPromotionType());
+            } else {
+                validMoveResult = (ValidMoveResult) moveResult;
+            }
+            ChessBoard tempBoard = validMoveResult.getResult();
+
             if (!board.equals(tempBoard)) {
                 Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
                 nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(),

@@ -49,4 +49,8 @@ public class Promotion extends RawMove implements ExecutableMove {
     public RawMove getRepresentation() {
         return this;
     }
+
+    public Type getType() {
+        return type;
+    }
 }

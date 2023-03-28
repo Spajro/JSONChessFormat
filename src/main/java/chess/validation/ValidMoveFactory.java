@@ -17,6 +17,9 @@ public class ValidMoveFactory {
 
     public Optional<ValidMove> createValidMove(RawMove move) {
         if (validator.isCorrect(move)) {
+            if (validator.isLegalPromotion(move)) {
+                return Optional.of(createPromotion(move));
+            }
             if (validator.isLegalCastle(move)) {
                 return Optional.of(createCastle(move));
             }
@@ -28,6 +31,10 @@ public class ValidMoveFactory {
             }
         }
         return Optional.empty();
+    }
+
+    private UnTypedPromotion createPromotion(RawMove move) {
+        return new UnTypedPromotion(move, chessBoard);
     }
 
     private SimpleMove createSimpleMove(RawMove move) {
