@@ -30,8 +30,8 @@ public class CastleValidator {
             return checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
                     && isCastleLegalInRequirements(castleType)
                     && !anyPositionKingsPassesIsAttacked(castleType)
-                    && !anyPositionBetweenKingAndRookIsOccupied(castleType)
-                    && !checkValidator.isKingChecked(chessBoard.getColor());
+                    && !anyPositionBetweenKingAndRookIsOccupied(castleType);
+            //&& !checkValidator.isKingChecked(chessBoard.getColor());
         } else {
             return false;
         }
@@ -51,17 +51,13 @@ public class CastleValidator {
 
     private boolean anyPositionKingsPassesIsAttacked(CastleType castleType) {
         return positionsKingPasses(castleType).stream()
-                .filter(position -> chessBoard.getUtility().isPositionAttacked(position, chessBoard.getColor().swap()))
-                .toList()
-                .size() > 0;
+                .anyMatch(position -> chessBoard.getUtility().isPositionAttacked(position, chessBoard.getColor().swap()));
     }
 
     private boolean anyPositionBetweenKingAndRookIsOccupied(CastleType castleType) {
         return positionsBetweenKingAndRook(castleType).stream()
                 .map(chessBoard::getField)
-                .filter(Field::hasPiece)
-                .toList()
-                .size() > 0;
+                .anyMatch(Field::hasPiece);
     }
 
     private boolean isCastleLegalInRequirements(CastleType castleType) {

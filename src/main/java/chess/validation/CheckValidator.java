@@ -6,6 +6,7 @@ import chess.board.features.ChessBoardUtility;
 import chess.color.Color;
 import chess.moves.*;
 import chess.pieces.King;
+import chess.pieces.Piece;
 
 class CheckValidator {
     private final ChessBoardUtility utility;
@@ -35,6 +36,11 @@ class CheckValidator {
 
     public boolean kingIsNotCheckedAfterEnPassantCapture(RawMove move, Color kingColor) {
         ChessBoard tempBoard = chessBoard.makeMove((ExecutableMove) new EnPassantCapture(move, chessBoard.getBoard()));
+        return !(new CheckValidator(tempBoard).isKingChecked(kingColor));
+    }
+
+    public boolean kingIsNotCheckedAfterPromotion(RawMove move, Color kingColor) {
+        ChessBoard tempBoard = chessBoard.makeMove((ExecutableMove) new Promotion(move, chessBoard, Piece.Type.QUEEN));
         return !(new CheckValidator(tempBoard).isKingChecked(kingColor));
     }
 }

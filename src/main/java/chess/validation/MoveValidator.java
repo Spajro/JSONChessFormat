@@ -54,9 +54,9 @@ public class MoveValidator {
     public boolean isLegalPromotion(RawMove move) {
         if (chessBoard.getField(move.getStartPosition()).getPiece().getType().equals(Piece.Type.PAWN)) {
             if (chessBoard.getColor().isWhite()) {
-                return move.getStartPosition().getY() == 7 && move.getEndPosition().getY() == 8;
+                return move.getStartPosition().getY() == 7 && move.getEndPosition().getY() == 8 && checkValidator.kingIsNotCheckedAfterPromotion(move,chessBoard.getColor());
             } else {
-                return move.getStartPosition().getY() == 2 && move.getEndPosition().getY() == 1;
+                return move.getStartPosition().getY() == 2 && move.getEndPosition().getY() == 1 && checkValidator.kingIsNotCheckedAfterPromotion(move,chessBoard.getColor());
             }
         }
         return false;

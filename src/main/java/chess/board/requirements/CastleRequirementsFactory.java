@@ -6,6 +6,7 @@ import chess.board.lowlevel.Field;
 import chess.moves.ValidMove;
 import chess.pieces.King;
 import chess.pieces.Piece;
+import chess.pieces.Rook;
 
 public class CastleRequirementsFactory {
     private final ChessBoard chessBoard;
@@ -44,7 +45,7 @@ public class CastleRequirementsFactory {
             return false;
         }
         Piece piece = field.getPiece();
-        return (piece instanceof King) && piece.getColor().equal(chessBoard.getColor());
+        return (piece instanceof Rook) && piece.getColor().equal(chessBoard.getColor());
     }
 
     private boolean isKingOnPosition(Position position) {
