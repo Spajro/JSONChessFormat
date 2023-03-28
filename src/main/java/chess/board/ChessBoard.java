@@ -74,8 +74,8 @@ public class ChessBoard {
                         new ChessBoard(executableMove.makeMove(),
                                 color.swap(),
                                 castleRequirementsFactory.getNextRequirements(validMove),
-                                validMove)
-                );
+                                validMove),
+                        executableMove);
             }
             if (validMove instanceof UnTypedPromotion promotion) {
                 return new PromotionResult(this, promotion);

@@ -3,7 +3,6 @@ package data.model;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
-import chess.validation.ValidMoveFactory;
 import data.json.Jsonable;
 import data.json.ListJsonFactory;
 import data.annotations.Annotations;
@@ -42,34 +41,29 @@ public class Diagram implements Jsonable {
 
         MoveResult moveResult = board.makeMove(move);
         if (moveResult.isValid()) {
-
             ValidMoveResult validMoveResult;
             if (moveResult instanceof PromotionResult promotionResult) {
                 validMoveResult = promotionResult.type(typeProvider.getPromotionType());
             } else {
                 validMoveResult = (ValidMoveResult) moveResult;
             }
-            ChessBoard tempBoard = validMoveResult.getResult();
 
-            if (!board.equals(tempBoard)) {
-                Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-                nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(),
-                        new ValidMoveFactory(board).createValidMove(move).orElseThrow(RuntimeException::new));
-                for (Diagram diagram : nextDiagrams) {
-                    if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
-                        return diagram;
-                    }
+            ChessBoard tempBoard = validMoveResult.getResult();
+            Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+            nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
+            for (Diagram diagram : nextDiagrams) {
+                if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+                    return diagram;
                 }
-                nextDiagrams.add(nextDiagram);
-                return nextDiagram;
-            } else {
-                Log.log().fail("Corrupted Move:" + move);
-                return this;
             }
+
+            nextDiagrams.add(nextDiagram);
+            return nextDiagram;
         } else {
             Log.log().info("Illegal Move");
             return this;
         }
+
     }
 
     public Diagram getDiagramOfId(int id) {

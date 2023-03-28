@@ -20,6 +20,6 @@ public class PromotionResult implements MoveResult {
     }
 
     public ValidMoveResult type(Piece.Type type) {
-        return new ValidMoveResult(chessBoard.makeMove((ExecutableMove) promotion.type(type)));
+        return new ValidMoveResult(chessBoard.makeMove((ExecutableMove) promotion.type(type)), promotion.type(type));
     }
 }
