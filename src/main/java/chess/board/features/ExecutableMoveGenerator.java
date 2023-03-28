@@ -5,6 +5,7 @@ import chess.board.ChessBoard;
 import chess.color.Color;
 import chess.moves.*;
 import chess.pieces.Pawn;
+import chess.pieces.Piece;
 import chess.validation.ValidMoveFactory;
 
 import java.util.List;
@@ -25,10 +26,13 @@ public class ExecutableMoveGenerator {
     public List<ExecutableMove> getAllPossibleExecutableMoves() {
         return Stream.concat(
                 Stream.concat(
-                        getAllPossibleSimpleMoves().stream(),
-                        getAllPossibleCastles().stream()
+                        Stream.concat(
+                                getAllPossibleSimpleMoves().stream(),
+                                getAllPossibleCastles().stream()
+                        ),
+                        getAllPossibleEnPassantCaptures().stream()
                 ),
-                getAllPossibleEnPassantCaptures().stream()
+                getAllPossiblePromotions().stream()
         ).toList();
     }
 
@@ -71,5 +75,35 @@ public class ExecutableMoveGenerator {
                 .filter(object -> object instanceof EnPassantCapture)
                 .map(object -> (EnPassantCapture) object)
                 .toList();
+    }
+
+    private List<Promotion> getAllPossiblePromotions() {
+        return utility.getPiecesOfColor(color).stream()
+                .filter(piece -> piece instanceof Pawn)
+                .map(piece -> (Pawn) piece)
+                .filter(this::isOnPenultimateLine)
+                .flatMap(pawn -> pawn.getPossibleEndPositions().stream()
+                        .map(position -> new RawMove(pawn.getPosition(), position)))
+                .map(validMoveFactory::createValidMove)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(object -> object instanceof UnTypedPromotion)
+                .map(object -> (UnTypedPromotion) object)
+                .flatMap(this::typePromotion)
+                .toList();
+
+    }
+
+    private boolean isOnPenultimateLine(Pawn pawn) {
+        if (pawn.getColor().isWhite()) {
+            return pawn.getPosition().getY() == 7;
+        } else {
+            return pawn.getPosition().getY() == 2;
+        }
+    }
+
+    private Stream<Promotion> typePromotion(UnTypedPromotion promotion) {
+        List<Piece.Type> types = List.of(Piece.Type.KNIGHT, Piece.Type.BISHOP, Piece.Type.ROOK, Piece.Type.QUEEN);
+        return types.stream().map(promotion::type);
     }
 }
