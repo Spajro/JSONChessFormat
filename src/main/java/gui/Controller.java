@@ -1,7 +1,6 @@
 package gui;
 
 import chess.Position;
-import chess.pieces.Piece;
 import chess.utility.FENTranslator;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -122,9 +121,7 @@ public class Controller {
     }
 
     private PromotionTypeProvider getPromotionTypeProvider() {
-        return () -> {
-            return Piece.Type.QUEEN;//TODO
-        };
+        return new DialogPromotionTypeProvider(optionPanel);
     }
 
     public int getScale() {
