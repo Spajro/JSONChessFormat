@@ -1,6 +1,6 @@
 import cli.ActionData;
 import cli.CommandLineHandler;
-import chess.utility.AlgebraicTranslator;
+import chess.utility.AlgebraicParser;
 
 import java.util.Scanner;
 
@@ -8,6 +8,7 @@ public class CliMain {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        AlgebraicParser algebraicParser = AlgebraicParser.getInstance();
         boolean working = true;
 
         CommandLineHandler handler = new CommandLineHandler();
@@ -20,7 +21,7 @@ public class CliMain {
                 switch (cmd) {
                     case "LD" -> data = new ActionData("LD", scanner.nextLine());
                     case "SV" -> data = new ActionData("SV", scanner.nextLine());
-                    case "MM" -> data = new ActionData("MM", AlgebraicTranslator.longAlgebraicToMove(scanner.nextLine(), handler.getColor()));
+                    case "MM" -> data = new ActionData("MM", algebraicParser.longAlgebraicToMove(scanner.nextLine(), handler.getColor()));
                     case "QT" -> working = false;
                     case "DL" -> data = new ActionData("DL", null);
                     case "GB" -> data = new ActionData("GB", Integer.parseInt(scanner.nextLine()));

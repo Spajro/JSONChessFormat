@@ -3,12 +3,12 @@ package data.model;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
+import chess.utility.AlgebraicFactory;
 import data.json.Jsonable;
 import data.json.ListJsonFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
-import chess.utility.AlgebraicTranslator;
 import log.Log;
 
 import java.util.LinkedList;
@@ -22,6 +22,7 @@ public class Diagram implements Jsonable {
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
     private final ChessBoard board;
+    private final AlgebraicFactory algebraicFactory = AlgebraicFactory.getInstance();
 
     public Diagram() {
         moveId = 0;
@@ -50,7 +51,7 @@ public class Diagram implements Jsonable {
 
             ChessBoard tempBoard = validMoveResult.getResult();
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-            nextDiagram.moveName = AlgebraicTranslator.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
+            nextDiagram.moveName = algebraicFactory.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
                     return diagram;

@@ -1,11 +1,11 @@
 package cli;
 
 import chess.board.lowlevel.Field;
+import chess.utility.AlgebraicFactory;
 import data.model.Diagram;
 import chess.Position;
 import chess.color.Color;
 import chess.moves.RawMove;
-import chess.utility.AlgebraicTranslator;
 import data.model.FileManager;
 
 import java.io.*;
@@ -13,6 +13,7 @@ import java.io.*;
 public class CommandLineHandler {
     Diagram node = new Diagram();
     FileManager fileManager = new FileManager();
+    AlgebraicFactory algebraicFactory = AlgebraicFactory.getInstance();
 
     public void makeAction(ActionData data) {
         switch (data.getCode()) {
@@ -37,7 +38,7 @@ public class CommandLineHandler {
     }
 
     void makeMove(RawMove M) {
-        node = node.makeMove(M,null);//TODO
+        node = node.makeMove(M, null);//TODO
     }
 
     void deleteDiagram() {
@@ -118,7 +119,7 @@ public class CommandLineHandler {
                     } else {
                         System.out.print("B");
                     }
-                    System.out.print(AlgebraicTranslator.pieceToAlgebraic(field.getPiece()));
+                    System.out.print(algebraicFactory.typeToAlgebraic(field.getPiece().getType()));
                 }
                 System.out.print(" ");
             }
