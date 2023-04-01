@@ -11,7 +11,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-public class FENTranslator {
+public class FENParser {
+    private static final FENParser parser = new FENParser();
+
+    public static FENParser getInstance() {
+        return parser;
+    }
+
+    private FENParser() {
+    }
 
     public ChessBoard parseFEN(String fen) {
         String[] splitted = fen.split(" ");

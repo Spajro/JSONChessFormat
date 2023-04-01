@@ -1,6 +1,6 @@
 import chess.board.ChessBoard;
 import chess.moves.*;
-import chess.utility.FENTranslator;
+import chess.utility.FENParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -67,7 +67,7 @@ public class DebugPerftTest {
     @Test
     void test(){
         String FEN="r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ";
-        Map<String,Long> result=debugPerft(new FENTranslator().parseFEN(FEN),4);
+        Map<String,Long> result=debugPerft(FENParser.getInstance().parseFEN(FEN),4);
         System.out.println("S"+result.get("S"));
         System.out.println("C"+result.get("C"));
         System.out.println("E"+result.get("E"));

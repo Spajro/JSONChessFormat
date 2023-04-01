@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FENTranslatorTest {
+class FENParserTest {
 
     @Test
     void parseFEN() {
         String fen = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - ";
-        ChessBoard actual = new FENTranslator().parseFEN(fen);
+        ChessBoard actual = FENParser.getInstance().parseFEN(fen);
         ChessBoard expected = new ChessBoard(Board.getBlank(),
                 Color.white,
                 new CastleRequirements(false, false, false, false),
@@ -39,7 +39,7 @@ class FENTranslatorTest {
     @Test
     void parseFENOfStart() {
         String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ";
-        ChessBoard actual = new FENTranslator().parseFEN(fen);
+        ChessBoard actual = FENParser.getInstance().parseFEN(fen);
         ChessBoard expected = new ChessBoard();
         assertEquals(expected, actual);
     }

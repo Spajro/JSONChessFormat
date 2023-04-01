@@ -1,7 +1,7 @@
 package chess;
 
 import chess.board.ChessBoard;
-import chess.utility.FENTranslator;
+import chess.utility.FENParser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class PerftTest {
 
     void perftCase(String fen, long expected, int n) {
-        long actual = timedPerft(new FENTranslator().parseFEN(fen), n);
+        long actual = timedPerft(FENParser.getInstance().parseFEN(fen), n);
         System.out.println("Deviation for n = " + n + " is " + deviation(expected, actual));
         assertEquals(expected, actual);
     }

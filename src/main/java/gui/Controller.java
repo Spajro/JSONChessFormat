@@ -1,7 +1,7 @@
 package gui;
 
 import chess.Position;
-import chess.utility.FENTranslator;
+import chess.utility.FENParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -25,7 +25,7 @@ public class Controller {
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
     private final FileManager fileManager = new FileManager();
-    private final FENTranslator fenTranslator = new FENTranslator();
+    private final FENParser fenParser = FENParser.getInstance();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -151,7 +151,7 @@ public class Controller {
     }
 
     public void loadChessBoardFromFEN(String fen) {
-        dataModel.setActualNode(new Diagram(fenTranslator.parseFEN(fen), null, 0));
+        dataModel.setActualNode(new Diagram(fenParser.parseFEN(fen), null, 0));
         dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
     }
