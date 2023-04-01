@@ -1,6 +1,7 @@
 package gui;
 
 import chess.Position;
+import chess.utility.FENFactory;
 import chess.utility.FENParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -154,5 +155,12 @@ public class Controller {
         dataModel.setActualNode(new Diagram(fenParser.parseFEN(fen), null, 0));
         dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
+    }
+
+    public void saveChessBoardToFEN() {
+        JTextArea textArea = new JTextArea();
+        textArea.setText(FENFactory.getInstance().chessBoardToFEN(dataModel.getActualNode().getBoard()));
+        textArea.setEditable(false);
+        JOptionPane.showMessageDialog(optionPanel, textArea);
     }
 }
