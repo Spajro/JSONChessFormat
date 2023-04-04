@@ -2,6 +2,8 @@ package cli;
 
 import chess.board.lowlevel.Field;
 import chess.utility.AlgebraicFactory;
+import data.json.JsonFactory;
+import data.model.DataModel;
 import data.model.Diagram;
 import chess.Position;
 import chess.color.Color;
@@ -11,9 +13,11 @@ import data.model.FileManager;
 import java.io.*;
 
 public class CommandLineHandler {
-    Diagram node = new Diagram();
+    DataModel dataModel=new DataModel();
+    Diagram node = dataModel.getActualNode();
     FileManager fileManager = new FileManager();
     AlgebraicFactory algebraicFactory = AlgebraicFactory.getInstance();
+    JsonFactory jsonFactory=new JsonFactory(dataModel);
 
     public void makeAction(ActionData data) {
         switch (data.getCode()) {
@@ -24,7 +28,7 @@ public class CommandLineHandler {
                     System.out.print("Loading failed");
                 }
             }
-            case "SV" -> fileManager.save((String) data.getParam(), node.toJson());
+            case "SV" -> fileManager.save((String) data.getParam(), jsonFactory.toJson());
             case "MM" -> makeMove((RawMove) data.getParam());
             case "DL" -> deleteDiagram();
             case "GB" -> goBack((int) data.getParam());

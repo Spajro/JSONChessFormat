@@ -6,6 +6,7 @@ import chess.utility.FENParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
+import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.moves.RawMove;
@@ -27,11 +28,13 @@ public class Controller {
     private TreeMouseListener treeMouseListener;
     private final FileManager fileManager = new FileManager();
     private final FENParser fenParser = FENParser.getInstance();
+    private final JsonFactory jsonFactory;
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
         this.boardPanel = boardPanel;
         dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
+        jsonFactory = new JsonFactory(dataModel);
     }
 
     public void executeDragAction(RawMove move, SpecialKeysMap keysMap) {
@@ -148,7 +151,7 @@ public class Controller {
     }
 
     public void saveDataToFile(String filename) {
-        fileManager.save(filename, dataModel.toJson());
+        fileManager.save(filename, jsonFactory.toJson());
     }
 
     public void loadChessBoardFromFEN(String fen) {
