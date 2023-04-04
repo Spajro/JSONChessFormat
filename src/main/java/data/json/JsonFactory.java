@@ -3,6 +3,7 @@ package data.json;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
+import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 
@@ -72,10 +73,18 @@ public class JsonFactory {
                 arrow.getEndPosition().getX() +
                 "\",\"y\":\"" +
                 arrow.getEndPosition().getY() +
-                "\"}}";
+                "\"},\"color\":\"" +
+                GraphicAnnotation.drawColorToString(arrow.getColor()) +
+                "\"}";
     }
 
     private String toJson(FieldAnnotation field) {
-        return "{\"x\":\"" + field.getX() + "\",\"y\":\"" + field.getY() + "\"}";
+        return "{\"x\":\"" +
+                field.getX() +
+                "\",\"y\":\"" +
+                field.getY() +
+                "\",\"color\":\"" +
+                GraphicAnnotation.drawColorToString(field.getColor()) +
+                "\"}";
     }
 }
