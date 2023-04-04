@@ -1,11 +1,8 @@
 package data.annotations;
 
-import data.json.Jsonable;
-import data.json.ListJsonFactory;
-
 import java.util.LinkedList;
 
-public class Annotations implements Jsonable {
+public class Annotations {
     private String textAnnotation = "";
     private final LinkedList<ArrowAnnotation> arrowAnnotations = new LinkedList<>();
     private final LinkedList<FieldAnnotation> fieldAnnotations = new LinkedList<>();
@@ -22,19 +19,7 @@ public class Annotations implements Jsonable {
         return fieldAnnotations;
     }
 
-
     public void setTextAnnotation(String textAnnotation) {
         this.textAnnotation = textAnnotation;
-    }
-
-    @Override
-    public String toJson() {
-        return "{\"text\":\"" +
-                textAnnotation +
-                "\",\"arrows\":" +
-                ListJsonFactory.listToJson(arrowAnnotations) +
-                ",\"fields\":" +
-                ListJsonFactory.listToJson(fieldAnnotations) +
-                "}";
     }
 }

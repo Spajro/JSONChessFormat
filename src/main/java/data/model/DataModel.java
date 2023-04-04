@@ -1,7 +1,6 @@
 package data.model;
 
 import chess.moves.RawMove;
-import data.json.Jsonable;
 
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -9,7 +8,7 @@ import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.util.LinkedList;
 
-public class DataModel implements TreeModel, Jsonable {
+public class DataModel implements TreeModel {
     private Diagram actualNode;
     private final LinkedList<TreeModelListener> treeModelListeners;
     private PromotionTypeProvider promotionTypeProvider;
@@ -20,7 +19,7 @@ public class DataModel implements TreeModel, Jsonable {
     }
 
     public void makeMove(RawMove m) {
-        actualNode = actualNode.makeMove(m,promotionTypeProvider);
+        actualNode = actualNode.makeMove(m, promotionTypeProvider);
         notifyListenersOnInsert(actualNode);
     }
 
@@ -104,10 +103,5 @@ public class DataModel implements TreeModel, Jsonable {
         for (TreeModelListener listener : treeModelListeners) {
             listener.treeStructureChanged(event);
         }
-    }
-
-    @Override
-    public String toJson() {
-        return "{\"root\":" + actualNode.getRoot().toJson() + "}";
     }
 }

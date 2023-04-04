@@ -4,8 +4,6 @@ import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.utility.AlgebraicFactory;
-import data.json.Jsonable;
-import data.json.ListJsonFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
@@ -15,7 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-public class Diagram implements Jsonable {
+public class Diagram {
     private final int moveId;
     private String moveName = "diag";
     private final Diagram parent;
@@ -132,16 +130,5 @@ public class Diagram implements Jsonable {
     @Override
     public String toString() {
         return moveName;
-    }
-
-    public String toJson() {
-        return "{\"moveName\":\"" +
-                moveName +
-                "\",\"moves\":" +
-                ListJsonFactory.listToJson(nextDiagrams) +
-                ",\"annotations\":" +
-                annotations.toJson() +
-                "}";
-
     }
 }
