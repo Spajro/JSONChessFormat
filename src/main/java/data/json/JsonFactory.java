@@ -44,7 +44,7 @@ public class JsonFactory {
         StringBuilder result = new StringBuilder();
         result.append('{');
         if (!annotations.getTextAnnotation().isEmpty()) {
-            result.append("{\"text\":\"")
+            result.append("\"text\":\"")
                     .append(annotations.getTextAnnotation())
                     .append("\",");
         }
@@ -79,11 +79,11 @@ public class JsonFactory {
     }
 
     private String toJson(FieldAnnotation field) {
-        return "{\"x\":\"" +
+        return "{\"position\": { \"x\":\"" +
                 field.getX() +
                 "\",\"y\":\"" +
                 field.getY() +
-                "\",\"color\":\"" +
+                "\"},\"color\":\"" +
                 GraphicAnnotation.drawColorToString(field.getColor()) +
                 "\"}";
     }
