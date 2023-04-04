@@ -19,23 +19,47 @@ public class JsonFactory {
     }
 
     private String toJson(Diagram diagram) {
-        return "{\"moveName\":\"" +
-                diagram.getMoveName() +
-                "\",\"moves\":" +
-                listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson) +
-                ",\"annotations\":" +
-                toJson(diagram.getAnnotations()) +
-                "}";
+        StringBuilder result = new StringBuilder();
+        result.append('{')
+                .append("\"moveName\":\"")
+                .append(diagram.getMoveName())
+                .append("\",");
+        if (!diagram.getNextDiagrams().isEmpty()) {
+            result.append("\"moves\":")
+                    .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson))
+                    .append(',');
+        }
+        if (!diagram.getAnnotations().isEmpty()) {
+            result.append("\"annotations\":")
+                    .append(toJson(diagram.getAnnotations()))
+                    .append(',');
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append('}');
+        return result.toString();
     }
 
     private String toJson(Annotations annotations) {
-        return "{\"text\":\"" +
-                annotations.getTextAnnotation() +
-                "\",\"arrows\":" +
-                listJsonFactory.listToJson(annotations.getArrowAnnotations(), this::toJson) +
-                ",\"fields\":" +
-                listJsonFactory.listToJson(annotations.getFieldAnnotations(), this::toJson) +
-                "}";
+        StringBuilder result = new StringBuilder();
+        result.append('{');
+        if (!annotations.getTextAnnotation().isEmpty()) {
+            result.append("{\"text\":\"")
+                    .append(annotations.getTextAnnotation())
+                    .append("\",");
+        }
+        if (!annotations.getArrowAnnotations().isEmpty()) {
+            result.append("\"arrows\":")
+                    .append(listJsonFactory.listToJson(annotations.getArrowAnnotations(), this::toJson))
+                    .append(",");
+        }
+        if (!annotations.getFieldAnnotations().isEmpty()) {
+            result.append("\"fields\":")
+                    .append(listJsonFactory.listToJson(annotations.getFieldAnnotations(), this::toJson))
+                    .append(',');
+        }
+        result.deleteCharAt(result.length() - 1);
+        result.append('}');
+        return result.toString();
     }
 
     private String toJson(ArrowAnnotation arrow) {

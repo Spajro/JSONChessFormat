@@ -28,6 +28,8 @@ public class JsonParser {
     private void from(Diagram parent, JsonNode jsonNode) {
         String moveName = jsonNode.get("moveName").asText();
         Diagram diagram = parent.makeMove(algebraicParser.longAlgebraicToMove(moveName, parent.getBoard().getColor().swap()), null);
-        jsonNode.get("moves").forEach(node -> from(diagram, node));
+        if (jsonNode.get("moves") != null) {
+            jsonNode.get("moves").forEach(node -> from(diagram, node));
+        }
     }
 }

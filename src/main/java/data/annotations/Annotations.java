@@ -22,4 +22,8 @@ public class Annotations {
     public void setTextAnnotation(String textAnnotation) {
         this.textAnnotation = textAnnotation;
     }
+
+    public boolean isEmpty() {
+        return textAnnotation.isEmpty() && arrowAnnotations.isEmpty() && fieldAnnotations.isEmpty();
+    }
 }
