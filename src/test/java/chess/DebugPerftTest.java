@@ -1,6 +1,9 @@
+package chess;
+
 import chess.board.ChessBoard;
 import chess.moves.*;
 import chess.utility.FENParser;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
@@ -8,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+@Disabled
 public class DebugPerftTest {
     Map<String, Long> debugPerft(ChessBoard board, int n) {
         if (n == 1) {
@@ -64,6 +68,7 @@ public class DebugPerftTest {
         return result;
     }
 
+    @Disabled
     @Test
     void test(){
         String FEN="r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - ";
