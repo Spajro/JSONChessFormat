@@ -21,7 +21,7 @@ public class CliMain {
                 switch (cmd) {
                     case "LD" -> data = new ActionData("LD", scanner.nextLine());
                     case "SV" -> data = new ActionData("SV", scanner.nextLine());
-                    case "MM" -> data = new ActionData("MM", algebraicParser.longAlgebraicToMove(scanner.nextLine(), handler.getColor()));
+                    case "MM" -> data = new ActionData("MM", algebraicParser.parseLongAlgebraic(scanner.nextLine(), handler.getColor()));
                     case "QT" -> working = false;
                     case "DL" -> data = new ActionData("DL", null);
                     case "GB" -> data = new ActionData("GB", Integer.parseInt(scanner.nextLine()));

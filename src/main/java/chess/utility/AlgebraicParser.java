@@ -2,7 +2,9 @@ package chess.utility;
 
 import chess.Position;
 import chess.color.Color;
-import chess.moves.*;
+import chess.moves.RawMove;
+
+import java.util.Optional;
 
 public class AlgebraicParser {
     private static final AlgebraicParser algebraicParser = new AlgebraicParser();
@@ -14,26 +16,37 @@ public class AlgebraicParser {
     private AlgebraicParser() {
     }
 
-    public RawMove longAlgebraicToMove(String move, Color color) {
+    public RawMove parseLongAlgebraic(String move, Color color) {
+        return algebraicCastleToMove(move, color)
+                .orElse(longAlgebraicToMove(move).orElseThrow());
+    }
+
+    private Optional<RawMove> longAlgebraicToMove(String move) {
+        String rawMove = slicePieceId(move);
+        if (rawMove.charAt(2) == '-') {
+            return Optional.of(new RawMove(
+                    algebraicToPosition(rawMove.substring(0, 2)),
+                    algebraicToPosition(rawMove.substring(3))));
+        }
+        return Optional.empty();
+    }
+
+    private Optional<RawMove> algebraicCastleToMove(String move, Color color) {
         if (move.equals("O-O")) {
             if (color.isWhite()) {
-                return new RawMove(new Position(5, 1), new Position(7, 1));
+                return Optional.of(new RawMove(new Position(5, 1), new Position(7, 1)));
             } else {
-                return new RawMove(new Position(5, 8), new Position(7, 8));
+                return Optional.of(new RawMove(new Position(5, 8), new Position(7, 8)));
             }
         }
         if (move.equals("O-O-O")) {
             if (color.isWhite()) {
-                return new RawMove(new Position(5, 1), new Position(3, 1));
+                return Optional.of(new RawMove(new Position(5, 1), new Position(3, 1)));
             } else {
-                return new RawMove(new Position(5, 8), new Position(3, 8));
+                return Optional.of(new RawMove(new Position(5, 8), new Position(3, 8)));
             }
         }
-        String rawMove = slicePieceId(move);
-        if (rawMove.charAt(2) == '-') {
-            return new RawMove(algebraicToPosition(rawMove.substring(0, 2)), algebraicToPosition(rawMove.substring(3)));
-        }
-        throw new IllegalArgumentException(move + "is not a valid long algebraic notation");
+        return Optional.empty();
     }
 
     private String slicePieceId(String move) {
