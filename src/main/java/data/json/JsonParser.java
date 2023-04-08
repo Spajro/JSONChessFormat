@@ -2,7 +2,7 @@ package data.json;
 
 import chess.Position;
 import chess.moves.RawMove;
-import chess.utility.AlgebraicParser;
+import chess.utility.LongAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,7 +14,7 @@ import data.model.Diagram;
 
 public class JsonParser {
     ObjectMapper mapper = new ObjectMapper();
-    AlgebraicParser algebraicParser = AlgebraicParser.getInstance();
+    LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
 
     public Diagram parseJson(String json) {
         try {
@@ -33,7 +33,7 @@ public class JsonParser {
 
     private void from(Diagram parent, JsonNode jsonNode) {
         String moveName = jsonNode.get("moveName").asText();
-        Diagram diagram = parent.makeMove(algebraicParser.parseLongAlgebraic(moveName, parent.getBoard().getColor().swap()), null);
+        Diagram diagram = parent.makeMove(longAlgebraicParser.parseLongAlgebraic(moveName, parent.getBoard().getColor().swap()), null);
         if (jsonNode.get("moves") != null) {
             jsonNode.get("moves").forEach(node -> from(diagram, node));
         }
