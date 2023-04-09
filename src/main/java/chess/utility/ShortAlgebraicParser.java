@@ -25,12 +25,16 @@ public class ShortAlgebraicParser {
             case 2 -> pawnToMove(move, chessBoard);
             case 3 -> xor(
                     pawnCaptureToMove(move, chessBoard),
-                    xor(specialPawnToMove(move, chessBoard),
+                    xor(
+                            specialPawnToMove(move, chessBoard),
                             pieceToMove(move, chessBoard)));
             case 4 -> xor(
                     pieceCaptureToMove(move, chessBoard),
-                    specialPieceToMove(move, chessBoard)
+                    xor(
+                            specialPieceToMove(move, chessBoard),
+                            specialPawnCaptureToMove(move, chessBoard))
             );
+            case 5 -> specialPieceCaptureToMove(move, chessBoard);
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
     }
@@ -73,13 +77,21 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> pieceCaptureToMove(String move, ChessBoard chessBoard) {
-        if (move.charAt(0) != 'x') {
+        if (move.charAt(1) != 'x') {
             return Optional.empty();
         }
-        return pieceToMove(move.substring(1), chessBoard);
+        return pieceToMove(move.charAt(0) + move.substring(2), chessBoard);
     }
 
     private Optional<RawMove> specialPieceToMove(String move, ChessBoard chessBoard) {
+        return Optional.empty();//TODO
+    }
+
+    private Optional<RawMove> specialPawnCaptureToMove(String move, ChessBoard chessBoard) {
+        return Optional.empty();//TODO
+    }
+
+    private Optional<RawMove> specialPieceCaptureToMove(String move, ChessBoard chessBoard) {
         return Optional.empty();//TODO
     }
 
@@ -90,9 +102,7 @@ public class ShortAlgebraicParser {
                 .map(chessBoard::getField)
                 .filter(Field::hasPiece)
                 .map(Field::getPiece)
-                .filter(piece1 -> piece1.getType().equals(piece.getType())
-                        && piece1.getColor().equal(piece.getColor())
-                )
+                .filter(piece::partiallyEquals)
                 .map(Piece::getPosition)
                 .collect(Collectors.toSet());
         if (positionSet.size() != 1) {
