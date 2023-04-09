@@ -35,7 +35,7 @@ public class Pawn extends Piece {
         Set<Position> result = stepsBackward.values().stream()
                 .map(position::add)
                 .filter(value -> !value.equals(position.add(stepsBackward.get(Step.FAR))))
-                .filter(value -> chessBoard.getField(value).isEmpty())
+                .filter(value -> chessBoard.getField(value).isEmpty() || chessBoard.getField(value).getPiece().partiallyEquals(this))
                 .collect(Collectors.toSet());
         if (isOnStartLine(position.add(stepsBackward.get(Step.FAR)))
                 && chessBoard.getField(position.add(stepsBackward.get(Step.FRONT))).isEmpty()) {

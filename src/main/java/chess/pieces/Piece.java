@@ -29,7 +29,7 @@ public abstract class Piece {
     }
 
     /**
-     * @return set of positions from which piece could move to current position (only empty fields)
+     * @return set of positions from which piece could move to current position (empty fields and fields with this piece)
      */
     public abstract Set<Position> getPossibleStartPositions();
 
@@ -59,4 +59,9 @@ public abstract class Piece {
     }
 
     public abstract Type getType();
+
+    public boolean partiallyEquals(Piece piece) {
+        return this.getType().equals(piece.getType())
+                && this.getColor().equal(piece.getColor());
+    }
 }

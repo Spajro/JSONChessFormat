@@ -17,7 +17,7 @@ public abstract class RestrictedMovementPiece extends Piece {
 
     protected Set<Position> getPossibleStartPositions(Set<Position> steps) {
         return getPossibleNonCollidingPositions(steps).stream()
-                .filter(position -> chessBoard.getField(position).isEmpty())
+                .filter(position -> chessBoard.getField(position).isEmpty() || chessBoard.getField(position).getPiece().partiallyEquals(this))
                 .collect(Collectors.toSet());
     }
 
