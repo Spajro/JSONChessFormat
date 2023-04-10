@@ -6,6 +6,7 @@ import chess.color.Color;
 import chess.moves.RawMove;
 import chess.pieces.King;
 import chess.pieces.Pawn;
+import chess.pieces.Rook;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -48,5 +49,29 @@ class ShortAlgebraicParserTest {
         ChessBoard chessBoard = new ChessBoard().put(new Pawn(Color.black, new Position(3, 3), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
         assertEquals(new RawMove(new Position(2, 1), new Position(3, 3)), rawMove);
+    }
+
+    @Test
+    void parseShortCastleTest(){
+        String move="O-O";
+        ChessBoard chessBoard=ChessBoard
+                .getBlank(Color.white)
+                .put(new King(Color.white, new Position(5, 1), null))
+                .put(new King(Color.black, new Position(5, 8), null))
+                .put(new Rook(Color.white,new Position(8,1),null));
+        RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
+        assertEquals(new RawMove(new Position(5, 1), new Position(7, 1)), rawMove);
+    }
+
+    @Test
+    void parseLongCastleTest(){
+        String move="O-O-O";
+        ChessBoard chessBoard=ChessBoard
+                .getBlank(Color.white)
+                .put(new King(Color.white, new Position(5, 1), null))
+                .put(new King(Color.black, new Position(5, 8), null))
+                .put(new Rook(Color.white,new Position(1,1),null));
+        RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
+        assertEquals(new RawMove(new Position(5, 1), new Position(3, 1)), rawMove);
     }
 }
