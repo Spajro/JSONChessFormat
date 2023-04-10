@@ -22,7 +22,7 @@ public class DisplayConfiguration {
     private static final String BBISHOPPATH = "black/bishop";
     private static final String BROOKPATH = "black/rook";
     private static final String BQUEENPATH = "black/queen";
-    private static final String BKINGPATH = "/black/king";
+    private static final String BKINGPATH = "black/king";
     private static final String FORMAT = ".bmp";
     private final HashMap<Piece.Type, ImageIcon> whiteImageMap;
     private final HashMap<Piece.Type, ImageIcon> blackImageMap;
@@ -47,7 +47,7 @@ public class DisplayConfiguration {
     }
 
     private ImageIcon getImageFromResources(String path) {
-        try (InputStream resource = DisplayConfiguration.class.getResourceAsStream(fullPieceImagePath(path))) {
+        try (InputStream resource = getClass().getResourceAsStream(fullPieceImagePath(path))) {
             Image image = ImageIO.read(resource);
             return new ImageIcon(image);
         } catch (IOException e) {
