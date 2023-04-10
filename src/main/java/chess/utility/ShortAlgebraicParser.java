@@ -25,9 +25,7 @@ public class ShortAlgebraicParser {
             case 2 -> pieceToMove('P' + move, chessBoard);
             case 3 -> xor(
                     pieceCaptureToMove('P' + move, chessBoard),
-                    xor(
-                            ambiguousPieceToMove('P' + move, chessBoard),
-                            pieceToMove(move, chessBoard)));
+                    pieceToMove(move, chessBoard));
             case 4 -> xor(
                     pieceCaptureToMove(move, chessBoard),
                     xor(
@@ -78,7 +76,7 @@ public class ShortAlgebraicParser {
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
-        Optional<Position> optionalStart = chooseByAmbiguous(positionSet, move.charAt(0));
+        Optional<Position> optionalStart = chooseByAmbiguous(positionSet, move.charAt(1));
         if (optionalStart.isEmpty()) {
             return Optional.empty();
         }
