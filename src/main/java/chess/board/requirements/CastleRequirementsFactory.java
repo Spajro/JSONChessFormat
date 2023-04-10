@@ -16,23 +16,40 @@ public class CastleRequirementsFactory {
     }
 
     public CastleRequirements getNextRequirements(ValidMove move) {
+        CastleRequirements requirements = chessBoard.getCastleRequirements();
         if (kingMoved(move)) {
-            return chessBoard.getCastleRequirements().kingMoved(chessBoard.getColor());
+            return requirements.kingMoved(chessBoard.getColor());
         } else if (hColumnRookMoved(move)) {
-            return chessBoard.getCastleRequirements().hColumnRookMoved(chessBoard.getColor());
+            return requirements.hColumnRookMoved(chessBoard.getColor());
+        } else if (hColumnRookCaptured(move)) {
+            return requirements.hColumnRookMoved(chessBoard.getColor().swap());
         } else if (aColumnRookMoved(move)) {
-            return chessBoard.getCastleRequirements().aColumnRookMoved(chessBoard.getColor());
+            return requirements.aColumnRookMoved(chessBoard.getColor());
+        } else if (aColumnRookCaptured(move)) {
+            return requirements.aColumnRookMoved(chessBoard.getColor().swap());
         } else {
-            return chessBoard.getCastleRequirements().copy();
+            return requirements.copy();
         }
     }
 
     private boolean aColumnRookMoved(ValidMove move) {
-        return isRookOnPosition(move.getStartPosition()) && move.getStartPosition().getX() == 1 && move.getStartPosition().getY() == getStartRow();
+        return isRookOnPosition(move.getStartPosition())
+                && move.getStartPosition().equals(new Position(1, getStartRow()));
+    }
+
+    private boolean aColumnRookCaptured(ValidMove move) {
+        return isOppositeRookOnPosition(move.getRepresentation().getEndPosition())
+                && move.getRepresentation().getEndPosition().equals(new Position(1, getOppositeStartRow()));
     }
 
     private boolean hColumnRookMoved(ValidMove move) {
-        return isRookOnPosition(move.getStartPosition()) && move.getStartPosition().getX() == 8 && move.getStartPosition().getY() == getStartRow();
+        return isRookOnPosition(move.getStartPosition())
+                && move.getStartPosition().equals(new Position(8, getStartRow()));
+    }
+
+    private boolean hColumnRookCaptured(ValidMove move) {
+        return isOppositeRookOnPosition(move.getRepresentation().getEndPosition())
+                && move.getRepresentation().getEndPosition().equals(new Position(8, getOppositeStartRow()));
     }
 
     private boolean kingMoved(ValidMove move) {
@@ -46,6 +63,15 @@ public class CastleRequirementsFactory {
         }
         Piece piece = field.getPiece();
         return (piece instanceof Rook) && piece.getColor().equal(chessBoard.getColor());
+    }
+
+    private boolean isOppositeRookOnPosition(Position position) {
+        Field field = chessBoard.getField(position);
+        if (field.isEmpty()) {
+            return false;
+        }
+        Piece piece = field.getPiece();
+        return (piece instanceof Rook) && !piece.getColor().equal(chessBoard.getColor());
     }
 
     private boolean isKingOnPosition(Position position) {
@@ -62,6 +88,14 @@ public class CastleRequirementsFactory {
             return 1;
         } else {
             return 8;
+        }
+    }
+
+    private int getOppositeStartRow() {
+        if (chessBoard.getColor().isWhite()) {
+            return 8;
+        } else {
+            return 1;
         }
     }
 }
