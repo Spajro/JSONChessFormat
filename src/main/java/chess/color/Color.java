@@ -1,13 +1,11 @@
 package chess.color;
 
-import java.io.Serializable;
-
-public interface Color extends Serializable {
+public interface Color {
     White white = new White();
     Black black = new Black();
 
-    default boolean equal(Color color){
-        return this.isWhite()==color.isWhite();
+    default boolean equal(Color color) {
+        return this.isWhite() == color.isWhite();
     }
 
     Color swap();
