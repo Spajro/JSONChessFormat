@@ -22,19 +22,19 @@ public class ShortAlgebraicParser {
 
     private Optional<RawMove> shortAlgebraicToMove(String move, ChessBoard chessBoard) {
         return switch (move.length()) {
-            case 2 -> pawnToMove(move, chessBoard);
+            case 2 -> pieceToMove('P' + move, chessBoard);
             case 3 -> xor(
-                    pawnCaptureToMove(move, chessBoard),
+                    pieceCaptureToMove('P' + move, chessBoard),
                     xor(
-                            specialPawnToMove(move, chessBoard),
+                            ambiguousPieceToMove('P' + move, chessBoard),
                             pieceToMove(move, chessBoard)));
             case 4 -> xor(
                     pieceCaptureToMove(move, chessBoard),
                     xor(
-                            specialPieceToMove(move, chessBoard),
-                            specialPawnCaptureToMove(move, chessBoard))
+                            ambiguousPieceToMove(move, chessBoard),
+                            ambiguousPieceCaptureToMove('P' + move, chessBoard))
             );
-            case 5 -> specialPieceCaptureToMove(move, chessBoard);
+            case 5 -> ambiguousPieceCaptureToMove(move, chessBoard);
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
     }
@@ -51,18 +51,6 @@ public class ShortAlgebraicParser {
         }
     }
 
-    private Optional<RawMove> pawnToMove(String move, ChessBoard chessBoard) {
-        Position end = utility.algebraicToPosition(move);
-        return getSinglePieceMove(new Pawn(chessBoard.getColor(), end, chessBoard), chessBoard);
-    }
-
-    private Optional<RawMove> pawnCaptureToMove(String move, ChessBoard chessBoard) {
-        if (move.charAt(0) != 'x') {
-            return Optional.empty();
-        }
-        return pawnToMove(move.substring(1), chessBoard);
-    }
-
     private Optional<RawMove> pieceToMove(String move, ChessBoard chessBoard) {
         Position end = utility.algebraicToPosition(move.substring(1));
         Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
@@ -72,20 +60,6 @@ public class ShortAlgebraicParser {
         return getSinglePieceMove(optionalPiece.get(), chessBoard);
     }
 
-    private Optional<RawMove> specialPawnToMove(String move, ChessBoard chessBoard) {
-        Position end = utility.algebraicToPosition(move.substring(1));
-        Piece pawn = new Pawn(chessBoard.getColor(), end, chessBoard);
-        Set<Position> positionSet = getPositions(pawn, chessBoard);
-        if (positionSet.size() < 1) {
-            return Optional.empty();
-        }
-        Optional<Position>optionalStart=chooseBySpecial(positionSet, move.charAt(0));
-        if(optionalStart.isEmpty()){
-            return Optional.empty();
-        }
-        return Optional.of(new RawMove(optionalStart.get(), end));
-    }
-
     private Optional<RawMove> pieceCaptureToMove(String move, ChessBoard chessBoard) {
         if (move.charAt(1) != 'x') {
             return Optional.empty();
@@ -93,7 +67,7 @@ public class ShortAlgebraicParser {
         return pieceToMove(move.charAt(0) + move.substring(2), chessBoard);
     }
 
-    private Optional<RawMove> specialPieceToMove(String move, ChessBoard chessBoard) {
+    private Optional<RawMove> ambiguousPieceToMove(String move, ChessBoard chessBoard) {
         Position end = utility.algebraicToPosition(move.substring(2));
         Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
         if (optionalPiece.isEmpty()) {
@@ -104,25 +78,18 @@ public class ShortAlgebraicParser {
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
-        Optional<Position>optionalStart=chooseBySpecial(positionSet, move.charAt(0));
-        if(optionalStart.isEmpty()){
+        Optional<Position> optionalStart = chooseByAmbiguous(positionSet, move.charAt(0));
+        if (optionalStart.isEmpty()) {
             return Optional.empty();
         }
         return Optional.of(new RawMove(optionalStart.get(), end));
     }
 
-    private Optional<RawMove> specialPawnCaptureToMove(String move, ChessBoard chessBoard) {
-        if (move.charAt(1) != 'x') {
-            return Optional.empty();
-        }
-        return specialPieceToMove(move.charAt(0) + move.substring(2), chessBoard);
-    }
-
-    private Optional<RawMove> specialPieceCaptureToMove(String move, ChessBoard chessBoard) {
+    private Optional<RawMove> ambiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {
         if (move.charAt(2) != 'x') {
             return Optional.empty();
         }
-        return specialPieceToMove(move.substring(0, 2) + move.substring(3), chessBoard);
+        return ambiguousPieceToMove(move.substring(0, 2) + move.substring(3), chessBoard);
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
@@ -133,9 +100,9 @@ public class ShortAlgebraicParser {
         return Optional.of(new RawMove(positionSet.stream().findAny().get(), piece.getPosition()));
     }
 
-    private Optional<Position> chooseBySpecial(Set<Position> positions, char special) {
+    private Optional<Position> chooseByAmbiguous(Set<Position> positions, char ambiguous) {
         try {
-            int column = utility.columnToNumber(special);
+            int column = utility.columnToNumber(ambiguous);
             Set<Position> positionSet = positions.stream()
                     .filter(position -> position.getX() == column)
                     .collect(Collectors.toSet());
@@ -146,7 +113,7 @@ public class ShortAlgebraicParser {
         } catch (IllegalArgumentException ignored) {
         }
         try {
-            int row = rowToNumber(special);
+            int row = rowToNumber(ambiguous);
             Set<Position> positionSet = positions.stream()
                     .filter(position -> position.getY() == row)
                     .collect(Collectors.toSet());
@@ -173,6 +140,7 @@ public class ShortAlgebraicParser {
 
     private Optional<Piece> charToPiece(char piece, Position position, ChessBoard chessBoard) {
         return Optional.ofNullable(switch (piece) {
+            case 'P' -> new Pawn(chessBoard.getColor(), position, chessBoard);
             case 'N' -> new Knight(chessBoard.getColor(), position, chessBoard);
             case 'B' -> new Bishop(chessBoard.getColor(), position, chessBoard);
             case 'R' -> new Rook(chessBoard.getColor(), position, chessBoard);
