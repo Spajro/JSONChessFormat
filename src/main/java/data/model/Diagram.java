@@ -3,7 +3,7 @@ package data.model;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
-import chess.utility.AlgebraicFactory;
+import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
@@ -20,7 +20,7 @@ public class Diagram {
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
     private final ChessBoard board;
-    private final AlgebraicFactory algebraicFactory = AlgebraicFactory.getInstance();
+    private final LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
 
     public Diagram() {
         moveId = 0;
@@ -49,7 +49,7 @@ public class Diagram {
 
             ChessBoard tempBoard = validMoveResult.getResult();
             Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
-            nextDiagram.moveName = algebraicFactory.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
+            nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
                     return diagram;

@@ -5,15 +5,7 @@ import chess.board.ChessBoard;
 import chess.moves.*;
 import chess.pieces.*;
 
-public class AlgebraicFactory {
-    private static final AlgebraicFactory algebraicFactory = new AlgebraicFactory();
-
-    public static AlgebraicFactory getInstance() {
-        return algebraicFactory;
-    }
-
-    private AlgebraicFactory() {
-    }
+public class LongAlgebraicFactory {
 
     public String moveToLongAlgebraic(ChessBoard board, ValidMove move) {
         if (move instanceof SimpleMove simpleMove) {

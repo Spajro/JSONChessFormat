@@ -1,7 +1,7 @@
 package cli;
 
 import chess.board.lowlevel.Field;
-import chess.utility.AlgebraicFactory;
+import chess.utility.LongAlgebraicFactory;
 import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
@@ -16,7 +16,7 @@ public class CommandLineHandler {
     DataModel dataModel=new DataModel();
     Diagram node = dataModel.getActualNode();
     FileManager fileManager = new FileManager();
-    AlgebraicFactory algebraicFactory = AlgebraicFactory.getInstance();
+    LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
     JsonFactory jsonFactory=new JsonFactory(dataModel);
 
     public void makeAction(ActionData data) {
@@ -123,7 +123,7 @@ public class CommandLineHandler {
                     } else {
                         System.out.print("B");
                     }
-                    System.out.print(algebraicFactory.typeToAlgebraic(field.getPiece().getType()));
+                    System.out.print(longAlgebraicFactory.typeToAlgebraic(field.getPiece().getType()));
                 }
                 System.out.print(" ");
             }
