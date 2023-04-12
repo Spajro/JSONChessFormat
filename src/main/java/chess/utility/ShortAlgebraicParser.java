@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ShortAlgebraicParser {
-    private final AlgebraicParserUtility utility = new AlgebraicParserUtility();
+    private final AlgebraicUtility utility = new AlgebraicUtility();
 
     public RawMove parseShortAlgebraic(String move, ChessBoard chessBoard) {
         return utility.algebraicCastleToMove(move, chessBoard.getColor())

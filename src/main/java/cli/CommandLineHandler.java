@@ -1,6 +1,7 @@
 package cli;
 
 import chess.board.lowlevel.Field;
+import chess.utility.AlgebraicUtility;
 import chess.utility.LongAlgebraicFactory;
 import data.json.JsonFactory;
 import data.model.DataModel;
@@ -13,11 +14,11 @@ import data.model.FileManager;
 import java.io.*;
 
 public class CommandLineHandler {
-    DataModel dataModel=new DataModel();
+    DataModel dataModel = new DataModel();
     Diagram node = dataModel.getActualNode();
     FileManager fileManager = new FileManager();
-    LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
-    JsonFactory jsonFactory=new JsonFactory(dataModel);
+    AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+    JsonFactory jsonFactory = new JsonFactory(dataModel);
 
     public void makeAction(ActionData data) {
         switch (data.getCode()) {
@@ -123,7 +124,7 @@ public class CommandLineHandler {
                     } else {
                         System.out.print("B");
                     }
-                    System.out.print(longAlgebraicFactory.typeToAlgebraic(field.getPiece().getType()));
+                    System.out.print(algebraicUtility.typeToAlgebraic(field.getPiece().getType()));
                 }
                 System.out.print(" ");
             }
