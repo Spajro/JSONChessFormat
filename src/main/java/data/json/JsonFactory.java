@@ -1,5 +1,6 @@
 package data.json;
 
+import chess.utility.AlgebraicUtility;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -10,6 +11,7 @@ import data.model.Diagram;
 public class JsonFactory {
     private final DataModel dataModel;
     private final ListJsonFactory listJsonFactory = new ListJsonFactory();
+    private final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
 
     public JsonFactory(DataModel dataModel) {
         this.dataModel = dataModel;
@@ -65,25 +67,18 @@ public class JsonFactory {
 
     private String toJson(ArrowAnnotation arrow) {
         return "{" +
-                "\"start\":{\"x\":\"" +
-                arrow.getStartPosition().getX() +
-                "\",\"y\":\"" +
-                arrow.getStartPosition().getY() +
-                "\"},\"end\":{\"x\":\"" +
-                arrow.getEndPosition().getX() +
-                "\",\"y\":\"" +
-                arrow.getEndPosition().getY() +
-                "\"},\"color\":\"" +
+                "\"arrow\":\"" +
+                algebraicUtility.positionToAlgebraic(arrow.getStartPosition()) +
+                algebraicUtility.positionToAlgebraic(arrow.getEndPosition()) +
+                "\",\"color\":\"" +
                 GraphicAnnotation.drawColorToString(arrow.getColor()) +
                 "\"}";
     }
 
     private String toJson(FieldAnnotation field) {
-        return "{\"position\": { \"x\":\"" +
-                field.getX() +
-                "\",\"y\":\"" +
-                field.getY() +
-                "\"},\"color\":\"" +
+        return "{\"position\": \"" +
+                algebraicUtility.positionToAlgebraic(field) +
+                "\",\"color\":\"" +
                 GraphicAnnotation.drawColorToString(field.getColor()) +
                 "\"}";
     }

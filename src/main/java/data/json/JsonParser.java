@@ -1,7 +1,7 @@
 package data.json;
 
-import chess.Position;
 import chess.moves.RawMove;
+import chess.utility.AlgebraicUtility;
 import chess.utility.LongAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -15,6 +15,7 @@ import data.model.Diagram;
 public class JsonParser {
     ObjectMapper mapper = new ObjectMapper();
     LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
+    AlgebraicUtility algebraicUtility = new AlgebraicUtility();
 
     public Diagram parseJson(String json) {
         try {
@@ -22,7 +23,9 @@ public class JsonParser {
             String moveName = root.get("moveName").asText();
             if (moveName.equals("Start")) {
                 Diagram diagram = new Diagram();
-                root.get("moves").forEach(node -> from(diagram, node));
+                if (root.get("moves") != null) {
+                    root.get("moves").forEach(node -> from(diagram, node));
+                }
                 return diagram;
             }
         } catch (JsonProcessingException e) {
@@ -56,11 +59,12 @@ public class JsonParser {
     }
 
     private ArrowAnnotation toArrow(JsonNode jsonNode) {
-        if (jsonNode.get("start") != null && jsonNode.get("end") != null && jsonNode.get("color") != null) {
+        if (jsonNode.get("arrow") != null && jsonNode.get("color") != null) {
+            String arrow = jsonNode.get("arrow").asText();
             return new ArrowAnnotation(
                     new RawMove(
-                            toPosition(jsonNode.get("start")),
-                            toPosition(jsonNode.get("end"))),
+                            algebraicUtility.algebraicToPosition(arrow.substring(0, 2)),
+                            algebraicUtility.algebraicToPosition(arrow.substring(2))),
                     toDrawColor(jsonNode.get("color")));
         }
         throw new IllegalArgumentException("Not a json arrow: " + jsonNode);
@@ -69,19 +73,10 @@ public class JsonParser {
     private FieldAnnotation toField(JsonNode jsonNode) {
         if (jsonNode.get("position") != null && jsonNode.get("color") != null) {
             return new FieldAnnotation(
-                    toPosition(jsonNode.get("position")),
+                    algebraicUtility.algebraicToPosition(jsonNode.get("position").asText()),
                     toDrawColor(jsonNode.get("color")));
         }
         throw new IllegalArgumentException("Not a json field annotation: " + jsonNode);
-    }
-
-    private Position toPosition(JsonNode jsonNode) {
-        if (jsonNode.get("x") != null && jsonNode.get("y") != null) {
-            return new Position(
-                    jsonNode.get("x").asInt(),
-                    jsonNode.get("y").asInt());
-        }
-        throw new IllegalArgumentException("Not a json position: " + jsonNode);
     }
 
     private GraphicAnnotation.DrawColor toDrawColor(JsonNode jsonNode) {
