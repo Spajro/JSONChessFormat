@@ -1,8 +1,10 @@
 package gui;
 
 import chess.Position;
+import chess.color.Color;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
+import chess.utility.LongAlgebraicParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -17,6 +19,8 @@ import log.Log;
 
 import javax.swing.*;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Controller {
     private final DataModel dataModel;
@@ -27,6 +31,8 @@ public class Controller {
     private final FileManager fileManager = new FileManager();
     private final FENParser fenParser = FENParser.getInstance();
     private final JsonFactory jsonFactory;
+
+    private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -164,5 +170,15 @@ public class Controller {
         textArea.setText(FENFactory.getInstance().chessBoardToFEN(dataModel.getActualNode().getBoard()));
         textArea.setEditable(false);
         JOptionPane.showMessageDialog(optionPanel, textArea);
+    }
+
+    public void makeMoves(String moves) {
+        Color color = dataModel.getActualNode().getBoard().getColor();
+        List<RawMove> result = new LinkedList<>();
+        for (String move : moves.split(" ")) {
+            result.add(longAlgebraicParser.parseLongAlgebraic(move, color));
+            color = color.swap();
+        }
+        dataModel.makeMoves(result);
     }
 }

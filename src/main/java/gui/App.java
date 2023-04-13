@@ -21,6 +21,7 @@ public class App {
         menuBar = new JMenuBar();
         createFileMenu(dataModel);
         createFeatureMenu();
+        createEditionMenu();
         boardPanel = new BoardPanel(dataModel.getActualNode());
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
@@ -78,6 +79,16 @@ public class App {
         menuBar.add(featureMenu);
     }
 
+    private void createEditionMenu() {
+        JMenu editionMenu = new JMenu("Edit");
+
+        JMenuItem addMovesItem = new JMenuItem("Add moves");
+        addMovesItem.addActionListener(e -> controller.makeMoves(getMoves()));
+        editionMenu.add(addMovesItem);
+
+        menuBar.add(editionMenu);
+    }
+
     private void setUpBoardPanel() {
         boardPanel.addMouseListener(new BoardMouseListener(controller));
         boardPanel.setFocusable(true);
@@ -85,10 +96,14 @@ public class App {
     }
 
     private String getFilename() {
-        return JOptionPane.showInputDialog(frame, "What is name of file?", null);
+        return JOptionPane.showInputDialog(frame, "What is name of file?");
     }
 
     private String getFEN() {
-        return JOptionPane.showInputDialog(frame, "Write FEN you want to import", null);
+        return JOptionPane.showInputDialog(frame, "Write FEN you want to import");
+    }
+
+    private String getMoves() {
+        return JOptionPane.showInputDialog(frame, "Write moves you want to add");
     }
 }

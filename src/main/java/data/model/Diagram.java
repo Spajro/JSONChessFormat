@@ -1,5 +1,6 @@
 package data.model;
 
+import chess.moves.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
@@ -62,7 +63,20 @@ public class Diagram {
             Log.log().info("Illegal Move");
             return this;
         }
+    }
 
+    public Diagram makeMove(ExecutableMove move) {
+        ChessBoard tempBoard = board.makeMove(move);
+        Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+        nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), move);
+        for (Diagram diagram : nextDiagrams) {
+            if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+                return diagram;
+            }
+        }
+
+        nextDiagrams.add(nextDiagram);
+        return nextDiagram;
     }
 
     public Diagram getDiagramOfId(int id) {

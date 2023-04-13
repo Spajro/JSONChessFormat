@@ -1,10 +1,13 @@
 package data.model;
 
+import chess.moves.ExecutableMove;
 import chess.moves.RawMove;
+
+import java.util.List;
 
 public class DataModel {
     private Diagram actualNode;
-    private final TreeDataModel treeDataMode=new TreeDataModel();
+    private final TreeDataModel treeDataMode = new TreeDataModel();
     private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
@@ -13,9 +16,22 @@ public class DataModel {
     }
 
     public void makeMove(RawMove m) {
+        Diagram tempNode = actualNode;
         actualNode = actualNode.makeMove(m, promotionTypeProvider);
-        treeDataMode.setActualNode(actualNode);
-        treeDataMode.notifyListenersOnInsert(actualNode);
+        if (tempNode != actualNode) {
+            treeDataMode.setActualNode(actualNode);
+            treeDataMode.notifyListenersOnInsert(actualNode);
+        }
+    }
+
+    public void makeMoves(List<RawMove> moves) {
+        Diagram tempNode = actualNode;
+        for (RawMove move : moves) {
+            makeMove(move);
+            if (actualNode == tempNode) {
+                return;
+            }
+        }
     }
 
     public void setActualNode(Diagram actualNode) {
