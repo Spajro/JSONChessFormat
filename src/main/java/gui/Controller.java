@@ -7,11 +7,8 @@ import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.json.JsonFactory;
-import data.model.DataModel;
-import data.model.Diagram;
+import data.model.*;
 import chess.moves.RawMove;
-import data.model.FileManager;
-import data.model.PromotionTypeProvider;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
 import gui.option.OptionPanel;
@@ -23,6 +20,7 @@ import java.io.FileNotFoundException;
 
 public class Controller {
     private final DataModel dataModel;
+    private final TreeDataModel treeDataModel;
     private final BoardPanel boardPanel;
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
@@ -32,6 +30,7 @@ public class Controller {
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
+        treeDataModel = dataModel.asTree();
         this.boardPanel = boardPanel;
         dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
         jsonFactory = new JsonFactory(dataModel);
@@ -55,7 +54,7 @@ public class Controller {
         } else {
             dataModel.makeMove(move);
             boardPanel.setDiagram(dataModel.getActualNode());
-            treeMouseListener.treeNodeInserted(dataModel.getTreePathTo(dataModel.getActualNode()));
+            treeMouseListener.treeNodeInserted(treeDataModel.getTreePathTo(dataModel.getActualNode()));
             optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
         }
         boardPanel.repaint();
@@ -121,7 +120,7 @@ public class Controller {
     }
 
     public JTree createTreeWithDataModel() {
-        return new JTree(dataModel);
+        return new JTree(treeDataModel);
     }
 
     private PromotionTypeProvider getPromotionTypeProvider() {
@@ -143,7 +142,7 @@ public class Controller {
     public void loadDataFromFile(String filename) {
         try {
             dataModel.setActualNode(fileManager.load(filename));
-            dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
@@ -156,7 +155,7 @@ public class Controller {
 
     public void loadChessBoardFromFEN(String fen) {
         dataModel.setActualNode(new Diagram(fenParser.parseFEN(fen), null, 0));
-        dataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+        treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
     }
 
