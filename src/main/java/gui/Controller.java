@@ -1,10 +1,15 @@
 package gui;
 
 import chess.Position;
-import chess.color.Color;
+import chess.board.ChessBoard;
+import chess.pieces.Piece;
+import chess.results.MoveResult;
+import chess.results.PromotionResult;
+import chess.results.ValidMoveResult;
+import chess.utility.AlgebraicUtility;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
-import chess.utility.LongAlgebraicParser;
+import chess.utility.ShortAlgebraicParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -21,6 +26,7 @@ import javax.swing.*;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Controller {
     private final DataModel dataModel;
@@ -32,7 +38,8 @@ public class Controller {
     private final FENParser fenParser = FENParser.getInstance();
     private final JsonFactory jsonFactory;
 
-    private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
+    private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
+    private final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -173,11 +180,27 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Color color = dataModel.getActualNode().getBoard().getColor();
+        ChessBoard chessBoard = dataModel.getActualNode().getBoard();
         List<RawMove> result = new LinkedList<>();
         for (String move : moves.split(" ")) {
-            result.add(longAlgebraicParser.parseLongAlgebraic(move, color));
-            color = color.swap();
+            RawMove rawMove = shortAlgebraicParser.parseShortAlgebraic(move, chessBoard);
+            result.add(rawMove);
+            MoveResult moveResult = chessBoard.makeMove(rawMove);
+            if (moveResult.isValid()) {
+                ValidMoveResult validMoveResult;
+                if (moveResult instanceof PromotionResult promotionResult) {
+                    Optional<Piece.Type> optionalType = algebraicUtility.parsePromotion(move);
+                    if (optionalType.isEmpty()) {
+                        return;
+                    }
+                    validMoveResult = promotionResult.type(optionalType.get());
+                } else {
+                    validMoveResult = (ValidMoveResult) moveResult;
+                }
+                chessBoard = validMoveResult.getResult();
+            } else {
+                return;
+            }
         }
         dataModel.makeMoves(result);
     }

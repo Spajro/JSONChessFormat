@@ -7,6 +7,8 @@ import chess.pieces.Piece;
 
 import java.util.Optional;
 
+import static chess.pieces.Piece.Type.*;
+
 public class AlgebraicUtility {
     Optional<RawMove> algebraicCastleToMove(String move, Color color) {
         if (move.equals("O-O")) {
@@ -33,6 +35,10 @@ public class AlgebraicUtility {
         return new Position(columnToNumber(position.charAt(0)), Character.getNumericValue(position.charAt(1)));
     }
 
+    public Optional<Piece.Type> parsePromotion(String move) {
+        return algebraicToType(move.charAt(move.length()-1));
+    }
+
     public int columnToNumber(char column) {
         return switch (column) {
             case 'a' -> 1;
@@ -56,6 +62,18 @@ public class AlgebraicUtility {
             case QUEEN -> 'Q';
             case KING -> 'K';
         };
+    }
+
+    public Optional<Piece.Type> algebraicToType(char type) {
+        return Optional.ofNullable(switch (type) {
+            case ' ' -> PAWN;
+            case 'N' -> KNIGHT;
+            case 'B' -> BISHOP;
+            case 'R' -> ROOK;
+            case 'Q' -> QUEEN;
+            case 'K' -> KING;
+            default -> null;
+        });
     }
 
     public String positionToAlgebraic(Position position) {
