@@ -15,12 +15,13 @@ public class ShortAlgebraicParser {
 
     public RawMove parseShortAlgebraic(String move, ChessBoard chessBoard) {
         return utility.algebraicCastleToMove(move, chessBoard.getColor())
-                .orElseGet(() -> shortAlgebraicToMove(move, chessBoard)
+                .orElseGet(() -> shortAlgebraicToMove(removeCheckmarks(move), chessBoard)
                         .orElseThrow(() -> new IllegalArgumentException("Illegal short algebraic: " + move))
                 );
     }
 
     private Optional<RawMove> shortAlgebraicToMove(String move, ChessBoard chessBoard) {
+
         return switch (move.length()) {
             case 2 -> pieceToMove('P' + move, chessBoard);
             case 3 -> xor(
@@ -38,14 +39,14 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> xor(Optional<RawMove> first, Optional<RawMove> second) {
-        if (first.isPresent() && second.isEmpty()) {
-            return first;
-        } else if (first.isEmpty() && second.isPresent()) {
-            return second;
+        if (first.isPresent() && second.isPresent()) {
+            throw new IllegalArgumentException();
         } else if (first.isEmpty() && second.isEmpty()) {
             return Optional.empty();
+        } else if (first.isPresent()) {
+            return first;
         } else {
-            throw new IllegalArgumentException();
+            return second;
         }
     }
 
@@ -124,7 +125,16 @@ public class ShortAlgebraicParser {
         return Optional.empty();
     }
 
-    private static Set<Position> getPositions(Piece piece, ChessBoard chessBoard) {
+    private String removeCheckmarks(String move) {
+        char last = move.charAt(move.length() - 1);
+        if (last == '+' || last == '#') {
+            return move.substring(0, move.length() - 1);
+        } else {
+            return move;
+        }
+    }
+
+    private Set<Position> getPositions(Piece piece, ChessBoard chessBoard) {
         return piece
                 .getPossibleStartPositions()
                 .stream()
@@ -132,6 +142,7 @@ public class ShortAlgebraicParser {
                 .filter(Field::hasPiece)
                 .map(Field::getPiece)
                 .filter(piece::partiallyEquals)
+                .filter(p -> p.getPossibleEndPositions().contains(piece.getPosition()))
                 .map(Piece::getPosition)
                 .collect(Collectors.toSet());
     }

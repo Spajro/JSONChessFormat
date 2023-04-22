@@ -21,7 +21,7 @@ public class King extends Piece {
                 .map(this::getField)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .filter(Field::isEmpty)
+                .filter(field -> field.isEmpty() || field.getPiece().partiallyEquals(this))
                 .map(Field::getPosition)
                 .collect(Collectors.toSet());
     }
