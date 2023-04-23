@@ -1,6 +1,5 @@
 package data.model;
 
-import chess.moves.ExecutableMove;
 import chess.moves.RawMove;
 
 import java.util.List;
