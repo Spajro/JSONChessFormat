@@ -19,7 +19,7 @@ public class App {
     public App(DataModel dataModel) {
         frame = new JFrame();
         menuBar = new JMenuBar();
-        createFileMenu(dataModel);
+        createFileMenu();
         createFeatureMenu();
         createEditionMenu();
         boardPanel = new BoardPanel(dataModel.getActualNode());
@@ -39,16 +39,16 @@ public class App {
         frame.setVisible(true);
     }
 
-    private void createFileMenu(DataModel dataModel) {
+    private void createFileMenu() {
         JMenu fileMenu = new JMenu("File");
 
-        JMenuItem saveMenuItem = new JMenuItem("Save to file");
-        saveMenuItem.addActionListener(e -> controller.saveDataToFile(getFilename()));
-        fileMenu.add(saveMenuItem);
+        JMenuItem saveJSONMenuItem = new JMenuItem("Save to json");
+        saveJSONMenuItem.addActionListener(e -> controller.saveDataToJSON(getFilename()));
+        fileMenu.add(saveJSONMenuItem);
 
-        JMenuItem loadMenuItem = new JMenuItem("Load from file");
-        loadMenuItem.addActionListener(e -> controller.loadDataFromFile(getFilename()));
-        fileMenu.add(loadMenuItem);
+        JMenuItem loadJSONMenuItem = new JMenuItem("Load from json");
+        loadJSONMenuItem.addActionListener(e -> controller.loadDataFromJSON(getFilename()));
+        fileMenu.add(loadJSONMenuItem);
 
         JMenuItem loadFENMenuItem = new JMenuItem("Load from FEN");
         loadFENMenuItem.addActionListener(e -> controller.loadChessBoardFromFEN(getFEN()));
@@ -57,6 +57,10 @@ public class App {
         JMenuItem saveFENMenuItem = new JMenuItem("Save to FEN");
         saveFENMenuItem.addActionListener(e -> controller.saveChessBoardToFEN());
         fileMenu.add(saveFENMenuItem);
+
+        JMenuItem loadPGNMenuItem = new JMenuItem("Load from PGN");
+        loadPGNMenuItem.addActionListener(e -> controller.loadDataFromPGN(getFilename()));
+        fileMenu.add(loadPGNMenuItem);
 
         menuBar.add(fileMenu);
     }

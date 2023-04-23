@@ -118,7 +118,7 @@ public class Controller {
     }
 
     public void setActualNode(Diagram lastPathComponent) {
-        Log.log().info(lastPathComponent.toString() + " is set as actual node");
+        Log.log().info(lastPathComponent.toString() + " is set as actual node, " + lastPathComponent.getNextDiagrams().size() + " nextDiagrams");
         dataModel.setActualNode(lastPathComponent);
         boardPanel.setDiagram(lastPathComponent);
         optionPanel.setText(lastPathComponent.getAnnotations().getTextAnnotation());
@@ -144,9 +144,9 @@ public class Controller {
         dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
     }
 
-    public void loadDataFromFile(String filename) {
+    public void loadDataFromJSON(String filename) {
         try {
-            dataModel.setActualNode(fileManager.load(filename));
+            dataModel.setActualNode(fileManager.loadJSON(filename));
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
@@ -154,7 +154,17 @@ public class Controller {
         }
     }
 
-    public void saveDataToFile(String filename) {
+    public void loadDataFromPGN(String filename) {
+        try {
+            dataModel.setActualNode(fileManager.loadPGN(filename));
+            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+            boardPanel.setDiagram(dataModel.getActualNode());
+        } catch (FileNotFoundException e) {
+            Log.log().warn("file not found");
+        }
+    }
+
+    public void saveDataToJSON(String filename) {
         fileManager.save(filename, jsonFactory.toJson());
     }
 

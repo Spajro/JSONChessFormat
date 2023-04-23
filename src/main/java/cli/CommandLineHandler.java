@@ -2,7 +2,6 @@ package cli;
 
 import chess.board.lowlevel.Field;
 import chess.utility.AlgebraicUtility;
-import chess.utility.LongAlgebraicFactory;
 import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
@@ -24,7 +23,7 @@ public class CommandLineHandler {
         switch (data.getCode()) {
             case "LD" -> {
                 try {
-                    node = fileManager.load((String) data.getParam());
+                    node = fileManager.loadJSON((String) data.getParam());
                 } catch (FileNotFoundException e) {
                     System.out.print("Loading failed");
                 }

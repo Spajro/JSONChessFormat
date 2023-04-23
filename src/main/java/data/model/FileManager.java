@@ -1,5 +1,6 @@
 package data.model;
 
+import data.PGNParser;
 import data.json.JsonParser;
 import log.Log;
 
@@ -7,18 +8,27 @@ import java.io.*;
 import java.util.Scanner;
 
 public class FileManager {
-    private final JsonParser parser = new JsonParser();
+    private final JsonParser jsonParser = new JsonParser();
+    private final PGNParser pgnParser = new PGNParser();
 
-    public Diagram load(String filename) throws FileNotFoundException {
-        Log.log().info("Loading");
+    public Diagram loadJSON(String filename) throws FileNotFoundException {
+        Log.log().info("Loading JSON");
         Scanner scanner = new Scanner(new File(filename + ".json"));
         String text = scanner.useDelimiter("\\A").next();
         scanner.close();
-        return parser.parseJson(text.trim());
+        return jsonParser.parseJson(text.trim());
     }
 
-    public void save(String filename,String json) {
-        Log.log().info("saving");
+    public Diagram loadPGN(String filename) throws FileNotFoundException {
+        Log.log().info("Loading PGN");
+        Scanner scanner = new Scanner(new File(filename + ".pgn"));
+        String text = scanner.useDelimiter("\\A").next();
+        scanner.close();
+        return pgnParser.parsePGN(text).diagram().orElseThrow(() -> new IllegalArgumentException("Illegal pgn"));
+    }
+
+    public void save(String filename, String json) {
+        Log.log().info("Saving JSON");
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".json"));
             writer.write(json);

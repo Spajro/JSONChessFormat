@@ -35,6 +35,7 @@ public class DataModel {
 
     public void setActualNode(Diagram actualNode) {
         this.actualNode = actualNode;
+        treeDataMode.setActualNode(actualNode);
     }
 
     public Diagram getActualNode() {
