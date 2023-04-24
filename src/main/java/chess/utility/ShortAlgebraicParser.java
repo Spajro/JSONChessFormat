@@ -5,6 +5,7 @@ import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
 import chess.moves.RawMove;
 import chess.pieces.*;
+import chess.validation.MoveValidator;
 
 import java.util.Optional;
 import java.util.Set;
@@ -21,7 +22,6 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> shortAlgebraicToMove(String move, ChessBoard chessBoard) {
-
         return switch (move.length()) {
             case 2 -> pieceToMove('P' + move, chessBoard);
             case 3 -> xor(
@@ -94,7 +94,13 @@ public class ShortAlgebraicParser {
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
         Set<Position> positionSet = getPositions(piece, chessBoard);
         if (positionSet.size() != 1) {
-            return Optional.empty();
+            Set<Position> filteredSet = positionSet.stream()
+                    .filter(position -> new MoveValidator(chessBoard).isLegalSimpleMove(new RawMove(position, piece.getPosition())))
+                    .collect(Collectors.toSet());
+            if (filteredSet.size() != 1) {
+                return Optional.empty();
+            }
+            return Optional.of(new RawMove(filteredSet.stream().findAny().get(), piece.getPosition()));
         }
         return Optional.of(new RawMove(positionSet.stream().findAny().get(), piece.getPosition()));
     }

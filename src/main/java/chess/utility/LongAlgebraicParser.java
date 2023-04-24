@@ -10,7 +10,7 @@ public class LongAlgebraicParser {
 
     public RawMove parseLongAlgebraic(String move, Color color) {
         return utility.algebraicCastleToMove(move, color)
-                .orElse(longAlgebraicToMove(move)
+                .orElseGet(() -> longAlgebraicToMove(move)
                         .orElseThrow(() -> new IllegalArgumentException("Wrong algebraic"))
                 );
     }
