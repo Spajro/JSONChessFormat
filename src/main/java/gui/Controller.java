@@ -185,4 +185,14 @@ public class Controller {
         Optional<List<RawMove>> optionalRawMoves = pgnParser.parseMoves(dataModel.getActualNode(), Arrays.asList(moves.split(" ")));
         optionalRawMoves.ifPresent(dataModel::makeMoves);
     }
+
+    public void insertPGN(String filename) {
+        try {
+            dataModel.insert(fileManager.loadPGN(filename));
+            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+            boardPanel.setDiagram(dataModel.getActualNode());
+        } catch (FileNotFoundException e) {
+            Log.log().warn("file not found");
+        }
+    }
 }

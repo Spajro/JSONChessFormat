@@ -102,6 +102,24 @@ public class Diagram {
         }
     }
 
+    public void insert(Diagram node) {
+        if (this.partiallyEquals(node)) {
+            node.getNextDiagrams().forEach(
+                    diagram1 -> {
+                        List<Diagram> matching = nextDiagrams.stream().filter(diagram1::partiallyEquals).toList();
+                        switch (matching.size()) {
+                            case 0 -> nextDiagrams.add(diagram1);
+                            case 1 -> matching.get(0).insert(diagram1);
+                            default -> Log.log().fail("Too many matching nodes to insert");
+                        }
+                    }
+            );
+        } else {
+            Log.log().fail("Impossible to insert");
+        }
+    }
+
+
     public Diagram getRoot() {
         return getDiagramOfId(0);
     }
@@ -144,5 +162,11 @@ public class Diagram {
     @Override
     public String toString() {
         return moveName;
+    }
+
+    public boolean partiallyEquals(Diagram diagram) {
+        return this.moveId == diagram.moveId &&
+                this.moveName.equals(diagram.moveName) &&
+                this.board.equals(diagram.board);
     }
 }

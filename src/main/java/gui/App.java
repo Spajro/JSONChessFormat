@@ -90,6 +90,10 @@ public class App {
         addMovesItem.addActionListener(e -> controller.makeMoves(getMoves()));
         editionMenu.add(addMovesItem);
 
+        JMenuItem insertPGNItem = new JMenuItem("Insert pgn");
+        insertPGNItem.addActionListener(e -> controller.insertPGN(getFilename()));
+        editionMenu.add(insertPGNItem);
+
         menuBar.add(editionMenu);
     }
 

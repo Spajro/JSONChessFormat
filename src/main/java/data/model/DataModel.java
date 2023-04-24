@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.RawMove;
+import log.Log;
 
 import java.util.List;
 
@@ -31,6 +32,13 @@ public class DataModel {
                 return;
             }
         }
+    }
+
+    public void insert(Diagram tree) {
+        Log.log().info("DataModel insertion");
+        Diagram actualRoot = actualNode.getRoot();
+        Diagram insertedRoot = tree.getRoot();
+        actualRoot.insert(insertedRoot);
     }
 
     public void setActualNode(Diagram actualNode) {
