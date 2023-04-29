@@ -11,6 +11,7 @@ import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
+import data.model.MetaData;
 
 public class JsonParser {
     ObjectMapper mapper = new ObjectMapper();
@@ -42,6 +43,9 @@ public class JsonParser {
         }
         if (jsonNode.get("annotations") != null) {
             parseAnnotations(diagram, jsonNode.get("annotations"));
+        }
+        if (jsonNode.get("metadata") != null) {
+            parseMetadata(diagram, jsonNode);
         }
     }
 
@@ -87,5 +91,21 @@ public class JsonParser {
             case "\"green\"" -> GraphicAnnotation.DrawColor.GREEN;
             default -> throw new IllegalStateException("Unexpected value: " + jsonNode);
         };
+    }
+
+    private void parseMetadata(Diagram diagram, JsonNode jsonNode) {
+        jsonNode.get("metadata").forEach(node -> diagram.addMetadata(toMetadata(node)));
+    }
+
+    private MetaData toMetadata(JsonNode jsonNode) {
+        return new MetaData(
+                jsonNode.get("event").asText(),
+                jsonNode.get("site").asText(),
+                jsonNode.get("date").asText(),
+                jsonNode.get("round").asText(),
+                jsonNode.get("white").asText(),
+                jsonNode.get("black").asText(),
+                jsonNode.get("result").asText()
+        );
     }
 }
