@@ -1,7 +1,8 @@
 package data.model;
 
-import data.PGNParser;
+import data.pgn.PGNParser;
 import data.json.JsonParser;
+import data.pgn.ParsedPGN;
 import log.Log;
 
 import java.io.*;
@@ -19,12 +20,12 @@ public class FileManager {
         return jsonParser.parseJson(text.trim());
     }
 
-    public Diagram loadPGN(String filename) throws FileNotFoundException {
+    public ParsedPGN loadPGN(String filename) throws FileNotFoundException {
         Log.log().info("Loading PGN");
         Scanner scanner = new Scanner(new File(filename + ".pgn"));
         String text = scanner.useDelimiter("\\A").next();
         scanner.close();
-        return pgnParser.parsePGN(text).diagram().orElseThrow(() -> new IllegalArgumentException("Illegal pgn"));
+        return pgnParser.parsePGN(text);
     }
 
     public void save(String filename, String json) {

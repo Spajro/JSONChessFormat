@@ -7,6 +7,7 @@ import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
+import data.model.MetaData;
 
 public class JsonFactory {
     private final DataModel dataModel;
@@ -37,9 +38,39 @@ public class JsonFactory {
                     .append(toJson(diagram.getAnnotations()))
                     .append(',');
         }
+        if (!diagram.getMetaData().isEmpty()) {
+            result.append("\"metadata\":")
+                    .append(listJsonFactory.listToJson(diagram.getMetaData(), this::toJson))
+                    .append(',');
+        }
         result.deleteCharAt(result.length() - 1);
         result.append('}');
         return result.toString();
+    }
+
+    private String toJson(MetaData metaData) {
+        return '{' +
+                "\"event\":" +
+                metaData.event() +
+                "," +
+                "\"site\":" +
+                metaData.site() +
+                "," +
+                "\"date\":" +
+                metaData.date() +
+                "," +
+                "\"round\":" +
+                metaData.round() +
+                "," +
+                "\"white\":" +
+                metaData.white() +
+                "," +
+                "\"black\":" +
+                metaData.black() +
+                "," +
+                "\"result\":" +
+                metaData.result() +
+                '}';
     }
 
     private String toJson(Annotations annotations) {

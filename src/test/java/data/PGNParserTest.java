@@ -1,6 +1,7 @@
 package data;
 
 import data.model.Diagram;
+import data.pgn.PGNParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;

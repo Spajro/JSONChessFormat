@@ -13,7 +13,6 @@ import log.Log;
 import java.util.LinkedList;
 import java.util.List;
 
-
 public class Diagram {
     private final int moveId;
     private String moveName = "diag";
@@ -22,6 +21,7 @@ public class Diagram {
     private final Annotations annotations = new Annotations();
     private final ChessBoard board;
     private final LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
+    private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
         moveId = 0;
@@ -102,20 +102,31 @@ public class Diagram {
         }
     }
 
-    public void insert(Diagram node) {
+    public void insert(Diagram node, MetaData metaData) {
         if (this.partiallyEquals(node)) {
             node.getNextDiagrams().forEach(
                     diagram1 -> {
                         List<Diagram> matching = nextDiagrams.stream().filter(diagram1::partiallyEquals).toList();
                         switch (matching.size()) {
-                            case 0 -> nextDiagrams.add(diagram1);
-                            case 1 -> matching.get(0).insert(diagram1);
+                            case 0 -> {
+                                nextDiagrams.add(diagram1);
+                                insertMetadataToLastDiagram(metaData);
+                            }
+                            case 1 -> matching.get(0).insert(diagram1, metaData);
                             default -> Log.log().fail("Too many matching nodes to insert");
                         }
                     }
             );
         } else {
             Log.log().fail("Impossible to insert");
+        }
+    }
+
+    public void insertMetadataToLastDiagram(MetaData metaData) {
+        switch (nextDiagrams.size()) {
+            case 0 -> addMetadata(metaData);
+            case 1 -> nextDiagrams.getFirst().insertMetadataToLastDiagram(metaData);
+            default -> Log.log().fail("Too many nodes for metadata");
         }
     }
 
@@ -168,5 +179,13 @@ public class Diagram {
         return this.moveId == diagram.moveId &&
                 this.moveName.equals(diagram.moveName) &&
                 this.board.equals(diagram.board);
+    }
+
+    public void addMetadata(MetaData metaData) {
+        this.metaData.add(metaData);
+    }
+
+    public LinkedList<MetaData> getMetaData() {
+        return metaData;
     }
 }

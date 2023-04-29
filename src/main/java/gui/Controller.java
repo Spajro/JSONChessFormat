@@ -3,13 +3,14 @@ package gui;
 import chess.Position;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
-import data.PGNParser;
+import data.pgn.PGNParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.json.JsonFactory;
 import data.model.*;
 import chess.moves.RawMove;
+import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
 import gui.option.OptionPanel;
@@ -156,7 +157,7 @@ public class Controller {
 
     public void loadDataFromPGN(String filename) {
         try {
-            dataModel.setActualNode(fileManager.loadPGN(filename));
+            dataModel.setActualNode(fileManager.loadPGN(filename).diagram().orElseThrow());
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
@@ -188,7 +189,8 @@ public class Controller {
 
     public void insertPGN(String filename) {
         try {
-            dataModel.insert(fileManager.loadPGN(filename));
+            ParsedPGN pgn=fileManager.loadPGN(filename);
+            dataModel.insert(pgn.diagram().orElseThrow(),pgn.metadata());
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {

@@ -1,4 +1,4 @@
-package data;
+package data.pgn;
 
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
@@ -14,18 +14,16 @@ import data.model.MetaData;
 import java.util.*;
 
 public class PGNParser {
-    public record Result(MetaData metadata, Optional<Diagram> diagram) {
-    }
 
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
 
-    public Result parsePGN(String pgn) {
+    public ParsedPGN parsePGN(String pgn) {
         int split = pgn.lastIndexOf(']') + 1;
         String metadata = pgn.substring(0, split);
         MetaData metaData = parseMetadata(metadata);
         String moves = pgn.substring(split);
-        return new Result(metaData, parseMoves(moves));
+        return new ParsedPGN(metaData, parseMoves(moves));
     }
 
     private MetaData parseMetadata(String metadata) {

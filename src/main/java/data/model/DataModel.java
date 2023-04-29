@@ -34,11 +34,11 @@ public class DataModel {
         }
     }
 
-    public void insert(Diagram tree) {
+    public void insert(Diagram tree,MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
         Diagram insertedRoot = tree.getRoot();
-        actualRoot.insert(insertedRoot);
+        actualRoot.insert(insertedRoot,metaData);
     }
 
     public void setActualNode(Diagram actualNode) {
