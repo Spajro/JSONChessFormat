@@ -3,24 +3,25 @@ package data.model;
 import chess.moves.RawMove;
 import log.Log;
 
-import java.util.List;
+import java.util.*;
 
 public class DataModel {
     private Diagram actualNode;
-    private final TreeDataModel treeDataMode = new TreeDataModel();
+    private Map<MetaData, Diagram> matches = new HashMap<>();
+    private final TreeDataModel treeDataModel = new TreeDataModel();
     private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
         actualNode = new Diagram();
-        treeDataMode.setActualNode(actualNode);
+        treeDataModel.setActualNode(actualNode);
     }
 
     public void makeMove(RawMove m) {
         Diagram tempNode = actualNode;
         actualNode = actualNode.makeMove(m, promotionTypeProvider);
         if (tempNode != actualNode) {
-            treeDataMode.setActualNode(actualNode);
-            treeDataMode.notifyListenersOnInsert(actualNode);
+            treeDataModel.setActualNode(actualNode);
+            treeDataModel.notifyListenersOnInsert(actualNode);
         }
     }
 
@@ -34,16 +35,31 @@ public class DataModel {
         }
     }
 
-    public void insert(Diagram tree,MetaData metaData) {
+    public void insert(Diagram tree, MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
         Diagram insertedRoot = tree.getRoot();
-        actualRoot.insert(insertedRoot,metaData);
+        matches.put(metaData, getLast(insertedRoot).orElseThrow());
+        actualRoot.insert(insertedRoot, metaData);
+    }
+
+    private Optional<Diagram> getLast(Diagram diagram) {
+        return switch (diagram.getNextDiagrams().size()) {
+            case 0 -> Optional.of(diagram);
+            case 1 -> getLast(diagram.getNextDiagrams().getFirst());
+            default -> Optional.empty();
+        };
     }
 
     public void setActualNode(Diagram actualNode) {
         this.actualNode = actualNode;
-        treeDataMode.setActualNode(actualNode);
+        treeDataModel.setActualNode(actualNode);
+    }
+
+    public void setNewTree(Diagram tree) {
+        this.actualNode = tree;
+        treeDataModel.setActualNode(tree);
+        matches = gatherMetadata();
     }
 
     public Diagram getActualNode() {
@@ -55,6 +71,22 @@ public class DataModel {
     }
 
     public TreeDataModel asTree() {
-        return treeDataMode;
+        return treeDataModel;
+    }
+
+    private Map<MetaData, Diagram> gatherMetadata() {
+        Map<MetaData, Diagram> result = new HashMap<>();
+        Diagram root = actualNode.getRoot();
+        Stack<Diagram> stack = new Stack<>();
+        stack.add(root);
+        while (!stack.isEmpty()) {
+            Diagram node = stack.pop();
+            if (!node.getMetaData().isEmpty()) {
+                node.getMetaData().forEach(metaData -> result.put(metaData, node));
+            } else {
+                stack.addAll(node.getNextDiagrams());
+            }
+        }
+        return result;
     }
 }

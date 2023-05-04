@@ -110,7 +110,7 @@ public class Diagram {
                         switch (matching.size()) {
                             case 0 -> {
                                 nextDiagrams.add(diagram1);
-                                insertMetadataToLastDiagram(metaData);
+                                diagram1.insertMetadataToLastDiagram(metaData);
                             }
                             case 1 -> matching.get(0).insert(diagram1, metaData);
                             default -> Log.log().fail("Too many matching nodes to insert");

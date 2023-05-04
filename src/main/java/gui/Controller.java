@@ -147,7 +147,7 @@ public class Controller {
 
     public void loadDataFromJSON(String filename) {
         try {
-            dataModel.setActualNode(fileManager.loadJSON(filename));
+            dataModel.setNewTree(fileManager.loadJSON(filename));
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
@@ -157,7 +157,7 @@ public class Controller {
 
     public void loadDataFromPGN(String filename) {
         try {
-            dataModel.setActualNode(fileManager.loadPGN(filename).diagram().orElseThrow());
+            dataModel.setNewTree(fileManager.loadPGN(filename).diagram().orElseThrow());
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
@@ -170,7 +170,7 @@ public class Controller {
     }
 
     public void loadChessBoardFromFEN(String fen) {
-        dataModel.setActualNode(new Diagram(fenParser.parseFEN(fen), null, 0));
+        dataModel.setNewTree(new Diagram(fenParser.parseFEN(fen), null, 0));
         treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
     }
@@ -189,8 +189,8 @@ public class Controller {
 
     public void insertPGN(String filename) {
         try {
-            ParsedPGN pgn=fileManager.loadPGN(filename);
-            dataModel.insert(pgn.diagram().orElseThrow(),pgn.metadata());
+            ParsedPGN pgn = fileManager.loadPGN(filename);
+            dataModel.insert(pgn.diagram().orElseThrow(), pgn.metadata());
             treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
