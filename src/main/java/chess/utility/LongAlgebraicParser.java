@@ -6,7 +6,7 @@ import chess.moves.RawMove;
 import java.util.Optional;
 
 public class LongAlgebraicParser {
-    private final AlgebraicUtility utility = new AlgebraicUtility();
+    private final AlgebraicUtility utility = AlgebraicUtility.getInstance();
 
     public RawMove parseLongAlgebraic(String move, Color color) {
         return utility.algebraicCastleToMove(move, color)

@@ -31,7 +31,7 @@ public class DebugPerftTest {
     }
 
     long divide(ChessBoard board, int n, boolean print) {
-        LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
+        LongAlgebraicFactory longAlgebraicFactory = LongAlgebraicFactory.getInstance();
         if (n < 2) {
             return -1;
         }

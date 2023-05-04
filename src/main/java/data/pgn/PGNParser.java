@@ -16,7 +16,7 @@ import java.util.*;
 public class PGNParser {
 
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
-    private final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+    private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
 
     public ParsedPGN parsePGN(String pgn) {
         int split = pgn.lastIndexOf(']') + 1;

@@ -10,6 +10,15 @@ import java.util.Optional;
 import static chess.pieces.Piece.Type.*;
 
 public class AlgebraicUtility {
+    private static final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+
+    private AlgebraicUtility() {
+    }
+
+    public static AlgebraicUtility getInstance() {
+        return algebraicUtility;
+    }
+
     Optional<RawMove> algebraicCastleToMove(String move, Color color) {
         if (move.equals("O-O")) {
             if (color.isWhite()) {
@@ -36,7 +45,7 @@ public class AlgebraicUtility {
     }
 
     public Optional<Piece.Type> parsePromotion(String move) {
-        return algebraicToType(move.charAt(move.length()-1));
+        return algebraicToType(move.charAt(move.length() - 1));
     }
 
     public int columnToNumber(char column) {

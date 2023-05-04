@@ -16,7 +16,7 @@ import data.model.MetaData;
 public class JsonParser {
     ObjectMapper mapper = new ObjectMapper();
     LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
-    AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+    AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
 
     public Diagram parseJson(String json) {
         try {

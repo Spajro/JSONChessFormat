@@ -16,7 +16,7 @@ public class CommandLineHandler {
     DataModel dataModel = new DataModel();
     Diagram node = dataModel.getActualNode();
     FileManager fileManager = new FileManager();
-    AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+    AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
     JsonFactory jsonFactory = new JsonFactory(dataModel);
 
     public void makeAction(ActionData data) {

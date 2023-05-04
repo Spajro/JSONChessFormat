@@ -12,7 +12,7 @@ import data.model.MetaData;
 public class JsonFactory {
     private final DataModel dataModel;
     private final ListJsonFactory listJsonFactory = new ListJsonFactory();
-    private final AlgebraicUtility algebraicUtility = new AlgebraicUtility();
+    private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
 
     public JsonFactory(DataModel dataModel) {
         this.dataModel = dataModel;

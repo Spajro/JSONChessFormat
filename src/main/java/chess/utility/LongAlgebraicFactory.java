@@ -4,7 +4,16 @@ import chess.board.ChessBoard;
 import chess.moves.*;
 
 public class LongAlgebraicFactory {
-    AlgebraicUtility utility=new AlgebraicUtility();
+    private static final LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
+
+    private LongAlgebraicFactory() {
+    }
+
+    public static LongAlgebraicFactory getInstance() {
+        return longAlgebraicFactory;
+    }
+
+    AlgebraicUtility utility = AlgebraicUtility.getInstance();
 
     public String moveToLongAlgebraic(ChessBoard board, ValidMove move) {
         if (move instanceof SimpleMove simpleMove) {

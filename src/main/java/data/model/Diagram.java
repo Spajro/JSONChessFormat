@@ -20,7 +20,7 @@ public class Diagram {
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
     private final ChessBoard board;
-    private final LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();
+    private final LongAlgebraicFactory longAlgebraicFactory = LongAlgebraicFactory.getInstance();
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
