@@ -31,6 +31,7 @@ public class App {
     }
 
     private void setUpFrame() {
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.setJMenuBar(menuBar);
         frame.setLayout(new GridLayout());
         frame.add(boardPanel);
