@@ -27,19 +27,15 @@ import java.util.Optional;
 
 public class Controller {
     private final DataModel dataModel;
-    private final TreeDataModel treeDataModel;
     private final BoardPanel boardPanel;
     private final GamesFrame gamesFrame;
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
     private final FileManager fileManager = new FileManager();
-    private final FENParser fenParser = FENParser.getInstance();
     private final JsonFactory jsonFactory;
-    private final PGNParser pgnParser = new PGNParser();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
-        treeDataModel = dataModel.asTree();
         this.boardPanel = boardPanel;
         this.gamesFrame = new GamesFrame(dataModel, this);
         dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
@@ -64,7 +60,7 @@ public class Controller {
         } else {
             dataModel.makeMove(move);
             boardPanel.setDiagram(dataModel.getActualNode());
-            treeMouseListener.treeNodeInserted(treeDataModel.getTreePathTo(dataModel.getActualNode()));
+            treeMouseListener.treeNodeInserted(dataModel.asTree().getTreePathTo(dataModel.getActualNode()));
             optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
         }
         boardPanel.repaint();
@@ -130,7 +126,7 @@ public class Controller {
     }
 
     public JTree createTreeWithDataModel() {
-        return new JTree(treeDataModel);
+        return new JTree(dataModel.asTree());
     }
 
     private PromotionTypeProvider getPromotionTypeProvider() {
@@ -152,7 +148,7 @@ public class Controller {
     public void loadDataFromJSON(String filename) {
         try {
             dataModel.setNewTree(fileManager.loadJSON(filename));
-            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
@@ -162,7 +158,7 @@ public class Controller {
     public void loadDataFromPGN(String filename) {
         try {
             dataModel.setNewTree(fileManager.loadPGN(filename).diagram().orElseThrow());
-            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
@@ -174,8 +170,8 @@ public class Controller {
     }
 
     public void loadChessBoardFromFEN(String fen) {
-        dataModel.setNewTree(new Diagram(fenParser.parseFEN(fen), null, 0));
-        treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode());
+        dataModel.setNewTree(new Diagram(FENParser.getInstance().parseFEN(fen), null, 0));
+        dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
     }
 
@@ -187,7 +183,7 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Optional<List<RawMove>> optionalRawMoves = pgnParser.parseMoves(dataModel.getActualNode(), Arrays.asList(moves.split(" ")));
+        Optional<List<RawMove>> optionalRawMoves = PGNParser.getInstance().parseMoves(dataModel.getActualNode(), Arrays.asList(moves.split(" ")));
         optionalRawMoves.ifPresent(dataModel::makeMoves);
     }
 
@@ -195,7 +191,7 @@ public class Controller {
         try {
             ParsedPGN pgn = fileManager.loadPGN(filename);
             dataModel.insert(pgn.diagram().orElseThrow(), pgn.metadata());
-            treeDataModel.notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");

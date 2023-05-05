@@ -32,7 +32,7 @@ class PGNParserTest {
                                 
                                 
                 """;
-        Optional<Diagram> node=new PGNParser().parsePGN(pgn).diagram();
+        Optional<Diagram> node=PGNParser.getInstance().parsePGN(pgn).diagram();
         assertTrue(node.isPresent());
     }
 

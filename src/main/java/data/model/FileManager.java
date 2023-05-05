@@ -10,7 +10,7 @@ import java.util.Scanner;
 
 public class FileManager {
     private final JsonParser jsonParser = new JsonParser();
-    private final PGNParser pgnParser = new PGNParser();
+    private final PGNParser pgnParser = PGNParser.getInstance();
 
     public Diagram loadJSON(String filename) throws FileNotFoundException {
         Log.log().info("Loading JSON");

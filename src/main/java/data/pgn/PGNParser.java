@@ -14,6 +14,14 @@ import data.model.MetaData;
 import java.util.*;
 
 public class PGNParser {
+    private static final PGNParser pgnParser = new PGNParser();
+
+    private PGNParser() {
+    }
+
+    public static PGNParser getInstance() {
+        return pgnParser;
+    }
 
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
