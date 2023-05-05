@@ -18,7 +18,6 @@ public class App {
 
     public App(DataModel dataModel) {
         frame = new JFrame();
-
         boardPanel = new BoardPanel(dataModel.getActualNode());
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
