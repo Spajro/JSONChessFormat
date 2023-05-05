@@ -22,6 +22,7 @@ public class App {
         createFileMenu();
         createFeatureMenu();
         createEditionMenu();
+        createGamesMenu();
         boardPanel = new BoardPanel(dataModel.getActualNode());
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
@@ -96,6 +97,16 @@ public class App {
         editionMenu.add(insertPGNItem);
 
         menuBar.add(editionMenu);
+    }
+
+    private void createGamesMenu() {
+        JMenu gamesMenu = new JMenu("Games");
+
+        JMenuItem showGamesItem = new JMenuItem("Show games");
+        showGamesItem.addActionListener(e -> controller.showGames());
+        gamesMenu.add(showGamesItem);
+
+        menuBar.add(gamesMenu);
     }
 
     private void setUpBoardPanel() {

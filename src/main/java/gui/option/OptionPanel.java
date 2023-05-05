@@ -24,4 +24,8 @@ public class OptionPanel extends JPanel {
     public void setText(String text) {
         jTextArea.setText(text);
     }
+
+    public JTree getTree() {
+        return jTree;
+    }
 }

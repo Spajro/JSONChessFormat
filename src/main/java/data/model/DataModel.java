@@ -7,7 +7,7 @@ import java.util.*;
 
 public class DataModel {
     private Diagram actualNode;
-    private Map<MetaData, Diagram> matches = new HashMap<>();
+    private Map<MetaData, Diagram> games = new HashMap<>();
     private final TreeDataModel treeDataModel = new TreeDataModel();
     private PromotionTypeProvider promotionTypeProvider;
 
@@ -39,7 +39,7 @@ public class DataModel {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
         Diagram insertedRoot = tree.getRoot();
-        matches.put(metaData, getLast(insertedRoot).orElseThrow());
+        games.put(metaData, getLast(insertedRoot).orElseThrow());
         actualRoot.insert(insertedRoot, metaData);
     }
 
@@ -59,7 +59,7 @@ public class DataModel {
     public void setNewTree(Diagram tree) {
         this.actualNode = tree;
         treeDataModel.setActualNode(tree);
-        matches = gatherMetadata();
+        games = gatherMetadata();
     }
 
     public Diagram getActualNode() {
@@ -88,5 +88,9 @@ public class DataModel {
             }
         }
         return result;
+    }
+
+    public Map<MetaData, Diagram> getGames() {
+        return games;
     }
 }

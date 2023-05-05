@@ -13,11 +13,13 @@ import chess.moves.RawMove;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
+import gui.games.GamesFrame;
 import gui.option.OptionPanel;
 import gui.option.TreeMouseListener;
 import log.Log;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +29,7 @@ public class Controller {
     private final DataModel dataModel;
     private final TreeDataModel treeDataModel;
     private final BoardPanel boardPanel;
+    private final GamesFrame gamesFrame;
     private OptionPanel optionPanel;
     private TreeMouseListener treeMouseListener;
     private final FileManager fileManager = new FileManager();
@@ -38,6 +41,7 @@ public class Controller {
         this.dataModel = dataModel;
         treeDataModel = dataModel.asTree();
         this.boardPanel = boardPanel;
+        this.gamesFrame = new GamesFrame(dataModel, this);
         dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
         jsonFactory = new JsonFactory(dataModel);
     }
@@ -196,5 +200,17 @@ public class Controller {
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
         }
+    }
+
+    public void showGames() {
+        gamesFrame.refresh();
+        gamesFrame.setVisible(true);
+    }
+
+    public void selectGame(MetaData metaData) {
+        Diagram node = dataModel.getGames().get(metaData);
+        TreePath treePath = dataModel.asTree().getTreePathTo(node);
+        optionPanel.getTree().setSelectionPath(treePath);
+        optionPanel.getTree().scrollPathToVisible(treePath);
     }
 }
