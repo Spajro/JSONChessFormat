@@ -20,6 +20,6 @@ public class GamesFrame extends JFrame {
 
     public void refresh() {
         listModel.removeAllElements();
-        listModel.addAll(dataModel.getGames().keySet());
+        listModel.addAll(dataModel.getGames().getMetadata());
     }
 }

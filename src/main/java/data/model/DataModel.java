@@ -7,7 +7,7 @@ import java.util.*;
 
 public class DataModel {
     private Diagram actualNode;
-    private Map<MetaData, Diagram> games = new HashMap<>();
+    private final GamesRepository games = new GamesRepository();
     private final TreeDataModel treeDataModel = new TreeDataModel();
     private PromotionTypeProvider promotionTypeProvider;
 
@@ -59,7 +59,7 @@ public class DataModel {
     public void setNewTree(Diagram tree) {
         this.actualNode = tree;
         treeDataModel.setActualNode(tree);
-        games = gatherMetadata();
+        games.setNewTree(tree.getRoot());
     }
 
     public Diagram getActualNode() {
@@ -74,23 +74,8 @@ public class DataModel {
         return treeDataModel;
     }
 
-    private Map<MetaData, Diagram> gatherMetadata() {
-        Map<MetaData, Diagram> result = new HashMap<>();
-        Diagram root = actualNode.getRoot();
-        Stack<Diagram> stack = new Stack<>();
-        stack.add(root);
-        while (!stack.isEmpty()) {
-            Diagram node = stack.pop();
-            if (!node.getMetaData().isEmpty()) {
-                node.getMetaData().forEach(metaData -> result.put(metaData, node));
-            } else {
-                stack.addAll(node.getNextDiagrams());
-            }
-        }
-        return result;
-    }
 
-    public Map<MetaData, Diagram> getGames() {
+    public GamesRepository getGames() {
         return games;
     }
 }
