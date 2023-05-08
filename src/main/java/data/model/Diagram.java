@@ -12,6 +12,7 @@ import log.Log;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 public class Diagram {
     private final int moveId;
@@ -19,27 +20,27 @@ public class Diagram {
     private final Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
-    private final ChessBoard board;
+    private final ExecutableMove creatingMove;
     private final LongAlgebraicFactory longAlgebraicFactory = LongAlgebraicFactory.getInstance();
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
         moveId = 0;
         moveName = "Start";
-        board = new ChessBoard();
         parent = null;
+        creatingMove = null;
     }
 
-    public Diagram(ChessBoard nextBoard, Diagram last, int id) {
-        moveId = id;
-        board = nextBoard;
-        parent = last;
+    public Diagram(ExecutableMove creatingMove, Diagram parent, int moveId) {
+        this.creatingMove = creatingMove;
+        this.parent = parent;
+        this.moveId = moveId;
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
         Log.log().info("Trying to make:" + move);
 
-        MoveResult moveResult = board.makeMove(move);
+        MoveResult moveResult = getBoard().makeMove(move);
         if (moveResult.isValid()) {
             ValidMoveResult validMoveResult;
             if (moveResult instanceof PromotionResult promotionResult) {
@@ -48,11 +49,10 @@ public class Diagram {
                 validMoveResult = (ValidMoveResult) moveResult;
             }
 
-            ChessBoard tempBoard = validMoveResult.getResult();
-            Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+            Diagram nextDiagram = new Diagram(validMoveResult.getMove(), this, moveId + 1);
             nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
             for (Diagram diagram : nextDiagrams) {
-                if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+                if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
                     return diagram;
                 }
             }
@@ -66,11 +66,10 @@ public class Diagram {
     }
 
     public Diagram makeMove(ExecutableMove move) {
-        ChessBoard tempBoard = board.makeMove(move);
-        Diagram nextDiagram = new Diagram(tempBoard, this, moveId + 1);
+        Diagram nextDiagram = new Diagram(move, this, moveId + 1);
         nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), move);
         for (Diagram diagram : nextDiagrams) {
-            if (diagram.board.equals(nextDiagram.board) && diagram.moveId == nextDiagram.moveId) {
+            if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
                 return diagram;
             }
         }
@@ -152,7 +151,16 @@ public class Diagram {
     }
 
     public ChessBoard getBoard() {
-        return board;
+        List<ExecutableMove> moves = getPathFromRoot().stream()
+                .skip(1)
+                .map(diagram -> diagram.getCreatingMove().orElseThrow())
+                .toList();
+
+        ChessBoard result = new ChessBoard();
+        for (ExecutableMove move : moves) {
+            result = result.makeMove(move);
+        }
+        return result;
     }
 
     public Diagram getNextDiagram(int index) {
@@ -178,7 +186,7 @@ public class Diagram {
     public boolean partiallyEquals(Diagram diagram) {
         return this.moveId == diagram.moveId &&
                 this.moveName.equals(diagram.moveName) &&
-                this.board.equals(diagram.board);
+                this.getBoard().equals(diagram.getBoard());
     }
 
     public void addMetadata(MetaData metaData) {
@@ -187,5 +195,9 @@ public class Diagram {
 
     public LinkedList<MetaData> getMetaData() {
         return metaData;
+    }
+
+    public Optional<ExecutableMove> getCreatingMove() {
+        return Optional.ofNullable(creatingMove);
     }
 }
