@@ -26,4 +26,14 @@ public class Annotations {
     public boolean isEmpty() {
         return textAnnotation.isEmpty() && arrowAnnotations.isEmpty() && fieldAnnotations.isEmpty();
     }
+
+    public void addAll(Annotations annotations) {
+        arrowAnnotations.addAll(annotations.getArrowAnnotations());
+        fieldAnnotations.addAll(annotations.getFieldAnnotations());
+        if (textAnnotation.isEmpty()) {
+            textAnnotation = annotations.textAnnotation;
+        } else if (!annotations.textAnnotation.isEmpty()) {
+            textAnnotation = textAnnotation + " | " + annotations.textAnnotation;
+        }
+    }
 }

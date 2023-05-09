@@ -101,17 +101,15 @@ public class Diagram {
         }
     }
 
-    public void insert(Diagram node, MetaData metaData) {
+    public void insert(Diagram node) {
         if (this.partiallyEquals(node)) {
+            copyData(node);
             node.getNextDiagrams().forEach(
                     diagram1 -> {
                         List<Diagram> matching = nextDiagrams.stream().filter(diagram1::partiallyEquals).toList();
                         switch (matching.size()) {
-                            case 0 -> {
-                                nextDiagrams.add(diagram1);
-                                diagram1.insertMetadataToLastDiagram(metaData);
-                            }
-                            case 1 -> matching.get(0).insert(diagram1, metaData);
+                            case 0 -> nextDiagrams.add(diagram1);
+                            case 1 -> matching.get(0).insert(diagram1);
                             default -> Log.log().fail("Too many matching nodes to insert");
                         }
                     }
@@ -121,12 +119,9 @@ public class Diagram {
         }
     }
 
-    public void insertMetadataToLastDiagram(MetaData metaData) {
-        switch (nextDiagrams.size()) {
-            case 0 -> addMetadata(metaData);
-            case 1 -> nextDiagrams.getFirst().insertMetadataToLastDiagram(metaData);
-            default -> Log.log().fail("Too many nodes for metadata");
-        }
+    private void copyData(Diagram node) {
+        annotations.addAll(node.getAnnotations());
+        metaData.addAll(node.getMetaData());
     }
 
 

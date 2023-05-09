@@ -39,8 +39,10 @@ public class DataModel {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
         Diagram insertedRoot = tree.getRoot();
-        games.put(metaData, getLast(insertedRoot).orElseThrow());
-        actualRoot.insert(insertedRoot, metaData);
+        Diagram insertedLast = getLast(insertedRoot).orElseThrow();
+        insertedLast.addMetadata(metaData);
+        games.put(metaData, insertedLast);
+        actualRoot.insert(insertedRoot);
     }
 
     private Optional<Diagram> getLast(Diagram diagram) {
