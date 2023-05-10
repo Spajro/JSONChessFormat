@@ -16,17 +16,16 @@ import java.util.Optional;
 
 public class Diagram {
     private final int moveId;
-    private String moveName = "diag";
+    private final String moveName;
     private final Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
     private final ExecutableMove creatingMove;
-    private final LongAlgebraicFactory longAlgebraicFactory = LongAlgebraicFactory.getInstance();
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
         moveId = 0;
-        moveName = "Start";
+        moveName = "Root";
         parent = null;
         creatingMove = null;
     }
@@ -35,6 +34,11 @@ public class Diagram {
         this.creatingMove = creatingMove;
         this.parent = parent;
         this.moveId = moveId;
+        if (parent != null) {
+            moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(parent.getBoard(), creatingMove);
+        } else {
+            moveName = "Root";
+        }
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
@@ -50,7 +54,6 @@ public class Diagram {
             }
 
             Diagram nextDiagram = new Diagram(validMoveResult.getMove(), this, moveId + 1);
-            nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), validMoveResult.getMove());
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
                     return diagram;
@@ -67,7 +70,6 @@ public class Diagram {
 
     public Diagram makeMove(ExecutableMove move) {
         Diagram nextDiagram = new Diagram(move, this, moveId + 1);
-        nextDiagram.moveName = longAlgebraicFactory.moveToLongAlgebraic(this.getBoard(), move);
         for (Diagram diagram : nextDiagrams) {
             if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
                 return diagram;
@@ -85,16 +87,14 @@ public class Diagram {
         if (id > moveId || id < 0) {
             throw new IllegalArgumentException("illegal move id:" + id);
         } else {
-            assert parent != null;
             return parent.getDiagramOfId(id);
         }
     }
 
     public List<Diagram> getPathFromRoot() {
-        if (moveId == 0) {
+        if (parent == null) {
             return new LinkedList<>(List.of(this));
         } else {
-            assert parent != null;
             List<Diagram> result = parent.getPathFromRoot();
             result.add(this);
             return result;
@@ -124,7 +124,6 @@ public class Diagram {
         metaData.addAll(node.getMetaData());
     }
 
-
     public Diagram getRoot() {
         return getDiagramOfId(0);
     }
@@ -146,12 +145,15 @@ public class Diagram {
     }
 
     public ChessBoard getBoard() {
+        if (parent == null) {
+            return new ChessBoard();
+        }
         List<ExecutableMove> moves = getPathFromRoot().stream()
                 .skip(1)
                 .map(diagram -> diagram.getCreatingMove().orElseThrow())
                 .toList();
 
-        ChessBoard result = new ChessBoard();
+        ChessBoard result = getRoot().getBoard();
         for (ExecutableMove move : moves) {
             result = result.makeMove(move);
         }
