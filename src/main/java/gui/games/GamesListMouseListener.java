@@ -19,11 +19,15 @@ public class GamesListMouseListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getClickCount() == 2) {
-            Rectangle r = list.getCellBounds(0, list.getLastVisibleIndex());
-            if (r != null && r.contains(e.getPoint())) {
-                int index = list.locationToIndex(e.getPoint());
+        Rectangle r = list.getCellBounds(0, list.getLastVisibleIndex());
+        if (r != null && r.contains(e.getPoint())) {
+            int index = list.locationToIndex(e.getPoint());
+
+            if (e.getClickCount() == 2) {
                 controller.selectGame(list.getModel().getElementAt(index));
+
+            } else if (e.getClickCount() == 3) {
+                controller.selectGameEnd(list.getModel().getElementAt(index));
             }
         }
     }

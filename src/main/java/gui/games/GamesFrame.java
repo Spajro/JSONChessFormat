@@ -16,6 +16,7 @@ public class GamesFrame extends JFrame {
         list.addMouseListener(new GamesListMouseListener(list, controller));
         this.dataModel = dataModel;
         this.add(list);
+        this.setSize(640, 480);
     }
 
     public void refresh() {

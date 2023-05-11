@@ -47,7 +47,7 @@ public class DataModel {
         games.update(games.get(metaData).updateMetadata());
     }
 
-    private Optional<Diagram> getLast(Diagram diagram) {
+    public Optional<Diagram> getLast(Diagram diagram) {
         return switch (diagram.getNextDiagrams().size()) {
             case 0 -> Optional.of(diagram);
             case 1 -> getLast(diagram.getNextDiagrams().getFirst());

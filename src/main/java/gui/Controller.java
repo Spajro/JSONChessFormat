@@ -204,7 +204,14 @@ public class Controller {
     }
 
     public void selectGame(MetaData metaData) {
-        Diagram node = dataModel.getGames().get(metaData);
+        selectNode(dataModel.getGames().get(metaData));
+    }
+
+    public void selectGameEnd(MetaData metaData) {
+        selectNode(dataModel.getLast(dataModel.getGames().get(metaData)).orElseThrow());
+    }
+
+    private void selectNode(Diagram node) {
         TreePath treePath = dataModel.asTree().getTreePathTo(node);
         optionPanel.getTree().setSelectionPath(treePath);
         optionPanel.getTree().scrollPathToVisible(treePath);
