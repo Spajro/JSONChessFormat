@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.RawMove;
+import data.model.games.GamesRepository;
 import log.Log;
 
 import java.util.*;
@@ -42,7 +43,8 @@ public class DataModel {
         Diagram insertedLast = getLast(insertedRoot).orElseThrow();
         insertedLast.addMetadata(metaData);
         games.put(metaData, insertedLast);
-        actualRoot.insert(insertedRoot);
+        games.update(actualRoot.insert(insertedRoot));
+        games.update(games.get(metaData).updateMetadata());
     }
 
     private Optional<Diagram> getLast(Diagram diagram) {

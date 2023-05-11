@@ -1,4 +1,7 @@
-package data.model;
+package data.model.games;
+
+import data.model.Diagram;
+import data.model.MetaData;
 
 import java.util.*;
 
@@ -24,15 +27,19 @@ public class GamesRepository {
         return result;
     }
 
-    public void put(MetaData metaData,Diagram diagram){
-        games.put(metaData,diagram);
+    public void put(MetaData metaData, Diagram diagram) {
+        games.put(metaData, diagram);
     }
 
-    public Diagram get(MetaData metaData){
+    public void update(GamesUpdateEvent event) {
+        games.putAll(event.gamesMap());
+    }
+
+    public Diagram get(MetaData metaData) {
         return games.get(metaData);
     }
 
-    public Set<MetaData> getMetadata(){
+    public Set<MetaData> getMetadata() {
         return games.keySet();
     }
 }

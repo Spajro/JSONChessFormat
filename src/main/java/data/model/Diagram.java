@@ -8,6 +8,7 @@ import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
+import data.model.games.GamesUpdateEvent;
 import log.Log;
 
 import java.util.LinkedList;
@@ -17,7 +18,7 @@ import java.util.Optional;
 public class Diagram {
     private final int moveId;
     private final String moveName;
-    private final Diagram parent;
+    private Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
     private final ExecutableMove creatingMove;
@@ -101,27 +102,81 @@ public class Diagram {
         }
     }
 
-    public void insert(Diagram node) {
+    public GamesUpdateEvent insert(Diagram node) {
         if (this.partiallyEquals(node)) {
-            copyData(node);
-            node.getNextDiagrams().forEach(
-                    diagram1 -> {
-                        List<Diagram> matching = nextDiagrams.stream().filter(diagram1::partiallyEquals).toList();
-                        switch (matching.size()) {
-                            case 0 -> nextDiagrams.add(diagram1);
-                            case 1 -> matching.get(0).insert(diagram1);
-                            default -> Log.log().fail("Too many matching nodes to insert");
-                        }
-                    }
+            return copyData(node).join(
+                    node.getNextDiagrams().stream()
+                            .map(
+                                    diagram -> {
+                                        List<Diagram> matching = nextDiagrams.stream().filter(diagram::partiallyEquals).toList();
+                                        switch (matching.size()) {
+                                            case 0 -> {
+                                                diagram.setParent(this);
+                                                nextDiagrams.add(diagram);
+                                                return GamesUpdateEvent.empty();
+                                            }
+                                            case 1 -> {
+                                                return matching.get(0).insert(diagram);
+                                            }
+                                            default -> {
+                                                Log.log().fail("Too many matching nodes to insert");
+                                                return GamesUpdateEvent.empty();
+                                            }
+                                        }
+                                    })
+                            .reduce(GamesUpdateEvent.empty(),
+                                    GamesUpdateEvent::join)
             );
         } else {
             Log.log().fail("Impossible to insert");
+            return GamesUpdateEvent.empty();
         }
     }
 
-    private void copyData(Diagram node) {
+    private GamesUpdateEvent copyData(Diagram node) {
         annotations.addAll(node.getAnnotations());
         metaData.addAll(node.getMetaData());
+        return GamesUpdateEvent.of(node.getMetaData(), this);
+    }
+
+    public GamesUpdateEvent updateMetadata() {
+        if (metaData.isEmpty()) {
+            Log.log().warn("Cant update metadata for diagram without it");
+            return GamesUpdateEvent.empty();
+        }
+
+        if (parent == null) {
+            return GamesUpdateEvent.empty();
+        }
+
+        if (parent.getMetaData().isEmpty()) {
+            GamesUpdateEvent event = GamesUpdateEvent.of(metaData, parent);
+            parent.getMetaData().addAll(metaData);
+            metaData.clear();
+            return event.join(parent.updateMetadata());
+        } else {
+            if (parent.getNextDiagrams().size() != 2) {
+                Log.log().fail("Algorithm Axioms broken");
+                return GamesUpdateEvent.empty();
+            }
+
+            Diagram brother = getOtherDiagramFromParent();
+            brother.getMetaData().addAll(parent.getMetaData());
+            parent.getMetaData().clear();
+            return GamesUpdateEvent.of(brother.getMetaData(), brother);
+        }
+    }
+
+    private Diagram getOtherDiagramFromParent() {
+        Diagram diagram1 = parent.getNextDiagram(0);
+        Diagram diagram2 = parent.getNextDiagram(1);
+        if (this == diagram1) {
+            return diagram2;
+        } else if (this == diagram2) {
+            return diagram1;
+        }
+        Log.log().fail("Too many diagrams to choose from");
+        return diagram1;
     }
 
     public Diagram getRoot() {
@@ -196,5 +251,9 @@ public class Diagram {
 
     public Optional<ExecutableMove> getCreatingMove() {
         return Optional.ofNullable(creatingMove);
+    }
+
+    private void setParent(Diagram parent) {
+        this.parent = parent;
     }
 }
