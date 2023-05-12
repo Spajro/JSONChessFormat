@@ -3,7 +3,8 @@ package gui;
 import chess.Position;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
-import data.pgn.PGNParser;
+import chess.utility.ShortAlgebraicParser;
+import data.ParserUtility;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -21,7 +22,6 @@ import log.Log;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +33,7 @@ public class Controller {
     private TreeMouseListener treeMouseListener;
     private final FileManager fileManager = new FileManager();
     private final JsonFactory jsonFactory;
+    private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -183,7 +184,12 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Optional<List<RawMove>> optionalRawMoves = PGNParser.getInstance().parseMoves(dataModel.getActualNode(), Arrays.asList(moves.split(" ")));
+        Optional<List<RawMove>> optionalRawMoves = ParserUtility.getInstance()
+                .parseMoves(
+                        dataModel.getActualNode(),
+                        List.of(moves.split(" ")),
+                        shortAlgebraicParser::parseShortAlgebraic);
+
         optionalRawMoves.ifPresent(dataModel::makeMoves);
     }
 
