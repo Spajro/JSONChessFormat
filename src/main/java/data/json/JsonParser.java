@@ -6,6 +6,7 @@ import chess.utility.LongAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import data.ParserUtility;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -13,19 +14,26 @@ import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import data.model.MetaData;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 public class JsonParser {
-    ObjectMapper mapper = new ObjectMapper();
-    LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
-    AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
+    private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
+    private final ParserUtility parserUtility = ParserUtility.getInstance();
 
     public Diagram parseJson(String json) {
         try {
             JsonNode root = mapper.readTree(json).get("root");
             String moveName = root.get("moveName").asText();
-            if (moveName.equals("Start")) {
+            if (moveName.equals("Root")) {
                 Diagram diagram = new Diagram();
                 if (root.get("moves") != null) {
                     root.get("moves").forEach(node -> from(diagram, node));
+                } else if (root.get("movesList") != null) {
+                    fromList(diagram, root.get("movesList"));
                 }
                 return diagram;
             }
@@ -40,6 +48,8 @@ public class JsonParser {
         Diagram diagram = parent.makeMove(longAlgebraicParser.parseLongAlgebraic(moveName, parent.getBoard().getColor().swap()), null);
         if (jsonNode.get("moves") != null) {
             jsonNode.get("moves").forEach(node -> from(diagram, node));
+        } else if (jsonNode.get("movesList") != null) {
+            fromList(diagram, jsonNode.get("movesList"));
         }
         if (jsonNode.get("annotations") != null) {
             parseAnnotations(diagram, jsonNode.get("annotations"));
@@ -47,6 +57,20 @@ public class JsonParser {
         if (jsonNode.get("metadata") != null) {
             parseMetadata(diagram, jsonNode);
         }
+    }
+
+    private void fromList(Diagram diagram, JsonNode movesList) {
+        List<String> moves = new ArrayList<>();
+        Iterator<JsonNode> iterator = movesList.elements();
+        while (iterator.hasNext()) {
+            moves.add(iterator.next().asText());
+            iterator.remove();
+        }
+        parserUtility.createTree(diagram, parserUtility.parseMoves(
+                diagram,
+                moves,
+                (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor())).orElse(List.of())
+        );
     }
 
     private void parseAnnotations(Diagram diagram, JsonNode jsonNode) {

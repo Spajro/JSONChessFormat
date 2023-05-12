@@ -37,7 +37,7 @@ public class JsonFactory {
                     .append(',');
         }
         if (isSubTreeOptimizable(diagram)) {
-            Optional<LinkedList<Diagram>> list = getPathToLast(diagram);
+            Optional<LinkedList<Diagram>> list = getPathToLast(diagram.getNextDiagram(0));
             list.ifPresent(diagrams -> result.append("\"movesList\":")
                     .append(listJsonFactory.listToJson(diagrams, this::toOptimizedJson))
                     .append(','));
@@ -146,7 +146,7 @@ public class JsonFactory {
         return switch (diagram.getNextDiagramsCount()) {
             case 0 -> Optional.of(new LinkedList<>());
             case 1 -> getPathToLast(diagram.getNextDiagram(0)).map(list -> {
-                list.addLast(diagram);
+                list.addFirst(diagram);
                 return list;
             });
             default -> Optional.empty();
