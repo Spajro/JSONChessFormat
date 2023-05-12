@@ -9,6 +9,9 @@ import data.model.DataModel;
 import data.model.Diagram;
 import data.model.MetaData;
 
+import java.util.LinkedList;
+import java.util.Optional;
+
 public class JsonFactory {
     private final DataModel dataModel;
     private final ListJsonFactory listJsonFactory = new ListJsonFactory();
@@ -28,7 +31,17 @@ public class JsonFactory {
                 .append("\"moveName\":\"")
                 .append(diagram.getMoveName())
                 .append("\",");
-        if (!diagram.getNextDiagrams().isEmpty()) {
+        if (!diagram.getMetaData().isEmpty()) {
+            result.append("\"metadata\":")
+                    .append(listJsonFactory.listToJson(diagram.getMetaData(), this::toJson))
+                    .append(',');
+        }
+        if (isSubTreeOptimizable(diagram)) {
+            Optional<LinkedList<Diagram>> list = getPathToLast(diagram);
+            list.ifPresent(diagrams -> result.append("\"movesList\":")
+                    .append(listJsonFactory.listToJson(diagrams, this::toOptimizedJson))
+                    .append(','));
+        } else if (!diagram.getNextDiagrams().isEmpty()) {
             result.append("\"moves\":")
                     .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson))
                     .append(',');
@@ -36,11 +49,6 @@ public class JsonFactory {
         if (!diagram.getAnnotations().isEmpty()) {
             result.append("\"annotations\":")
                     .append(toJson(diagram.getAnnotations()))
-                    .append(',');
-        }
-        if (!diagram.getMetaData().isEmpty()) {
-            result.append("\"metadata\":")
-                    .append(listJsonFactory.listToJson(diagram.getMetaData(), this::toJson))
                     .append(',');
         }
         result.deleteCharAt(result.length() - 1);
@@ -112,5 +120,36 @@ public class JsonFactory {
                 "\",\"color\":\"" +
                 GraphicAnnotation.drawColorToString(field.getColor()) +
                 "\"}";
+    }
+
+    private String toOptimizedJson(Diagram diagram) {
+        return "\"" + diagram.getMoveName() + "\"";
+    }
+
+    public boolean isSubTreeOptimizable(Diagram diagram) {
+        if (containsData(diagram)) {
+            return false;
+        } else {
+            return switch (diagram.getNextDiagramsCount()) {
+                case 0 -> true;
+                case 1 -> isSubTreeOptimizable(diagram.getNextDiagram(0));
+                default -> false;
+            };
+        }
+    }
+
+    private boolean containsData(Diagram diagram) {
+        return !(diagram.getMetaData().isEmpty() && diagram.getAnnotations().isEmpty());
+    }
+
+    private Optional<LinkedList<Diagram>> getPathToLast(Diagram diagram) {
+        return switch (diagram.getNextDiagramsCount()) {
+            case 0 -> Optional.of(new LinkedList<>());
+            case 1 -> getPathToLast(diagram.getNextDiagram(0)).map(list -> {
+                list.addLast(diagram);
+                return list;
+            });
+            default -> Optional.empty();
+        };
     }
 }
