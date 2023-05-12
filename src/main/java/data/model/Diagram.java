@@ -149,21 +149,32 @@ public class Diagram {
             return GamesUpdateEvent.empty();
         }
 
-        if (parent.getMetaData().isEmpty()) {
+        if (parent.getNextDiagramsCount() == 1) {
             GamesUpdateEvent event = GamesUpdateEvent.of(metaData, parent);
             parent.getMetaData().addAll(metaData);
             metaData.clear();
             return event.join(parent.updateMetadata());
-        } else {
-            if (parent.getNextDiagrams().size() != 2) {
-                Log.log().fail("Algorithm Axioms broken");
-                return GamesUpdateEvent.empty();
-            }
-
+        } else if (parent.getNextDiagramsCount() == 2) {
             Diagram brother = getOtherDiagramFromParent();
-            brother.getMetaData().addAll(parent.getMetaData());
-            parent.getMetaData().clear();
+            brother.getMetaData().addAll(parent.getMetadataFromPathToRoot());
             return GamesUpdateEvent.of(brother.getMetaData(), brother);
+        } else {
+            return GamesUpdateEvent.empty();
+        }
+    }
+
+    private List<MetaData> getMetadataFromPathToRoot() {
+        if (!metaData.isEmpty()) {
+            List<MetaData> result = List.copyOf(metaData);
+            metaData.clear();
+            return result;
+        } else {
+            if (parent == null) {
+                Log.log().fail("no metadata on path to root");
+                return List.of();
+            } else {
+                return parent.getMetadataFromPathToRoot();
+            }
         }
     }
 
@@ -232,7 +243,7 @@ public class Diagram {
 
     @Override
     public String toString() {
-        return moveName;
+        return moveName + " | " + metaData.size();
     }
 
     public boolean partiallyEquals(Diagram diagram) {
