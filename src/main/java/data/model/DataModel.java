@@ -10,6 +10,7 @@ public class DataModel {
     private Diagram actualNode;
     private final GamesRepository games = new GamesRepository();
     private final TreeDataModel treeDataModel = new TreeDataModel();
+    private final DiagramManager diagramManager = new DiagramManager();
     private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
@@ -43,8 +44,8 @@ public class DataModel {
         Diagram insertedLast = getLast(insertedRoot).orElseThrow();
         insertedLast.addMetadata(metaData);
         games.put(metaData, insertedLast);
-        games.update(actualRoot.insert(insertedRoot));
-        games.update(games.get(metaData).updateMetadata());
+        games.update(diagramManager.insert(actualRoot, insertedRoot));
+        games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {
