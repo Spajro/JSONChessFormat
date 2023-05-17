@@ -41,7 +41,7 @@ public class TreeDataModel implements TreeModel {
 
     @Override
     public int getIndexOfChild(Object parent, Object child) {
-        return ((Diagram) parent).getIndexInNextDiagrams((Diagram) child);
+        return ((Diagram) parent).getNextDiagrams().indexOf((Diagram) child);
     }
 
     @Override
@@ -59,12 +59,15 @@ public class TreeDataModel implements TreeModel {
     }
 
     public void notifyListenersOnInsert(Diagram newDiagram) {
+        Diagram parent = newDiagram.getParent().orElseThrow();
+
         int[] childrenArray = new int[1];
         Object[] objects = new Object[1];
         objects[0] = newDiagram;
-        childrenArray[0] = newDiagram.getParent().getIndexInNextDiagrams(newDiagram);
+        childrenArray[0] = parent.getNextDiagrams().indexOf(newDiagram);
+
         TreeModelEvent event = new TreeModelEvent(this,
-                getTreePathTo(newDiagram.getParent()),
+                getTreePathTo(parent),
                 childrenArray,
                 objects
         );

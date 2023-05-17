@@ -80,17 +80,6 @@ public class Diagram {
         return nextDiagram;
     }
 
-    public Diagram getDiagramOfId(int id) {
-        if (id == moveId) {
-            return this;
-        }
-        if (id > moveId || id < 0) {
-            throw new IllegalArgumentException("illegal move id:" + id);
-        } else {
-            return parent.getDiagramOfId(id);
-        }
-    }
-
     public List<Diagram> getPathFromRoot() {
         if (parent == null) {
             return new LinkedList<>(List.of(this));
@@ -102,15 +91,17 @@ public class Diagram {
     }
 
     public Diagram getRoot() {
-        return getDiagramOfId(0);
+        return getParent()
+                .map(Diagram::getRoot)
+                .orElse(this);
     }
 
     public Annotations getAnnotations() {
         return annotations;
     }
 
-    public Diagram getParent() {
-        return parent;
+    public Optional<Diagram> getParent() {
+        return Optional.ofNullable(parent);
     }
 
     public String getMoveName() {
@@ -148,10 +139,6 @@ public class Diagram {
         return nextDiagrams.size();
     }
 
-    public int getIndexInNextDiagrams(Diagram d) {
-        return nextDiagrams.indexOf(d);
-    }
-
     @Override
     public String toString() {
         return moveName + " | " + metaData.size();
@@ -177,5 +164,9 @@ public class Diagram {
 
     public void setParent(Diagram parent) {
         this.parent = parent;
+    }
+
+    public int getMoveId() {
+        return moveId;
     }
 }

@@ -4,6 +4,7 @@ import data.model.games.GamesUpdateEvent;
 import log.Log;
 
 import java.util.List;
+import java.util.Optional;
 
 public class DiagramManager {
     public GamesUpdateEvent insert(Diagram tree, Diagram node) {
@@ -49,18 +50,19 @@ public class DiagramManager {
             return GamesUpdateEvent.empty();
         }
 
-        if (node.getParent() == null) {
+        Optional<Diagram> optionalParent = node.getParent();
+        if (optionalParent.isEmpty()) {
             return GamesUpdateEvent.empty();
         }
-
-        if (node.getParent().getNextDiagramsCount() == 1) {
-            GamesUpdateEvent event = GamesUpdateEvent.of(node.getMetaData(), node.getParent());
-            node.getParent().getMetaData().addAll(node.getMetaData());
+        Diagram parent = optionalParent.get();
+        if (parent.getNextDiagramsCount() == 1) {
+            GamesUpdateEvent event = GamesUpdateEvent.of(node.getMetaData(), parent);
+            parent.getMetaData().addAll(node.getMetaData());
             node.getMetaData().clear();
-            return event.join(updateMetadata(node.getParent()));
-        } else if (node.getParent().getNextDiagramsCount() == 2) {
+            return event.join(updateMetadata(parent));
+        } else if (parent.getNextDiagramsCount() == 2) {
             Diagram brother = getOtherDiagramFromParent(node);
-            brother.getMetaData().addAll(getMetadataFromPathToRoot(node.getParent()));
+            brother.getMetaData().addAll(getMetadataFromPathToRoot(parent));
             return GamesUpdateEvent.of(brother.getMetaData(), brother);
         } else {
             return GamesUpdateEvent.empty();
@@ -73,18 +75,19 @@ public class DiagramManager {
             node.getMetaData().clear();
             return result;
         } else {
-            if (node.getParent() == null) {
+            if (node.getParent().isEmpty()) {
                 Log.log().fail("no metadata on path to root");
                 return List.of();
             } else {
-                return getMetadataFromPathToRoot(node.getParent());
+                return getMetadataFromPathToRoot(node.getParent().get());
             }
         }
     }
 
     private Diagram getOtherDiagramFromParent(Diagram diagram) {
-        Diagram diagram1 = diagram.getParent().getNextDiagram(0);
-        Diagram diagram2 = diagram.getParent().getNextDiagram(1);
+        Diagram parent = diagram.getParent().orElseThrow();
+        Diagram diagram1 = parent.getNextDiagram(0);
+        Diagram diagram2 = parent.getNextDiagram(1);
         if (diagram == diagram1) {
             return diagram2;
         } else if (diagram == diagram2) {

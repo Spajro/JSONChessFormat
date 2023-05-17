@@ -46,18 +46,24 @@ public class CommandLineHandler {
     }
 
     void deleteDiagram() {
-        if (node.getParent() != null) {
+
+        if (node.getParent().isPresent()) {
             Diagram Temp = node;
-            node = node.getParent();
+            node = node.getParent().get();
             node.getNextDiagrams().remove(Temp);
         } else {
             System.out.print("Cant delete");
         }
-
     }
 
-    void goBack(int pos) {
-        node = node.getDiagramOfId(pos);
+    void goBack(int id) {
+        while (id > node.getMoveId() || id < 0) {
+            if (node.getParent().isPresent()) {
+                node = node.getParent().get();
+            } else {
+                break;
+            }
+        }
     }
 
     void printMoves() {
@@ -74,8 +80,8 @@ public class CommandLineHandler {
     }
 
     void jumpBack() {
-        if (node.getParent() != null) {
-            node = node.getParent();
+        if (node.getParent().isPresent()) {
+            node = node.getParent().get();
         } else {
             System.out.print("Cant jump back");
         }
