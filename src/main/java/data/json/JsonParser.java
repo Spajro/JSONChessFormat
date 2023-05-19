@@ -91,8 +91,8 @@ public class JsonParser {
             String arrow = jsonNode.get("arrow").asText();
             return new ArrowAnnotation(
                     new RawMove(
-                            algebraicUtility.algebraicToPosition(arrow.substring(0, 2)),
-                            algebraicUtility.algebraicToPosition(arrow.substring(2))),
+                            algebraicUtility.algebraicToPosition(arrow.substring(0, 2)).orElseThrow(),
+                            algebraicUtility.algebraicToPosition(arrow.substring(2)).orElseThrow()),
                     toDrawColor(jsonNode.get("color")));
         }
         throw new IllegalArgumentException("Not a json arrow: " + jsonNode);
@@ -101,7 +101,7 @@ public class JsonParser {
     private FieldAnnotation toField(JsonNode jsonNode) {
         if (jsonNode.get("position") != null && jsonNode.get("color") != null) {
             return new FieldAnnotation(
-                    algebraicUtility.algebraicToPosition(jsonNode.get("position").asText()),
+                    algebraicUtility.algebraicToPosition(jsonNode.get("position").asText()).orElseThrow(),
                     toDrawColor(jsonNode.get("color")));
         }
         throw new IllegalArgumentException("Not a json field annotation: " + jsonNode);

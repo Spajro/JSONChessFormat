@@ -65,8 +65,11 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> pieceToMove(String move, ChessBoard chessBoard) {
-        Position end = utility.algebraicToPosition(move.substring(1));
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
+        Optional<Position> end = utility.algebraicToPosition(move.substring(1));
+        if (end.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
@@ -81,8 +84,11 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> ambiguousPieceToMove(String move, ChessBoard chessBoard) {
-        Position end = utility.algebraicToPosition(move.substring(2));
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
+        Optional<Position> end = utility.algebraicToPosition(move.substring(2));
+        if (end.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
@@ -95,7 +101,7 @@ public class ShortAlgebraicParser {
         if (optionalStart.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(new RawMove(optionalStart.get(), end));
+        return Optional.of(new RawMove(optionalStart.get(), end.get()));
     }
 
     private Optional<RawMove> ambiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {
@@ -106,8 +112,11 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> doubleAmbiguousPieceToMove(String move, ChessBoard chessBoard) {
-        Position end = utility.algebraicToPosition(move.substring(3));
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
+        Optional<Position> end = utility.algebraicToPosition(move.substring(3));
+        if (end.isEmpty()) {
+            return Optional.empty();
+        }
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
@@ -120,7 +129,7 @@ public class ShortAlgebraicParser {
         if (optionalStart.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(new RawMove(optionalStart.get(), end));
+        return Optional.of(new RawMove(optionalStart.get(), end.get()));
     }
 
     private Optional<RawMove> doubleAmbiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {
@@ -172,9 +181,12 @@ public class ShortAlgebraicParser {
 
     private Optional<Position> chooseByAmbiguous(Set<Position> positions, char ambiguous) {
         try {
-            int column = utility.columnToNumber(ambiguous);
+            Optional<Integer> column = utility.columnToNumber(ambiguous);
+            if (column.isEmpty()) {
+                return Optional.empty();
+            }
             Set<Position> positionSet = positions.stream()
-                    .filter(position -> position.getX() == column)
+                    .filter(position -> position.getX() == column.get())
                     .collect(Collectors.toSet());
             if (positionSet.size() != 1) {
                 return Optional.empty();
@@ -197,9 +209,12 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<Position> chooseByDoubleAmbiguous(Set<Position> positionSet, String ambiguous) {
-        Position position = utility.algebraicToPosition(ambiguous);
-        if (positionSet.contains(position)) {
-            return Optional.of(position);
+        Optional<Position> position = utility.algebraicToPosition(ambiguous);
+        if (position.isEmpty()) {
+            return Optional.empty();
+        }
+        if (positionSet.contains(position.get())) {
+            return position;
         } else {
             return Optional.empty();
         }

@@ -37,19 +37,23 @@ public class AlgebraicUtility {
         return Optional.empty();
     }
 
-    public Position algebraicToPosition(String position) {
+    public Optional<Position> algebraicToPosition(String position) {
         if (Character.getNumericValue(position.charAt(1)) > 8) {
-            throw new IllegalArgumentException("Invalid row number:" + Character.getNumericValue(position.charAt(1)));
+            return Optional.empty();
         }
-        return new Position(columnToNumber(position.charAt(0)), Character.getNumericValue(position.charAt(1)));
+        Optional<Integer> column = columnToNumber(position.charAt(0));
+        if (column.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new Position(column.get(), Character.getNumericValue(position.charAt(1))));
     }
 
     public Optional<Type> parsePromotion(String move) {
         return algebraicToType(move.charAt(move.length() - 1));
     }
 
-    public int columnToNumber(char column) {
-        return switch (column) {
+    public Optional<Integer> columnToNumber(char column) {
+        return Optional.ofNullable(switch (column) {
             case 'a' -> 1;
             case 'b' -> 2;
             case 'c' -> 3;
@@ -58,8 +62,8 @@ public class AlgebraicUtility {
             case 'f' -> 6;
             case 'g' -> 7;
             case 'h' -> 8;
-            default -> throw new IllegalArgumentException("Not valid column:" + column);
-        };
+            default -> null;
+        });
     }
 
     public char typeToAlgebraic(Type type) {

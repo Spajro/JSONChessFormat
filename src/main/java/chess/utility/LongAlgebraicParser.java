@@ -1,5 +1,6 @@
 package chess.utility;
 
+import chess.Position;
 import chess.color.Color;
 import chess.moves.RawMove;
 
@@ -18,10 +19,15 @@ public class LongAlgebraicParser {
 
     private Optional<RawMove> longAlgebraicToMove(String move) {
         String rawMove = slicePieceId(move);
+        Optional<Position> start = utility.algebraicToPosition(rawMove.substring(0, 2));
+        Optional<Position> end = utility.algebraicToPosition(rawMove.substring(3));
+        if (start.isEmpty() || end.isEmpty()) {
+            return Optional.empty();
+        }
         if (rawMove.charAt(2) == '-') {
             return Optional.of(new RawMove(
-                    utility.algebraicToPosition(rawMove.substring(0, 2)),
-                    utility.algebraicToPosition(rawMove.substring(3))));
+                    start.get(),
+                    end.get()));
         }
         return Optional.empty();
     }
