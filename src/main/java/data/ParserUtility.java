@@ -2,6 +2,7 @@ package data;
 
 import chess.board.ChessBoard;
 import chess.moves.RawMove;
+import chess.moves.RawPromotion;
 import chess.pieces.Piece;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
@@ -37,11 +38,15 @@ public class ParserUtility {
             if (moveResult.isValid()) {
                 ValidMoveResult validMoveResult;
                 if (moveResult instanceof PromotionResult promotionResult) {
-                    Optional<Piece.Type> optionalType = AlgebraicUtility.getInstance().parsePromotion(move);
-                    if (optionalType.isEmpty()) {
-                        return Optional.empty();
+                    if (rawMove instanceof RawPromotion rawPromotion) {
+                        validMoveResult = promotionResult.type(rawPromotion.getType());
+                    } else {
+                        Optional<Piece.Type> optionalType = AlgebraicUtility.getInstance().parsePromotion(move);
+                        if (optionalType.isEmpty()) {
+                            return Optional.empty();
+                        }
+                        validMoveResult = promotionResult.type(optionalType.get());
                     }
-                    validMoveResult = promotionResult.type(optionalType.get());
                 } else {
                     validMoveResult = (ValidMoveResult) moveResult;
                 }

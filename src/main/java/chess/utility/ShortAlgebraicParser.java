@@ -17,7 +17,7 @@ public class ShortAlgebraicParser {
     private final AlgebraicUtility utility = AlgebraicUtility.getInstance();
 
     public RawMove parseShortAlgebraic(String move, ChessBoard chessBoard) {
-        return utility.algebraicCastleToMove(move, chessBoard.getColor())
+        return utility.algebraicCastleToMove(removeCheckmarks(move), chessBoard.getColor())
                 .orElseGet(() -> shortAlgebraicToMove(removeCheckmarks(move), chessBoard)
                         .orElseThrow(() -> new IllegalArgumentException("Illegal short algebraic: " + move))
                 );
