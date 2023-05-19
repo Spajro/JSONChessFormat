@@ -158,9 +158,20 @@ public class Controller {
 
     public void loadDataFromPGN(String filename) {
         try {
-            dataModel.setNewTree(fileManager.loadPGN(filename).diagram().orElseThrow());
+            List<ParsedPGN> parsedPGNS = fileManager.loadPGN(filename);
+            if (parsedPGNS.size() == 0) {
+                Log.log().warn("Empty pgn");
+                return;
+            }
+            dataModel.setNewTree(parsedPGNS.get(0).diagram().orElseThrow());
             dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
+            if (parsedPGNS.size() > 1) {
+                for (int i = 1; i < parsedPGNS.size(); i++) {
+                    dataModel.insert(parsedPGNS.get(i).diagram().orElseThrow(), parsedPGNS.get(i).metadata());
+                    dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+                }
+            }
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
         }
@@ -195,9 +206,11 @@ public class Controller {
 
     public void insertPGN(String filename) {
         try {
-            ParsedPGN pgn = fileManager.loadPGN(filename);
-            dataModel.insert(pgn.diagram().orElseThrow(), pgn.metadata());
-            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+            List<ParsedPGN> pgn = fileManager.loadPGN(filename);
+            pgn.forEach(parsedPGN -> {
+                dataModel.insert(parsedPGN.diagram().orElseThrow(), parsedPGN.metadata());
+                dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+            });
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");

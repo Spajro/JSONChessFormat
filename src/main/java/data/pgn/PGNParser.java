@@ -22,18 +22,21 @@ public class PGNParser {
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
     private final ParserUtility parserUtility = ParserUtility.getInstance();
 
-
-    public ParsedPGN parsePGN(String pgn) {
-        int split = pgn.lastIndexOf(']') + 1;
-        String metadata = pgn.substring(0, split);
-        MetaData metaData = parseMetadata(metadata);
-        String moves = pgn.substring(split);
-        return new ParsedPGN(metaData, parseMoves(moves));
+    public List<ParsedPGN> parsePGN(String pgn) {
+        ArrayList<String> parts = new ArrayList<>(List.of(pgn.split("\r\n\r\n")));
+        ArrayList<ParsedPGN> result = new ArrayList<>();
+        for (int i = 0; i < parts.size(); i += 2) {
+            result.add(new ParsedPGN(
+                    parseMetadata(parts.get(i)),
+                    parseMoves(parts.get(i + 1)
+                    )));
+        }
+        return result;
     }
 
     private MetaData parseMetadata(String metadata) {
         HashMap<String, String> metadataMap = new HashMap<>();
-        Arrays.stream(metadata.split("\n"))
+        Arrays.stream(metadata.split("\r\n"))
                 .map(s -> s.substring(1, s.length() - 1))
                 .forEach(s -> {
                     int index = s.indexOf(" ");

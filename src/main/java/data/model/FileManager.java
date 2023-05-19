@@ -6,6 +6,7 @@ import data.pgn.ParsedPGN;
 import log.Log;
 
 import java.io.*;
+import java.util.List;
 import java.util.Scanner;
 
 public class FileManager {
@@ -20,7 +21,7 @@ public class FileManager {
         return jsonParser.parseJson(text.trim());
     }
 
-    public ParsedPGN loadPGN(String filename) throws FileNotFoundException {
+    public List<ParsedPGN> loadPGN(String filename) throws FileNotFoundException {
         Log.log().info("Loading PGN");
         Scanner scanner = new Scanner(new File(filename + ".pgn"));
         String text = scanner.useDelimiter("\\A").next();
