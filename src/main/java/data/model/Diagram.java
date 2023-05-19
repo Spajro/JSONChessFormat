@@ -146,7 +146,7 @@ public class Diagram {
 
     @Override
     public String toString() {
-        return moveName + " | " + metaData.size();
+        return moveName + " | " + gamesInTree();
     }
 
     public boolean partiallyEquals(Diagram diagram) {
@@ -173,5 +173,14 @@ public class Diagram {
 
     public int getMoveId() {
         return moveId;
+    }
+
+    private int gamesInTree() {
+        //TODO for debug purposes only
+        if (!metaData.isEmpty()) {
+            return metaData.size();
+        } else {
+            return nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
+        }
     }
 }
