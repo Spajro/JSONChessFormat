@@ -208,8 +208,12 @@ public class Controller {
         try {
             List<ParsedPGN> pgn = fileManager.loadPGN(filename);
             pgn.forEach(parsedPGN -> {
-                dataModel.insert(parsedPGN.diagram().orElseThrow(), parsedPGN.metadata());
-                dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+                if (parsedPGN.diagram().isPresent()) {
+                    dataModel.insert(parsedPGN.diagram().get(), parsedPGN.metadata());
+                    dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+                } else {
+                    Log.log().warn("Broken game: " + parsedPGN.metadata());
+                }
             });
             boardPanel.setDiagram(dataModel.getActualNode());
         } catch (FileNotFoundException e) {
