@@ -52,6 +52,7 @@ public class ShortAlgebraicParser {
         return list.stream().reduce(Optional.empty(), this::xor);
     }
 
+    @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
     private Optional<RawMove> xor(Optional<RawMove> first, Optional<RawMove> second) {
         if (first.isPresent() && second.isPresent()) {
             throw new IllegalArgumentException();
@@ -237,9 +238,16 @@ public class ShortAlgebraicParser {
                 .filter(Field::hasPiece)
                 .map(Field::getPiece)
                 .filter(piece::partiallyEquals)
-                .filter(p -> p.getPossibleEndPositions().contains(piece.getPosition()))
+                .filter(p -> p.getPossibleEndPositions().contains(piece.getPosition()) || isEnPassant(p, piece, chessBoard))
                 .map(Piece::getPosition)
                 .collect(Collectors.toSet());
+    }
+
+    private boolean isEnPassant(Piece start, Piece end, ChessBoard chessBoard) {
+        if (start.getType().equals(Piece.Type.PAWN) && start.getType().equals(Piece.Type.PAWN)) {
+            return new MoveValidator(chessBoard).isLegalEnPassantCapture(new RawMove(start.getPosition(), end.getPosition()));
+        }
+        return false;
     }
 
     private Optional<Piece> charToPiece(char piece, Position position, ChessBoard chessBoard) {
