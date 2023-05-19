@@ -40,10 +40,14 @@ public class ShortAlgebraicParser {
             case 5 -> listXor(List.of(
                             ambiguousPieceCaptureToMove(move, chessBoard),
                             doubleAmbiguousPieceToMove(move, chessBoard),
-                            ambiguousPawnPromotion(move, chessBoard)
+                            ambiguousPawnPromotion(move, chessBoard),
+                            pawnCapturePromotion(move, chessBoard)
                     )
             );
-            case 6 -> doubleAmbiguousPieceCaptureToMove(move, chessBoard);
+            case 6 -> xor(
+                    doubleAmbiguousPieceCaptureToMove(move, chessBoard),
+                    ambiguousPawnCapturePromotion(move, chessBoard)
+            );
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
     }
@@ -164,6 +168,22 @@ public class ShortAlgebraicParser {
             return Optional.empty();
         }
         return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
+    }
+
+    private Optional<RawMove> pawnCapturePromotion(String move, ChessBoard chessBoard) {
+        if (move.charAt(0) != 'x') {
+            return Optional.empty();
+        }
+
+        return pawnPromotion(move.substring(1), chessBoard);
+    }
+
+    private Optional<RawMove> ambiguousPawnCapturePromotion(String move, ChessBoard chessBoard) {
+        if (move.charAt(1) != 'x') {
+            return Optional.empty();
+        }
+
+        return ambiguousPawnPromotion(move.charAt(0) + move.substring(2), chessBoard);
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
