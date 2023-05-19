@@ -4,9 +4,11 @@ import chess.Position;
 import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
 import chess.moves.RawMove;
+import chess.moves.RawPromotion;
 import chess.pieces.*;
 import chess.validation.MoveValidator;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,20 +28,28 @@ public class ShortAlgebraicParser {
             case 2 -> pieceToMove('P' + move, chessBoard);
             case 3 -> xor(
                     pieceCaptureToMove('P' + move, chessBoard),
-                    pieceToMove(move, chessBoard));
-            case 4 -> xor(
-                    pieceCaptureToMove(move, chessBoard),
-                    xor(
-                            ambiguousPieceToMove(move, chessBoard),
-                            ambiguousPieceCaptureToMove('P' + move, chessBoard))
+                    pieceToMove(move, chessBoard)
             );
-            case 5 -> xor(
-                    ambiguousPieceCaptureToMove(move, chessBoard),
-                    doubleAmbiguousPieceToMove(move, chessBoard)
+            case 4 -> listXor(List.of(
+                            pieceCaptureToMove(move, chessBoard),
+                            ambiguousPieceToMove(move, chessBoard),
+                            ambiguousPieceCaptureToMove('P' + move, chessBoard),
+                            pawnPromotion(move, chessBoard)
+                    )
+            );
+            case 5 -> listXor(List.of(
+                            ambiguousPieceCaptureToMove(move, chessBoard),
+                            doubleAmbiguousPieceToMove(move, chessBoard),
+                            ambiguousPawnPromotion(move, chessBoard)
+                    )
             );
             case 6 -> doubleAmbiguousPieceCaptureToMove(move, chessBoard);
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
+    }
+
+    private Optional<RawMove> listXor(List<Optional<RawMove>> list) {
+        return list.stream().reduce(Optional.empty(), this::xor);
     }
 
     private Optional<RawMove> xor(Optional<RawMove> first, Optional<RawMove> second) {
@@ -118,6 +128,32 @@ public class ShortAlgebraicParser {
             return Optional.empty();
         }
         return doubleAmbiguousPieceToMove(move.substring(0, 3) + move.substring(4), chessBoard);
+    }
+
+    private Optional<RawMove> pawnPromotion(String move, ChessBoard chessBoard) {
+        if (move.charAt(2) != '=') {
+            return Optional.empty();
+        }
+
+        Optional<RawMove> optionalRawMove = pieceToMove("P" + move.substring(0, 2), chessBoard);
+        Optional<Piece.Type> optionalType = utility.algebraicToType(move.charAt(3));
+        if (optionalRawMove.isEmpty() || optionalType.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
+    }
+
+    private Optional<RawMove> ambiguousPawnPromotion(String move, ChessBoard chessBoard) {
+        if (move.charAt(3) != '=') {
+            return Optional.empty();
+        }
+
+        Optional<RawMove> optionalRawMove = ambiguousPieceToMove("P" + move.substring(0, 3), chessBoard);
+        Optional<Piece.Type> optionalType = utility.algebraicToType(move.charAt(4));
+        if (optionalRawMove.isEmpty() || optionalType.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {

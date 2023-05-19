@@ -3,10 +3,10 @@ package chess.utility;
 import chess.Position;
 import chess.color.Color;
 import chess.moves.RawMove;
-import chess.pieces.Piece;
 
 import java.util.Optional;
 
+import static chess.pieces.Piece.*;
 import static chess.pieces.Piece.Type.*;
 
 public class AlgebraicUtility {
@@ -44,7 +44,7 @@ public class AlgebraicUtility {
         return new Position(columnToNumber(position.charAt(0)), Character.getNumericValue(position.charAt(1)));
     }
 
-    public Optional<Piece.Type> parsePromotion(String move) {
+    public Optional<Type> parsePromotion(String move) {
         return algebraicToType(move.charAt(move.length() - 1));
     }
 
@@ -62,7 +62,7 @@ public class AlgebraicUtility {
         };
     }
 
-    public char typeToAlgebraic(Piece.Type type) {
+    public char typeToAlgebraic(Type type) {
         return switch (type) {
             case PAWN -> ' ';
             case KNIGHT -> 'N';
@@ -73,7 +73,7 @@ public class AlgebraicUtility {
         };
     }
 
-    public Optional<Piece.Type> algebraicToType(char type) {
+    public Optional<Type> algebraicToType(char type) {
         return Optional.ofNullable(switch (type) {
             case ' ' -> PAWN;
             case 'N' -> KNIGHT;
