@@ -23,9 +23,10 @@ public class PGNParser {
     private final ParserUtility parserUtility = ParserUtility.getInstance();
 
     public List<ParsedPGN> parsePGN(String pgn) {
-        ArrayList<String> parts = new ArrayList<>(List.of(pgn.split("\r\n\r\n")));
+        String newLine = getEndLineCharacter(pgn).orElseThrow();
+        ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
-        for (int i = 0; i < parts.size(); i += 2) {
+        for (int i = 0; i < parts.size()-1; i += 2) {
             result.add(new ParsedPGN(
                     parseMetadata(parts.get(i)),
                     parseMoves(parts.get(i + 1)
@@ -36,7 +37,7 @@ public class PGNParser {
 
     private MetaData parseMetadata(String metadata) {
         HashMap<String, String> metadataMap = new HashMap<>();
-        Arrays.stream(metadata.split("\r\n"))
+        Arrays.stream(metadata.split(getEndLineCharacter(metadata).orElseThrow()))
                 .map(s -> s.substring(1, s.length() - 1))
                 .forEach(s -> {
                     int index = s.indexOf(" ");
@@ -63,4 +64,14 @@ public class PGNParser {
         return optionalRawMoves.map(moveList -> parserUtility.createTree(root, moveList));
     }
 
+
+    private Optional<String> getEndLineCharacter(String text) {
+        if (text.contains("\r\n")) {
+            return Optional.of("\r\n");
+        } else if (text.contains("\n")) {
+            return Optional.of("\n");
+        } else {
+            return Optional.empty();
+        }
+    }
 }
