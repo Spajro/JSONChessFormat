@@ -34,7 +34,7 @@ public class ValidMoveFactory {
     }
 
     private UnTypedPromotion createPromotion(RawMove move) {
-        return new UnTypedPromotion(move, chessBoard);
+        return new UnTypedPromotion(move, chessBoard.getBoard(), chessBoard.getColor());
     }
 
     private SimpleMove createSimpleMove(RawMove move) {

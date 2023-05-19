@@ -1,41 +1,41 @@
 package chess.moves;
 
-import chess.board.ChessBoard;
 import chess.board.lowlevel.Board;
 import chess.color.Color;
 
 import static chess.pieces.Piece.*;
 
 public class Promotion extends RawMove implements ExecutableMove {
-    private final ChessBoard chessBoard;
+    private final Board board;
+    private final Color color;
     private final Type type;
 
-    public Promotion(RawMove move, ChessBoard chessBoard, Type type) {
+    public Promotion(RawMove move, Board board, Color color, Type type) {
         super(move);
-        this.chessBoard = chessBoard;
+        this.board = board;
+        this.color = color;
         this.type = type;
     }
 
     @Override
     public Board makeMove() {
-        Board newBoard = Board.getCopy(chessBoard.getBoard());
-        newBoard.write(convert(type,chessBoard.getColor()), getEndPosition());
+        Board newBoard = Board.getCopy(board);
+        newBoard.write(convert(type, color), getEndPosition());
         newBoard.write(Board.EMPTY, getStartPosition());
         return newBoard;
     }
 
     private byte convert(Type type, Color color) {
-        if(color.isWhite()){
-            return switch(type){
+        if (color.isWhite()) {
+            return switch (type) {
                 case KNIGHT -> Board.WKNIGHT;
                 case BISHOP -> Board.WBISHOP;
                 case ROOK -> Board.WROOK;
                 case QUEEN -> Board.WQUEEN;
                 default -> throw new IllegalStateException("Illegal promotion");
             };
-        }
-        else{
-            return switch(type){
+        } else {
+            return switch (type) {
                 case KNIGHT -> Board.BKNIGHT;
                 case BISHOP -> Board.BBISHOP;
                 case ROOK -> Board.BROOK;

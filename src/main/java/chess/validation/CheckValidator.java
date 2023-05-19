@@ -40,7 +40,7 @@ class CheckValidator {
     }
 
     public boolean kingIsNotCheckedAfterPromotion(RawMove move, Color kingColor) {
-        ChessBoard tempBoard = chessBoard.makeMove((ExecutableMove) new Promotion(move, chessBoard, Piece.Type.QUEEN));
+        ChessBoard tempBoard = chessBoard.makeMove((ExecutableMove) new Promotion(move, chessBoard.getBoard(), chessBoard.getColor(), Piece.Type.QUEEN));
         return !(new CheckValidator(tempBoard).isKingChecked(kingColor));
     }
 }
