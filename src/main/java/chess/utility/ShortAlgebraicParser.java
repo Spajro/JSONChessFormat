@@ -33,7 +33,11 @@ public class ShortAlgebraicParser {
                             ambiguousPieceToMove(move, chessBoard),
                             ambiguousPieceCaptureToMove('P' + move, chessBoard))
             );
-            case 5 -> ambiguousPieceCaptureToMove(move, chessBoard);
+            case 5 -> xor(
+                    ambiguousPieceCaptureToMove(move, chessBoard),
+                    doubleAmbiguousPieceToMove(move, chessBoard)
+            );
+            case 6 -> doubleAmbiguousPieceCaptureToMove(move, chessBoard);
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
     }
@@ -91,6 +95,31 @@ public class ShortAlgebraicParser {
         return ambiguousPieceToMove(move.substring(0, 2) + move.substring(3), chessBoard);
     }
 
+    private Optional<RawMove> doubleAmbiguousPieceToMove(String move, ChessBoard chessBoard) {
+        Position end = utility.algebraicToPosition(move.substring(3));
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end, chessBoard);
+        if (optionalPiece.isEmpty()) {
+            return Optional.empty();
+        }
+        Piece piece = optionalPiece.get();
+        Set<Position> positionSet = getPositions(piece, chessBoard);
+        if (positionSet.size() < 1) {
+            return Optional.empty();
+        }
+        Optional<Position> optionalStart = chooseByDoubleAmbiguous(positionSet, move.substring(1, 3));
+        if (optionalStart.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new RawMove(optionalStart.get(), end));
+    }
+
+    private Optional<RawMove> doubleAmbiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {
+        if (move.charAt(3) != 'x') {
+            return Optional.empty();
+        }
+        return doubleAmbiguousPieceToMove(move.substring(0, 3) + move.substring(4), chessBoard);
+    }
+
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
         Set<Position> positionSet = getPositions(piece, chessBoard);
         if (positionSet.size() != 1) {
@@ -129,6 +158,15 @@ public class ShortAlgebraicParser {
         } catch (IllegalArgumentException ignored) {
         }
         return Optional.empty();
+    }
+
+    private Optional<Position> chooseByDoubleAmbiguous(Set<Position> positionSet, String ambiguous) {
+        Position position = utility.algebraicToPosition(ambiguous);
+        if (positionSet.contains(position)) {
+            return Optional.of(position);
+        } else {
+            return Optional.empty();
+        }
     }
 
     private String removeCheckmarks(String move) {
