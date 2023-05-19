@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.ExecutableMove;
+import chess.moves.RawPromotion;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
@@ -48,7 +49,11 @@ public class Diagram {
         if (moveResult.isValid()) {
             ValidMoveResult validMoveResult;
             if (moveResult instanceof PromotionResult promotionResult) {
-                validMoveResult = promotionResult.type(typeProvider.getPromotionType());
+                if (move instanceof RawPromotion rawPromotion) {
+                    validMoveResult = promotionResult.type(rawPromotion.getType());
+                } else {
+                    validMoveResult = promotionResult.type(typeProvider.getPromotionType());
+                }
             } else {
                 validMoveResult = (ValidMoveResult) moveResult;
             }
