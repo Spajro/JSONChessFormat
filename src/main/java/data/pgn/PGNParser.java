@@ -7,6 +7,7 @@ import data.model.Diagram;
 import data.model.MetaData;
 
 import java.util.*;
+import java.util.regex.Pattern;
 
 public class PGNParser {
 
@@ -26,7 +27,7 @@ public class PGNParser {
         String newLine = getEndLineCharacter(pgn).orElseThrow();
         ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
-        for (int i = 0; i < parts.size()-1; i += 2) {
+        for (int i = 0; i < parts.size() - 1; i += 2) {
             result.add(new ParsedPGN(
                     parseMetadata(parts.get(i)),
                     parseMoves(parts.get(i + 1)
@@ -55,8 +56,10 @@ public class PGNParser {
     }
 
     private Optional<Diagram> parseMoves(String input) {
+        Pattern pattern = Pattern.compile("[^A-Za-z\\d-/+#=]");
         List<String> moves = Arrays.stream(input.split(" "))
-                .filter(s -> !(s.charAt(s.length() - 1) == '.'))
+                .map(this::removeMarksFromEndIfAny)
+                .filter(string -> !pattern.matcher(string).find())
                 .map(String::trim)
                 .toList();
         Diagram root = new Diagram();
@@ -64,6 +67,16 @@ public class PGNParser {
         return optionalRawMoves.map(moveList -> parserUtility.createTree(root, moveList));
     }
 
+    private String removeMarksFromEndIfAny(String string) {
+        int index = string.length() - 1;
+        while (string.charAt(index) == '?' || string.charAt(index) == '!') {
+            index--;
+            if (index < 0) {
+                return "";
+            }
+        }
+        return string.substring(0, index + 1);
+    }
 
     private Optional<String> getEndLineCharacter(String text) {
         if (text.contains("\r\n")) {
