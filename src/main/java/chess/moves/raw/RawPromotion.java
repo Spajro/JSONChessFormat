@@ -1,4 +1,4 @@
-package chess.moves;
+package chess.moves.raw;
 
 import chess.Position;
 

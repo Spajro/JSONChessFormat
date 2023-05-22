@@ -1,7 +1,8 @@
-package chess.moves;
+package chess.moves.valid.executable;
 
 import chess.board.lowlevel.Board;
 import chess.Position;
+import chess.moves.raw.RawMove;
 
 public class Castle implements ExecutableMove {
     private final RawMove kingMove;

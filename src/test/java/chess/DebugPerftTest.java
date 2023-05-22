@@ -1,7 +1,7 @@
 package chess;
 
 import chess.board.ChessBoard;
-import chess.moves.*;
+import chess.moves.valid.executable.*;
 import chess.utility.FENParser;
 import chess.utility.LongAlgebraicFactory;
 import org.junit.jupiter.api.Disabled;

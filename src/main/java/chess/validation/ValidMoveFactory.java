@@ -2,7 +2,12 @@ package chess.validation;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.moves.*;
+import chess.moves.raw.RawMove;
+import chess.moves.valid.UnTypedPromotion;
+import chess.moves.valid.ValidMove;
+import chess.moves.valid.executable.Castle;
+import chess.moves.valid.executable.EnPassantCapture;
+import chess.moves.valid.executable.SimpleMove;
 
 import java.util.Optional;
 

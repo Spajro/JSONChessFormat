@@ -3,8 +3,8 @@ package chess.utility;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
-import chess.moves.RawMove;
-import chess.moves.RawPromotion;
+import chess.moves.raw.RawMove;
+import chess.moves.raw.RawPromotion;
 import chess.pieces.*;
 import chess.validation.MoveValidator;
 

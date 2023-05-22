@@ -1,7 +1,11 @@
 package chess.utility;
 
 import chess.board.ChessBoard;
-import chess.moves.*;
+import chess.moves.valid.ValidMove;
+import chess.moves.valid.executable.Castle;
+import chess.moves.valid.executable.EnPassantCapture;
+import chess.moves.valid.executable.Promotion;
+import chess.moves.valid.executable.SimpleMove;
 
 public class LongAlgebraicFactory {
     private static final LongAlgebraicFactory longAlgebraicFactory = new LongAlgebraicFactory();

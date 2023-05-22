@@ -1,16 +1,19 @@
-package chess.moves;
+package chess.moves.valid.executable;
 
 import chess.board.lowlevel.Board;
 import chess.color.Color;
+import chess.moves.Vector;
+import chess.moves.raw.RawMove;
+import chess.moves.raw.RawPromotion;
 
 import static chess.pieces.Piece.*;
 
-public class Promotion extends RawMove implements ExecutableMove {
+public class Promotion extends Vector implements ExecutableMove {
     private final Board board;
     private final Color color;
     private final Type type;
 
-    public Promotion(RawMove move, Board board, Color color, Type type) {
+    public Promotion(Vector move, Board board, Color color, Type type) {
         super(move);
         this.board = board;
         this.color = color;
@@ -47,7 +50,7 @@ public class Promotion extends RawMove implements ExecutableMove {
 
     @Override
     public RawMove getRepresentation() {
-        return this;
+        return new RawPromotion(new RawMove(this), type);
     }
 
     public Type getType() {

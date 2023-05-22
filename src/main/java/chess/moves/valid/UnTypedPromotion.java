@@ -1,11 +1,13 @@
-package chess.moves;
+package chess.moves.valid;
 
-import chess.board.ChessBoard;
 import chess.board.lowlevel.Board;
 import chess.color.Color;
+import chess.moves.valid.executable.Promotion;
+import chess.moves.Vector;
+import chess.moves.raw.RawMove;
 import chess.pieces.Piece;
 
-public class UnTypedPromotion extends RawMove implements ValidMove {
+public class UnTypedPromotion extends Vector implements ValidMove {
     private final Board board;
     private final Color color;
 
@@ -17,7 +19,7 @@ public class UnTypedPromotion extends RawMove implements ValidMove {
 
     @Override
     public RawMove getRepresentation() {
-        return this;
+        return new RawMove(this);
     }
 
     public Promotion type(Piece.Type type) {

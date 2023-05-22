@@ -3,7 +3,7 @@ package chess.validation;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 
 import chess.pieces.*;
 import org.junit.jupiter.api.Test;

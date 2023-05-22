@@ -1,6 +1,6 @@
 package gui.scaling;
 
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 
 public class ScaledLine {
     private final ScaledPosition start;

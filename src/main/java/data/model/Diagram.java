@@ -1,14 +1,14 @@
 package data.model;
 
-import chess.moves.ExecutableMove;
-import chess.moves.RawPromotion;
+import chess.moves.valid.executable.ExecutableMove;
+import chess.moves.raw.RawPromotion;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import log.Log;
 
 import java.util.LinkedList;

@@ -2,7 +2,7 @@ package gui.board;
 
 import chess.board.lowlevel.Board;
 import chess.Position;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import gui.Controller;
 import log.Log;
 

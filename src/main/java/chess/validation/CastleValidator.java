@@ -4,7 +4,7 @@ import chess.Position;
 import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 
 import java.util.HashSet;
 import java.util.Optional;

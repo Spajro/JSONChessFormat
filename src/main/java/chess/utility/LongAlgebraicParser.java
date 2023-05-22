@@ -2,7 +2,7 @@ package chess.utility;
 
 import chess.Position;
 import chess.color.Color;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 
 import java.util.Optional;
 

@@ -1,6 +1,6 @@
 package data.model;
 
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import data.model.games.GamesRepository;
 import log.Log;
 

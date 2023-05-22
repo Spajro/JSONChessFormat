@@ -1,7 +1,7 @@
 package data.model;
 
 import chess.board.ChessBoard;
-import chess.moves.ExecutableMove;
+import chess.moves.valid.executable.ExecutableMove;
 
 public class FENDiagram extends Diagram {
     private final ChessBoard chessBoard;

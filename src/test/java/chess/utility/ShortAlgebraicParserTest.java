@@ -3,7 +3,7 @@ package chess.utility;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import chess.pieces.King;
 import chess.pieces.Knight;
 import chess.pieces.Pawn;

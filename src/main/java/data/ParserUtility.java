@@ -1,8 +1,8 @@
 package data;
 
 import chess.board.ChessBoard;
-import chess.moves.RawMove;
-import chess.moves.RawPromotion;
+import chess.moves.raw.RawMove;
+import chess.moves.raw.RawPromotion;
 import chess.pieces.Piece;
 import chess.results.MoveResult;
 import chess.results.PromotionResult;

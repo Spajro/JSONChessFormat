@@ -1,17 +1,17 @@
 package data.annotations;
 
-import chess.moves.RawMove;
+import chess.moves.Vector;
 
-public class ArrowAnnotation extends RawMove implements GraphicAnnotation {
+public class ArrowAnnotation extends Vector implements GraphicAnnotation {
     private final DrawColor color;
 
-    public ArrowAnnotation(RawMove move, DrawColor color) {
-        super(move);
+    public ArrowAnnotation(Vector vector, DrawColor color) {
+        super(vector);
         this.color = color;
     }
 
-    public boolean moveEquals(RawMove move) {
-        return getStartPosition().equals(move.getStartPosition()) && getEndPosition().equals(move.getEndPosition());
+    public boolean moveEquals(Vector vector) {
+        return getStartPosition().equals(vector.getStartPosition()) && getEndPosition().equals(vector.getEndPosition());
     }
 
     @Override

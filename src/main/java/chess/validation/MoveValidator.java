@@ -1,9 +1,9 @@
 package chess.validation;
 
 import chess.board.ChessBoard;
-import chess.moves.RawMove;
-import chess.moves.SimpleMove;
-import chess.moves.ValidMove;
+import chess.moves.raw.RawMove;
+import chess.moves.valid.executable.SimpleMove;
+import chess.moves.valid.ValidMove;
 import chess.pieces.Pawn;
 import chess.pieces.Piece;
 

@@ -1,7 +1,7 @@
 package chess.results;
 
 import chess.board.ChessBoard;
-import chess.moves.ExecutableMove;
+import chess.moves.valid.executable.ExecutableMove;
 
 public class ValidMoveResult implements MoveResult {
     private final ChessBoard result;

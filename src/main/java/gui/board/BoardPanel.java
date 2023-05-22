@@ -4,7 +4,7 @@ import chess.Position;
 import chess.board.lowlevel.Board;
 import chess.board.features.ChessBoardCoverageAnalyzer;
 import chess.board.features.ChessBoardWeakPointsAnalyzer;
-import chess.moves.ValidMove;
+import chess.moves.valid.ValidMove;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;

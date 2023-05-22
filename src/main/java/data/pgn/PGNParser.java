@@ -1,6 +1,6 @@
 package data.pgn;
 
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import chess.utility.ShortAlgebraicParser;
 import data.ParserUtility;
 import data.model.Diagram;

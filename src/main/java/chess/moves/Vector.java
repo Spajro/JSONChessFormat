@@ -4,18 +4,18 @@ import chess.Position;
 
 import java.util.Objects;
 
-public class RawMove {
+public abstract class Vector {
     private final Position startPosition;
     private final Position endPosition;
 
-    public RawMove(Position startPosition, Position endPosition) {
+    public Vector(Position startPosition, Position endPosition) {
         this.startPosition = startPosition;
         this.endPosition = endPosition;
     }
 
-    public RawMove(RawMove move) {
-        this.startPosition = move.getStartPosition();
-        this.endPosition = move.getEndPosition();
+    public Vector(Vector vector) {
+        this.startPosition = vector.getStartPosition();
+        this.endPosition = vector.getEndPosition();
     }
 
     public Position getStartPosition() {
@@ -35,8 +35,8 @@ public class RawMove {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        RawMove rawMove = (RawMove) o;
-        return startPosition.equals(rawMove.startPosition) && endPosition.equals(rawMove.endPosition);
+        Vector vector = (Vector) o;
+        return startPosition.equals(vector.startPosition) && endPosition.equals(vector.endPosition);
     }
 
     @Override

@@ -1,8 +1,8 @@
 package chess.results;
 
 import chess.board.ChessBoard;
-import chess.moves.ExecutableMove;
-import chess.moves.UnTypedPromotion;
+import chess.moves.valid.executable.ExecutableMove;
+import chess.moves.valid.UnTypedPromotion;
 import chess.pieces.Piece;
 
 public class PromotionResult implements MoveResult {
@@ -20,6 +20,6 @@ public class PromotionResult implements MoveResult {
     }
 
     public ValidMoveResult type(Piece.Type type) {
-        return new ValidMoveResult(chessBoard.makeMove((ExecutableMove) promotion.type(type)), promotion.type(type));
+        return new ValidMoveResult(chessBoard.makeMove(promotion.type(type)), promotion.type(type));
     }
 }

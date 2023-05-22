@@ -1,6 +1,6 @@
 package data.json;
 
-import chess.moves.RawMove;
+import chess.moves.raw.RawMove;
 import chess.utility.AlgebraicUtility;
 import chess.utility.LongAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
