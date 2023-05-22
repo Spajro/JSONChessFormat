@@ -2,10 +2,7 @@ package data;
 
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
-import chess.moves.raw.RawPromotion;
-import chess.pieces.Piece;
 import chess.results.MoveResult;
-import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.utility.AlgebraicUtility;
 import data.model.Diagram;
@@ -35,22 +32,9 @@ public class ParserUtility {
             RawMove rawMove = parser.apply(move, chessBoard);
             result.add(rawMove);
             MoveResult moveResult = chessBoard.makeMove(rawMove);
-            if (moveResult.isValid()) {
-                ValidMoveResult validMoveResult;
-                if (moveResult instanceof PromotionResult promotionResult) {
-                    if (rawMove instanceof RawPromotion rawPromotion) {
-                        validMoveResult = promotionResult.type(rawPromotion.getType());
-                    } else {
-                        Optional<Piece.Type> optionalType = AlgebraicUtility.getInstance().parsePromotion(move);
-                        if (optionalType.isEmpty()) {
-                            return Optional.empty();
-                        }
-                        validMoveResult = promotionResult.type(optionalType.get());
-                    }
-                } else {
-                    validMoveResult = (ValidMoveResult) moveResult;
-                }
-                chessBoard = validMoveResult.getResult();
+            Optional<ValidMoveResult> validMoveResult = moveResult.validate(() -> AlgebraicUtility.getInstance().parsePromotion(move).orElseThrow());
+            if (validMoveResult.isPresent()) {
+                chessBoard = validMoveResult.get().getResult();
             } else {
                 return Optional.empty();
             }

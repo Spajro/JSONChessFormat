@@ -1,6 +1,7 @@
 package chess.results;
 
 import chess.board.ChessBoard;
+import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 
 public class ValidMoveResult implements MoveResult {
@@ -21,7 +22,12 @@ public class ValidMoveResult implements MoveResult {
         return result;
     }
 
-    public ExecutableMove getMove() {
+    @Override
+    public RawMove getMove() {
+        return move.getRepresentation();
+    }
+
+    public ExecutableMove getExecutableMove() {
         return move;
     }
 }

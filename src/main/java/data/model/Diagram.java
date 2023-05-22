@@ -1,9 +1,7 @@
 package data.model;
 
 import chess.moves.valid.executable.ExecutableMove;
-import chess.moves.raw.RawPromotion;
 import chess.results.MoveResult;
-import chess.results.PromotionResult;
 import chess.results.ValidMoveResult;
 import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
@@ -46,19 +44,10 @@ public class Diagram {
         Log.log().info("Trying to make:" + move);
 
         MoveResult moveResult = getBoard().makeMove(move);
-        if (moveResult.isValid()) {
-            ValidMoveResult validMoveResult;
-            if (moveResult instanceof PromotionResult promotionResult) {
-                if (move instanceof RawPromotion rawPromotion) {
-                    validMoveResult = promotionResult.type(rawPromotion.getType());
-                } else {
-                    validMoveResult = promotionResult.type(typeProvider.getPromotionType());
-                }
-            } else {
-                validMoveResult = (ValidMoveResult) moveResult;
-            }
+        Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
-            Diagram nextDiagram = new Diagram(validMoveResult.getMove(), this, moveId + 1);
+        if (validMoveResult.isPresent()) {
+            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), this, moveId + 1);
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
                     return diagram;

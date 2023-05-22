@@ -81,7 +81,7 @@ public class ChessBoard {
                 return new PromotionResult(this, promotion);
             }
         }
-        return new InvalidMoveResult();
+        return new InvalidMoveResult(move);
     }
 
     public ChessBoard makeMove(ExecutableMove validMove) {

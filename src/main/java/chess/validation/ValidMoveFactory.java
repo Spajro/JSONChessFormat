@@ -3,10 +3,12 @@ package chess.validation;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import chess.moves.raw.RawPromotion;
 import chess.moves.valid.UnTypedPromotion;
 import chess.moves.valid.ValidMove;
 import chess.moves.valid.executable.Castle;
 import chess.moves.valid.executable.EnPassantCapture;
+import chess.moves.valid.executable.Promotion;
 import chess.moves.valid.executable.SimpleMove;
 
 import java.util.Optional;
@@ -38,7 +40,10 @@ public class ValidMoveFactory {
         return Optional.empty();
     }
 
-    private UnTypedPromotion createPromotion(RawMove move) {
+    private ValidMove createPromotion(RawMove move) {
+        if (move instanceof RawPromotion rawPromotion) {
+            return new Promotion(move, chessBoard.getBoard(), chessBoard.getColor(), rawPromotion.getType());
+        }
         return new UnTypedPromotion(move, chessBoard.getBoard(), chessBoard.getColor());
     }
 
