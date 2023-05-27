@@ -64,18 +64,6 @@ public class Diagram {
         }
     }
 
-    public Diagram makeMove(ExecutableMove move) {
-        Diagram nextDiagram = new Diagram(move, this, moveId + 1);
-        for (Diagram diagram : nextDiagrams) {
-            if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
-                return diagram;
-            }
-        }
-
-        nextDiagrams.add(nextDiagram);
-        return nextDiagram;
-    }
-
     public List<Diagram> getPathFromRoot() {
         if (parent == null) {
             return new LinkedList<>(List.of(this));
