@@ -77,7 +77,6 @@ public class DiagramManager {
             return result;
         } else {
             if (node.getParent().isEmpty()) {
-                Log.log().fail("no metadata on path to root");
                 return List.of();
             } else {
                 return getMetadataFromPathToRoot(node.getParent().get());
