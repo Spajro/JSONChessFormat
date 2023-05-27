@@ -5,6 +5,7 @@ import chess.utility.ShortAlgebraicParser;
 import data.ParserUtility;
 import data.model.Diagram;
 import data.model.MetaData;
+import log.Log;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -25,6 +26,7 @@ public class PGNParser {
 
     public List<ParsedPGN> parsePGN(String pgn) {
         String newLine = getEndLineCharacter(pgn).orElseThrow();
+        long startTime = System.nanoTime();
         ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
         for (int i = 0; i < parts.size() - 1; i += 2) {
@@ -33,6 +35,11 @@ public class PGNParser {
                     parseMoves(parts.get(i + 1)
                     )));
         }
+        long endTime = System.nanoTime();
+        long nanoDuration = (endTime - startTime);
+        double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
+        double nodesPerSec = ((double) (parts.size() / 2) / secondDuration);
+        Log.log().info("Parsing time: " + secondDuration + "s with speed: " + nodesPerSec + "dps");
         return result;
     }
 
