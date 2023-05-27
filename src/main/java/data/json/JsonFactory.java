@@ -37,7 +37,7 @@ public class JsonFactory {
                     .append(',');
         }
         if (isSubTreeOptimizable(diagram)) {
-            Optional<LinkedList<Diagram>> list = getPathToLast(diagram.getNextDiagram(0));
+            Optional<LinkedList<Diagram>> list = getPathToLast(diagram);
             list.ifPresent(diagrams -> result.append("\"movesList\":")
                     .append(listJsonFactory.listToJson(diagrams, this::toOptimizedJson))
                     .append(','));
