@@ -4,7 +4,8 @@ import chess.moves.raw.RawMove;
 import chess.utility.ShortAlgebraicParser;
 import data.ParserUtility;
 import data.model.Diagram;
-import data.model.MetaData;
+import data.model.metadata.GameData;
+import data.model.metadata.MetaData;
 import log.Log;
 
 import java.util.*;
@@ -51,7 +52,7 @@ public class PGNParser {
                     int index = s.indexOf(" ");
                     metadataMap.put(s.substring(0, index), s.substring(index));
                 });
-        return new MetaData(
+        return new GameData(
                 metadataMap.get("Event"),
                 metadataMap.get("Site"),
                 metadataMap.get("Date"),

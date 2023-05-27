@@ -1,6 +1,7 @@
 package data.model;
 
 import data.model.games.GamesUpdateEvent;
+import data.model.metadata.MetaData;
 import log.Log;
 
 import java.util.List;

@@ -1,7 +1,7 @@
 package data.pgn;
 
 import data.model.Diagram;
-import data.model.MetaData;
+import data.model.metadata.MetaData;
 
 import java.util.Optional;
 

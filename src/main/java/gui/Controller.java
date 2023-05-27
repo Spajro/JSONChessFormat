@@ -11,6 +11,7 @@ import data.annotations.GraphicAnnotation;
 import data.json.JsonFactory;
 import data.model.*;
 import chess.moves.raw.RawMove;
+import data.model.metadata.MetaData;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;

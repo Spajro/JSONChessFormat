@@ -7,7 +7,7 @@ import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
-import data.model.MetaData;
+import data.model.metadata.GameData;
 
 import java.util.LinkedList;
 import java.util.Optional;
@@ -33,7 +33,7 @@ public class JsonFactory {
                 .append("\",");
         if (!diagram.getMetaData().isEmpty()) {
             result.append("\"metadata\":")
-                    .append(listJsonFactory.listToJson(diagram.getMetaData(), this::toJson))
+                    .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
                     .append(',');
         }
         if (isSubTreeOptimizable(diagram)) {
@@ -56,7 +56,7 @@ public class JsonFactory {
         return result.toString();
     }
 
-    private String toJson(MetaData metaData) {
+    private String toJson(GameData metaData) {
         return '{' +
                 "\"event\":" +
                 metaData.event() +

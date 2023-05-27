@@ -12,7 +12,8 @@ import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
-import data.model.MetaData;
+import data.model.metadata.GameData;
+import data.model.metadata.MetaData;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -122,7 +123,7 @@ public class JsonParser {
     }
 
     private MetaData toMetadata(JsonNode jsonNode) {
-        return new MetaData(
+        return new GameData(
                 jsonNode.get("event").asText(),
                 jsonNode.get("site").asText(),
                 jsonNode.get("date").asText(),

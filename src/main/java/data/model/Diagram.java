@@ -7,6 +7,8 @@ import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import data.model.metadata.GameData;
+import data.model.metadata.MetaData;
 import log.Log;
 
 import java.util.LinkedList;
@@ -150,6 +152,13 @@ public class Diagram {
 
     public LinkedList<MetaData> getMetaData() {
         return metaData;
+    }
+
+    public List<GameData> getGameData() {
+        return metaData.stream()
+                .filter(m -> m instanceof GameData)
+                .map(m -> (GameData) m)
+                .toList();
     }
 
     public Optional<ExecutableMove> getCreatingMove() {

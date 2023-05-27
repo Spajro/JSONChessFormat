@@ -1,7 +1,7 @@
 package gui.games;
 
 import data.model.DataModel;
-import data.model.MetaData;
+import data.model.metadata.MetaData;
 import gui.Controller;
 
 import javax.swing.*;
