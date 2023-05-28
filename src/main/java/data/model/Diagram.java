@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class Diagram {
-    private final String moveName;
     private Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
@@ -24,7 +23,6 @@ public class Diagram {
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
-        moveName = "Root";
         parent = null;
         creatingMove = null;
     }
@@ -32,11 +30,6 @@ public class Diagram {
     public Diagram(ExecutableMove creatingMove, Diagram parent) {
         this.creatingMove = creatingMove;
         this.parent = parent;
-        if (parent != null) {
-            moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(parent.getBoard(), creatingMove);
-        } else {
-            moveName = "Root";
-        }
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
@@ -48,8 +41,10 @@ public class Diagram {
         if (validMoveResult.isPresent()) {
             Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), this);
             for (Diagram diagram : nextDiagrams) {
-                if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
-                    return diagram;
+                if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
+                    if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
+                        return diagram;
+                    }
                 }
             }
 
@@ -86,7 +81,11 @@ public class Diagram {
     }
 
     public String getMoveName() {
-        return moveName;
+        if (parent != null) {
+            return LongAlgebraicFactory.getInstance().moveToLongAlgebraic(parent.getBoard(), creatingMove);
+        } else {
+            return "Root";
+        }
     }
 
     public LinkedList<Diagram> getNextDiagrams() {
@@ -122,11 +121,11 @@ public class Diagram {
 
     @Override
     public String toString() {
-        return moveName + " | " + gamesInTree();
+        return getMoveName() + " | " + gamesInTree();
     }
 
     public boolean partiallyEquals(Diagram diagram) {
-        return moveName.equals(diagram.moveName) && parentsEquals(diagram);
+        return getMoveName().equals(diagram.getMoveName()) && parentsEquals(diagram);
     }
 
     private boolean parentsEquals(Diagram diagram) {
