@@ -131,7 +131,17 @@ public class Diagram {
     public boolean partiallyEquals(Diagram diagram) {
         return this.moveId == diagram.moveId &&
                 this.moveName.equals(diagram.moveName) &&
-                this.getBoard().equals(diagram.getBoard());
+                parentsEquals(diagram);
+    }
+
+    private boolean parentsEquals(Diagram diagram) {
+        if (parent == null && diagram.parent == null) {
+            return true;
+        }
+        if (parent != null && diagram.parent != null) {
+            return parent.partiallyEquals(diagram.parent);
+        }
+        return false;
     }
 
     public void addMetadata(MetaData metaData) {
