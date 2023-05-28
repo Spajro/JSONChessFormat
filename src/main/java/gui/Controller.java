@@ -208,6 +208,7 @@ public class Controller {
     public void insertPGN(String filename) {
         try {
             List<ParsedPGN> pgn = fileManager.loadPGN(filename);
+            long startTime = System.nanoTime();
             pgn.forEach(parsedPGN -> {
                 if (parsedPGN.diagram().isPresent()) {
                     dataModel.insert(parsedPGN.diagram().get(), parsedPGN.metadata());
@@ -217,6 +218,11 @@ public class Controller {
                 }
             });
             boardPanel.setDiagram(dataModel.getActualNode());
+            long endTime = System.nanoTime();
+            long nanoDuration = (endTime - startTime);
+            double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
+            double nodesPerSec = pgn.size() / secondDuration;
+            Log.debug("Inserting time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
         }

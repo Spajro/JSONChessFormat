@@ -40,7 +40,7 @@ public class PGNParser {
         long nanoDuration = (endTime - startTime);
         double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
         double nodesPerSec = ((double) (parts.size() / 2) / secondDuration);
-        Log.log().info("Parsing time: " + secondDuration + "s with speed: " + nodesPerSec + "dps");
+        Log.debug("Parsing time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
         return result;
     }
 
