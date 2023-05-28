@@ -183,7 +183,7 @@ public class Controller {
     }
 
     public void loadChessBoardFromFEN(String fen) {
-        dataModel.setNewTree(new FENDiagram(null, null, 0, FENParser.getInstance().parseFEN(fen)));
+        dataModel.setNewTree(new FENDiagram(null, null, FENParser.getInstance().parseFEN(fen)));
         dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
         boardPanel.setDiagram(dataModel.getActualNode());
     }

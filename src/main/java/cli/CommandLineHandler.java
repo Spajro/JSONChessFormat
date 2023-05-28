@@ -57,7 +57,8 @@ public class CommandLineHandler {
     }
 
     void goBack(int id) {
-        while (id > node.getMoveId() || id < 0) {
+        while (id > 0) {
+            id--;
             if (node.getParent().isPresent()) {
                 node = node.getParent().get();
             } else {

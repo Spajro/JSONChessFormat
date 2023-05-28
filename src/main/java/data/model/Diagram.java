@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class Diagram {
-    private final int moveId;
     private final String moveName;
     private Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
@@ -25,16 +24,14 @@ public class Diagram {
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
-        moveId = 0;
         moveName = "Root";
         parent = null;
         creatingMove = null;
     }
 
-    public Diagram(ExecutableMove creatingMove, Diagram parent, int moveId) {
+    public Diagram(ExecutableMove creatingMove, Diagram parent) {
         this.creatingMove = creatingMove;
         this.parent = parent;
-        this.moveId = moveId;
         if (parent != null) {
             moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(parent.getBoard(), creatingMove);
         } else {
@@ -49,9 +46,9 @@ public class Diagram {
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
         if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), this, moveId + 1);
+            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), this);
             for (Diagram diagram : nextDiagrams) {
-                if (diagram.getBoard().equals(nextDiagram.getBoard()) && diagram.moveId == nextDiagram.moveId) {
+                if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
                     return diagram;
                 }
             }
@@ -129,9 +126,7 @@ public class Diagram {
     }
 
     public boolean partiallyEquals(Diagram diagram) {
-        return this.moveId == diagram.moveId &&
-                this.moveName.equals(diagram.moveName) &&
-                parentsEquals(diagram);
+        return moveName.equals(diagram.moveName) && parentsEquals(diagram);
     }
 
     private boolean parentsEquals(Diagram diagram) {
@@ -165,10 +160,6 @@ public class Diagram {
 
     public void setParent(Diagram parent) {
         this.parent = parent;
-    }
-
-    public int getMoveId() {
-        return moveId;
     }
 
     private int gamesInTree() {
