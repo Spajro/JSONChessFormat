@@ -1,5 +1,6 @@
 package data.pgn;
 
+import chess.board.ChessBoard;
 import chess.utility.ShortAlgebraicParser;
 import data.ParserUtility;
 import data.model.Diagram;
@@ -69,8 +70,7 @@ public class PGNParser {
                 .filter(string -> !pattern.matcher(string).find())
                 .map(String::trim)
                 .toList();
-        Diagram root = new Diagram();
-        return parserUtility.parseMoves(root.getBoard(), moves, shortAlgebraicParser::parseShortAlgebraic);
+        return parserUtility.parseMoves(new ChessBoard(), moves, shortAlgebraicParser::parseShortAlgebraic);
     }
 
     private String removeMarksFromEndIfAny(String string) {

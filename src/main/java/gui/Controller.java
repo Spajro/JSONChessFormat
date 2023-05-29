@@ -212,12 +212,12 @@ public class Controller {
             pgn.forEach(parsedPGN -> {
                 if (parsedPGN.diagram().isPresent()) {
                     dataModel.insert(parsedPGN.diagram().get(), parsedPGN.metadata());
-                    dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
                 } else {
                     Log.log().warn("Broken game: " + parsedPGN.metadata());
                 }
             });
             boardPanel.setDiagram(dataModel.getActualNode());
+            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
             long endTime = System.nanoTime();
             long nanoDuration = (endTime - startTime);
             double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
