@@ -196,13 +196,13 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Optional<List<RawMove>> optionalRawMoves = ParserUtility.getInstance()
+        Optional<Diagram> optionalDiagram = ParserUtility.getInstance()
                 .parseMoves(
-                        dataModel.getActualNode(),
+                        dataModel.getActualNode().getBoard(),
                         List.of(moves.split(" ")),
                         shortAlgebraicParser::parseShortAlgebraic);
 
-        optionalRawMoves.ifPresent(dataModel::makeMoves);
+        optionalDiagram.ifPresent(dataModel::insertInPlace);
     }
 
     public void insertPGN(String filename) {

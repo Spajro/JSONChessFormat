@@ -28,16 +28,6 @@ public class DataModel {
         }
     }
 
-    public void makeMoves(List<RawMove> moves) {
-        Diagram tempNode = actualNode;
-        for (RawMove move : moves) {
-            makeMove(move);
-            if (actualNode == tempNode) {
-                return;
-            }
-        }
-    }
-
     public void insert(Diagram tree, MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
@@ -47,6 +37,10 @@ public class DataModel {
         games.put(metaData, insertedLast);
         games.update(diagramManager.insert(actualRoot, insertedRoot));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
+    }
+
+    public void insertInPlace(Diagram diagram) {
+        games.update(diagramManager.insert(actualNode, diagram));
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {

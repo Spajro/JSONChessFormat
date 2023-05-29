@@ -14,10 +14,12 @@ import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
+import log.Log;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class JsonParser {
     private final ObjectMapper mapper = new ObjectMapper();
@@ -67,11 +69,16 @@ public class JsonParser {
             moves.add(iterator.next().asText());
             iterator.remove();
         }
-        parserUtility.createTree(diagram, parserUtility.parseMoves(
-                diagram,
+        Optional<Diagram> optionalDiagram = parserUtility.parseMoves(
+                diagram.getBoard(),
                 moves,
-                (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor())).orElse(List.of())
-        );
+                (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor()));
+        if (optionalDiagram.isPresent()) {
+            diagram.getNextDiagrams().add(optionalDiagram.get());
+            optionalDiagram.get().setParent(diagram);
+        } else {
+            Log.log().fail("Missing optional Diagram in JsonParser.fromList");
+        }
     }
 
     private void parseAnnotations(Diagram diagram, JsonNode jsonNode) {
