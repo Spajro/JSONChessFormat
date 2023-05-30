@@ -16,20 +16,31 @@ import java.util.List;
 import java.util.Optional;
 
 public class Diagram {
+    private final String moveName;
     private Diagram parent;
     private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
     private final Annotations annotations = new Annotations();
-    private final ExecutableMove creatingMove;
+    private final RawMove creatingMove;
     private final LinkedList<MetaData> metaData = new LinkedList<>();
 
     public Diagram() {
         parent = null;
         creatingMove = null;
+        moveName = "Root";
     }
 
-    public Diagram(ExecutableMove creatingMove, Diagram parent) {
-        this.creatingMove = creatingMove;
+    public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent) {
+        if (creatingMove == null) {
+            this.creatingMove = null;
+        } else {
+            this.creatingMove = creatingMove.getRepresentation();
+        }
         this.parent = parent;
+        if (parent != null) {
+            moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
+        } else {
+            moveName = "Root";
+        }
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
@@ -39,7 +50,7 @@ public class Diagram {
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
         if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), this);
+            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), validMoveResult.get().getResult(), this);
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
                     if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
@@ -81,11 +92,7 @@ public class Diagram {
     }
 
     public String getMoveName() {
-        if (parent != null) {
-            return LongAlgebraicFactory.getInstance().moveToLongAlgebraic(parent.getBoard(), creatingMove);
-        } else {
-            return "Root";
-        }
+        return moveName;
     }
 
     public LinkedList<Diagram> getNextDiagrams() {
@@ -96,14 +103,14 @@ public class Diagram {
         if (parent == null) {
             return new ChessBoard();
         }
-        List<ExecutableMove> moves = getPathFromRoot().stream()
+        ChessBoard result = new ChessBoard();
+        List<RawMove> moves = getPathFromRoot().stream()
                 .skip(1)
                 .map(diagram -> diagram.getCreatingMove().orElseThrow())
                 .toList();
 
-        ChessBoard result = getRoot().getBoard();
-        for (ExecutableMove move : moves) {
-            result = result.makeMove(move);
+        for (RawMove move : moves) {
+            result = result.makeMove(move).validate(null).orElseThrow().getResult();
         }
         return result;
     }
@@ -153,7 +160,7 @@ public class Diagram {
                 .toList();
     }
 
-    public Optional<ExecutableMove> getCreatingMove() {
+    public Optional<RawMove> getCreatingMove() {
         return Optional.ofNullable(creatingMove);
     }
 

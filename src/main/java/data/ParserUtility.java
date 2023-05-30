@@ -31,8 +31,8 @@ public class ParserUtility {
             MoveResult moveResult = chessBoard.makeMove(rawMove);
             Optional<ValidMoveResult> validMoveResult = moveResult.validate(() -> AlgebraicUtility.getInstance().parsePromotion(move).orElseThrow());
             if (validMoveResult.isPresent()) {
+                Diagram diagram = new Diagram(validMoveResult.get().getExecutableMove(), chessBoard, temp);
                 chessBoard = validMoveResult.get().getResult();
-                Diagram diagram = new Diagram(validMoveResult.get().getExecutableMove(), temp);
                 temp.getNextDiagrams().add(diagram);
                 temp = diagram;
             } else {

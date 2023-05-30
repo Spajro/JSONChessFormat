@@ -7,7 +7,7 @@ public class FENDiagram extends Diagram {
     private final ChessBoard chessBoard;
 
     public FENDiagram(ExecutableMove creatingMove, Diagram parent, ChessBoard chessBoard) {
-        super(creatingMove, parent);
+        super(creatingMove, chessBoard, parent);
         this.chessBoard = chessBoard;
     }
 
