@@ -12,24 +12,23 @@ public class DiagramManager {
         if (tree.partiallyEquals(node)) {
             return copyData(tree, node).join(
                     node.getNextDiagrams().stream()
-                            .map(
-                                    diagram -> {
-                                        List<Diagram> matching = tree.getNextDiagrams().stream().filter(diagram::partiallyEquals).toList();
-                                        switch (matching.size()) {
-                                            case 0 -> {
-                                                diagram.setParent(tree);
-                                                tree.getNextDiagrams().add(diagram);
-                                                return GamesUpdateEvent.empty();
-                                            }
-                                            case 1 -> {
-                                                return insert(matching.get(0), diagram);
-                                            }
-                                            default -> {
-                                                Log.log().fail("Too many matching nodes to insert");
-                                                return GamesUpdateEvent.empty();
-                                            }
-                                        }
-                                    })
+                            .map(diagram -> {
+                                List<Diagram> matching = tree.getNextDiagrams().stream().filter(diagram::partiallyEquals).toList();
+                                switch (matching.size()) {
+                                    case 0 -> {
+                                        diagram.setParent(tree);
+                                        tree.getNextDiagrams().add(diagram);
+                                        return GamesUpdateEvent.empty();
+                                    }
+                                    case 1 -> {
+                                        return insert(matching.get(0), diagram);
+                                    }
+                                    default -> {
+                                        Log.log().fail("Too many matching nodes to insert");
+                                        return GamesUpdateEvent.empty();
+                                    }
+                                }
+                            })
                             .reduce(GamesUpdateEvent.empty(),
                                     GamesUpdateEvent::join)
             );
@@ -56,18 +55,25 @@ public class DiagramManager {
             return GamesUpdateEvent.empty();
         }
         Diagram parent = optionalParent.get();
-        if (parent.getNextDiagramsCount() == 1) {
-            GamesUpdateEvent event = GamesUpdateEvent.of(node.getMetaData(), parent);
-            parent.getMetaData().addAll(node.getMetaData());
-            node.getMetaData().clear();
-            return event.join(updateMetadata(parent));
-        } else if (parent.getNextDiagramsCount() == 2) {
-            Diagram brother = getOtherDiagramFromParent(node);
-            brother.getMetaData().addAll(getMetadataFromPathToRoot(parent));
-            return GamesUpdateEvent.of(brother.getMetaData(), brother);
-        } else {
-            return GamesUpdateEvent.empty();
-        }
+
+        return switch (parent.getNextDiagramsCount()) {
+            case 1 -> moveMetaData(node, parent).join(updateMetadata(parent));
+            case 2 -> updateBrotherMetadata(node, parent);
+            default -> GamesUpdateEvent.empty();
+        };
+    }
+
+    private GamesUpdateEvent moveMetaData(Diagram from, Diagram to) {
+        GamesUpdateEvent event = GamesUpdateEvent.of(from.getMetaData(), to);
+        to.getMetaData().addAll(from.getMetaData());
+        from.getMetaData().clear();
+        return event;
+    }
+
+    private GamesUpdateEvent updateBrotherMetadata(Diagram diagram, Diagram parent) {
+        Diagram brother = getBrother(diagram);
+        brother.getMetaData().addAll(getMetadataFromPathToRoot(parent));
+        return GamesUpdateEvent.of(brother.getMetaData(), brother);
     }
 
     private List<MetaData> getMetadataFromPathToRoot(Diagram node) {
@@ -84,7 +90,7 @@ public class DiagramManager {
         }
     }
 
-    private Diagram getOtherDiagramFromParent(Diagram diagram) {
+    private Diagram getBrother(Diagram diagram) {
         Diagram parent = diagram.getParent().orElseThrow();
         Diagram diagram1 = parent.getNextDiagram(0);
         Diagram diagram2 = parent.getNextDiagram(1);
