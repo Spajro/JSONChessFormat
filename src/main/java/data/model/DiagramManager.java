@@ -1,6 +1,7 @@
 package data.model;
 
 import data.model.games.GamesUpdateEvent;
+import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
 
@@ -77,9 +78,10 @@ public class DiagramManager {
     }
 
     private List<MetaData> getMetadataFromPathToRoot(Diagram node) {
-        if (!node.getMetaData().isEmpty()) {
-            List<MetaData> result = List.copyOf(node.getMetaData());
-            node.getMetaData().clear();
+        List<GameData> gameData=node.getNonEndingGameData();
+        if (!gameData.isEmpty()) {
+            List<MetaData> result = List.copyOf(gameData);
+            node.getMetaData().removeAll(gameData);
             return result;
         } else {
             if (node.getParent().isEmpty()) {

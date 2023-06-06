@@ -168,12 +168,30 @@ public class Diagram {
         this.parent = parent;
     }
 
+    private int depth() {
+        Diagram diagram = this;
+        int result = 0;
+        while (diagram.parent != null) {
+            result++;
+            diagram = diagram.parent;
+        }
+        return result;
+    }
+
+    public List<GameData> getNonEndingGameData() {
+        return getMetaData().stream()
+                .filter(metaData -> metaData instanceof GameData)
+                .map(metaData -> (GameData) metaData)
+                .filter(gameData -> gameData.length() != depth())
+                .toList();
+    }
+
     private int gamesInTree() {
         //TODO for debug purposes only
-        if (!metaData.isEmpty()) {
+        if (!getNonEndingGameData().isEmpty()) {
             return metaData.size();
         } else {
-            return nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
+            return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
         }
     }
 }
