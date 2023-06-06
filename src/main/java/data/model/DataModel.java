@@ -35,12 +35,12 @@ public class DataModel {
         Diagram insertedLast = getLast(insertedRoot).orElseThrow();
         insertedLast.addMetadata(metaData);
         games.put(metaData, insertedLast);
-        games.update(diagramManager.insert(actualRoot, insertedRoot));
+        games.update(diagramManager.merge(actualRoot, insertedRoot));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
     public void insertInPlace(Diagram diagram) {
-        games.update(diagramManager.insert(actualNode, diagram));
+        games.update(diagramManager.merge(actualNode, diagram));
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {

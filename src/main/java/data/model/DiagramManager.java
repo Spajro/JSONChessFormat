@@ -1,15 +1,19 @@
 package data.model;
 
+import chess.board.ChessBoard;
+import chess.moves.raw.RawMove;
+import chess.results.ValidMoveResult;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 public class DiagramManager {
-    public GamesUpdateEvent insert(Diagram tree, Diagram node) {
+    public GamesUpdateEvent merge(Diagram tree, Diagram node) {
         if (tree.partiallyEquals(node)) {
             return copyData(tree, node).join(
                     node.getNextDiagrams().stream()
@@ -22,7 +26,7 @@ public class DiagramManager {
                                         return GamesUpdateEvent.empty();
                                     }
                                     case 1 -> {
-                                        return insert(matching.get(0), diagram);
+                                        return merge(matching.get(0), diagram);
                                     }
                                     default -> {
                                         Log.log().fail("Too many matching nodes to insert");
@@ -34,9 +38,41 @@ public class DiagramManager {
                                     GamesUpdateEvent::join)
             );
         } else {
-            Log.log().fail("Impossible to insert");
+            Log.log().fail("Cant merge");
             return GamesUpdateEvent.empty();
         }
+    }
+
+    public void insert(Diagram tree, LinkedList<RawMove> moves) {
+        RawMove move = moves.poll();
+        Optional<Diagram> optionalDiagram = getByRawMove(tree, move);
+        if (optionalDiagram.isPresent()) {
+            insert(optionalDiagram.get(), moves);
+        } else {
+            ChessBoard chessBoard = tree.getBoard();
+            Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate(null);
+            if (validMoveResult.isEmpty()) {
+                Log.log().fail("Cant insert");
+            } else {
+                tree.getNextDiagrams().add(new LazyDiagram(
+                        validMoveResult.get().getExecutableMove(),
+                        validMoveResult.get().getResult(),
+                        tree,
+                        moves
+                ));
+            }
+        }
+    }
+
+    private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {
+        for (Diagram nextDiagram : diagram.getNextDiagrams()) {
+            if (nextDiagram.getCreatingMove().isPresent()) {
+                if (nextDiagram.getCreatingMove().get().equals(move)) {
+                    return Optional.of(nextDiagram);
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     private GamesUpdateEvent copyData(Diagram to, Diagram from) {
@@ -78,7 +114,7 @@ public class DiagramManager {
     }
 
     private List<MetaData> getMetadataFromPathToRoot(Diagram node) {
-        List<GameData> gameData=node.getNonEndingGameData();
+        List<GameData> gameData = node.getNonEndingGameData();
         if (!gameData.isEmpty()) {
             List<MetaData> result = List.copyOf(gameData);
             node.getMetaData().removeAll(gameData);
