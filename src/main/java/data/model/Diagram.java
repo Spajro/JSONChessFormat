@@ -18,7 +18,7 @@ import java.util.Optional;
 public class Diagram {
     private final String moveName;
     private Diagram parent;
-    private final LinkedList<Diagram> nextDiagrams = new LinkedList<>();
+    private final LinkedList<Diagram> nextDiagrams;
     private final Annotations annotations = new Annotations();
     private final RawMove creatingMove;
     private final LinkedList<MetaData> metaData = new LinkedList<>();
@@ -27,15 +27,19 @@ public class Diagram {
         parent = null;
         creatingMove = null;
         moveName = "Root";
+        nextDiagrams = new LinkedList<>();
     }
 
     public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent) {
+        nextDiagrams = new LinkedList<>();
+        this.parent = parent;
+
         if (creatingMove == null) {
             this.creatingMove = null;
         } else {
             this.creatingMove = creatingMove.getRepresentation();
         }
-        this.parent = parent;
+
         if (parent != null) {
             moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
         } else {
