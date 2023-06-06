@@ -137,7 +137,8 @@ public class JsonParser {
                 jsonNode.get("round").asText(),
                 jsonNode.get("white").asText(),
                 jsonNode.get("black").asText(),
-                jsonNode.get("result").asText()
+                jsonNode.get("result").asText(),
+                jsonNode.get("length").asInt()
         );
     }
 }

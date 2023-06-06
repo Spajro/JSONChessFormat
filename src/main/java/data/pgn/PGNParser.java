@@ -31,10 +31,17 @@ public class PGNParser {
         ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
         for (int i = 0; i < parts.size() - 1; i += 2) {
+            Optional<Diagram> diagram = parseMoves(parts.get(i + 1));
+            int length;
+            if (diagram.isEmpty()) {
+                length = -1;
+            } else {
+                length = treeLength(diagram.get()).orElseThrow();
+            }
             result.add(new ParsedPGN(
-                    parseMetadata(parts.get(i)),
-                    parseMoves(parts.get(i + 1)
-                    )));
+                    parseMetadata(parts.get(i), length),
+                    diagram
+            ));
         }
         long endTime = System.nanoTime();
         long nanoDuration = (endTime - startTime);
@@ -44,7 +51,7 @@ public class PGNParser {
         return result;
     }
 
-    private MetaData parseMetadata(String metadata) {
+    private MetaData parseMetadata(String metadata, int gameLength) {
         HashMap<String, String> metadataMap = new HashMap<>();
         Arrays.stream(metadata.split(getEndLineCharacter(metadata).orElseThrow()))
                 .map(s -> s.substring(1, s.length() - 1))
@@ -59,7 +66,8 @@ public class PGNParser {
                 metadataMap.get("Round"),
                 metadataMap.get("White"),
                 metadataMap.get("Black"),
-                metadataMap.get("Result")
+                metadataMap.get("Result"),
+                gameLength
         );
     }
 
@@ -71,6 +79,14 @@ public class PGNParser {
                 .map(String::trim)
                 .toList();
         return parserUtility.parseMoves(new ChessBoard(), moves, shortAlgebraicParser::parseShortAlgebraic);
+    }
+
+    private Optional<Integer> treeLength(Diagram diagram) {
+        return switch (diagram.getNextDiagramsCount()) {
+            case 0 -> Optional.of(1);
+            case 1 -> treeLength(diagram.getNextDiagram(0)).map(i -> i + 1);
+            default -> Optional.empty();
+        };
     }
 
     private String removeMarksFromEndIfAny(String string) {

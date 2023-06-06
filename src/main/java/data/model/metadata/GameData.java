@@ -7,5 +7,6 @@ public record GameData(
         String round,
         String white,
         String black,
-        String result) implements MetaData{
+        String result,
+        int length) implements MetaData {
 }

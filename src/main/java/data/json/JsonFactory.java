@@ -78,6 +78,8 @@ public class JsonFactory {
                 "," +
                 "\"result\":" +
                 metaData.result() +
+                "\"length\":" +
+                metaData.length() +
                 '}';
     }
 
