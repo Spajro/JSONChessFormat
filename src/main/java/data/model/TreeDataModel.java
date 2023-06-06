@@ -21,17 +21,17 @@ public class TreeDataModel implements TreeModel {
 
     @Override
     public Object getChild(Object parent, int index) {
-        return ((Diagram) parent).getNextDiagram(index);
+        return ((Diagram) parent).getNextDiagrams().get(index);
     }
 
     @Override
     public int getChildCount(Object parent) {
-        return ((Diagram) parent).getNextDiagramsCount();
+        return ((Diagram) parent).getNextDiagrams().size();
     }
 
     @Override
     public boolean isLeaf(Object node) {
-        return ((Diagram) node).getNextDiagramsCount() == 0;
+        return ((Diagram) node).getNextDiagrams().size() == 0;
     }
 
     @Override

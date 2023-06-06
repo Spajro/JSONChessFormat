@@ -132,9 +132,9 @@ public class JsonFactory {
         if (containsData(diagram)) {
             return false;
         } else {
-            return switch (diagram.getNextDiagramsCount()) {
+            return switch (diagram.getNextDiagrams().size()) {
                 case 0 -> true;
-                case 1 -> isSubTreeOptimizable(diagram.getNextDiagram(0));
+                case 1 -> isSubTreeOptimizable(diagram.getNextDiagrams().getFirst());
                 default -> false;
             };
         }
@@ -145,9 +145,9 @@ public class JsonFactory {
     }
 
     private Optional<LinkedList<Diagram>> getPathToLast(Diagram diagram) {
-        return switch (diagram.getNextDiagramsCount()) {
+        return switch (diagram.getNextDiagrams().size()) {
             case 0 -> Optional.of(new LinkedList<>());
-            case 1 -> getPathToLast(diagram.getNextDiagram(0)).map(list -> {
+            case 1 -> getPathToLast(diagram.getNextDiagrams().getFirst()).map(list -> {
                 list.addFirst(diagram);
                 return list;
             });

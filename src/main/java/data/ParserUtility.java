@@ -39,7 +39,7 @@ public class ParserUtility {
                 return Optional.empty();
             }
         }
-        return Optional.of(temp.getRoot().getNextDiagram(0));
+        return Optional.of(temp.getRoot().getNextDiagrams().getFirst());
     }
 
     private boolean isGameEnd(String move) {

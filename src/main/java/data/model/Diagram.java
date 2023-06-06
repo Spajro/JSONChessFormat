@@ -115,17 +115,6 @@ public class Diagram {
         return result;
     }
 
-    public Diagram getNextDiagram(int index) {
-        if (index >= 0 && index < nextDiagrams.size()) {
-            return nextDiagrams.get(index);
-        }
-        return null;
-    }
-
-    public int getNextDiagramsCount() {
-        return nextDiagrams.size();
-    }
-
     @Override
     public String toString() {
         return getMoveName() + " | " + gamesInTree();

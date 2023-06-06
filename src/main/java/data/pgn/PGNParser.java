@@ -82,9 +82,9 @@ public class PGNParser {
     }
 
     private Optional<Integer> treeLength(Diagram diagram) {
-        return switch (diagram.getNextDiagramsCount()) {
+        return switch (diagram.getNextDiagrams().size()) {
             case 0 -> Optional.of(1);
-            case 1 -> treeLength(diagram.getNextDiagram(0)).map(i -> i + 1);
+            case 1 -> treeLength(diagram.getNextDiagrams().getFirst()).map(i -> i + 1);
             default -> Optional.empty();
         };
     }

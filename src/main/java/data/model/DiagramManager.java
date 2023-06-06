@@ -57,7 +57,7 @@ public class DiagramManager {
         }
         Diagram parent = optionalParent.get();
 
-        return switch (parent.getNextDiagramsCount()) {
+        return switch (parent.getNextDiagrams().size()) {
             case 1 -> moveMetaData(node, parent).join(updateMetadata(parent));
             case 2 -> updateBrotherMetadata(node, parent);
             default -> GamesUpdateEvent.empty();
@@ -94,8 +94,8 @@ public class DiagramManager {
 
     private Diagram getBrother(Diagram diagram) {
         Diagram parent = diagram.getParent().orElseThrow();
-        Diagram diagram1 = parent.getNextDiagram(0);
-        Diagram diagram2 = parent.getNextDiagram(1);
+        Diagram diagram1 = parent.getNextDiagrams().get(0);
+        Diagram diagram2 = parent.getNextDiagrams().get(1);
         if (diagram == diagram1) {
             return diagram2;
         } else if (diagram == diagram2) {
