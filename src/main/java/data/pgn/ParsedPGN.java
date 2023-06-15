@@ -1,9 +1,10 @@
 package data.pgn;
 
-import data.model.Diagram;
+import chess.moves.valid.executable.ExecutableMove;
 import data.model.metadata.MetaData;
 
+import java.util.LinkedList;
 import java.util.Optional;
 
-public record ParsedPGN(MetaData metadata, Optional<Diagram> diagram) {
+public record ParsedPGN(MetaData metadata, Optional<LinkedList<ExecutableMove>> moves) {
 }

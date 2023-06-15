@@ -1,9 +1,9 @@
 package data.pgn;
 
 import chess.board.ChessBoard;
+import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.ShortAlgebraicParser;
-import data.ParserUtility;
-import data.model.Diagram;
+import data.MoveParser;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
@@ -23,7 +23,7 @@ public class PGNParser {
     }
 
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
-    private final ParserUtility parserUtility = ParserUtility.getInstance();
+    private final MoveParser moveParser = MoveParser.getInstance();
 
     public List<ParsedPGN> parsePGN(String pgn) {
         String newLine = getEndLineCharacter(pgn).orElseThrow();
@@ -31,16 +31,16 @@ public class PGNParser {
         ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
         for (int i = 0; i < parts.size() - 1; i += 2) {
-            Optional<Diagram> diagram = parseMoves(parts.get(i + 1));
+            Optional<LinkedList<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
             int length;
-            if (diagram.isEmpty()) {
+            if (moves.isEmpty()) {
                 length = -1;
             } else {
-                length = treeLength(diagram.get()).orElseThrow();
+                length = moves.get().size();
             }
             result.add(new ParsedPGN(
                     parseMetadata(parts.get(i), length),
-                    diagram
+                    moves
             ));
         }
         long endTime = System.nanoTime();
@@ -71,22 +71,14 @@ public class PGNParser {
         );
     }
 
-    private Optional<Diagram> parseMoves(String input) {
+    private Optional<LinkedList<ExecutableMove>> parseMoves(String input) {
         Pattern pattern = Pattern.compile("[^A-Za-z\\d-/+#=]");
         List<String> moves = Arrays.stream(input.split(" "))
                 .map(this::removeMarksFromEndIfAny)
                 .filter(string -> !pattern.matcher(string).find())
                 .map(String::trim)
                 .toList();
-        return parserUtility.parseMoves(new ChessBoard(), moves, shortAlgebraicParser::parseShortAlgebraic);
-    }
-
-    private Optional<Integer> treeLength(Diagram diagram) {
-        return switch (diagram.getNextDiagrams().size()) {
-            case 0 -> Optional.of(1);
-            case 1 -> treeLength(diagram.getNextDiagrams().getFirst()).map(i -> i + 1);
-            default -> Optional.empty();
-        };
+        return moveParser.parseMoves(new ChessBoard(), moves, shortAlgebraicParser::parseShortAlgebraic);
     }
 
     private String removeMarksFromEndIfAny(String string) {

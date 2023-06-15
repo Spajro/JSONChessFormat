@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.raw.RawMove;
+import chess.moves.valid.executable.ExecutableMove;
 import data.model.games.GamesRepository;
 import data.model.metadata.MetaData;
 import log.Log;
@@ -28,19 +29,15 @@ public class DataModel {
         }
     }
 
-    public void insert(Diagram tree, MetaData metaData) {
+    public void insert(LinkedList<ExecutableMove> moves, MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
-        Diagram insertedRoot = tree.getRoot();
-        Diagram insertedLast = getLast(insertedRoot).orElseThrow();
-        insertedLast.addMetadata(metaData);
-        games.put(metaData, insertedLast);
-        games.update(diagramManager.merge(actualRoot, insertedRoot));
+        games.update(diagramManager.insert(actualRoot, moves, metaData));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
-    public void insertInPlace(Diagram diagram) {
-        games.update(diagramManager.merge(actualNode, diagram));
+    public void insertInPlace(LinkedList<ExecutableMove> rawMoves) {
+        diagramManager.insert(actualNode, rawMoves,null);
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {

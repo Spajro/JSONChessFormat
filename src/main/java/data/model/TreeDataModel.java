@@ -31,6 +31,9 @@ public class TreeDataModel implements TreeModel {
 
     @Override
     public boolean isLeaf(Object node) {
+        if (((Diagram) node).isLazy()) {
+            return false;
+        }
         return ((Diagram) node).getNextDiagrams().size() == 0;
     }
 

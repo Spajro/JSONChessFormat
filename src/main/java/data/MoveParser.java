@@ -2,27 +2,28 @@ package data;
 
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import chess.moves.valid.executable.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
 import chess.utility.AlgebraicUtility;
-import data.model.Diagram;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
 
-public class ParserUtility {
-    private static final ParserUtility parserUtility = new ParserUtility();
+public class MoveParser {
+    private static final MoveParser MOVE_PARSER = new MoveParser();
 
-    private ParserUtility() {
+    private MoveParser() {
     }
 
-    public static ParserUtility getInstance() {
-        return parserUtility;
+    public static MoveParser getInstance() {
+        return MOVE_PARSER;
     }
 
-    public Optional<Diagram> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
-        Diagram temp = new Diagram();
+    public Optional<LinkedList<ExecutableMove>> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
+        LinkedList<ExecutableMove> result=new LinkedList<>();
         for (String move : moves) {
             if (isGameEnd(move)) {
                 break;
@@ -31,15 +32,13 @@ public class ParserUtility {
             MoveResult moveResult = chessBoard.makeMove(rawMove);
             Optional<ValidMoveResult> validMoveResult = moveResult.validate(() -> AlgebraicUtility.getInstance().parsePromotion(move).orElseThrow());
             if (validMoveResult.isPresent()) {
-                Diagram diagram = new Diagram(validMoveResult.get().getExecutableMove(), chessBoard, temp);
                 chessBoard = validMoveResult.get().getResult();
-                temp.getNextDiagrams().add(diagram);
-                temp = diagram;
+                result.add(validMoveResult.get().getExecutableMove());
             } else {
                 return Optional.empty();
             }
         }
-        return Optional.of(temp.getRoot().getNextDiagrams().getFirst());
+        return Optional.of(result);
     }
 
     private boolean isGameEnd(String move) {

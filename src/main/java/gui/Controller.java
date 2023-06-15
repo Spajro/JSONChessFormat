@@ -1,10 +1,11 @@
 package gui;
 
 import chess.Position;
+import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
 import chess.utility.ShortAlgebraicParser;
-import data.ParserUtility;
+import data.MoveParser;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
@@ -23,6 +24,7 @@ import log.Log;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.io.FileNotFoundException;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -164,12 +166,12 @@ public class Controller {
                 Log.log().warn("Empty pgn");
                 return;
             }
-            dataModel.setNewTree(parsedPGNS.get(0).diagram().orElseThrow());
+            dataModel.setNewTree(new Diagram());
             dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode());
             boardPanel.setDiagram(dataModel.getActualNode());
             if (parsedPGNS.size() > 1) {
                 for (int i = 1; i < parsedPGNS.size(); i++) {
-                    dataModel.insert(parsedPGNS.get(i).diagram().orElseThrow(), parsedPGNS.get(i).metadata());
+                    dataModel.insert(parsedPGNS.get(i).moves().orElseThrow(), parsedPGNS.get(i).metadata());
                     dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
                 }
             }
@@ -196,13 +198,12 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Optional<Diagram> optionalDiagram = ParserUtility.getInstance()
+        Optional<LinkedList<ExecutableMove>> optionalMoves = MoveParser.getInstance()
                 .parseMoves(
                         dataModel.getActualNode().getBoard(),
                         List.of(moves.split(" ")),
                         shortAlgebraicParser::parseShortAlgebraic);
-
-        optionalDiagram.ifPresent(dataModel::insertInPlace);
+        optionalMoves.ifPresent(dataModel::insertInPlace);
     }
 
     public void insertPGN(String filename) {
@@ -210,8 +211,8 @@ public class Controller {
             List<ParsedPGN> pgn = fileManager.loadPGN(filename);
             long startTime = System.nanoTime();
             pgn.forEach(parsedPGN -> {
-                if (parsedPGN.diagram().isPresent()) {
-                    dataModel.insert(parsedPGN.diagram().get(), parsedPGN.metadata());
+                if (parsedPGN.moves().isPresent()) {
+                    dataModel.insert(parsedPGN.moves().get(), parsedPGN.metadata());
                 } else {
                     Log.log().warn("Broken game: " + parsedPGN.metadata());
                 }

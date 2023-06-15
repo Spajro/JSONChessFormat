@@ -18,7 +18,8 @@ import java.util.Optional;
 public class Diagram {
     private final String moveName;
     private Diagram parent;
-    private final LinkedList<Diagram> nextDiagrams;
+    private LinkedList<Diagram> nextDiagrams;
+    private  LinkedList<RawMove> lazyMoves;
     private final Annotations annotations = new Annotations();
     private final RawMove creatingMove;
     private final LinkedList<MetaData> metaData = new LinkedList<>();
@@ -33,6 +34,23 @@ public class Diagram {
     public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent) {
         nextDiagrams = new LinkedList<>();
         this.parent = parent;
+
+        if (creatingMove == null) {
+            this.creatingMove = null;
+        } else {
+            this.creatingMove = creatingMove.getRepresentation();
+        }
+
+        if (parent != null) {
+            moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
+        } else {
+            moveName = "Root";
+        }
+    }
+
+    public Diagram(ExecutableMove creatingMove,ChessBoard chessBoard,Diagram parent, LinkedList<RawMove> moves){
+        this.parent = parent;
+        this.lazyMoves=moves;
 
         if (creatingMove == null) {
             this.creatingMove = null;
@@ -100,6 +118,9 @@ public class Diagram {
     }
 
     public LinkedList<Diagram> getNextDiagrams() {
+        if(lazyMoves!=null){
+            expand();
+        }
         return nextDiagrams;
     }
 
@@ -180,11 +201,40 @@ public class Diagram {
     }
 
     private int gamesInTree() {
+
         //TODO for debug purposes only
-        if (!getNonEndingGameData().isEmpty()) {
+        if (!getNonEndingGameData().isEmpty() || lazyMoves!=null) {
             return metaData.size();
         } else {
             return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
         }
+    }
+
+    public void expand() {
+        RawMove move = lazyMoves.poll();
+        if(move==null){
+            nextDiagrams=new LinkedList<>();
+            lazyMoves=null;
+            return;
+        }
+        ChessBoard chessBoard = getBoard();
+        Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate(null);
+        if (validMoveResult.isEmpty()) {
+            throw new IllegalStateException();
+        }
+
+        Diagram lazy = new Diagram(
+                validMoveResult.get().getExecutableMove(),
+                chessBoard,
+                this,
+                lazyMoves
+        );
+        nextDiagrams=new LinkedList<>();
+        lazyMoves=null;
+        this.getNextDiagrams().add(lazy);
+    }
+
+    public boolean isLazy(){
+        return lazyMoves!=null;
     }
 }

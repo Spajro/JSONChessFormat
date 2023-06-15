@@ -1,12 +1,13 @@
 package data.json;
 
 import chess.moves.raw.RawMove;
+import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.AlgebraicUtility;
 import chess.utility.LongAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import data.ParserUtility;
+import data.MoveParser;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -16,16 +17,13 @@ import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class JsonParser {
     private final ObjectMapper mapper = new ObjectMapper();
     private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
-    private final ParserUtility parserUtility = ParserUtility.getInstance();
+    private final MoveParser moveParser = MoveParser.getInstance();
 
     public Diagram parseJson(String json) {
         try {
@@ -69,15 +67,22 @@ public class JsonParser {
             moves.add(iterator.next().asText());
             iterator.remove();
         }
-        Optional<Diagram> optionalDiagram = parserUtility.parseMoves(
+        Optional<LinkedList<ExecutableMove>> executableMoves = moveParser.parseMoves(
                 diagram.getBoard(),
                 moves,
                 (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor()));
-        if (optionalDiagram.isPresent()) {
-            diagram.getNextDiagrams().add(optionalDiagram.get());
-            optionalDiagram.get().setParent(diagram);
+        if (executableMoves.isPresent()) {
+            ExecutableMove executableMove=executableMoves.get().poll();
+            diagram.getNextDiagrams().add(new Diagram(
+                    executableMove,
+                    diagram.getBoard().makeMove(executableMove),
+                    diagram,
+                    new LinkedList<>(executableMoves.get().stream()
+                            .map(ExecutableMove::getRepresentation)
+                            .toList())
+            ));
         } else {
-            Log.log().fail("Missing optional Diagram in JsonParser.fromList");
+            Log.log().fail("Missing optional in JsonParser.fromList");
         }
     }
 
