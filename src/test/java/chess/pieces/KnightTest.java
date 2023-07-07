@@ -12,7 +12,7 @@ class KnightTest {
     @Test
     void shouldReturn8PositionsForKnightInMiddle(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
-        Knight knight=new Knight(Color.white,new Position(4,4),chessBoard);
+        Knight knight=new Knight(Color.white, Position.of(4,4),chessBoard);
         assertEquals(knight.getPossibleEndPositions().size(),8);
         assertEquals(knight.getPossibleStartPositions().size(),8);
     }
@@ -20,7 +20,7 @@ class KnightTest {
     @Test
     void shouldReturn2PositionsForKnightInCorner(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
-        Knight knight=new Knight(Color.white,new Position(1,1),chessBoard);
+        Knight knight=new Knight(Color.white, Position.of(1,1),chessBoard);
         assertEquals(knight.getPossibleEndPositions().size(),2);
         assertEquals(knight.getPossibleStartPositions().size(),2);
     }
@@ -28,7 +28,7 @@ class KnightTest {
     @Test
     void shouldReturn4PositionsForKnightOnMiddleOfEdge(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
-        Knight knight=new Knight(Color.white,new Position(8,4),chessBoard);
+        Knight knight=new Knight(Color.white, Position.of(8,4),chessBoard);
         assertEquals(knight.getPossibleEndPositions().size(),4);
         assertEquals(knight.getPossibleStartPositions().size(),4);
     }
@@ -36,7 +36,7 @@ class KnightTest {
     @Test
     void shouldReturn3PositionsForKnightOnEdgeCloseToCorner(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
-        Knight knight=new Knight(Color.white,new Position(8,2),chessBoard);
+        Knight knight=new Knight(Color.white, Position.of(8,2),chessBoard);
         assertEquals(knight.getPossibleEndPositions().size(),3);
         assertEquals(knight.getPossibleStartPositions().size(),3);
     }
@@ -44,24 +44,24 @@ class KnightTest {
     @Test
     void shouldReturn8PositionsWhenAttackEnemyPieceFromMiddle(){
         ChessBoard chessBoard1=ChessBoard.getBlank(Color.white);
-        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black,new Position(3,2),chessBoard1));
-        Knight knight=new Knight(Color.white,new Position(4,4),chessBoard2);
+        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black, Position.of(3,2),chessBoard1));
+        Knight knight=new Knight(Color.white, Position.of(4,4),chessBoard2);
         assertEquals(knight.getPossibleEndPositions().size(),8);
     }
 
     @Test
     void shouldReturn7PositionsWhenTryToGoBackToFieldWithPiece(){
         ChessBoard chessBoard1=ChessBoard.getBlank(Color.white);
-        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black,new Position(3,2),chessBoard1));
-        Knight knight=new Knight(Color.white,new Position(4,4),chessBoard2);
+        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black, Position.of(3,2),chessBoard1));
+        Knight knight=new Knight(Color.white, Position.of(4,4),chessBoard2);
         assertEquals(knight.getPossibleStartPositions().size(),7);
     }
 
     @Test
     void shouldReturn7PositionsWhenAttackOwnPieceFromMiddle(){
         ChessBoard chessBoard1=ChessBoard.getBlank(Color.white);
-        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.white,new Position(3,2),chessBoard1));
-        Knight knight=new Knight(Color.white,new Position(4,4),chessBoard2);
+        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.white, Position.of(3,2),chessBoard1));
+        Knight knight=new Knight(Color.white, Position.of(4,4),chessBoard2);
         assertEquals(knight.getPossibleEndPositions().size(),7);
     }
 }

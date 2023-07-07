@@ -41,7 +41,7 @@ public class FENParser {
         Board board = Board.getBlank();
         for (int y = 1; y <= Board.SIZE; y++) {
             for (int x = 1; x <= Board.SIZE; x++) {
-                board.write(asciiToByte(expanded.get(8 - y).get(x - 1)), new Position(x, y));
+                board.write(asciiToByte(expanded.get(8 - y).get(x - 1)), Position.of(x, y));
             }
         }
         return board;

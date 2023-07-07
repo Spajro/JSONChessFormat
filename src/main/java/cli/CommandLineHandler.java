@@ -121,7 +121,7 @@ public class CommandLineHandler {
         System.out.println();
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
-                Field field = node.getBoard().getField(new Position(j, i));
+                Field field = node.getBoard().getField(Position.of(j, i));
                 if (field.isEmpty()) {
                     System.out.print("00");
                 } else {

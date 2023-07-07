@@ -34,22 +34,22 @@ public class CastleRequirementsFactory {
 
     private boolean aColumnRookMoved(ValidMove move) {
         return isRookOnPosition(move.getStartPosition())
-                && move.getStartPosition().equals(new Position(1, getStartRow()));
+                && move.getStartPosition().equals(Position.of(1, getStartRow()));
     }
 
     private boolean aColumnRookCaptured(ValidMove move) {
         return isOppositeRookOnPosition(move.getRepresentation().getEndPosition())
-                && move.getRepresentation().getEndPosition().equals(new Position(1, getOppositeStartRow()));
+                && move.getRepresentation().getEndPosition().equals(Position.of(1, getOppositeStartRow()));
     }
 
     private boolean hColumnRookMoved(ValidMove move) {
         return isRookOnPosition(move.getStartPosition())
-                && move.getStartPosition().equals(new Position(8, getStartRow()));
+                && move.getStartPosition().equals(Position.of(8, getStartRow()));
     }
 
     private boolean hColumnRookCaptured(ValidMove move) {
         return isOppositeRookOnPosition(move.getRepresentation().getEndPosition())
-                && move.getRepresentation().getEndPosition().equals(new Position(8, getOppositeStartRow()));
+                && move.getRepresentation().getEndPosition().equals(Position.of(8, getOppositeStartRow()));
     }
 
     private boolean kingMoved(ValidMove move) {

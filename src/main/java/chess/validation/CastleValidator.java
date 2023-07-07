@@ -84,14 +84,14 @@ public class CastleValidator {
     private Set<Position> positionsKingPasses(CastleType castleType) {
         Set<Position> result = new HashSet<>();
         if (castleType.equals(CastleType.SHORT)) {
-            result.add(new Position(5, getStartRow()));
-            result.add(new Position(6, getStartRow()));
-            result.add(new Position(7, getStartRow()));
+            result.add(Position.of(5, getStartRow()));
+            result.add(Position.of(6, getStartRow()));
+            result.add(Position.of(7, getStartRow()));
         }
         if (castleType.equals(CastleType.LONG)) {
-            result.add(new Position(5, getStartRow()));
-            result.add(new Position(4, getStartRow()));
-            result.add(new Position(3, getStartRow()));
+            result.add(Position.of(5, getStartRow()));
+            result.add(Position.of(4, getStartRow()));
+            result.add(Position.of(3, getStartRow()));
         }
         return result;
     }
@@ -99,13 +99,13 @@ public class CastleValidator {
     private Set<Position> positionsBetweenKingAndRook(CastleType castleType) {
         Set<Position> result = new HashSet<>();
         if (castleType.equals(CastleType.SHORT)) {
-            result.add(new Position(6, getStartRow()));
-            result.add(new Position(7, getStartRow()));
+            result.add(Position.of(6, getStartRow()));
+            result.add(Position.of(7, getStartRow()));
         }
         if (castleType.equals(CastleType.LONG)) {
-            result.add(new Position(4, getStartRow()));
-            result.add(new Position(3, getStartRow()));
-            result.add(new Position(2, getStartRow()));
+            result.add(Position.of(4, getStartRow()));
+            result.add(Position.of(3, getStartRow()));
+            result.add(Position.of(2, getStartRow()));
         }
         return result;
     }

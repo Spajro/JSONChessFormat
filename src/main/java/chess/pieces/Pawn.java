@@ -116,16 +116,16 @@ public class Pawn extends Piece {
     }
 
     private void populateWhite(HashMap<Step, Position> map) {
-        map.put(Step.FRONT, new Position(0, 1));
-        map.put(Step.LEFT, new Position(-1, 1));
-        map.put(Step.RIGHT, new Position(1, 1));
-        map.put(Step.FAR, new Position(0, 2));
+        map.put(Step.FRONT, Position.of(0, 1));
+        map.put(Step.LEFT, Position.of(-1, 1));
+        map.put(Step.RIGHT, Position.of(1, 1));
+        map.put(Step.FAR, Position.of(0, 2));
     }
 
     private void populateBlack(HashMap<Step, Position> map) {
-        map.put(Step.FRONT, new Position(0, -1));
-        map.put(Step.LEFT, new Position(-1, -1));
-        map.put(Step.RIGHT, new Position(1, -1));
-        map.put(Step.FAR, new Position(0, -2));
+        map.put(Step.FRONT, Position.of(0, -1));
+        map.put(Step.LEFT, Position.of(-1, -1));
+        map.put(Step.RIGHT, Position.of(1, -1));
+        map.put(Step.FAR, Position.of(0, -2));
     }
 }

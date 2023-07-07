@@ -18,7 +18,7 @@ public class EnPassantCapture extends Vector implements ExecutableMove {
         Board newBoard = Board.getCopy(board);
         newBoard.write(board.read(getStartPosition()), getEndPosition());
         newBoard.write(Board.EMPTY, getStartPosition());
-        newBoard.write(Board.EMPTY, new Position(getEndPosition().getX(), getStartPosition().getY()));
+        newBoard.write(Board.EMPTY, Position.of(getEndPosition().getX(), getStartPosition().getY()));
         return newBoard;
     }
 

@@ -21,7 +21,7 @@ public class BoardMouseListener implements MouseInputListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        controller.executeClickAction(new Position(findField(e.getX()), reverse(findField(e.getY()))), new SpecialKeysMap(e));
+        controller.executeClickAction(Position.of(findField(e.getX()), reverse(findField(e.getY()))), new SpecialKeysMap(e));
         x = -1;
         y = -1;
     }
@@ -38,8 +38,8 @@ public class BoardMouseListener implements MouseInputListener {
         if (x != -1 && y != -1 && x != e.getX() && y != e.getY()) {
             Log.log().info("Drag = ( " + findField(x) + ", " + reverse(findField(y)) + ")->( " + findField(e.getX()) + ", " + reverse(findField(e.getY())));
             controller.executeDragAction(new RawMove(
-                            new Position(findField(x), reverse(findField(y))),
-                            new Position(findField(e.getX()), reverse(findField(e.getY())))),
+                            Position.of(findField(x), reverse(findField(y))),
+                            Position.of(findField(e.getX()), reverse(findField(e.getY())))),
                     new SpecialKeysMap(e)
             );
             x = -1;

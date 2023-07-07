@@ -52,10 +52,10 @@ public class ExecutableMoveGenerator {
 
     private List<Castle> getAllPossibleCastles() {
         List<RawMove> legalCastleRawMoves = List.of(
-                new RawMove(new Position(5, 8), new Position(7, 8)),
-                new RawMove(new Position(5, 8), new Position(3, 8)),
-                new RawMove(new Position(5, 1), new Position(7, 1)),
-                new RawMove(new Position(5, 1), new Position(3, 1))
+                new RawMove(Position.of(5, 8), Position.of(7, 8)),
+                new RawMove(Position.of(5, 8), Position.of(3, 8)),
+                new RawMove(Position.of(5, 1), Position.of(7, 1)),
+                new RawMove(Position.of(5, 1), Position.of(3, 1))
         );
         return legalCastleRawMoves.stream()
                 .map(validMoveFactory::createValidMove)

@@ -22,16 +22,16 @@ public class AlgebraicUtility {
     Optional<RawMove> algebraicCastleToMove(String move, Color color) {
         if (move.equals("O-O")) {
             if (color.isWhite()) {
-                return Optional.of(new RawMove(new Position(5, 1), new Position(7, 1)));
+                return Optional.of(new RawMove(Position.of(5, 1), Position.of(7, 1)));
             } else {
-                return Optional.of(new RawMove(new Position(5, 8), new Position(7, 8)));
+                return Optional.of(new RawMove(Position.of(5, 8), Position.of(7, 8)));
             }
         }
         if (move.equals("O-O-O")) {
             if (color.isWhite()) {
-                return Optional.of(new RawMove(new Position(5, 1), new Position(3, 1)));
+                return Optional.of(new RawMove(Position.of(5, 1), Position.of(3, 1)));
             } else {
-                return Optional.of(new RawMove(new Position(5, 8), new Position(3, 8)));
+                return Optional.of(new RawMove(Position.of(5, 8), Position.of(3, 8)));
             }
         }
         return Optional.empty();
@@ -45,7 +45,7 @@ public class AlgebraicUtility {
         if (column.isEmpty()) {
             return Optional.empty();
         }
-        return Optional.of(new Position(column.get(), Character.getNumericValue(position.charAt(1))));
+        return Optional.of(Position.of(column.get(), Character.getNumericValue(position.charAt(1))));
     }
 
     public Optional<Type> parsePromotion(String move) {

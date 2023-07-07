@@ -32,7 +32,7 @@ public class FENFactory {
         for (int y = Board.SIZE; y > 0; y--) {
             LinkedList<Integer> row = new LinkedList<>();
             for (int x = 1; x <= Board.SIZE; x++) {
-                int next = byteToAscii(board.read(new Position(x, y)));
+                int next = byteToAscii(board.read(Position.of(x, y)));
 
                 if (isAsciiDigit(next) && !row.isEmpty()) {
                     if (isAsciiDigit(row.getLast())) {

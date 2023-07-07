@@ -23,16 +23,16 @@ class FENParserTest {
                 new CastleRequirements(false, false, false, false),
                 null
         )
-                .put(new King(Color.white, new Position(1, 5), null))
-                .put(new Pawn(Color.white, new Position(2, 5), null))
-                .put(new Rook(Color.white, new Position(2, 4), null))
-                .put(new Pawn(Color.white, new Position(5, 2), null))
-                .put(new Pawn(Color.white, new Position(7, 2), null))
-                .put(new Pawn(Color.black, new Position(3, 7), null))
-                .put(new Pawn(Color.black, new Position(4, 6), null))
-                .put(new Pawn(Color.black, new Position(6, 4), null))
-                .put(new Rook(Color.black, new Position(8, 5), null))
-                .put(new King(Color.black, new Position(8, 4), null));
+                .put(new King(Color.white, Position.of(1, 5), null))
+                .put(new Pawn(Color.white, Position.of(2, 5), null))
+                .put(new Rook(Color.white, Position.of(2, 4), null))
+                .put(new Pawn(Color.white, Position.of(5, 2), null))
+                .put(new Pawn(Color.white, Position.of(7, 2), null))
+                .put(new Pawn(Color.black, Position.of(3, 7), null))
+                .put(new Pawn(Color.black, Position.of(4, 6), null))
+                .put(new Pawn(Color.black, Position.of(6, 4), null))
+                .put(new Rook(Color.black, Position.of(8, 5), null))
+                .put(new King(Color.black, Position.of(8, 4), null));
         assertEquals(expected,actual);
     }
 

@@ -6,17 +6,21 @@ public class Position {
     protected final int x;
     protected final int y;
 
-    public Position(int nx, int ny) {
+    protected Position(int nx, int ny) {
         x = nx;
         y = ny;
     }
 
+    public static Position of(int nx, int ny) {
+        return new Position(nx, ny);
+    }
+
     public Position add(Position p) {
-        return new Position(x + p.x, y + p.y);
+        return of(x + p.x, y + p.y);
     }
 
     public Position subtract(Position p) {
-        return new Position(x - p.x, y - p.y);
+        return of(x - p.x, y - p.y);
     }
 
     public boolean isBetween(Position first, Position second) {
@@ -28,7 +32,7 @@ public class Position {
         } else {
             Position diff = first.subtract(second);
             if (abs(diff.x) == abs(diff.y)) {
-                Position direction = new Position(diff.x / abs(diff.x), diff.y / abs(diff.y));
+                Position direction = of(diff.x / abs(diff.x), diff.y / abs(diff.y));
                 Position temp = second;
                 while (!temp.equals(first)) {
                     if (temp.equals(this)) {

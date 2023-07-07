@@ -13,7 +13,7 @@ class BishopTest {
     void shouldReturn7PositionsForBishopInCorner(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
 
-        Bishop bishop=new Bishop(Color.white,new Position(1,1),chessBoard);
+        Bishop bishop=new Bishop(Color.white, Position.of(1,1),chessBoard);
 
         assertEquals(7,bishop.getPossibleEndPositions().size());
         assertEquals(7,bishop.getPossibleStartPositions().size());
@@ -23,7 +23,7 @@ class BishopTest {
     void shouldReturn13PositionsForBishopInMiddle(){
         ChessBoard chessBoard=ChessBoard.getBlank(Color.white);
 
-        Bishop bishop=new Bishop(Color.white,new Position(4,4),chessBoard);
+        Bishop bishop=new Bishop(Color.white, Position.of(4,4),chessBoard);
 
         assertEquals(13,bishop.getPossibleEndPositions().size());
         assertEquals(13,bishop.getPossibleStartPositions().size());
@@ -32,9 +32,9 @@ class BishopTest {
     @Test
     void shouldReturn1PositionsForBlockedBishopInCorner(){
         ChessBoard chessBoard1=ChessBoard.getBlank(Color.white);
-        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black,new Position(2,2),chessBoard1));
+        ChessBoard chessBoard2=chessBoard1.put(new Pawn(Color.black, Position.of(2,2),chessBoard1));
 
-        Bishop bishop=new Bishop(Color.white,new Position(1,1),chessBoard2);
+        Bishop bishop=new Bishop(Color.white, Position.of(1,1),chessBoard2);
 
         assertEquals(1,bishop.getPossibleEndPositions().size());
         assertEquals(0,bishop.getPossibleStartPositions().size());
