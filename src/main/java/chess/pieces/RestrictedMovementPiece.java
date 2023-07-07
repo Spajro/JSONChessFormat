@@ -47,7 +47,7 @@ public abstract class RestrictedMovementPiece extends Piece {
 
     private Set<Position> getLineOfPossibleNonCollidingPositions(Position step) {
         Set<Position> result = new HashSet<>();
-        Position temporaryPosition = new Position(position).add(step);
+        Position temporaryPosition = position.add(step);
         while (temporaryPosition.isOnBoard()) {
             Field field = chessBoard.getField(temporaryPosition);
             result.add(temporaryPosition);

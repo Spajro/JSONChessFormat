@@ -6,7 +6,7 @@ public class FieldAnnotation extends Position implements GraphicAnnotation {
     private final DrawColor color;
 
     public FieldAnnotation(Position position, DrawColor color) {
-        super(position);
+        super(position.getX(), position.getY());
         this.color = color;
     }
 
