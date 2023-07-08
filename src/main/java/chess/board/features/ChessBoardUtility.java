@@ -5,6 +5,7 @@ import chess.board.ChessBoard;
 import chess.color.Color;
 import chess.board.lowlevel.Field;
 import chess.pieces.Piece;
+import chess.pools.PositionPool;
 
 import java.util.*;
 import java.util.function.Function;

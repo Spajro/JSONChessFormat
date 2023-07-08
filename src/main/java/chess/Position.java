@@ -1,18 +1,20 @@
 package chess;
 
+import chess.pools.PositionPool;
+
 import static java.lang.Math.*;
 
 public class Position {
     protected final int x;
     protected final int y;
 
-    protected Position(int nx, int ny) {
+    public Position(int nx, int ny) {
         x = nx;
         y = ny;
     }
 
     public static Position of(int nx, int ny) {
-        return new Position(nx, ny);
+        return PositionPool.getInstance().get(nx,ny);
     }
 
     public Position add(Position p) {
