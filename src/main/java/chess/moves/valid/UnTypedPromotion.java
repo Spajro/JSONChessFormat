@@ -19,7 +19,7 @@ public class UnTypedPromotion extends Vector implements ValidMove {
 
     @Override
     public RawMove getRepresentation() {
-        return new RawMove(this);
+        return RawMove.of(this);
     }
 
     public Promotion type(Piece.Type type) {

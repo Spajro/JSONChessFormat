@@ -8,7 +8,11 @@ public class RawMove extends Vector {
         super(startPosition, endPosition);
     }
 
-    public RawMove(Vector vector) {
+    protected RawMove(Vector vector) {
         super(vector);
+    }
+
+    public static RawMove of(Vector vector) {
+        return new RawMove(vector);
     }
 }

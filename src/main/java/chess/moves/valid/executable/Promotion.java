@@ -50,7 +50,7 @@ public class Promotion extends Vector implements ExecutableMove {
 
     @Override
     public RawMove getRepresentation() {
-        return new RawPromotion(new RawMove(this), type);
+        return new RawPromotion(RawMove.of(this), type);
     }
 
     public Type getType() {
