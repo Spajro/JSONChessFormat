@@ -13,6 +13,7 @@ import data.json.JsonFactory;
 import data.model.*;
 import chess.moves.raw.RawMove;
 import data.model.metadata.MetaData;
+import data.pgn.PagedPGNParser;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
 import gui.board.SpecialKeysMap;
@@ -208,21 +209,18 @@ public class Controller {
 
     public void insertPGN(String filename) {
         try {
-            List<ParsedPGN> pgn = fileManager.loadPGN(filename);
+            PagedPGNParser pgnParser = fileManager.loadPagedPGN(filename);
             long startTime = System.nanoTime();
-            pgn.forEach(parsedPGN -> {
-                if (parsedPGN.moves().isPresent()) {
-                    dataModel.insert(parsedPGN.moves().get(), parsedPGN.metadata());
-                } else {
-                    Log.log().warn("Broken game: " + parsedPGN.metadata());
-                }
-            });
+            while (pgnParser.hasNext()) {
+                ParsedPGN parsedPGN = pgnParser.next();
+                dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
+            }
             boardPanel.setDiagram(dataModel.getActualNode());
             dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
             long endTime = System.nanoTime();
             long nanoDuration = (endTime - startTime);
             double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
-            double nodesPerSec = pgn.size() / secondDuration;
+            double nodesPerSec = pgnParser.initialSize() / secondDuration;
             Log.debug("Inserting time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");

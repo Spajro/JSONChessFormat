@@ -51,7 +51,7 @@ public class PGNParser {
         return result;
     }
 
-    private MetaData parseMetadata(String metadata, int gameLength) {
+    public MetaData parseMetadata(String metadata, int gameLength) {
         HashMap<String, String> metadataMap = new HashMap<>();
         Arrays.stream(metadata.split(getEndLineCharacter(metadata).orElseThrow()))
                 .map(s -> s.substring(1, s.length() - 1))
@@ -71,7 +71,7 @@ public class PGNParser {
         );
     }
 
-    private Optional<ArrayDeque<ExecutableMove>> parseMoves(String input) {
+    public Optional<ArrayDeque<ExecutableMove>> parseMoves(String input) {
         Pattern pattern = Pattern.compile("[^A-Za-z\\d-/+#=]");
         List<String> moves = Arrays.stream(input.split(" "))
                 .map(this::removeMarksFromEndIfAny)
@@ -92,7 +92,7 @@ public class PGNParser {
         return string.substring(0, index + 1);
     }
 
-    private Optional<String> getEndLineCharacter(String text) {
+    public Optional<String> getEndLineCharacter(String text) {
         if (text.contains("\r\n")) {
             return Optional.of("\r\n");
         } else if (text.contains("\n")) {
