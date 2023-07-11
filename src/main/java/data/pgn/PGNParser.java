@@ -31,7 +31,7 @@ public class PGNParser {
         ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
         ArrayList<ParsedPGN> result = new ArrayList<>();
         for (int i = 0; i < parts.size() - 1; i += 2) {
-            Optional<LinkedList<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
+            Optional<ArrayDeque<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
             int length;
             if (moves.isEmpty()) {
                 length = -1;
@@ -71,7 +71,7 @@ public class PGNParser {
         );
     }
 
-    private Optional<LinkedList<ExecutableMove>> parseMoves(String input) {
+    private Optional<ArrayDeque<ExecutableMove>> parseMoves(String input) {
         Pattern pattern = Pattern.compile("[^A-Za-z\\d-/+#=]");
         List<String> moves = Arrays.stream(input.split(" "))
                 .map(this::removeMarksFromEndIfAny)

@@ -7,7 +7,7 @@ import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
 import chess.utility.AlgebraicUtility;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.BiFunction;
@@ -22,8 +22,8 @@ public class MoveParser {
         return MOVE_PARSER;
     }
 
-    public Optional<LinkedList<ExecutableMove>> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
-        LinkedList<ExecutableMove> result=new LinkedList<>();
+    public Optional<ArrayDeque<ExecutableMove>> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
+        ArrayDeque<ExecutableMove> result=new ArrayDeque<>();
         for (String move : moves) {
             if (isGameEnd(move)) {
                 break;

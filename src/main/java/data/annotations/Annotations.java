@@ -1,21 +1,21 @@
 package data.annotations;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class Annotations {
     private String textAnnotation = "";
-    private final LinkedList<ArrowAnnotation> arrowAnnotations = new LinkedList<>();
-    private final LinkedList<FieldAnnotation> fieldAnnotations = new LinkedList<>();
+    private final ArrayList<ArrowAnnotation> arrowAnnotations = new ArrayList<>();
+    private final ArrayList<FieldAnnotation> fieldAnnotations = new ArrayList<>();
 
     public String getTextAnnotation() {
         return textAnnotation;
     }
 
-    public LinkedList<ArrowAnnotation> getArrowAnnotations() {
+    public ArrayList<ArrowAnnotation> getArrowAnnotations() {
         return arrowAnnotations;
     }
 
-    public LinkedList<FieldAnnotation> getFieldAnnotations() {
+    public ArrayList<FieldAnnotation> getFieldAnnotations() {
         return fieldAnnotations;
     }
 

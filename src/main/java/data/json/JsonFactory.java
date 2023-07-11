@@ -9,8 +9,7 @@ import data.model.DataModel;
 import data.model.Diagram;
 import data.model.metadata.GameData;
 
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 
 public class JsonFactory {
     private final DataModel dataModel;
@@ -37,7 +36,8 @@ public class JsonFactory {
                     .append(',');
         }
         if (isSubTreeOptimizable(diagram)) {
-            Optional<LinkedList<Diagram>> list = getPathToLast(diagram);
+            Optional<List<Diagram>> list = getPathToLast(diagram);
+            list.ifPresent(Collections::reverse);
             list.ifPresent(diagrams -> result.append("\"movesList\":")
                     .append(listJsonFactory.listToJson(diagrams, this::toOptimizedJson))
                     .append(','));
@@ -134,7 +134,7 @@ public class JsonFactory {
         } else {
             return switch (diagram.getNextDiagrams().size()) {
                 case 0 -> true;
-                case 1 -> isSubTreeOptimizable(diagram.getNextDiagrams().getFirst());
+                case 1 -> isSubTreeOptimizable(diagram.getNextDiagrams().get(0));
                 default -> false;
             };
         }
@@ -144,11 +144,11 @@ public class JsonFactory {
         return !(diagram.getMetaData().isEmpty() && diagram.getAnnotations().isEmpty());
     }
 
-    private Optional<LinkedList<Diagram>> getPathToLast(Diagram diagram) {
+    private Optional<List<Diagram>> getPathToLast(Diagram diagram) {
         return switch (diagram.getNextDiagrams().size()) {
-            case 0 -> Optional.of(new LinkedList<>());
-            case 1 -> getPathToLast(diagram.getNextDiagrams().getFirst()).map(list -> {
-                list.addFirst(diagram);
+            case 0 -> Optional.of(new ArrayList<>());
+            case 1 -> getPathToLast(diagram.getNextDiagrams().get(0)).map(list -> {
+                list.add(diagram);
                 return list;
             });
             default -> Optional.empty();

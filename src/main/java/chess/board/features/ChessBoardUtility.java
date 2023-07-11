@@ -39,7 +39,7 @@ public class ChessBoardUtility {
     }
 
     public List<Position> getAllPositions() {
-        List<Position> result = new LinkedList<>();
+        List<Position> result = new ArrayList<>();
         for (int x = 1; x <= 8; x++) {
             for (int y = 1; y <= 8; y++) {
                 result.add(Position.of(x, y));

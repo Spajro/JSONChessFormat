@@ -4,11 +4,11 @@ import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 public class TreeDataModel implements TreeModel {
     private Diagram actualNode;
-    private final LinkedList<TreeModelListener> treeModelListeners = new LinkedList<>();
+    private final ArrayList<TreeModelListener> treeModelListeners = new ArrayList<>();
 
     public void setActualNode(Diagram actualNode) {
         this.actualNode = actualNode;

@@ -11,28 +11,26 @@ import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class Diagram {
     private final String moveName;
     private Diagram parent;
-    private LinkedList<Diagram> nextDiagrams;
-    private  LinkedList<RawMove> lazyMoves;
+    private ArrayList<Diagram> nextDiagrams;
+    private ArrayDeque<RawMove> lazyMoves;
     private final Annotations annotations = new Annotations();
     private final RawMove creatingMove;
-    private final LinkedList<MetaData> metaData = new LinkedList<>();
+    private final ArrayList<MetaData> metaData = new ArrayList<>();
 
     public Diagram() {
         parent = null;
         creatingMove = null;
         moveName = "Root";
-        nextDiagrams = new LinkedList<>();
+        nextDiagrams = new ArrayList<>();
     }
 
     public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent) {
-        nextDiagrams = new LinkedList<>();
+        nextDiagrams = new ArrayList<>();
         this.parent = parent;
 
         if (creatingMove == null) {
@@ -48,7 +46,7 @@ public class Diagram {
         }
     }
 
-    public Diagram(ExecutableMove creatingMove,ChessBoard chessBoard,Diagram parent, LinkedList<RawMove> moves){
+    public Diagram(ExecutableMove creatingMove,ChessBoard chessBoard,Diagram parent, ArrayDeque<RawMove> moves){
         this.parent = parent;
         this.lazyMoves=moves;
 
@@ -91,7 +89,7 @@ public class Diagram {
 
     public List<Diagram> getPathFromRoot() {
         if (parent == null) {
-            return new LinkedList<>(List.of(this));
+            return new ArrayList<>(List.of(this));
         } else {
             List<Diagram> result = parent.getPathFromRoot();
             result.add(this);
@@ -117,7 +115,7 @@ public class Diagram {
         return moveName;
     }
 
-    public LinkedList<Diagram> getNextDiagrams() {
+    public List<Diagram> getNextDiagrams() {
         if(lazyMoves!=null){
             expand();
         }
@@ -163,7 +161,7 @@ public class Diagram {
         this.metaData.add(metaData);
     }
 
-    public LinkedList<MetaData> getMetaData() {
+    public List<MetaData> getMetaData() {
         return metaData;
     }
 
@@ -213,7 +211,7 @@ public class Diagram {
     public void expand() {
         RawMove move = lazyMoves.poll();
         if(move==null){
-            nextDiagrams=new LinkedList<>();
+            nextDiagrams=new ArrayList<>();
             lazyMoves=null;
             return;
         }
@@ -229,7 +227,7 @@ public class Diagram {
                 this,
                 lazyMoves
         );
-        nextDiagrams=new LinkedList<>();
+        nextDiagrams=new ArrayList<>();
         lazyMoves=null;
         this.getNextDiagrams().add(lazy);
     }

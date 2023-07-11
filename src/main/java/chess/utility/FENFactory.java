@@ -6,7 +6,7 @@ import chess.board.lowlevel.Board;
 import chess.board.requirements.CastleRequirements;
 import chess.color.Color;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 
 public class FENFactory {
     private static final FENFactory factory = new FENFactory();
@@ -30,7 +30,7 @@ public class FENFactory {
     private String boardTOFEN(Board board) {
         StringBuilder result = new StringBuilder();
         for (int y = Board.SIZE; y > 0; y--) {
-            LinkedList<Integer> row = new LinkedList<>();
+            ArrayDeque<Integer> row = new ArrayDeque<>();
             for (int x = 1; x <= Board.SIZE; x++) {
                 int next = byteToAscii(board.read(Position.of(x, y)));
 

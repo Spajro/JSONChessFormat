@@ -24,7 +24,7 @@ import log.Log;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.io.FileNotFoundException;
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 
@@ -198,7 +198,7 @@ public class Controller {
     }
 
     public void makeMoves(String moves) {
-        Optional<LinkedList<ExecutableMove>> optionalMoves = MoveParser.getInstance()
+        Optional<ArrayDeque<ExecutableMove>> optionalMoves = MoveParser.getInstance()
                 .parseMoves(
                         dataModel.getActualNode().getBoard(),
                         List.of(moves.split(" ")),

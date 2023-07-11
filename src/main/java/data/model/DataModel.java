@@ -29,21 +29,21 @@ public class DataModel {
         }
     }
 
-    public void insert(LinkedList<ExecutableMove> moves, MetaData metaData) {
+    public void insert(ArrayDeque<ExecutableMove> moves, MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
         games.update(diagramManager.insert(actualRoot, moves, metaData));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
-    public void insertInPlace(LinkedList<ExecutableMove> rawMoves) {
+    public void insertInPlace(ArrayDeque<ExecutableMove> rawMoves) {
         diagramManager.insert(actualNode, rawMoves,null);
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {
         return switch (diagram.getNextDiagrams().size()) {
             case 0 -> Optional.of(diagram);
-            case 1 -> getLast(diagram.getNextDiagrams().getFirst());
+            case 1 -> getLast(diagram.getNextDiagrams().get(0));
             default -> Optional.empty();
         };
     }

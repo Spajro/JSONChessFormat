@@ -8,7 +8,7 @@ import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
 
-import java.util.LinkedList;
+import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,7 +43,7 @@ public class DiagramManager {
         }
     }
 
-    public GamesUpdateEvent insert(Diagram tree, LinkedList<ExecutableMove> moves, MetaData metaData) {
+    public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData) {
         if (moves.isEmpty()) {
             tree.getMetaData().add(metaData);
             return GamesUpdateEvent.of(List.of(metaData), tree);
@@ -60,15 +60,18 @@ public class DiagramManager {
                     move,
                     chessBoard,
                     tree,
-                    new LinkedList<>(moves.stream()
+                    new ArrayDeque<>(moves.stream()
                             .map(ExecutableMove::getRepresentation)
                             .toList())
             ));
-            tree.getNextDiagrams().getLast().getMetaData().add(metaData);
+            tree.getNextDiagrams()
+                    .get(tree.getNextDiagrams().size() - 1)
+                    .getMetaData()
+                    .add(metaData);
             return GamesUpdateEvent.of(
                     List.of(metaData),
-                    tree.getNextDiagrams().getLast()
-            ).join(updateMetadata(tree.getNextDiagrams().getLast()));
+                    tree.getNextDiagrams().get(tree.getNextDiagrams().size() - 1)
+            ).join(updateMetadata(tree.getNextDiagrams().get(tree.getNextDiagrams().size() - 1)));
         }
     }
 

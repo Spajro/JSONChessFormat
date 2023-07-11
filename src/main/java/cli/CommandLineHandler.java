@@ -90,7 +90,7 @@ public class CommandLineHandler {
 
     void jumpForward() {
         if (!node.getNextDiagrams().isEmpty()) {
-            node = node.getNextDiagrams().peekFirst();
+            node = node.getNextDiagrams().get(0);
         } else {
             System.out.print("Cant jump forward");
         }

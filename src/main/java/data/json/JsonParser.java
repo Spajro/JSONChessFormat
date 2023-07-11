@@ -67,7 +67,7 @@ public class JsonParser {
             moves.add(iterator.next().asText());
             iterator.remove();
         }
-        Optional<LinkedList<ExecutableMove>> executableMoves = moveParser.parseMoves(
+        Optional<ArrayDeque<ExecutableMove>> executableMoves = moveParser.parseMoves(
                 diagram.getBoard(),
                 moves,
                 (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor()));
@@ -77,7 +77,7 @@ public class JsonParser {
                     executableMove,
                     diagram.getBoard().makeMove(executableMove),
                     diagram,
-                    new LinkedList<>(executableMoves.get().stream()
+                    new ArrayDeque<>(executableMoves.get().stream()
                             .map(ExecutableMove::getRepresentation)
                             .toList())
             ));
