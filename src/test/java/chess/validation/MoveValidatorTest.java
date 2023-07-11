@@ -18,7 +18,7 @@ class MoveValidatorTest {
                 .put(new King(Color.white, Position.of(1, 1), null))
                 .put(new King(Color.black, Position.of(8, 8), null))
                 .put(new Knight(Color.white, Position.of(4, 5), null));
-        assertTrue(board.makeMove(new RawMove(Position.of(4, 5), Position.of(5, 7))).isValid());
+        assertTrue(board.makeMove(RawMove.of(Position.of(4, 5), Position.of(5, 7))).isValid());
     }
 
     @Test
@@ -28,7 +28,7 @@ class MoveValidatorTest {
                 .put(new King(Color.black, Position.of(8, 8), null))
                 .put(new Rook(Color.black, Position.of(1, 8), null))
                 .put(new Knight(Color.white, Position.of(4, 5), null));
-        assertFalse(board.makeMove(new RawMove(Position.of(4, 5), Position.of(5, 7))).isValid());
+        assertFalse(board.makeMove(RawMove.of(Position.of(4, 5), Position.of(5, 7))).isValid());
     }
 
     @Test
@@ -37,7 +37,7 @@ class MoveValidatorTest {
                 .put(new King(Color.white, Position.of(5, 1), null))
                 .put(new Bishop(Color.black, Position.of(2, 6), null))
                 .put(new Queen(Color.black, Position.of(6, 2), null));
-        assertFalse(board.makeMove(new RawMove(Position.of(5, 1), Position.of(6, 2))).isValid());
+        assertFalse(board.makeMove(RawMove.of(Position.of(5, 1), Position.of(6, 2))).isValid());
     }
 
 }

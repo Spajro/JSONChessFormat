@@ -20,7 +20,7 @@ class ShortAlgebraicParserTest {
         String move = "e4";
         ChessBoard chessBoard = new ChessBoard();
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(5, 2), Position.of(5, 4)), rawMove);
+        assertEquals(RawMove.of(Position.of(5, 2), Position.of(5, 4)), rawMove);
     }
 
     @Test
@@ -30,7 +30,7 @@ class ShortAlgebraicParserTest {
                 .put(new Pawn(Color.white, Position.of(5, 4), null))
                 .put(new Pawn(Color.black, Position.of(4, 5), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(5, 4), Position.of(4, 5)), rawMove);
+        assertEquals(RawMove.of(Position.of(5, 4), Position.of(4, 5)), rawMove);
     }
 
     @Test
@@ -38,7 +38,7 @@ class ShortAlgebraicParserTest {
         String move = "Nc3";
         ChessBoard chessBoard = new ChessBoard();
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(2, 1), Position.of(3, 3)), rawMove);
+        assertEquals(RawMove.of(Position.of(2, 1), Position.of(3, 3)), rawMove);
     }
 
     @Test
@@ -46,7 +46,7 @@ class ShortAlgebraicParserTest {
         String move = "Nxc3";
         ChessBoard chessBoard = new ChessBoard().put(new Pawn(Color.black, Position.of(3, 3), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(2, 1), Position.of(3, 3)), rawMove);
+        assertEquals(RawMove.of(Position.of(2, 1), Position.of(3, 3)), rawMove);
     }
 
     @Test
@@ -55,7 +55,7 @@ class ShortAlgebraicParserTest {
         ChessBoard chessBoard = getChessBoardWithKings()
                 .put(new Rook(Color.white, Position.of(8, 1), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(5, 1), Position.of(7, 1)), rawMove);
+        assertEquals(RawMove.of(Position.of(5, 1), Position.of(7, 1)), rawMove);
     }
 
     @Test
@@ -64,7 +64,7 @@ class ShortAlgebraicParserTest {
         ChessBoard chessBoard = getChessBoardWithKings()
                 .put(new Rook(Color.white, Position.of(1, 1), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(5, 1), Position.of(3, 1)), rawMove);
+        assertEquals(RawMove.of(Position.of(5, 1), Position.of(3, 1)), rawMove);
     }
 
     @Test
@@ -75,7 +75,7 @@ class ShortAlgebraicParserTest {
                 .put(new Pawn(Color.white, Position.of(5, 4), null))
                 .put(new Pawn(Color.black, Position.of(4, 5), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(3, 4), Position.of(4, 5)), rawMove);
+        assertEquals(RawMove.of(Position.of(3, 4), Position.of(4, 5)), rawMove);
     }
 
     @Test
@@ -85,7 +85,7 @@ class ShortAlgebraicParserTest {
                 .put(new Knight(Color.white, Position.of(2, 3), null))
                 .put(new Knight(Color.white, Position.of(4, 3), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(2, 3), Position.of(3, 5)), rawMove);
+        assertEquals(RawMove.of(Position.of(2, 3), Position.of(3, 5)), rawMove);
     }
 
     @Test
@@ -95,7 +95,7 @@ class ShortAlgebraicParserTest {
                 .put(new Knight(Color.white, Position.of(3, 2), null))
                 .put(new Knight(Color.white, Position.of(3, 4), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(3, 2), Position.of(5, 3)), rawMove);
+        assertEquals(RawMove.of(Position.of(3, 2), Position.of(5, 3)), rawMove);
     }
 
     @Test
@@ -106,7 +106,7 @@ class ShortAlgebraicParserTest {
                 .put(new Knight(Color.white, Position.of(4, 3), null))
                 .put(new Pawn(Color.black, Position.of(3, 5), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(2, 3), Position.of(3, 5)), rawMove);
+        assertEquals(RawMove.of(Position.of(2, 3), Position.of(3, 5)), rawMove);
     }
 
     @Test
@@ -117,7 +117,7 @@ class ShortAlgebraicParserTest {
                 .put(new Knight(Color.white, Position.of(3, 4), null))
                 .put(new Pawn(Color.black, Position.of(5, 3), null));
         RawMove rawMove = parser.parseShortAlgebraic(move, chessBoard);
-        assertEquals(new RawMove(Position.of(3, 2), Position.of(5, 3)), rawMove);
+        assertEquals(RawMove.of(Position.of(3, 2), Position.of(5, 3)), rawMove);
     }
 
     private static ChessBoard getChessBoardWithKings() {

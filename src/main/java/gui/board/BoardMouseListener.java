@@ -37,7 +37,7 @@ public class BoardMouseListener implements MouseInputListener {
         scale = controller.getScale();
         if (x != -1 && y != -1 && x != e.getX() && y != e.getY()) {
             Log.log().info("Drag = ( " + findField(x) + ", " + reverse(findField(y)) + ")->( " + findField(e.getX()) + ", " + reverse(findField(e.getY())));
-            controller.executeDragAction(new RawMove(
+            controller.executeDragAction(RawMove.of(
                             Position.of(findField(x), reverse(findField(y))),
                             Position.of(findField(e.getX()), reverse(findField(e.getY())))),
                     new SpecialKeysMap(e)

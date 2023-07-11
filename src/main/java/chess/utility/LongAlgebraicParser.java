@@ -39,7 +39,7 @@ public class LongAlgebraicParser {
 
         }
         if (rawMove.charAt(2) == '-') {
-            return Optional.of(new RawMove(
+            return Optional.of(RawMove.of(
                     start.get(),
                     end.get()));
         }

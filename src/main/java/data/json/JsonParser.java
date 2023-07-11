@@ -103,7 +103,7 @@ public class JsonParser {
         if (jsonNode.get("arrow") != null && jsonNode.get("color") != null) {
             String arrow = jsonNode.get("arrow").asText();
             return new ArrowAnnotation(
-                    new RawMove(
+                    RawMove.of(
                             algebraicUtility.algebraicToPosition(arrow.substring(0, 2)).orElseThrow(),
                             algebraicUtility.algebraicToPosition(arrow.substring(2)).orElseThrow()),
                     toDrawColor(jsonNode.get("color")));

@@ -22,16 +22,16 @@ public class AlgebraicUtility {
     Optional<RawMove> algebraicCastleToMove(String move, Color color) {
         if (move.equals("O-O")) {
             if (color.isWhite()) {
-                return Optional.of(new RawMove(Position.of(5, 1), Position.of(7, 1)));
+                return Optional.of(RawMove.of(Position.of(5, 1), Position.of(7, 1)));
             } else {
-                return Optional.of(new RawMove(Position.of(5, 8), Position.of(7, 8)));
+                return Optional.of(RawMove.of(Position.of(5, 8), Position.of(7, 8)));
             }
         }
         if (move.equals("O-O-O")) {
             if (color.isWhite()) {
-                return Optional.of(new RawMove(Position.of(5, 1), Position.of(3, 1)));
+                return Optional.of(RawMove.of(Position.of(5, 1), Position.of(3, 1)));
             } else {
-                return Optional.of(new RawMove(Position.of(5, 8), Position.of(3, 8)));
+                return Optional.of(RawMove.of(Position.of(5, 8), Position.of(3, 8)));
             }
         }
         return Optional.empty();

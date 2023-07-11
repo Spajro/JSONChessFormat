@@ -41,7 +41,7 @@ public class ExecutableMoveGenerator {
     private List<SimpleMove> getAllPossibleSimpleMoves() {
         return utility.getPiecesOfColor(color).stream()
                 .flatMap(piece -> piece.getPossibleEndPositions().stream()
-                        .map(position -> new RawMove(piece.getPosition(), position)))
+                        .map(position -> RawMove.of(piece.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -52,10 +52,10 @@ public class ExecutableMoveGenerator {
 
     private List<Castle> getAllPossibleCastles() {
         List<RawMove> legalCastleRawMoves = List.of(
-                new RawMove(Position.of(5, 8), Position.of(7, 8)),
-                new RawMove(Position.of(5, 8), Position.of(3, 8)),
-                new RawMove(Position.of(5, 1), Position.of(7, 1)),
-                new RawMove(Position.of(5, 1), Position.of(3, 1))
+                RawMove.of(Position.of(5, 8), Position.of(7, 8)),
+                RawMove.of(Position.of(5, 8), Position.of(3, 8)),
+                RawMove.of(Position.of(5, 1), Position.of(7, 1)),
+                RawMove.of(Position.of(5, 1), Position.of(3, 1))
         );
         return legalCastleRawMoves.stream()
                 .map(validMoveFactory::createValidMove)
@@ -70,7 +70,7 @@ public class ExecutableMoveGenerator {
         return utility.getPiecesOfColor(color).stream()
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
-                .flatMap(pawn -> pawn.getAttackedPositions().stream().map(position -> new RawMove(pawn.getPosition(), position)))
+                .flatMap(pawn -> pawn.getAttackedPositions().stream().map(position -> RawMove.of(pawn.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -85,7 +85,7 @@ public class ExecutableMoveGenerator {
                 .map(piece -> (Pawn) piece)
                 .filter(this::isOnPenultimateLine)
                 .flatMap(pawn -> pawn.getPossibleEndPositions().stream()
-                        .map(position -> new RawMove(pawn.getPosition(), position)))
+                        .map(position -> RawMove.of(pawn.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)

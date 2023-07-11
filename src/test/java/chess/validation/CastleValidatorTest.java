@@ -20,7 +20,7 @@ class CastleValidatorTest {
                 .put(new King(Color.white, Position.of(5, 1), null))
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.white, Position.of(8, 1), null));
-        assertTrue(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 1), Position.of(7, 1))));
+        assertTrue(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 1), Position.of(7, 1))));
     }
 
     @Test
@@ -29,7 +29,7 @@ class CastleValidatorTest {
                 .put(new King(Color.white, Position.of(5, 1), null))
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.white, Position.of(8, 1), null));
-        assertTrue(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 1), Position.of(3, 1))));
+        assertTrue(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 1), Position.of(3, 1))));
     }
 
     @Test
@@ -38,7 +38,7 @@ class CastleValidatorTest {
                 .put(new King(Color.white, Position.of(5, 1), null))
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.black, Position.of(8, 8), null));
-        assertTrue(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 8), Position.of(7, 8))));
+        assertTrue(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 8), Position.of(7, 8))));
     }
 
     @Test
@@ -47,7 +47,7 @@ class CastleValidatorTest {
                 .put(new King(Color.white, Position.of(5, 1), null))
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.black, Position.of(1, 8), null));
-        assertTrue(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 8), Position.of(3, 8))));
+        assertTrue(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 8), Position.of(3, 8))));
     }
 
     @Test
@@ -57,7 +57,7 @@ class CastleValidatorTest {
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.white, Position.of(8, 1), null))
                 .put(new Bishop(Color.white, Position.of(6, 1), null));
-        assertFalse(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 1), Position.of(7, 1))));
+        assertFalse(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 1), Position.of(7, 1))));
     }
 
     @Test
@@ -67,7 +67,7 @@ class CastleValidatorTest {
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.white, Position.of(8, 1), null))
                 .put(new Rook(Color.black, Position.of(6, 8), null));
-        assertFalse(new CastleValidator(chessBoard).isLegalCastle(new RawMove(Position.of(5, 1), Position.of(7, 1))));
+        assertFalse(new CastleValidator(chessBoard).isLegalCastle(RawMove.of(Position.of(5, 1), Position.of(7, 1))));
     }
 
     @Test
@@ -77,7 +77,7 @@ class CastleValidatorTest {
                 .put(new King(Color.black, Position.of(5, 8), null))
                 .put(new Rook(Color.white, Position.of(8, 1), null))
                 .put(new Bishop(Color.white, Position.of(6, 1), null));
-        ChessBoard afterMove = ((ValidMoveResult) chessBoard.makeMove(new RawMove(Position.of(5, 1), Position.of(4, 1)))).getResult();
-        assertFalse(new CastleValidator(afterMove).isLegalCastle(new RawMove(Position.of(4, 1), Position.of(7, 1))));
+        ChessBoard afterMove = ((ValidMoveResult) chessBoard.makeMove(RawMove.of(Position.of(5, 1), Position.of(4, 1)))).getResult();
+        assertFalse(new CastleValidator(afterMove).isLegalCastle(RawMove.of(Position.of(4, 1), Position.of(7, 1))));
     }
 }
