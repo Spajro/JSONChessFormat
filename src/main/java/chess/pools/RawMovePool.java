@@ -6,15 +6,9 @@ import chess.moves.raw.RawMove;
 import java.util.ArrayList;
 
 public class RawMovePool {
-    private static final RawMovePool rawMovePool = new RawMovePool();
-
-    public static RawMovePool getInstance() {
-        return rawMovePool;
-    }
-
     private final ArrayList<RawMove> pool = new ArrayList<>();
 
-    private RawMovePool() {
+    RawMovePool() {
         for (int a = 1; a < 9; a++) {
             for (int b = 1; b < 9; b++) {
                 for (int c = 1; c < 9; c++) {

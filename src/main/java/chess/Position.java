@@ -1,6 +1,6 @@
 package chess;
 
-import chess.pools.PositionPool;
+import chess.pools.PoolManager;
 
 import static java.lang.Math.*;
 
@@ -14,7 +14,7 @@ public class Position {
     }
 
     public static Position of(int nx, int ny) {
-        return PositionPool.getInstance().get(nx,ny);
+        return PoolManager.getPositionPool().get(nx, ny);
     }
 
     public Position add(Position p) {

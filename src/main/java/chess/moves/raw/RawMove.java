@@ -2,7 +2,7 @@ package chess.moves.raw;
 
 import chess.Position;
 import chess.moves.Vector;
-import chess.pools.RawMovePool;
+import chess.pools.PoolManager;
 
 public class RawMove extends Vector {
     public RawMove(Position startPosition, Position endPosition) {
@@ -14,10 +14,10 @@ public class RawMove extends Vector {
     }
 
     public static RawMove of(Position startPosition, Position endPosition) {
-        return RawMovePool.getInstance().get(startPosition, endPosition);
+        return PoolManager.getRawMovePool().get(startPosition, endPosition);
     }
 
     public static RawMove of(Vector vector) {
-        return RawMovePool.getInstance().get(vector.getStartPosition(), vector.getEndPosition());
+        return PoolManager.getRawMovePool().get(vector.getStartPosition(), vector.getEndPosition());
     }
 }
