@@ -66,11 +66,12 @@ public class Diagram {
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
         Log.log().info("Trying to make:" + move);
 
-        MoveResult moveResult = getBoard().makeMove(move);
+        ChessBoard chessBoard=getBoard();
+        MoveResult moveResult = chessBoard.makeMove(move);
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
         if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), validMoveResult.get().getResult(), this);
+            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), chessBoard, this);
             for (Diagram diagram : nextDiagrams) {
                 if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
                     if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
