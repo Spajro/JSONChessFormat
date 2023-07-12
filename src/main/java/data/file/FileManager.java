@@ -1,5 +1,6 @@
-package data.model;
+package data.file;
 
+import data.model.Diagram;
 import data.pgn.PGNParser;
 import data.json.JsonParser;
 import data.pgn.PagedPGNParser;
@@ -32,10 +33,7 @@ public class FileManager {
 
     public PagedPGNParser loadPagedPGN(String filename) throws FileNotFoundException {
         Log.log().info("Loading PGN");
-        Scanner scanner = new Scanner(new File(filename + ".pgn"));
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
-        return new PagedPGNParser(text);
+        return new PagedPGNParser(new PagedPGNReader(filename + ".pgn"));
     }
 
     public void save(String filename, String json) {

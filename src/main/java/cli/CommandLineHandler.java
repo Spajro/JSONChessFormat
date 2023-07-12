@@ -8,7 +8,7 @@ import data.model.Diagram;
 import chess.Position;
 import chess.color.Color;
 import chess.moves.raw.RawMove;
-import data.model.FileManager;
+import data.file.FileManager;
 
 import java.io.*;
 

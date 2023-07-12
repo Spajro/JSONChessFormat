@@ -1,31 +1,27 @@
 package data.pgn;
 
 import chess.moves.valid.executable.ExecutableMove;
+import data.file.PGNGame;
 
 import java.util.*;
 
 public class PagedPGNParser implements Iterator<ParsedPGN> {
-    private final Deque<String> parts;
-    private final int size;
+    private final Iterator<PGNGame> iterator;
 
-    public PagedPGNParser(String pgn) {
-        String newLine = PGNParser.getInstance().getEndLineCharacter(pgn).orElseThrow();
-        parts = new ArrayDeque<>(List.of(pgn.split(newLine + newLine)));
-        size = parts.size();
+    public PagedPGNParser(Iterator<PGNGame> iterator) {
+        this.iterator = iterator;
     }
 
     @Override
     public boolean hasNext() {
-        return parts.size() > 1;
+        return iterator.hasNext();
     }
 
     @Override
     public ParsedPGN next() {
-        if(parts.size()<2){
-            throw new IllegalStateException();
-        }
-        String metadata = parts.poll();
-        String moves = parts.poll();
+        PGNGame pgnGame = iterator.next();
+        String metadata = pgnGame.metadata();
+        String moves = pgnGame.moves();
         Optional<ArrayDeque<ExecutableMove>> executableMoves = PGNParser.getInstance().parseMoves(moves);
         int length;
         if (executableMoves.isEmpty()) {
@@ -37,9 +33,5 @@ public class PagedPGNParser implements Iterator<ParsedPGN> {
                 PGNParser.getInstance().parseMetadata(metadata, length),
                 executableMoves
         );
-    }
-
-    public int initialSize() {
-        return size;
     }
 }
