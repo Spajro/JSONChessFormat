@@ -8,26 +8,28 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class GamesListMouseListener implements MouseListener {
-    private final JList<MetaData> list;
+public class GamesTableMouseListener implements MouseListener {
+    private final JTable table;
+    private final GameTableModel gameTableModel;
     private final Controller controller;
 
-    public GamesListMouseListener(JList<MetaData> list, Controller controller) {
-        this.list = list;
+    public GamesTableMouseListener(JTable table, Controller controller) {
+        this.table = table;
         this.controller = controller;
+        this.gameTableModel = (GameTableModel) table.getModel();
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Rectangle r = list.getCellBounds(0, list.getLastVisibleIndex());
+        Rectangle r = table.getBounds();
         if (r != null && r.contains(e.getPoint())) {
-            int index = list.locationToIndex(e.getPoint());
+            int index = table.rowAtPoint(e.getPoint());
 
             if (e.getClickCount() == 2) {
-                controller.selectGame(list.getModel().getElementAt(index));
+                controller.selectGame(gameTableModel.getMetaDataForRow(index));
 
             } else if (e.getClickCount() == 3) {
-                controller.selectGameEnd(list.getModel().getElementAt(index));
+                controller.selectGameEnd(gameTableModel.getMetaDataForRow(index));
             }
         }
     }

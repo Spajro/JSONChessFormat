@@ -1,6 +1,7 @@
 package data.model.games;
 
 import data.model.Diagram;
+import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 
 import java.util.*;
@@ -39,7 +40,10 @@ public class GamesRepository {
         return games.get(metaData);
     }
 
-    public Set<MetaData> getMetadata() {
-        return games.keySet();
+    public List<GameData> getGameData() {
+        return games.keySet().stream()
+                .filter(metaData -> metaData instanceof GameData)
+                .map(metaData -> (GameData) metaData)
+                .toList();
     }
 }
