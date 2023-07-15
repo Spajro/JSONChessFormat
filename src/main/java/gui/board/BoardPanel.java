@@ -9,7 +9,8 @@ import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
-import gui.DisplayConfiguration;
+import gui.config.BoardDisplayConfiguration;
+import gui.config.PiecesDisplayConfiguration;
 import gui.scaling.*;
 
 import javax.swing.*;
@@ -21,17 +22,16 @@ import static java.lang.Math.min;
 public class BoardPanel extends JPanel {
     private int scale = 60;
     private Diagram diagram;
-    private Color colBack = Color.WHITE;
-    private Color colWhiteField = Color.WHITE;
-    private Color colBlackField = Color.DARK_GRAY;
-    private DisplayConfiguration displayConfiguration;
+    private BoardDisplayConfiguration boardDisplayConfiguration;
+    private PiecesDisplayConfiguration piecesDisplayConfiguration;
 
     private boolean doPaintCoverage = false;
     private boolean doPaintLegalMoves = false;
     private boolean doPaintWeakPoints = false;
 
     public BoardPanel(Diagram diagram) {
-        displayConfiguration = new DisplayConfiguration();
+        boardDisplayConfiguration = new BoardDisplayConfiguration();
+        piecesDisplayConfiguration = new PiecesDisplayConfiguration();
         this.diagram = diagram;
     }
 
@@ -39,7 +39,7 @@ public class BoardPanel extends JPanel {
     public void paint(Graphics g) {
         scale = getScale();
         g.setFont(new Font("TimesRoman", Font.PLAIN, partOf(0.25, scale)));
-        g.setColor(colBack);
+        g.setColor(boardDisplayConfiguration.getBackgroundColor());
         g.fillRect(0, 0, getWidth(), getHeight());
         if (diagram != null) {
             paintBoard(g);
@@ -62,9 +62,9 @@ public class BoardPanel extends JPanel {
         for (int y = 0; y < Board.SIZE; y++) {
             for (int x = 0; x < Board.SIZE; x++) {
                 if (nextColor) {
-                    g.setColor(colWhiteField);
+                    g.setColor(boardDisplayConfiguration.getWhiteFieldColor());
                 } else {
-                    g.setColor(colBlackField);
+                    g.setColor(boardDisplayConfiguration.getBlackFieldColor());
                 }
                 g.fillRect(x * scale, y * scale, scale, scale);
                 nextColor = !nextColor;
@@ -79,7 +79,7 @@ public class BoardPanel extends JPanel {
     }
 
     private void paintPiece(Piece piece, Graphics g) {
-        ImageIcon image = displayConfiguration.getImage(piece);
+        ImageIcon image = piecesDisplayConfiguration.getImage(piece);
         g.drawImage(image.getImage(),
                 (piece.getPosition().getX() - 1) * scale + partOf(0.1, scale),
                 (8 - piece.getPosition().getY()) * scale + partOf(0.1, scale),

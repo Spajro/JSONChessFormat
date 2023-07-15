@@ -1,4 +1,4 @@
-package gui;
+package gui.config;
 
 import chess.pieces.Piece;
 
@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
-public class DisplayConfiguration {
+public class PiecesDisplayConfiguration {
     private static final String FOLDERPATH = "/pieces/";
     private static final String WPAWNPATH = "white/pawn";
     private static final String WKNIGHTPATH = "white/knight";
@@ -27,7 +27,7 @@ public class DisplayConfiguration {
     private final HashMap<Piece.Type, ImageIcon> whiteImageMap;
     private final HashMap<Piece.Type, ImageIcon> blackImageMap;
 
-    public DisplayConfiguration() {
+    public PiecesDisplayConfiguration() {
         whiteImageMap = new HashMap<>();
         blackImageMap = new HashMap<>();
 
