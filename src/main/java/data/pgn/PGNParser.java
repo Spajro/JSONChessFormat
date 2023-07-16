@@ -72,6 +72,9 @@ public class PGNParser {
     }
 
     public Optional<ArrayDeque<ExecutableMove>> parseMoves(String input) {
+        if (input.charAt(0) == ' ') {
+            input = input.substring(1);
+        }
         Pattern pattern = Pattern.compile("[^A-Za-z\\d-/+#=]");
         List<String> moves = Arrays.stream(input.split(" "))
                 .map(this::removeMarksFromEndIfAny)
