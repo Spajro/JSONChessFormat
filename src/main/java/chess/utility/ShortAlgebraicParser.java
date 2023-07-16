@@ -201,11 +201,8 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<Position> chooseByAmbiguous(Set<Position> positions, char ambiguous) {
-        try {
-            Optional<Integer> column = utility.columnToNumber(ambiguous);
-            if (column.isEmpty()) {
-                return Optional.empty();
-            }
+        Optional<Integer> column = utility.columnToNumber(ambiguous);
+        if (column.isPresent()) {
             Set<Position> positionSet = positions.stream()
                     .filter(position -> position.getX() == column.get())
                     .collect(Collectors.toSet());
@@ -213,19 +210,19 @@ public class ShortAlgebraicParser {
                 return Optional.empty();
             }
             return positionSet.stream().findAny();
-        } catch (IllegalArgumentException ignored) {
         }
-        try {
-            int row = rowToNumber(ambiguous);
+
+        Optional<Integer> row = rowToNumber(ambiguous);
+        if (row.isPresent()) {
             Set<Position> positionSet = positions.stream()
-                    .filter(position -> position.getY() == row)
+                    .filter(position -> position.getY() == row.get())
                     .collect(Collectors.toSet());
             if (positionSet.size() != 1) {
                 return Optional.empty();
             }
             return positionSet.stream().findAny();
-        } catch (IllegalArgumentException ignored) {
         }
+
         return Optional.empty();
     }
 
@@ -282,8 +279,8 @@ public class ShortAlgebraicParser {
         });
     }
 
-    private int rowToNumber(char row) {
-        return switch (row) {
+    private Optional<Integer> rowToNumber(char row) {
+        return Optional.ofNullable(switch (row) {
             case '1' -> 1;
             case '2' -> 2;
             case '3' -> 3;
@@ -292,7 +289,7 @@ public class ShortAlgebraicParser {
             case '6' -> 6;
             case '7' -> 7;
             case '8' -> 8;
-            default -> throw new IllegalArgumentException("Not valid row:" + row);
-        };
+            default -> null;
+        });
     }
 }
