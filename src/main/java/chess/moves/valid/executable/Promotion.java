@@ -49,6 +49,11 @@ public class Promotion extends Vector implements ExecutableMove {
     }
 
     @Override
+    public Board getBoard() {
+        return Board.getCopy(board);
+    }
+
+    @Override
     public RawMove getRepresentation() {
         return new RawPromotion(RawMove.of(this), type);
     }

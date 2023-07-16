@@ -21,6 +21,11 @@ public class SimpleMove extends Vector implements ExecutableMove {
     }
 
     @Override
+    public Board getBoard() {
+        return Board.getCopy(board);
+    }
+
+    @Override
     public RawMove getRepresentation() {
         return RawMove.of(this);
     }

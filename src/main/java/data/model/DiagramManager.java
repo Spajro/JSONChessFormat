@@ -3,6 +3,8 @@ package data.model;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
+import data.model.boardfinder.BoardRecord;
+import data.model.boardfinder.BoardRepository;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
@@ -43,7 +45,7 @@ public class DiagramManager {
         }
     }
 
-    public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData) {
+    public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData, BoardRepository boardRepository) {
         if (moves.isEmpty()) {
             tree.getMetaData().add(metaData);
             return GamesUpdateEvent.of(List.of(metaData), tree);
@@ -52,9 +54,17 @@ public class DiagramManager {
 
         Optional<Diagram> optionalDiagram = getByRawMove(tree, move.getRepresentation());
         if (optionalDiagram.isPresent()) {
-            return insert(optionalDiagram.get(), moves, metaData);
+            boardRepository.put(move.getBoard(), new BoardRecord(optionalDiagram.get()));
+            return insert(optionalDiagram.get(), moves, metaData, boardRepository);
         } else {
             ChessBoard chessBoard = tree.getBoard();
+
+            ArrayDeque<BoardRecord> boardRecords = new ArrayDeque<>();
+            int i = 1;
+            for (ExecutableMove executableMove : moves) {
+                boardRecords.add(new BoardRecord(tree, i));
+                boardRepository.put(executableMove.getBoard(), boardRecords.getLast());
+            }
 
             tree.getNextDiagrams().add(new Diagram(
                     move,
@@ -62,7 +72,8 @@ public class DiagramManager {
                     tree,
                     new ArrayDeque<>(moves.stream()
                             .map(ExecutableMove::getRepresentation)
-                            .toList())
+                            .toList()),
+                    boardRecords
             ));
             tree.getNextDiagrams()
                     .get(tree.getNextDiagrams().size() - 1)

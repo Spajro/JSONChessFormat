@@ -31,6 +31,11 @@ public class Castle implements ExecutableMove {
     }
 
     @Override
+    public Board getBoard() {
+        return Board.getCopy(board);
+    }
+
+    @Override
     public Position getStartPosition() {
         return kingMove.getStartPosition();
     }

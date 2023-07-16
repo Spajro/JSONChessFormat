@@ -26,4 +26,9 @@ public class EnPassantCapture extends Vector implements ExecutableMove {
     public RawMove getRepresentation() {
         return RawMove.of(this);
     }
+
+    @Override
+    public Board getBoard() {
+        return Board.getCopy(board);
+    }
 }

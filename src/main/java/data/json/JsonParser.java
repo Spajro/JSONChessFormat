@@ -79,7 +79,8 @@ public class JsonParser {
                     diagram,
                     new ArrayDeque<>(executableMoves.get().stream()
                             .map(ExecutableMove::getRepresentation)
-                            .toList())
+                            .toList()),
+                    null//TODO
             ));
         } else {
             Log.log().fail("Missing optional in JsonParser.fromList");

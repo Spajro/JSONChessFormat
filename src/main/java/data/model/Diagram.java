@@ -7,6 +7,7 @@ import chess.utility.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import data.model.boardfinder.BoardRecord;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import log.Log;
@@ -18,9 +19,11 @@ public class Diagram {
     private Diagram parent;
     private ArrayList<Diagram> nextDiagrams;
     private ArrayDeque<RawMove> lazyMoves;
+    private ArrayDeque<BoardRecord> lazyBoardRecords;
     private final Annotations annotations = new Annotations();
     private final RawMove creatingMove;
     private final ArrayList<MetaData> metaData = new ArrayList<>();
+
 
     public Diagram() {
         parent = null;
@@ -46,9 +49,10 @@ public class Diagram {
         }
     }
 
-    public Diagram(ExecutableMove creatingMove,ChessBoard chessBoard,Diagram parent, ArrayDeque<RawMove> moves){
+    public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent, ArrayDeque<RawMove> moves, ArrayDeque<BoardRecord> lazyBoardRecords) {
         this.parent = parent;
-        this.lazyMoves=moves;
+        this.lazyMoves = moves;
+        this.lazyBoardRecords = lazyBoardRecords;
 
         if (creatingMove == null) {
             this.creatingMove = null;
@@ -66,7 +70,7 @@ public class Diagram {
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
         Log.log().info("Trying to make:" + move);
 
-        ChessBoard chessBoard=getBoard();
+        ChessBoard chessBoard = getBoard();
         MoveResult moveResult = chessBoard.makeMove(move);
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
@@ -117,7 +121,7 @@ public class Diagram {
     }
 
     public List<Diagram> getNextDiagrams() {
-        if(lazyMoves!=null){
+        if (lazyMoves != null) {
             expand();
         }
         return nextDiagrams;
@@ -202,7 +206,7 @@ public class Diagram {
     private int gamesInTree() {
 
         //TODO for debug purposes only
-        if (!getNonEndingGameData().isEmpty() || lazyMoves!=null) {
+        if (!getNonEndingGameData().isEmpty() || lazyMoves != null) {
             return metaData.size();
         } else {
             return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
@@ -211,29 +215,36 @@ public class Diagram {
 
     public void expand() {
         RawMove move = lazyMoves.poll();
-        if(move==null){
-            nextDiagrams=new ArrayList<>();
-            lazyMoves=null;
+
+        if (move == null) {
+            nextDiagrams = new ArrayList<>();
+            lazyMoves = null;
             return;
         }
+
         ChessBoard chessBoard = getBoard();
         Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate(null);
         if (validMoveResult.isEmpty()) {
             throw new IllegalStateException();
         }
 
+        lazyBoardRecords.forEach(BoardRecord::pushDownDistance);
+        lazyBoardRecords.pop();
+
         Diagram lazy = new Diagram(
                 validMoveResult.get().getExecutableMove(),
                 chessBoard,
                 this,
-                lazyMoves
+                lazyMoves,
+                lazyBoardRecords
         );
-        nextDiagrams=new ArrayList<>();
-        lazyMoves=null;
+        nextDiagrams = new ArrayList<>();
+        lazyMoves = null;
+        lazyBoardRecords = null;
         this.getNextDiagrams().add(lazy);
     }
 
-    public boolean isLazy(){
-        return lazyMoves!=null;
+    public boolean isLazy() {
+        return lazyMoves != null;
     }
 }

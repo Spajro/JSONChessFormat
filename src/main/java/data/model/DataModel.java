@@ -2,6 +2,7 @@ package data.model;
 
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
+import data.model.boardfinder.BoardRepository;
 import data.model.games.GamesRepository;
 import data.model.metadata.MetaData;
 import log.Log;
@@ -11,6 +12,7 @@ import java.util.*;
 public class DataModel {
     private Diagram actualNode;
     private final GamesRepository games = new GamesRepository();
+    private final BoardRepository boardRepository=new BoardRepository();
     private final TreeDataModel treeDataModel = new TreeDataModel();
     private final DiagramManager diagramManager = new DiagramManager();
     private PromotionTypeProvider promotionTypeProvider;
@@ -32,12 +34,12 @@ public class DataModel {
     public void insert(ArrayDeque<ExecutableMove> moves, MetaData metaData) {
         Log.log().info("DataModel insertion");
         Diagram actualRoot = actualNode.getRoot();
-        games.update(diagramManager.insert(actualRoot, moves, metaData));
+        games.update(diagramManager.insert(actualRoot, moves, metaData,boardRepository));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
     public void insertInPlace(ArrayDeque<ExecutableMove> rawMoves) {
-        diagramManager.insert(actualNode, rawMoves,null);
+        diagramManager.insert(actualNode, rawMoves,null,boardRepository);
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {
