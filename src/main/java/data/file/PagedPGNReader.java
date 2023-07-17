@@ -10,6 +10,7 @@ import java.util.*;
 public class PagedPGNReader implements Iterator<PGNGame> {
     private static final int CHUNK_SIZE = 1000;
     private final BufferedReader reader;
+    private boolean finished = false;
     private final Deque<String> read = new ArrayDeque<>();
 
     public PagedPGNReader(String filename) throws FileNotFoundException {
@@ -19,10 +20,23 @@ public class PagedPGNReader implements Iterator<PGNGame> {
 
     @Override
     public boolean hasNext() {
-        if (read.size()<100) {
+        if (finished) {
+            return false;
+        }
+        if (read.size() < 100) {
             upload();
         }
-        return !read.isEmpty();
+        if (read.isEmpty()) {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            finished = true;
+            return false;
+        } else {
+            return true;
+        }
     }
 
     @Override
