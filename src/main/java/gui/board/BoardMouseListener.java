@@ -3,8 +3,7 @@ package gui.board;
 import chess.board.lowlevel.Board;
 import chess.Position;
 import chess.moves.raw.RawMove;
-import gui.BoardController;
-import gui.Controller;
+import gui.controllers.BoardController;
 import log.Log;
 
 import javax.swing.event.MouseInputListener;

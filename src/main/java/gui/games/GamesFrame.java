@@ -1,7 +1,8 @@
 package gui.games;
 
 import data.model.DataModel;
-import gui.Controller;
+
+import gui.controllers.MenuController;
 
 import javax.swing.*;
 
@@ -9,7 +10,7 @@ public class GamesFrame extends JFrame {
     private final GameTableModel tableModel;
     private final DataModel dataModel;
 
-    public GamesFrame(DataModel dataModel, Controller controller) {
+    public GamesFrame(DataModel dataModel, MenuController controller) {
         tableModel = new GameTableModel(dataModel.getGames().getGameData());
         JTable jTable = new JTable(tableModel);
         jTable.addMouseListener(new GamesTableMouseListener(jTable, controller));

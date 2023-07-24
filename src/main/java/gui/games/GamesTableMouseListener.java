@@ -1,7 +1,6 @@
 package gui.games;
 
-import data.model.metadata.MetaData;
-import gui.Controller;
+import gui.controllers.MenuController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,9 +10,9 @@ import java.awt.event.MouseListener;
 public class GamesTableMouseListener implements MouseListener {
     private final JTable table;
     private final GameTableModel gameTableModel;
-    private final Controller controller;
+    private final MenuController controller;
 
-    public GamesTableMouseListener(JTable table, Controller controller) {
+    public GamesTableMouseListener(JTable table, MenuController controller) {
         this.table = table;
         this.controller = controller;
         this.gameTableModel = (GameTableModel) table.getModel();

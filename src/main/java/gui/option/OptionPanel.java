@@ -1,6 +1,6 @@
 package gui.option;
 
-import gui.Controller;
+import gui.controllers.Controller;
 
 import javax.swing.*;
 

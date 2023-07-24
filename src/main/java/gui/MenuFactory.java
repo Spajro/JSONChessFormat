@@ -1,11 +1,12 @@
 package gui;
 
 import gui.board.BoardPanel;
+import gui.controllers.MenuController;
 
 import javax.swing.*;
 
 public class MenuFactory {
-    public JMenuBar createMenu(Controller controller, BoardPanel boardPanel, DialogManager dialogManager) {
+    public JMenuBar createMenu(MenuController controller, BoardPanel boardPanel, DialogManager dialogManager) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(controller, dialogManager));
         menuBar.add(createFeatureMenu(boardPanel, controller));
@@ -13,7 +14,7 @@ public class MenuFactory {
         return menuBar;
     }
 
-    private JMenu createFileMenu(Controller controller, DialogManager dialogManager) {
+    private JMenu createFileMenu(MenuController controller, DialogManager dialogManager) {
         JMenu fileMenu = new JMenu("File");
 
         JMenuItem saveJSONMenuItem = new JMenuItem("Save to json");
@@ -39,7 +40,7 @@ public class MenuFactory {
         return fileMenu;
     }
 
-    private JMenu createFeatureMenu(BoardPanel boardPanel, Controller controller) {
+    private JMenu createFeatureMenu(BoardPanel boardPanel, MenuController controller) {
         JMenu featureMenu = new JMenu("Features");
 
         JMenuItem coverageMenuItem = new JMenuItem("Coverage");
@@ -61,7 +62,7 @@ public class MenuFactory {
         return featureMenu;
     }
 
-    private JMenu createEditionMenu(Controller controller, DialogManager dialogManager) {
+    private JMenu createEditionMenu(MenuController controller, DialogManager dialogManager) {
         JMenu editionMenu = new JMenu("Edit");
 
         JMenuItem addMovesItem = new JMenuItem("Add moves");

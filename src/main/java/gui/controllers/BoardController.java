@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import chess.Position;
 import chess.moves.raw.RawMove;
@@ -16,7 +16,7 @@ public class BoardController {
     private final DataModel dataModel;
     private final BoardPanel boardPanel;
 
-    public BoardController(DataModel dataModel, BoardPanel boardPanel, Controller controller) {
+    BoardController(DataModel dataModel, BoardPanel boardPanel, Controller controller) {
         this.dataModel = dataModel;
         this.boardPanel = boardPanel;
         this.controller = controller;

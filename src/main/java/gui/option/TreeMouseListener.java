@@ -1,7 +1,7 @@
 package gui.option;
 
 import data.model.Diagram;
-import gui.Controller;
+import gui.controllers.Controller;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;

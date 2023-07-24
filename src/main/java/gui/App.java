@@ -3,6 +3,7 @@ package gui;
 import data.model.DataModel;
 import gui.board.BoardMouseListener;
 import gui.board.BoardPanel;
+import gui.controllers.Controller;
 import gui.option.OptionPanel;
 
 import javax.swing.*;
@@ -22,7 +23,7 @@ public class App {
         controller = new Controller(dataModel, boardPanel);
         optionPanel = new OptionPanel(controller);
         DialogManager dialogManager = new DialogManager(frame);
-        menuBar = new MenuFactory().createMenu(controller, boardPanel, dialogManager);
+        menuBar = new MenuFactory().createMenu(controller.getMenuController(), boardPanel, dialogManager);
         controller.setOptionPanel(optionPanel);
         setUpBoardPanel();
         setUpFrame();

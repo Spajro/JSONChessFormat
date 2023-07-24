@@ -1,4 +1,4 @@
-package gui;
+package gui.controllers;
 
 import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.FENFactory;
@@ -10,13 +10,11 @@ import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
 import data.model.FENDiagram;
-import data.model.PromotionTypeProvider;
 import data.model.metadata.MetaData;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
 import gui.games.GamesFrame;
 import gui.option.OptionPanel;
-import gui.option.TreeMouseListener;
 import log.Log;
 
 import javax.swing.*;
@@ -27,51 +25,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
-public class Controller {
+public class MenuController {
     private final DataModel dataModel;
+    private final FileManager fileManager;
     private final BoardPanel boardPanel;
-    private final GamesFrame gamesFrame;
     private OptionPanel optionPanel;
-    private TreeMouseListener treeMouseListener;
-    private final FileManager fileManager = new FileManager();
-    private final JsonFactory jsonFactory;
+    private final GamesFrame gamesFrame;
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
-    private final BoardController boardController;
 
-    public Controller(DataModel dataModel, BoardPanel boardPanel) {
+    MenuController(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
         this.boardPanel = boardPanel;
         this.gamesFrame = new GamesFrame(dataModel, this);
-        dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
-        jsonFactory = new JsonFactory(dataModel);
-        boardController = new BoardController(dataModel, boardPanel, this);
-    }
-
-    public void setTreeMouseListener(TreeMouseListener treeMouseListener) {
-        this.treeMouseListener = treeMouseListener;
-    }
-
-    public void setActualNode(Diagram lastPathComponent) {
-        Log.log().info(lastPathComponent.toString() + " is set as actual node, " + lastPathComponent.getNextDiagrams().size() + " nextDiagrams");
-        dataModel.setActualNode(lastPathComponent);
-        boardPanel.setDiagram(lastPathComponent);
-        optionPanel.setText(lastPathComponent.getAnnotations().getTextAnnotation());
-    }
-
-    public JTree createTreeWithDataModel() {
-        return new JTree(dataModel.asTree());
-    }
-
-    private PromotionTypeProvider getPromotionTypeProvider() {
-        return new DialogPromotionTypeProvider(optionPanel);
-    }
-
-    public void setOptionPanel(OptionPanel optionPanel) {
-        this.optionPanel = optionPanel;
-    }
-
-    public void setTextAnnotation(String text) {
-        dataModel.getActualNode().getAnnotations().setTextAnnotation(text);
+        this.fileManager = new FileManager();
     }
 
     public void loadDataFromJSON(String filename) {
@@ -106,7 +72,7 @@ public class Controller {
     }
 
     public void saveDataToJSON(String filename) {
-        fileManager.save(filename, jsonFactory.toJson());
+        fileManager.save(filename, new JsonFactory(dataModel).toJson());
     }
 
     public void loadChessBoardFromFEN(String fen) {
@@ -172,12 +138,7 @@ public class Controller {
         optionPanel.getTree().scrollPathToVisible(treePath);
     }
 
-    public void updateOnInsert() {
-        treeMouseListener.treeNodeInserted(dataModel.asTree().getTreePathTo(dataModel.getActualNode()));
-        optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
-    }
-
-    public BoardController getBoardController() {
-        return boardController;
+    public void setOptionPanel(OptionPanel optionPanel) {
+        this.optionPanel = optionPanel;
     }
 }
