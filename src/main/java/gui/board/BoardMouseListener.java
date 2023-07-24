@@ -3,6 +3,7 @@ package gui.board;
 import chess.board.lowlevel.Board;
 import chess.Position;
 import chess.moves.raw.RawMove;
+import gui.BoardController;
 import gui.Controller;
 import log.Log;
 
@@ -10,12 +11,12 @@ import javax.swing.event.MouseInputListener;
 import java.awt.event.MouseEvent;
 
 public class BoardMouseListener implements MouseInputListener {
-    private final Controller controller;
+    private final BoardController controller;
     private int scale = 60;
     private int x = -1;
     private int y = -1;
 
-    public BoardMouseListener(Controller controller) {
+    public BoardMouseListener(BoardController controller) {
         this.controller = controller;
     }
 

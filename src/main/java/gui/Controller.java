@@ -1,22 +1,19 @@
 package gui;
 
-import chess.Position;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.FENFactory;
 import chess.utility.FENParser;
 import chess.utility.ShortAlgebraicParser;
 import data.MoveParser;
-import data.annotations.ArrowAnnotation;
-import data.annotations.FieldAnnotation;
-import data.annotations.GraphicAnnotation;
 import data.file.FileManager;
 import data.json.JsonFactory;
-import data.model.*;
-import chess.moves.raw.RawMove;
+import data.model.DataModel;
+import data.model.Diagram;
+import data.model.FENDiagram;
+import data.model.PromotionTypeProvider;
 import data.model.metadata.MetaData;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
-import gui.board.SpecialKeysMap;
 import gui.games.GamesFrame;
 import gui.option.OptionPanel;
 import gui.option.TreeMouseListener;
@@ -39,6 +36,7 @@ public class Controller {
     private final FileManager fileManager = new FileManager();
     private final JsonFactory jsonFactory;
     private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
+    private final BoardController boardController;
 
     public Controller(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -46,78 +44,7 @@ public class Controller {
         this.gamesFrame = new GamesFrame(dataModel, this);
         dataModel.setPromotionTypeProvider(getPromotionTypeProvider());
         jsonFactory = new JsonFactory(dataModel);
-    }
-
-    public void executeDragAction(RawMove move, SpecialKeysMap keysMap) {
-        if (keysMap.isAnyPressed()) {
-            if (arrowAnnotationExists(move)) {
-                Log.log().info("Remove arrow annotation " + move);
-                dataModel.getActualNode()
-                        .getAnnotations()
-                        .getArrowAnnotations()
-                        .removeIf(arrowAnnotation -> arrowAnnotation.moveEquals(move));
-            } else {
-                Log.log().info("Add arrow annotation " + move);
-                dataModel.getActualNode()
-                        .getAnnotations()
-                        .getArrowAnnotations()
-                        .add(new ArrowAnnotation(move, getDrawColor(keysMap)));
-            }
-        } else {
-            dataModel.makeMove(move);
-            boardPanel.setDiagram(dataModel.getActualNode());
-            treeMouseListener.treeNodeInserted(dataModel.asTree().getTreePathTo(dataModel.getActualNode()));
-            optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
-        }
-        boardPanel.repaint();
-    }
-
-    private boolean arrowAnnotationExists(RawMove move) {
-        return dataModel.getActualNode()
-                .getAnnotations()
-                .getArrowAnnotations()
-                .stream()
-                .anyMatch(arrowAnnotation -> arrowAnnotation.moveEquals(move));
-    }
-
-    public void executeClickAction(Position position, SpecialKeysMap keysMap) {
-        if (keysMap.isAnyPressed()) {
-            if (fieldAnnotationExists(position)) {
-                Log.log().info("Remove field annotation " + position);
-                dataModel.getActualNode()
-                        .getAnnotations()
-                        .getFieldAnnotations()
-                        .removeIf(fieldAnnotation -> fieldAnnotation.positionEquals(position));
-            } else {
-                Log.log().info("Add field annotation " + position);
-                dataModel.getActualNode()
-                        .getAnnotations()
-                        .getFieldAnnotations()
-                        .add(new FieldAnnotation(position, getDrawColor(keysMap)));
-            }
-            boardPanel.repaint();
-        }
-    }
-
-    private boolean fieldAnnotationExists(Position position) {
-        return dataModel.getActualNode()
-                .getAnnotations()
-                .getFieldAnnotations()
-                .stream()
-                .anyMatch(fieldAnnotation -> fieldAnnotation.positionEquals(position));
-    }
-
-    private GraphicAnnotation.DrawColor getDrawColor(SpecialKeysMap keysMap) {
-        if (keysMap.areAnyTwoPressed()) {
-            return GraphicAnnotation.DrawColor.YELLOW;
-        } else if (keysMap.isControlPressed()) {
-            return GraphicAnnotation.DrawColor.BLUE;
-        } else if (keysMap.isAltPressed()) {
-            return GraphicAnnotation.DrawColor.RED;
-        } else if (keysMap.isShiftPressed()) {
-            return GraphicAnnotation.DrawColor.GREEN;
-        }
-        throw new IllegalStateException("No special keys pressed when choosing annotation color");
+        boardController = new BoardController(dataModel, boardPanel, this);
     }
 
     public void setTreeMouseListener(TreeMouseListener treeMouseListener) {
@@ -137,10 +64,6 @@ public class Controller {
 
     private PromotionTypeProvider getPromotionTypeProvider() {
         return new DialogPromotionTypeProvider(optionPanel);
-    }
-
-    public int getScale() {
-        return boardPanel.getScale();
     }
 
     public void setOptionPanel(OptionPanel optionPanel) {
@@ -247,5 +170,14 @@ public class Controller {
         TreePath treePath = dataModel.asTree().getTreePathTo(node);
         optionPanel.getTree().setSelectionPath(treePath);
         optionPanel.getTree().scrollPathToVisible(treePath);
+    }
+
+    public void updateOnInsert() {
+        treeMouseListener.treeNodeInserted(dataModel.asTree().getTreePathTo(dataModel.getActualNode()));
+        optionPanel.setText(dataModel.getActualNode().getAnnotations().getTextAnnotation());
+    }
+
+    public BoardController getBoardController() {
+        return boardController;
     }
 }
