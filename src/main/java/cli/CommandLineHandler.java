@@ -2,51 +2,67 @@ package cli;
 
 import chess.board.lowlevel.Field;
 import chess.utility.AlgebraicUtility;
+import chess.utility.LongAlgebraicParser;
 import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.Position;
-import chess.color.Color;
 import chess.moves.raw.RawMove;
 import data.file.FileManager;
+import data.pgn.ParsedPGN;
+import log.Log;
 
 import java.io.*;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.List;
 
 public class CommandLineHandler {
-    DataModel dataModel = new DataModel();
-    Diagram node = dataModel.getActualNode();
-    FileManager fileManager = new FileManager();
-    AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
-    JsonFactory jsonFactory = new JsonFactory(dataModel);
+    private final DataModel dataModel = new DataModel();
+    private Diagram node = dataModel.getActualNode();
+    private final FileManager fileManager = new FileManager();
+    private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
+    private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
 
-    public void makeAction(ActionData data) {
-        switch (data.getCode()) {
-            case "LD" -> {
+    public void handle(String data) {
+        if (data.equals("")) {
+            return;
+        }
+        ArrayDeque<String> input = new ArrayDeque<>(List.of(data.split(" ")));
+        if (input.isEmpty()) {
+            System.out.println("Empty input");
+            return;
+        }
+        switch (input.poll()) {
+            case "load" -> {
                 try {
-                    node = fileManager.loadJSON((String) data.getParam());
+                    node = fileManager.loadJSON(input.poll());
                 } catch (FileNotFoundException e) {
                     System.out.print("Loading failed");
                 }
             }
-            case "SV" -> fileManager.save((String) data.getParam(), jsonFactory.toJson());
-            case "MM" -> makeMove((RawMove) data.getParam());
-            case "DL" -> deleteDiagram();
-            case "GB" -> goBack((int) data.getParam());
-            case "PM" -> printMoves();
-            case "PH" -> printHistory();
-            case "JB" -> jumpBack();
-            case "JF" -> jumpForward();
-            case "HP" -> printHelp();
-            default -> System.out.print("Unknown code" + data.getCode());
+            case "save" -> fileManager.save(input.poll(), new JsonFactory(dataModel).toJson());
+            case "move" -> makeMove(longAlgebraicParser.parseLongAlgebraic(input.poll(), node.getBoard().getColor()));
+            case "delete" -> deleteDiagram();
+            case "farBack" -> goBack(Integer.parseInt(input.poll()));
+            case "moves" -> printMoves();
+            case "history" -> printHistory();
+            case "back" -> jumpBack();
+            case "forward" -> jumpForward();
+            case "help" -> printHelp();
+            case "insert" -> insertPgn(input.poll());
+            case "status" -> printStatus();
+            case "quit" -> System.exit(0);
+            default -> System.out.print("Unknown input");
         }
+        display();
     }
 
-    void makeMove(RawMove M) {
-        node = node.makeMove(M, null);//TODO
+    private void makeMove(RawMove M) {
+        node = node.makeMove(M, null);
     }
 
-    void deleteDiagram() {
-
+    private void deleteDiagram() {
         if (node.getParent().isPresent()) {
             Diagram Temp = node;
             node = node.getParent().get();
@@ -56,7 +72,7 @@ public class CommandLineHandler {
         }
     }
 
-    void goBack(int id) {
+    private void goBack(int id) {
         while (id > 0) {
             id--;
             if (node.getParent().isPresent()) {
@@ -67,20 +83,20 @@ public class CommandLineHandler {
         }
     }
 
-    void printMoves() {
+    private void printMoves() {
         node.getNextDiagrams()
                 .stream()
                 .map(Diagram::getMoveName)
                 .forEach(string -> System.out.print(string + " "));
     }
 
-    void printHistory() {
+    private void printHistory() {
         node.getPathFromRoot().stream()
                 .map(Diagram::getMoveName)
                 .forEach(string -> System.out.print(string + " "));
     }
 
-    void jumpBack() {
+    private void jumpBack() {
         if (node.getParent().isPresent()) {
             node = node.getParent().get();
         } else {
@@ -88,7 +104,7 @@ public class CommandLineHandler {
         }
     }
 
-    void jumpForward() {
+    private void jumpForward() {
         if (!node.getNextDiagrams().isEmpty()) {
             node = node.getNextDiagrams().get(0);
         } else {
@@ -97,27 +113,10 @@ public class CommandLineHandler {
     }
 
     void printHelp() {
-        System.out.print(
-                """
-                        To make action write code , follow it by parameter if neccesary in next line\s
-                        case "SV" -> Save();
-                        case "MM" -> Makes move from parameter
-                        case "Q" -> Exit();
-                        case "DL" -> Delete_diagram();
-                        case "GB" -> Goes back to position indexed by parameter;
-                        case "PM" -> PrintMoves();
-                        case "PH" -> PrintHistory();
-                        case "JB" -> JumpBack();
-                        case "JF" -> JumpForward();
-                        case "HP" -> PrintHelp();""".indent(12));
-
+        System.out.print("TODO");
     }
 
-    public Color getColor() {
-        return node.getBoard().getColor();
-    }
-
-    public void display() {
+    private void display() {
         System.out.println();
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
@@ -137,5 +136,37 @@ public class CommandLineHandler {
             System.out.println();
             System.out.println();
         }
+    }
+
+    private void insertPgn(String filename) {
+        try {
+            Iterator<ParsedPGN> pgnParser = fileManager.loadPagedPGN(filename);
+            long startTime = System.nanoTime();
+            long size = 0;
+            while (pgnParser.hasNext()) {
+                ParsedPGN parsedPGN = pgnParser.next();
+                dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
+                size++;
+            }
+            long endTime = System.nanoTime();
+            long nanoDuration = (endTime - startTime);
+            double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
+            double nodesPerSec = size / secondDuration;
+            Log.debug("Inserting time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void printStatus() {
+        System.out.println("Nodes: " + size(node.getRoot()));
+        System.out.println("Games: " + dataModel.getGames().getGameData().size());
+    }
+
+    private int size(Diagram diagram) {
+        if (diagram.isLazy()) {
+            return 1;
+        }
+        return 1 + diagram.getNextDiagrams().stream().mapToInt(this::size).sum();
     }
 }
