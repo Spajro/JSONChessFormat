@@ -3,14 +3,17 @@ package data.model.boardfinder;
 import chess.board.lowlevel.Board;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class BoardRepository {
-    private final HashMap<Integer, List<BoardRecord>> map = new HashMap<>();
+    private final Map<Integer, ArrayList<BoardRecord>> map = new BoardMap();
 
     public void put(Board board, BoardRecord boardRecord) {
-        int hash = board.hashCode();
+        int hash = board.hashCode()%100000;
+        if(hash<0){
+            hash=hash*-1;
+        }
         if (map.containsKey(hash)) {
             map.get(hash).add(boardRecord);
         } else {
