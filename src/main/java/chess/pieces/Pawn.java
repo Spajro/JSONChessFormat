@@ -5,42 +5,32 @@ import chess.board.lowlevel.Field;
 import chess.Position;
 import chess.color.Color;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Pawn extends Piece {
     private enum Step {
         FRONT, LEFT, RIGHT, FAR
     }
 
-    private final HashMap<Step, Position> stepsForward = new HashMap<>();
-    private final HashMap<Step, Position> stepsBackward = new HashMap<>();
-
     public Pawn(Color color, Position position, ChessBoard chessBoard) {
         super(color, position, chessBoard);
-        if (color.isWhite()) {
-            populateWhite(stepsForward);
-            populateBlack(stepsBackward);
-        }
-        if (color.isBlack()) {
-            populateWhite(stepsBackward);
-            populateBlack(stepsForward);
-        }
     }
 
     @Override
     public Set<Position> getPossibleStartPositions() {
-        Set<Position> result = stepsBackward.values().stream()
+        Set<Position> result = Stream.of(Step.FRONT, Step.FAR, Step.LEFT, Step.RIGHT)
+                .map(this::getByStepBackward)
                 .map(position::add)
                 .filter(Position::isOnBoard)
-                .filter(value -> !value.equals(position.add(stepsBackward.get(Step.FAR))))
+                .filter(value -> !value.equals(position.add(getByStepBackward(Step.FAR))))
                 .filter(value -> chessBoard.getField(value).isEmpty() || chessBoard.getField(value).getPiece().partiallyEquals(this))
                 .collect(Collectors.toSet());
-        if (isOnStartLine(position.add(stepsBackward.get(Step.FAR)))
-                && chessBoard.getField(position.add(stepsBackward.get(Step.FRONT))).isEmpty()) {
-            result.add(position.add(stepsBackward.get(Step.FAR)));
+        if (isOnStartLine(position.add(getByStepBackward(Step.FAR)))
+                && chessBoard.getField(position.add(getByStepBackward(Step.FRONT))).isEmpty()) {
+            result.add(position.add(getByStepBackward(Step.FAR)));
         }
         return result;
     }
@@ -49,16 +39,16 @@ public class Pawn extends Piece {
     public Set<Position> getPossibleEndPositions() {
         Set<Position> result = new HashSet<>();
         if (isFrontEmpty()) {
-            result.add(position.add(stepsForward.get(Step.FRONT)));
+            result.add(position.add(getByStepForward(Step.FRONT)));
         }
         if (canCaptureRight()) {
-            result.add((position.add(stepsForward.get(Step.RIGHT))));
+            result.add((position.add(getByStepForward(Step.RIGHT))));
         }
         if (canCaptureLeft()) {
-            result.add((position.add(stepsForward.get(Step.LEFT))));
+            result.add((position.add(getByStepForward(Step.LEFT))));
         }
         if (isOnStartLine(position) && isFrontEmpty() && isFarEmpty()) {
-            result.add(position.add(stepsForward.get(Step.FAR)));
+            result.add(position.add(getByStepForward(Step.FAR)));
         }
         return result;
     }
@@ -66,8 +56,8 @@ public class Pawn extends Piece {
     @Override
     public Set<Position> getAttackedPositions() {
         Set<Position> result = new HashSet<>();
-        Position left = position.add(stepsForward.get(Step.LEFT));
-        Position right = position.add(stepsForward.get(Step.RIGHT));
+        Position left = position.add(getByStepForward(Step.LEFT));
+        Position right = position.add(getByStepForward(Step.RIGHT));
         if (left.isOnBoard()) {
             result.add(left);
         }
@@ -95,7 +85,7 @@ public class Pawn extends Piece {
     }
 
     private boolean isEnemyPieceOnStep(Step step) {
-        Position positionToCheck = position.add(stepsForward.get(step));
+        Position positionToCheck = position.add(getByStepForward(step));
         if (!positionToCheck.isOnBoard()) {
             return false;
         }
@@ -108,24 +98,45 @@ public class Pawn extends Piece {
     }
 
     private boolean isFrontEmpty() {
-        return !chessBoard.getField(position.add(stepsForward.get(Step.FRONT))).hasPiece();
+        return !chessBoard.getField(position.add(getByStepForward(Step.FRONT))).hasPiece();
     }
 
     private boolean isFarEmpty() {
-        return !chessBoard.getField(position.add(stepsForward.get(Step.FAR))).hasPiece();
+        return !chessBoard.getField(position.add(getByStepForward(Step.FAR))).hasPiece();
     }
 
-    private void populateWhite(HashMap<Step, Position> map) {
-        map.put(Step.FRONT, Position.of(0, 1));
-        map.put(Step.LEFT, Position.of(-1, 1));
-        map.put(Step.RIGHT, Position.of(1, 1));
-        map.put(Step.FAR, Position.of(0, 2));
+
+    private Position getByStepForward(Step step) {
+        if (color.isWhite()) {
+            return getByStepUp(step);
+        } else {
+            return getByStepDown(step);
+        }
     }
 
-    private void populateBlack(HashMap<Step, Position> map) {
-        map.put(Step.FRONT, Position.of(0, -1));
-        map.put(Step.LEFT, Position.of(-1, -1));
-        map.put(Step.RIGHT, Position.of(1, -1));
-        map.put(Step.FAR, Position.of(0, -2));
+    private Position getByStepBackward(Step step) {
+        if (color.isWhite()) {
+            return getByStepDown(step);
+        } else {
+            return getByStepUp(step);
+        }
+    }
+
+    private Position getByStepUp(Step step) {
+        return switch (step) {
+            case FRONT -> Position.of(0, 1);
+            case LEFT -> Position.of(-1, 1);
+            case RIGHT -> Position.of(1, 1);
+            case FAR -> Position.of(0, 2);
+        };
+    }
+
+    private Position getByStepDown(Step step) {
+        return switch (step) {
+            case FRONT -> Position.of(0, -1);
+            case LEFT -> Position.of(-1, -1);
+            case RIGHT -> Position.of(1, -1);
+            case FAR -> Position.of(0, -2);
+        };
     }
 }
