@@ -4,12 +4,12 @@ import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
 import chess.board.lowlevel.Field;
-import chess.pieces.Piece;
-import chess.pools.PositionPool;
+import chess.pieces.*;
 
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ChessBoardUtility {
     private final ChessBoard chessBoard;
@@ -49,12 +49,20 @@ public class ChessBoardUtility {
     }
 
     public boolean isPositionAttacked(Position position, Color attackingColor) {
-        return getNumberOfPiecesAttackingFields(attackingColor).get(position) > 0;
-    }
-
-    public Set<Piece> getPiecesAttackingPosition(Position kingPosition, Color attackingColor) {
-        return getPiecesOfColor(attackingColor).stream()
-                .filter(piece -> piece.getPossibleEndPositions().contains(kingPosition))
-                .collect(Collectors.toSet());
+        int attackingPieces = Stream.of(
+                        new Knight(attackingColor, position, chessBoard),
+                        new Bishop(attackingColor, position, chessBoard),
+                        new Rook(attackingColor, position, chessBoard),
+                        new Queen(attackingColor, position, chessBoard),
+                        new King(attackingColor, position, chessBoard))
+                .map(Piece::getPossibleStartPositions)
+                .mapToInt(Set::size)
+                .sum();
+        int attackingPawns = new Pawn(attackingColor, position, chessBoard)
+                .getPossibleStartPositions()
+                .stream()
+                .filter(value -> position.getX() != value.getX())
+                .collect(Collectors.toSet()).size();
+        return attackingPieces + attackingPawns > 0;
     }
 }
