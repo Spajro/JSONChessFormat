@@ -7,6 +7,7 @@ import chess.color.Color;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -17,7 +18,13 @@ public abstract class RestrictedMovementPiece extends Piece {
 
     protected Set<Position> getPossibleStartPositions(Set<Position> steps) {
         return getPossibleNonCollidingPositions(steps).stream()
-                .filter(position -> chessBoard.getField(position).isEmpty() || chessBoard.getField(position).getPiece().partiallyEquals(this))
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Field::hasPiece)
+                .map(Field::getPiece)
+                .filter(piece -> piece.partiallyEquals(this))
+                .map(Piece::getPosition)
                 .collect(Collectors.toSet());
     }
 

@@ -6,6 +6,7 @@ import chess.Position;
 import chess.color.Color;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,7 +27,13 @@ public class Pawn extends Piece {
                 .map(position::add)
                 .filter(Position::isOnBoard)
                 .filter(value -> !value.equals(position.add(getByStepBackward(Step.FAR))))
-                .filter(value -> chessBoard.getField(value).isEmpty() || chessBoard.getField(value).getPiece().partiallyEquals(this))
+                .map(this::getField)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .filter(Field::hasPiece)
+                .map(Field::getPiece)
+                .filter(piece -> piece.partiallyEquals(this))
+                .map(Piece::getPosition)
                 .collect(Collectors.toSet());
         if (isOnStartLine(position.add(getByStepBackward(Step.FAR)))
                 && chessBoard.getField(position.add(getByStepBackward(Step.FRONT))).isEmpty()) {

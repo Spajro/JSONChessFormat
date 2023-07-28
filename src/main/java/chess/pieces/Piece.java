@@ -29,7 +29,7 @@ public abstract class Piece {
     }
 
     /**
-     * @return set of positions from which piece could move to current position (empty fields and fields with this piece)
+     * @return set of positions from which piece could move to current position (fields with this piece)
      */
     public abstract Set<Position> getPossibleStartPositions();
 
