@@ -2,7 +2,6 @@ package chess.utility;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.board.lowlevel.Field;
 import chess.moves.raw.RawMove;
 import chess.moves.raw.RawPromotion;
 import chess.pieces.*;
@@ -98,7 +97,7 @@ public class ShortAlgebraicParser {
             return Optional.empty();
         }
         Piece piece = optionalPiece.get();
-        Set<Position> positionSet = getPositions(piece, chessBoard);
+        Set<Position> positionSet = piece.getPossibleStartPositions();
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
@@ -126,7 +125,7 @@ public class ShortAlgebraicParser {
             return Optional.empty();
         }
         Piece piece = optionalPiece.get();
-        Set<Position> positionSet = getPositions(piece, chessBoard);
+        Set<Position> positionSet = piece.getPossibleStartPositions();
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
@@ -187,7 +186,7 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
-        Set<Position> positionSet = getPositions(piece, chessBoard);
+        Set<Position> positionSet = piece.getPossibleStartPositions();
         if (positionSet.size() != 1) {
             Set<Position> filteredSet = positionSet.stream()
                     .filter(position -> new MoveValidator(chessBoard).isLegalSimpleMove(RawMove.of(position, piece.getPosition())))
@@ -245,24 +244,6 @@ public class ShortAlgebraicParser {
         } else {
             return move;
         }
-    }
-
-    private Set<Position> getPositions(Piece piece, ChessBoard chessBoard) {
-        return piece
-                .getPossibleStartPositions()
-                .stream()
-                .map(chessBoard::getField)
-                .map(Field::getPiece)
-                .filter(p -> p.getPossibleEndPositions().contains(piece.getPosition()) || isEnPassant(p, piece, chessBoard))
-                .map(Piece::getPosition)
-                .collect(Collectors.toSet());
-    }
-
-    private boolean isEnPassant(Piece start, Piece end, ChessBoard chessBoard) {
-        if (start.getType().equals(Piece.Type.PAWN) && start.getType().equals(Piece.Type.PAWN)) {
-            return new MoveValidator(chessBoard).isLegalEnPassantCapture(RawMove.of(start.getPosition(), end.getPosition()));
-        }
-        return false;
     }
 
     private Optional<Piece> charToPiece(char piece, Position position, ChessBoard chessBoard) {
