@@ -9,7 +9,6 @@ import chess.pieces.*;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ChessBoardUtility {
     private final ChessBoard chessBoard;
@@ -49,20 +48,45 @@ public class ChessBoardUtility {
     }
 
     public boolean isPositionAttacked(Position position, Color attackingColor) {
-        int attackingPieces = Stream.of(
-                        new Knight(attackingColor, position, chessBoard),
-                        new Bishop(attackingColor, position, chessBoard),
-                        new Rook(attackingColor, position, chessBoard),
-                        new Queen(attackingColor, position, chessBoard),
-                        new King(attackingColor, position, chessBoard))
-                .map(Piece::getPossibleStartPositions)
-                .mapToInt(Set::size)
-                .sum();
-        int attackingPawns = new Pawn(attackingColor, position, chessBoard)
-                .getPossibleStartPositions()
-                .stream()
-                .filter(value -> position.getX() != value.getX())
-                .collect(Collectors.toSet()).size();
-        return attackingPieces + attackingPawns > 0;
+        for (Position step : Steps.fullSteps) {
+            if (isAttackedFromDirection(position, step, attackingColor)) {
+                return true;
+            }
+        }
+        for (Position step : Steps.knightSteps) {
+            if (isAttackedByKnight(position, step, attackingColor)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isAttackedFromDirection(Position position, Position direction, Color attackingColor) {
+        Position temporaryPosition = position.add(direction);
+        while (temporaryPosition.isOnBoard()) {
+            Field field = chessBoard.getField(temporaryPosition);
+            if (field.hasPiece()) {
+                Piece piece = field.getPiece();
+                if (!piece.getColor().equal(attackingColor)) {
+                    return false;
+                }
+                return piece.getAttackedPositions().contains(position);
+            }
+            temporaryPosition = temporaryPosition.add(direction);
+        }
+        return false;
+    }
+
+    private boolean isAttackedByKnight(Position position, Position step, Color attackingColor) {
+        Position temporaryPosition = position.add(step);
+        if (!temporaryPosition.isOnBoard()) {
+            return false;
+        }
+        Field field = chessBoard.getField(position.add(step));
+        if (!field.hasPiece()) {
+            return false;
+        }
+        Piece piece = field.getPiece();
+        return piece instanceof Knight && piece.getColor().equal(attackingColor);
     }
 }
