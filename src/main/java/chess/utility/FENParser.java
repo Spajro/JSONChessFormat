@@ -30,7 +30,21 @@ public class FENParser {
         Color moveColor = parseColor(splitted[1]);
         CastleRequirements castleRequirements = parseCastles(splitted[2]);
 
-        return new ChessBoard(board, moveColor, castleRequirements, null);
+        Position whiteKing = null;
+        Position blackKing = null;
+
+        for (int i = 1; i < 8; i++) {
+            for (int j = 1; j < 8; j++) {
+                if (board.read(Position.of(i, j)) == Board.WKING) {
+                    whiteKing = Position.of(i, j);
+                }
+                if (board.read(Position.of(i, j)) == Board.BKING) {
+                    blackKing = Position.of(i, j);
+                }
+            }
+        }
+
+        return new ChessBoard(board, moveColor, castleRequirements, null, whiteKing, blackKing);
     }
 
     private Board parsePieces(String pieces) {

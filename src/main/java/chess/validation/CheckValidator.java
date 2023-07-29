@@ -19,7 +19,7 @@ class CheckValidator {
     }
 
     public boolean isKingChecked(Color kingColor) {
-        return utility.isPositionAttacked(utility.getKingPosition(kingColor), kingColor.swap());
+        return utility.isPositionAttacked(chessBoard.getKingPosition(kingColor), kingColor.swap());
     }
 
     public boolean kingIsNotCheckedAfterSimpleMove(RawMove move, Color kingColor) {
