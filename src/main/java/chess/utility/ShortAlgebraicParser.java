@@ -6,6 +6,7 @@ import chess.color.Color;
 import chess.moves.raw.RawMove;
 import chess.moves.raw.RawPromotion;
 import chess.pieces.*;
+import chess.pools.PoolManager;
 import chess.validation.MoveValidator;
 
 import java.util.List;
@@ -249,12 +250,12 @@ public class ShortAlgebraicParser {
 
     private Optional<Piece> charToPiece(char piece, Position position, Color color) {
         return Optional.ofNullable(switch (piece) {
-            case 'P' -> new Pawn(color, position);
-            case 'N' -> new Knight(color, position);
-            case 'B' -> new Bishop(color, position);
-            case 'R' -> new Rook(color, position);
-            case 'Q' -> new Queen(color, position);
-            case 'K' -> new King(color, position);
+            case 'P' -> PoolManager.getPiecePool().get(position,color, Piece.Type.PAWN);
+            case 'N' -> PoolManager.getPiecePool().get(position,color, Piece.Type.KNIGHT);
+            case 'B' -> PoolManager.getPiecePool().get(position,color, Piece.Type.BISHOP);
+            case 'R' -> PoolManager.getPiecePool().get(position,color, Piece.Type.ROOK);
+            case 'Q' -> PoolManager.getPiecePool().get(position,color, Piece.Type.QUEEN);
+            case 'K' -> PoolManager.getPiecePool().get(position,color, Piece.Type.KING);
             default -> null;
         });
     }

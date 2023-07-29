@@ -7,6 +7,7 @@ import chess.board.fields.OccupiedField;
 import chess.pieces.*;
 import chess.Position;
 import chess.color.Color;
+import chess.pools.PoolManager;
 
 public class BoardWrapper {
     private final ChessBoard chessBoard;
@@ -56,18 +57,18 @@ public class BoardWrapper {
             return EmptyField.of(position);
         }
         return new OccupiedField(switch (id) {
-            case Board.WPAWN -> new Pawn(Color.white, position);
-            case Board.WROOK -> new Rook(Color.white, position);
-            case Board.WBISHOP -> new Bishop(Color.white, position);
-            case Board.WQUEEN -> new Queen(Color.white, position);
-            case Board.WKING -> new King(Color.white, position);
-            case Board.WKNIGHT -> new Knight(Color.white, position);
-            case Board.BPAWN -> new Pawn(Color.black, position);
-            case Board.BROOK -> new Rook(Color.black, position);
-            case Board.BBISHOP -> new Bishop(Color.black, position);
-            case Board.BQUEEN -> new Queen(Color.black, position);
-            case Board.BKING -> new King(Color.black, position);
-            case Board.BKNIGHT -> new Knight(Color.black, position);
+            case Board.WPAWN -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.PAWN);
+            case Board.WROOK -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.ROOK);
+            case Board.WBISHOP -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.BISHOP);
+            case Board.WQUEEN -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.QUEEN);
+            case Board.WKING -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.KING);
+            case Board.WKNIGHT -> PoolManager.getPiecePool().get(position, Color.white, Piece.Type.KNIGHT);
+            case Board.BPAWN -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.PAWN);
+            case Board.BROOK -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.ROOK);
+            case Board.BBISHOP -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.BISHOP);
+            case Board.BQUEEN -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.QUEEN);
+            case Board.BKING -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.KING);
+            case Board.BKNIGHT -> PoolManager.getPiecePool().get(position, Color.black, Piece.Type.KNIGHT);
             default -> throw new IllegalArgumentException("unknown board figure id");
         });
     }
