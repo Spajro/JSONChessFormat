@@ -53,7 +53,7 @@ public class BoardWrapper {
 
     private Field convertIdToField(Position position, int id) {
         if (id == Board.EMPTY) {
-            return new EmptyField(position);
+            return EmptyField.of(position);
         }
         return new OccupiedField(switch (id) {
             case Board.WPAWN -> new Pawn(Color.white, position, chessBoard);
