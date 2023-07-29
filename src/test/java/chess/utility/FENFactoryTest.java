@@ -18,6 +18,8 @@ class FENFactoryTest {
         ChessBoard chessBoard = new ChessBoard(Board.getBlank(),
                 Color.white,
                 new CastleRequirements(false, false, false, false),
+                null,
+                null,
                 null
         )
                 .put(new King(Color.white, Position.of(1, 5), null))

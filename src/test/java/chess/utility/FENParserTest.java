@@ -21,6 +21,8 @@ class FENParserTest {
         ChessBoard expected = new ChessBoard(Board.getBlank(),
                 Color.white,
                 new CastleRequirements(false, false, false, false),
+                null,
+                null,
                 null
         )
                 .put(new King(Color.white, Position.of(1, 5), null))
@@ -33,7 +35,7 @@ class FENParserTest {
                 .put(new Pawn(Color.black, Position.of(6, 4), null))
                 .put(new Rook(Color.black, Position.of(8, 5), null))
                 .put(new King(Color.black, Position.of(8, 4), null));
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 
     @Test
