@@ -27,11 +27,11 @@ public class ValidMoveFactory {
             if (validator.isLegalPromotion(move)) {
                 return Optional.of(createPromotion(move));
             }
-            if (validator.isLegalCastle(move)) {
-                return Optional.of(createCastle(move));
-            }
             if (validator.isLegalSimpleMove(move)) {
                 return Optional.of(createSimpleMove(move));
+            }
+            if (validator.isLegalCastle(move)) {
+                return Optional.of(createCastle(move));
             }
             if (validator.isLegalEnPassantCapture(move)) {
                 return Optional.of(createEnPassantCapture(move));
