@@ -3,7 +3,7 @@ package chess.validation;
 import chess.Position;
 import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.moves.raw.RawMove;
 
 import java.util.HashSet;

@@ -3,7 +3,7 @@ package chess.board.features;
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.color.Color;
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.pieces.Piece;
 
 import java.util.Map;

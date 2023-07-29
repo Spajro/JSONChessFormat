@@ -2,7 +2,7 @@ package chess.board.requirements;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.moves.valid.ValidMove;
 import chess.pieces.King;
 import chess.pieces.Piece;

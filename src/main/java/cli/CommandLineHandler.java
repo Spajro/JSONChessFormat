@@ -1,6 +1,6 @@
 package cli;
 
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.utility.AlgebraicUtility;
 import chess.utility.LongAlgebraicParser;
 import data.json.JsonFactory;

@@ -1,6 +1,9 @@
 package chess.board.lowlevel;
 
 import chess.board.ChessBoard;
+import chess.board.fields.EmptyField;
+import chess.board.fields.Field;
+import chess.board.fields.OccupiedField;
 import chess.pieces.*;
 import chess.Position;
 import chess.color.Color;
@@ -49,8 +52,10 @@ public class BoardWrapper {
     }
 
     private Field convertIdToField(Position position, int id) {
-        return new Field(position, switch (id) {
-            case Board.EMPTY -> null;
+        if (id == Board.EMPTY) {
+            return new EmptyField(position);
+        }
+        return new OccupiedField(switch (id) {
             case Board.WPAWN -> new Pawn(Color.white, position, chessBoard);
             case Board.WROOK -> new Rook(Color.white, position, chessBoard);
             case Board.WBISHOP -> new Bishop(Color.white, position, chessBoard);

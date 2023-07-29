@@ -1,29 +1,31 @@
-package chess.board.lowlevel;
+package chess.board.fields;
 
 import chess.Position;
-import chess.pieces.*;
+import chess.pieces.Piece;
 
-public class Field {
+public class EmptyField implements Field {
     private final Position position;
-    private final Piece piece;
 
-    public Field(Position position, Piece piece) {
+    public EmptyField(Position position) {
         this.position = position;
-        this.piece = piece;
     }
 
+    @Override
     public boolean isEmpty() {
-        return piece == null;
+        return true;
     }
 
+    @Override
     public boolean hasPiece() {
-        return piece != null;
+        return false;
     }
 
+    @Override
     public Piece getPiece() {
-        return piece;
+        return null;
     }
 
+    @Override
     public Position getPosition() {
         return position;
     }

@@ -2,9 +2,10 @@ package chess.board;
 
 import chess.board.features.ChessBoardUtility;
 import chess.board.features.ExecutableMoveGenerator;
+import chess.board.fields.OccupiedField;
 import chess.board.lowlevel.Board;
 import chess.board.lowlevel.BoardWrapper;
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.board.requirements.CastleRequirements;
 import chess.board.requirements.CastleRequirementsFactory;
 import chess.Position;
@@ -92,7 +93,7 @@ public class ChessBoard {
         }
 
         return new ChessBoard(
-                boardWrapper.putFieldToBoard(new Field(piece.getPosition(), piece)),
+                boardWrapper.putFieldToBoard(new OccupiedField(piece)),
                 color,
                 castleRequirements,
                 lastMove,

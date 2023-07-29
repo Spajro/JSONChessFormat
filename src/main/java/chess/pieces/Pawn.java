@@ -1,7 +1,7 @@
 package chess.pieces;
 
 import chess.board.ChessBoard;
-import chess.board.lowlevel.Field;
+import chess.board.fields.Field;
 import chess.Position;
 import chess.color.Color;
 
