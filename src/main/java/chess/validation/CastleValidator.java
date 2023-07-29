@@ -1,6 +1,7 @@
 package chess.validation;
 
 import chess.Position;
+import chess.board.features.ChessBoardUtility;
 import chess.board.requirements.CastleRequirements;
 import chess.board.ChessBoard;
 import chess.board.lowlevel.Field;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 public class CastleValidator {
     private final ChessBoard chessBoard;
-    private final CheckValidator checkValidator;
+    private final ChessBoardUtility utility;
 
     enum CastleType {
         SHORT, LONG
@@ -20,25 +21,24 @@ public class CastleValidator {
 
     public CastleValidator(ChessBoard chessBoard) {
         this.chessBoard = chessBoard;
-        checkValidator = new CheckValidator(chessBoard);
+        this.utility = chessBoard.getUtility();
     }
 
     public boolean isLegalCastle(RawMove move) {
         Optional<CastleType> optionalCastleType = moveToType(move);
         if (optionalCastleType.isPresent()) {
             CastleType castleType = optionalCastleType.get();
-            return checkValidator.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
+            return utility.getKingPosition(chessBoard.getColor()).equals(move.getStartPosition())
                     && isCastleLegalInRequirements(castleType)
                     && !anyPositionKingsPassesIsAttacked(castleType)
                     && !anyPositionBetweenKingAndRookIsOccupied(castleType);
-            //&& !checkValidator.isKingChecked(chessBoard.getColor());
         } else {
             return false;
         }
     }
 
     public Optional<CastleType> moveToType(RawMove move) {
-        if (move.getStartPosition().equals(checkValidator.getKingPosition(chessBoard.getColor()))) {
+        if (move.getStartPosition().equals(utility.getKingPosition(chessBoard.getColor()))) {
             if (move.getEndPosition().getX() == move.getStartPosition().getX() + 2) {
                 return Optional.of(CastleType.SHORT);
             }

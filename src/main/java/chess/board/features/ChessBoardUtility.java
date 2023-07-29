@@ -89,4 +89,12 @@ public class ChessBoardUtility {
         Piece piece = field.getPiece();
         return piece instanceof Knight && piece.getColor().equal(attackingColor);
     }
+
+    public Position getKingPosition(Color kingColor) {
+        return getPiecesOfColor(kingColor).stream()
+                .filter(piece -> piece instanceof King)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No King on Board"))
+                .getPosition();
+    }
 }

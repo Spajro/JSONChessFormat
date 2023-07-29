@@ -1,15 +1,12 @@
 package chess.validation;
 
-import chess.Position;
 import chess.board.ChessBoard;
 import chess.board.features.ChessBoardUtility;
 import chess.color.Color;
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.EnPassantCapture;
-import chess.moves.valid.executable.ExecutableMove;
 import chess.moves.valid.executable.Promotion;
 import chess.moves.valid.executable.SimpleMove;
-import chess.pieces.King;
 import chess.pieces.Piece;
 
 class CheckValidator {
@@ -22,15 +19,7 @@ class CheckValidator {
     }
 
     public boolean isKingChecked(Color kingColor) {
-        return utility.isPositionAttacked(getKingPosition(kingColor), kingColor.swap());
-    }
-
-    public Position getKingPosition(Color kingColor) {
-        return utility.getPiecesOfColor(kingColor).stream()
-                .filter(piece -> piece instanceof King)
-                .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No King on Board"))
-                .getPosition();
+        return utility.isPositionAttacked(utility.getKingPosition(kingColor), kingColor.swap());
     }
 
     public boolean kingIsNotCheckedAfterSimpleMove(RawMove move, Color kingColor) {
