@@ -36,7 +36,9 @@ public class Pawn extends Piece {
                 .map(Piece::getPosition)
                 .collect(Collectors.toSet());
         if (isOnStartLine(position.add(getByStepBackward(Step.FAR)))
-                && chessBoard.getField(position.add(getByStepBackward(Step.FRONT))).isEmpty()) {
+                && chessBoard.getField(position.add(getByStepBackward(Step.FRONT))).isEmpty()
+                && chessBoard.getField(position.add(getByStepBackward(Step.FAR))).hasPiece()
+                && chessBoard.getField(position.add(getByStepBackward(Step.FAR))).getPiece().partiallyEquals(this)) {
             result.add(position.add(getByStepBackward(Step.FAR)));
         }
         return result;

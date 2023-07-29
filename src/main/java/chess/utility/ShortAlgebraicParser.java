@@ -252,9 +252,7 @@ public class ShortAlgebraicParser {
                 .getPossibleStartPositions()
                 .stream()
                 .map(chessBoard::getField)
-                .filter(Field::hasPiece)
                 .map(Field::getPiece)
-                .filter(piece::partiallyEquals)
                 .filter(p -> p.getPossibleEndPositions().contains(piece.getPosition()) || isEnPassant(p, piece, chessBoard))
                 .map(Piece::getPosition)
                 .collect(Collectors.toSet());
