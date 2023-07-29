@@ -33,8 +33,8 @@ public class FENParser {
         Position whiteKing = null;
         Position blackKing = null;
 
-        for (int i = 1; i < 8; i++) {
-            for (int j = 1; j < 8; j++) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
                 if (board.read(Position.of(i, j)) == Board.WKING) {
                     whiteKing = Position.of(i, j);
                 }
