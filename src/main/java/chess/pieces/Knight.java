@@ -10,15 +10,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Knight extends Piece {
-    public Knight(Color color, Position position, ChessBoard chessBoard) {
-        super(color, position, chessBoard);
+    public Knight(Color color, Position position) {
+        super(color, position);
     }
 
     @Override
-    public Set<Position> getPossibleStartPositions() {
+    public Set<Position> getPossibleStartPositions(ChessBoard chessBoard) {
         return Steps.knightSteps.stream()
                 .map(position::add)
-                .map(this::getField)
+                .map(value -> getField(chessBoard, value))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(Field::hasPiece)
@@ -29,10 +29,10 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Set<Position> getPossibleEndPositions() {
+    public Set<Position> getPossibleEndPositions(ChessBoard chessBoard) {
         return Steps.knightSteps.stream()
                 .map(position::add)
-                .map(this::getField)
+                .map(value -> getField(chessBoard, value))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(field -> field.isEmpty() || field.getPiece().getColor().equal(color.swap()))
@@ -41,10 +41,10 @@ public class Knight extends Piece {
     }
 
     @Override
-    public Set<Position> getAttackedPositions() {
+    public Set<Position> getAttackedPositions(ChessBoard chessBoard) {
         return Steps.knightSteps.stream()
                 .map(position::add)
-                .map(this::getField)
+                .map(p -> getField(chessBoard, p))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(Field::getPosition)

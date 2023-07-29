@@ -7,23 +7,23 @@ import chess.color.Color;
 import java.util.Set;
 
 public class Queen extends RestrictedMovementPiece {
-    public Queen(Color color, Position position, ChessBoard chessBoard) {
-        super(color, position, chessBoard);
+    public Queen(Color color, Position position) {
+        super(color, position);
     }
 
     @Override
-    public Set<Position> getPossibleStartPositions() {
-        return getPossibleStartPositions(Steps.fullSteps);
+    public Set<Position> getPossibleStartPositions(ChessBoard chessBoard) {
+        return getPossibleStartPositions(chessBoard, Steps.fullSteps);
     }
 
     @Override
-    public Set<Position> getPossibleEndPositions() {
-        return getPossibleEndPositions(Steps.fullSteps);
+    public Set<Position> getPossibleEndPositions(ChessBoard chessBoard) {
+        return getPossibleEndPositions(chessBoard, Steps.fullSteps);
     }
 
     @Override
-    public Set<Position> getAttackedPositions() {
-        return getAttackedPositions(Steps.fullSteps);
+    public Set<Position> getAttackedPositions(ChessBoard chessBoard) {
+        return getAttackedPositions(chessBoard, Steps.fullSteps);
     }
 
     @Override

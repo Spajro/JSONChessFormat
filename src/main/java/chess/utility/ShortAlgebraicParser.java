@@ -2,6 +2,7 @@ package chess.utility;
 
 import chess.Position;
 import chess.board.ChessBoard;
+import chess.color.Color;
 import chess.moves.raw.RawMove;
 import chess.moves.raw.RawPromotion;
 import chess.pieces.*;
@@ -73,7 +74,7 @@ public class ShortAlgebraicParser {
         if (end.isEmpty()) {
             return Optional.empty();
         }
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard.getColor());
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
@@ -92,12 +93,12 @@ public class ShortAlgebraicParser {
         if (end.isEmpty()) {
             return Optional.empty();
         }
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard.getColor());
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
         Piece piece = optionalPiece.get();
-        Set<Position> positionSet = piece.getPossibleStartPositions();
+        Set<Position> positionSet = piece.getPossibleStartPositions(chessBoard);
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
@@ -120,12 +121,12 @@ public class ShortAlgebraicParser {
         if (end.isEmpty()) {
             return Optional.empty();
         }
-        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard);
+        Optional<Piece> optionalPiece = charToPiece(move.charAt(0), end.get(), chessBoard.getColor());
         if (optionalPiece.isEmpty()) {
             return Optional.empty();
         }
         Piece piece = optionalPiece.get();
-        Set<Position> positionSet = piece.getPossibleStartPositions();
+        Set<Position> positionSet = piece.getPossibleStartPositions(chessBoard);
         if (positionSet.size() < 1) {
             return Optional.empty();
         }
@@ -186,7 +187,7 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
-        Set<Position> positionSet = piece.getPossibleStartPositions();
+        Set<Position> positionSet = piece.getPossibleStartPositions(chessBoard);
         if (positionSet.size() != 1) {
             Set<Position> filteredSet = positionSet.stream()
                     .filter(position -> new MoveValidator(chessBoard).isLegalSimpleMove(RawMove.of(position, piece.getPosition())))
@@ -246,14 +247,14 @@ public class ShortAlgebraicParser {
         }
     }
 
-    private Optional<Piece> charToPiece(char piece, Position position, ChessBoard chessBoard) {
+    private Optional<Piece> charToPiece(char piece, Position position, Color color) {
         return Optional.ofNullable(switch (piece) {
-            case 'P' -> new Pawn(chessBoard.getColor(), position, chessBoard);
-            case 'N' -> new Knight(chessBoard.getColor(), position, chessBoard);
-            case 'B' -> new Bishop(chessBoard.getColor(), position, chessBoard);
-            case 'R' -> new Rook(chessBoard.getColor(), position, chessBoard);
-            case 'Q' -> new Queen(chessBoard.getColor(), position, chessBoard);
-            case 'K' -> new King(chessBoard.getColor(), position, chessBoard);
+            case 'P' -> new Pawn(color, position);
+            case 'N' -> new Knight(color, position);
+            case 'B' -> new Bishop(color, position);
+            case 'R' -> new Rook(color, position);
+            case 'Q' -> new Queen(color, position);
+            case 'K' -> new King(color, position);
             default -> null;
         });
     }

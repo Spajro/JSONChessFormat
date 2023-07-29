@@ -18,8 +18,10 @@ public class ExecutableMoveGenerator {
     private final Color color;
     private final ChessBoardUtility utility;
     private final ValidMoveFactory validMoveFactory;
+    private final ChessBoard chessBoard;
 
     public ExecutableMoveGenerator(ChessBoard chessBoard) {
+        this.chessBoard = chessBoard;
         this.color = chessBoard.getColor();
         utility = new ChessBoardUtility(chessBoard);
         validMoveFactory = new ValidMoveFactory(chessBoard);
@@ -40,7 +42,7 @@ public class ExecutableMoveGenerator {
 
     private List<SimpleMove> getAllPossibleSimpleMoves() {
         return utility.getPiecesOfColor(color).stream()
-                .flatMap(piece -> piece.getPossibleEndPositions().stream()
+                .flatMap(piece -> piece.getPossibleEndPositions(chessBoard).stream()
                         .map(position -> RawMove.of(piece.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
@@ -70,7 +72,7 @@ public class ExecutableMoveGenerator {
         return utility.getPiecesOfColor(color).stream()
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
-                .flatMap(pawn -> pawn.getAttackedPositions().stream().map(position -> RawMove.of(pawn.getPosition(), position)))
+                .flatMap(pawn -> pawn.getAttackedPositions(chessBoard).stream().map(position -> RawMove.of(pawn.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
@@ -84,7 +86,7 @@ public class ExecutableMoveGenerator {
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
                 .filter(this::isOnPenultimateLine)
-                .flatMap(pawn -> pawn.getPossibleEndPositions().stream()
+                .flatMap(pawn -> pawn.getPossibleEndPositions(chessBoard).stream()
                         .map(position -> RawMove.of(pawn.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
                 .filter(Optional::isPresent)

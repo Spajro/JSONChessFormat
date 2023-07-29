@@ -27,7 +27,7 @@ public class MoveValidator {
     }
 
     public boolean isLegalSimpleMove(RawMove move) {
-        return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions().contains(move.getEndPosition())
+        return chessBoard.getField(move.getStartPosition()).getPiece().getPossibleEndPositions(chessBoard).contains(move.getEndPosition())
                 && checkValidator.kingIsNotCheckedAfterSimpleMove(move, chessBoard.getColor());
     }
 

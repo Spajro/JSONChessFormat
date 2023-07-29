@@ -56,18 +56,18 @@ public class BoardWrapper {
             return EmptyField.of(position);
         }
         return new OccupiedField(switch (id) {
-            case Board.WPAWN -> new Pawn(Color.white, position, chessBoard);
-            case Board.WROOK -> new Rook(Color.white, position, chessBoard);
-            case Board.WBISHOP -> new Bishop(Color.white, position, chessBoard);
-            case Board.WQUEEN -> new Queen(Color.white, position, chessBoard);
-            case Board.WKING -> new King(Color.white, position, chessBoard);
-            case Board.WKNIGHT -> new Knight(Color.white, position, chessBoard);
-            case Board.BPAWN -> new Pawn(Color.black, position, chessBoard);
-            case Board.BROOK -> new Rook(Color.black, position, chessBoard);
-            case Board.BBISHOP -> new Bishop(Color.black, position, chessBoard);
-            case Board.BQUEEN -> new Queen(Color.black, position, chessBoard);
-            case Board.BKING -> new King(Color.black, position, chessBoard);
-            case Board.BKNIGHT -> new Knight(Color.black, position, chessBoard);
+            case Board.WPAWN -> new Pawn(Color.white, position);
+            case Board.WROOK -> new Rook(Color.white, position);
+            case Board.WBISHOP -> new Bishop(Color.white, position);
+            case Board.WQUEEN -> new Queen(Color.white, position);
+            case Board.WKING -> new King(Color.white, position);
+            case Board.WKNIGHT -> new Knight(Color.white, position);
+            case Board.BPAWN -> new Pawn(Color.black, position);
+            case Board.BROOK -> new Rook(Color.black, position);
+            case Board.BBISHOP -> new Bishop(Color.black, position);
+            case Board.BQUEEN -> new Queen(Color.black, position);
+            case Board.BKING -> new King(Color.black, position);
+            case Board.BKNIGHT -> new Knight(Color.black, position);
             default -> throw new IllegalArgumentException("unknown board figure id");
         });
     }

@@ -19,7 +19,7 @@ public class ChessBoardUtility {
 
     public Map<Position, Long> getNumberOfPiecesAttackingFields(Color color) {
         Map<Position, Long> result = getPiecesOfColor(color).stream()
-                .map(Piece::getAttackedPositions)
+                .map(piece -> piece.getAttackedPositions(chessBoard))
                 .flatMap(Set::stream)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
@@ -70,7 +70,7 @@ public class ChessBoardUtility {
                 if (!piece.getColor().equal(attackingColor)) {
                     return false;
                 }
-                return piece.getAttackedPositions().contains(position);
+                return piece.getAttackedPositions(chessBoard).contains(position);
             }
             temporaryPosition = temporaryPosition.add(direction);
         }

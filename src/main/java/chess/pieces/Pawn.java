@@ -16,18 +16,18 @@ public class Pawn extends Piece {
         FRONT, LEFT, RIGHT, FAR
     }
 
-    public Pawn(Color color, Position position, ChessBoard chessBoard) {
-        super(color, position, chessBoard);
+    public Pawn(Color color, Position position) {
+        super(color, position);
     }
 
     @Override
-    public Set<Position> getPossibleStartPositions() {
+    public Set<Position> getPossibleStartPositions(ChessBoard chessBoard) {
         Set<Position> result = Stream.of(Step.FRONT, Step.FAR, Step.LEFT, Step.RIGHT)
                 .map(this::getByStepBackward)
                 .map(position::add)
                 .filter(Position::isOnBoard)
                 .filter(value -> !value.equals(position.add(getByStepBackward(Step.FAR))))
-                .map(this::getField)
+                .map(p -> getField(chessBoard, p))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(Field::hasPiece)
@@ -45,25 +45,25 @@ public class Pawn extends Piece {
     }
 
     @Override
-    public Set<Position> getPossibleEndPositions() {
+    public Set<Position> getPossibleEndPositions(ChessBoard chessBoard) {
         Set<Position> result = new HashSet<>();
-        if (isFrontEmpty()) {
+        if (isFrontEmpty(chessBoard)) {
             result.add(position.add(getByStepForward(Step.FRONT)));
         }
-        if (canCaptureRight()) {
+        if (canCaptureRight(chessBoard)) {
             result.add((position.add(getByStepForward(Step.RIGHT))));
         }
-        if (canCaptureLeft()) {
+        if (canCaptureLeft(chessBoard)) {
             result.add((position.add(getByStepForward(Step.LEFT))));
         }
-        if (isOnStartLine(position) && isFrontEmpty() && isFarEmpty()) {
+        if (isOnStartLine(position) && isFrontEmpty(chessBoard) && isFarEmpty(chessBoard)) {
             result.add(position.add(getByStepForward(Step.FAR)));
         }
         return result;
     }
 
     @Override
-    public Set<Position> getAttackedPositions() {
+    public Set<Position> getAttackedPositions(ChessBoard chessBoard) {
         Set<Position> result = new HashSet<>();
         Position left = position.add(getByStepForward(Step.LEFT));
         Position right = position.add(getByStepForward(Step.RIGHT));
@@ -85,15 +85,15 @@ public class Pawn extends Piece {
         return (temporaryPosition.getY() == 2 && color.isWhite()) || (temporaryPosition.getY() == 7 && color.isBlack());
     }
 
-    private boolean canCaptureLeft() {
-        return isEnemyPieceOnStep(Step.LEFT);
+    private boolean canCaptureLeft(ChessBoard chessBoard) {
+        return isEnemyPieceOnStep(chessBoard, Step.LEFT);
     }
 
-    private boolean canCaptureRight() {
-        return isEnemyPieceOnStep(Step.RIGHT);
+    private boolean canCaptureRight(ChessBoard chessBoard) {
+        return isEnemyPieceOnStep(chessBoard, Step.RIGHT);
     }
 
-    private boolean isEnemyPieceOnStep(Step step) {
+    private boolean isEnemyPieceOnStep(ChessBoard chessBoard, Step step) {
         Position positionToCheck = position.add(getByStepForward(step));
         if (!positionToCheck.isOnBoard()) {
             return false;
@@ -106,11 +106,11 @@ public class Pawn extends Piece {
         return !piece.getColor().equal(color);
     }
 
-    private boolean isFrontEmpty() {
+    private boolean isFrontEmpty(ChessBoard chessBoard) {
         return !chessBoard.getField(position.add(getByStepForward(Step.FRONT))).hasPiece();
     }
 
-    private boolean isFarEmpty() {
+    private boolean isFarEmpty(ChessBoard chessBoard) {
         return !chessBoard.getField(position.add(getByStepForward(Step.FAR))).hasPiece();
     }
 

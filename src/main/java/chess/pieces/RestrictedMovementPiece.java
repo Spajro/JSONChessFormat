@@ -12,13 +12,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public abstract class RestrictedMovementPiece extends Piece {
-    RestrictedMovementPiece(Color color, Position position, ChessBoard chessBoard) {
-        super(color, position, chessBoard);
+    RestrictedMovementPiece(Color color, Position position) {
+        super(color, position);
     }
 
-    protected Set<Position> getPossibleStartPositions(Set<Position> steps) {
-        return getPossibleNonCollidingPositions(steps).stream()
-                .map(this::getField)
+    protected Set<Position> getPossibleStartPositions(ChessBoard chessBoard, Set<Position> steps) {
+        return getPossibleNonCollidingPositions(chessBoard, steps).stream()
+                .map(p -> getField(chessBoard, p))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .filter(Field::hasPiece)
@@ -28,8 +28,8 @@ public abstract class RestrictedMovementPiece extends Piece {
                 .collect(Collectors.toSet());
     }
 
-    protected Set<Position> getPossibleEndPositions(Set<Position> steps) {
-        return getPossibleNonCollidingPositions(steps).stream()
+    protected Set<Position> getPossibleEndPositions(ChessBoard chessBoard, Set<Position> steps) {
+        return getPossibleNonCollidingPositions(chessBoard, steps).stream()
                 .filter(position -> {
                     if (chessBoard.getField(position).isEmpty()) {
                         return true;
@@ -41,18 +41,18 @@ public abstract class RestrictedMovementPiece extends Piece {
                 .collect(Collectors.toSet());
     }
 
-    protected Set<Position> getAttackedPositions(Set<Position> steps) {
-        return getPossibleNonCollidingPositions(steps);
+    protected Set<Position> getAttackedPositions(ChessBoard chessBoard, Set<Position> steps) {
+        return getPossibleNonCollidingPositions(chessBoard, steps);
     }
 
-    private Set<Position> getPossibleNonCollidingPositions(Set<Position> Steps) {
+    private Set<Position> getPossibleNonCollidingPositions(ChessBoard chessBoard, Set<Position> Steps) {
         return Steps.stream()
-                .map(this::getLineOfPossibleNonCollidingPositions)
+                .map(p -> getLineOfPossibleNonCollidingPositions(chessBoard, p))
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
     }
 
-    private Set<Position> getLineOfPossibleNonCollidingPositions(Position step) {
+    private Set<Position> getLineOfPossibleNonCollidingPositions(ChessBoard chessBoard, Position step) {
         Set<Position> result = new HashSet<>();
         Position temporaryPosition = position.add(step);
         while (temporaryPosition.isOnBoard()) {

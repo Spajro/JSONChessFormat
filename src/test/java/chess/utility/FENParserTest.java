@@ -25,16 +25,16 @@ class FENParserTest {
                 null,
                 null
         )
-                .put(new King(Color.white, Position.of(1, 5), null))
-                .put(new Pawn(Color.white, Position.of(2, 5), null))
-                .put(new Rook(Color.white, Position.of(2, 4), null))
-                .put(new Pawn(Color.white, Position.of(5, 2), null))
-                .put(new Pawn(Color.white, Position.of(7, 2), null))
-                .put(new Pawn(Color.black, Position.of(3, 7), null))
-                .put(new Pawn(Color.black, Position.of(4, 6), null))
-                .put(new Pawn(Color.black, Position.of(6, 4), null))
-                .put(new Rook(Color.black, Position.of(8, 5), null))
-                .put(new King(Color.black, Position.of(8, 4), null));
+                .put(new King(Color.white, Position.of(1, 5)))
+                .put(new Pawn(Color.white, Position.of(2, 5)))
+                .put(new Rook(Color.white, Position.of(2, 4)))
+                .put(new Pawn(Color.white, Position.of(5, 2)))
+                .put(new Pawn(Color.white, Position.of(7, 2)))
+                .put(new Pawn(Color.black, Position.of(3, 7)))
+                .put(new Pawn(Color.black, Position.of(4, 6)))
+                .put(new Pawn(Color.black, Position.of(6, 4)))
+                .put(new Rook(Color.black, Position.of(8, 5)))
+                .put(new King(Color.black, Position.of(8, 4)));
         assertEquals(expected, actual);
     }
 

@@ -7,23 +7,23 @@ import chess.color.Color;
 import java.util.Set;
 
 public class Bishop extends RestrictedMovementPiece {
-    public Bishop(Color color, Position position, ChessBoard chessBoard) {
-        super(color, position, chessBoard);
+    public Bishop(Color color, Position position) {
+        super(color, position);
     }
 
     @Override
-    public Set<Position> getPossibleStartPositions() {
-        return getPossibleStartPositions(Steps.diagonalSteps);
+    public Set<Position> getPossibleStartPositions(ChessBoard chessBoard) {
+        return getPossibleStartPositions(chessBoard, Steps.diagonalSteps);
     }
 
     @Override
-    public Set<Position> getPossibleEndPositions() {
-        return getPossibleEndPositions(Steps.diagonalSteps);
+    public Set<Position> getPossibleEndPositions(ChessBoard chessBoard) {
+        return getPossibleEndPositions(chessBoard, Steps.diagonalSteps);
     }
 
     @Override
-    public Set<Position> getAttackedPositions() {
-        return getAttackedPositions(Steps.diagonalSteps);
+    public Set<Position> getAttackedPositions(ChessBoard chessBoard) {
+        return getAttackedPositions(chessBoard, Steps.diagonalSteps);
     }
 
     @Override
