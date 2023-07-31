@@ -8,6 +8,7 @@ import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 import data.model.metadata.GameData;
+import log.Log;
 
 import java.util.*;
 
@@ -21,7 +22,14 @@ public class JsonFactory {
     }
 
     public String toJson() {
-        return "{\"root\":" + toJson(dataModel.getActualNode().getRoot()) + "}";
+        long startTime = System.nanoTime();
+        String json = "{\"root\":" + toJson(dataModel.getActualNode().getRoot()) + "}";
+        long endTime = System.nanoTime();
+        long nanoDuration = (endTime - startTime);
+        double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
+        double nodesPerSec = dataModel.getGames().size() / secondDuration;
+        Log.debug("Preparing json time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
+        return json;
     }
 
     private String toJson(Diagram diagram) {

@@ -46,4 +46,8 @@ public class GamesRepository {
                 .map(metaData -> (GameData) metaData)
                 .toList();
     }
+
+    public int size() {
+        return games.size();
+    }
 }
