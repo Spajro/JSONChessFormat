@@ -3,7 +3,7 @@ package data.model;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
-import chess.utility.LongAlgebraicFactory;
+import chess.formats.algebraic.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;

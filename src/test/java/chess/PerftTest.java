@@ -1,7 +1,7 @@
 package chess;
 
 import chess.board.ChessBoard;
-import chess.utility.FENParser;
+import chess.formats.fen.FENParser;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

@@ -2,7 +2,7 @@ package data.pgn;
 
 import chess.board.ChessBoard;
 import chess.moves.valid.executable.ExecutableMove;
-import chess.utility.ShortAlgebraicParser;
+import chess.formats.algebraic.ShortAlgebraicParser;
 import data.MoveParser;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;

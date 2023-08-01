@@ -5,7 +5,7 @@ import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
-import chess.utility.AlgebraicUtility;
+import chess.formats.algebraic.AlgebraicUtility;
 
 import java.util.ArrayDeque;
 import java.util.List;

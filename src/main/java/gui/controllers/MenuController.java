@@ -1,9 +1,9 @@
 package gui.controllers;
 
 import chess.moves.valid.executable.ExecutableMove;
-import chess.utility.FENFactory;
-import chess.utility.FENParser;
-import chess.utility.ShortAlgebraicParser;
+import chess.formats.fen.FENFactory;
+import chess.formats.fen.FENParser;
+import chess.formats.algebraic.ShortAlgebraicParser;
 import data.MoveParser;
 import data.file.FileManager;
 import data.json.JsonFactory;

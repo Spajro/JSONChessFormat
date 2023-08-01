@@ -2,8 +2,8 @@ package chess;
 
 import chess.board.ChessBoard;
 import chess.moves.valid.executable.*;
-import chess.utility.FENParser;
-import chess.utility.LongAlgebraicFactory;
+import chess.formats.fen.FENParser;
+import chess.formats.algebraic.LongAlgebraicFactory;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 

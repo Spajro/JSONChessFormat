@@ -1,4 +1,4 @@
-package chess.utility;
+package chess.formats.fen;
 
 import chess.Position;
 import chess.board.ChessBoard;

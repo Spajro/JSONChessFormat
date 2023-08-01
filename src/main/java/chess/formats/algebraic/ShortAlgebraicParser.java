@@ -1,4 +1,4 @@
-package chess.utility;
+package chess.formats.algebraic;
 
 import chess.Position;
 import chess.board.ChessBoard;

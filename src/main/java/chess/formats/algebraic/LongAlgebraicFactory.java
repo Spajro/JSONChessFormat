@@ -1,4 +1,4 @@
-package chess.utility;
+package chess.formats.algebraic;
 
 import chess.board.ChessBoard;
 import chess.moves.valid.ValidMove;

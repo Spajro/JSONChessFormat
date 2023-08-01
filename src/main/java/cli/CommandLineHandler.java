@@ -1,8 +1,8 @@
 package cli;
 
 import chess.board.fields.Field;
-import chess.utility.AlgebraicUtility;
-import chess.utility.LongAlgebraicParser;
+import chess.formats.algebraic.AlgebraicUtility;
+import chess.formats.algebraic.LongAlgebraicParser;
 import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;

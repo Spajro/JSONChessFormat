@@ -2,8 +2,8 @@ package data.json;
 
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
-import chess.utility.AlgebraicUtility;
-import chess.utility.RawAlgebraicParser;
+import chess.formats.algebraic.AlgebraicUtility;
+import chess.formats.algebraic.RawAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

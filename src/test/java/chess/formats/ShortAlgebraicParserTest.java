@@ -1,4 +1,4 @@
-package chess.utility;
+package chess.formats;
 
 import chess.Position;
 import chess.board.ChessBoard;
@@ -8,6 +8,7 @@ import chess.pieces.King;
 import chess.pieces.Knight;
 import chess.pieces.Pawn;
 import chess.pieces.Rook;
+import chess.formats.algebraic.ShortAlgebraicParser;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

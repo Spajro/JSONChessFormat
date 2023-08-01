@@ -1,4 +1,4 @@
-package chess.utility;
+package chess.formats;
 
 import chess.Position;
 import chess.board.ChessBoard;
@@ -8,17 +8,15 @@ import chess.color.Color;
 import chess.pieces.King;
 import chess.pieces.Pawn;
 import chess.pieces.Rook;
+import chess.formats.fen.FENFactory;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FENParserTest {
-
+class FENFactoryTest {
     @Test
-    void parseFEN() {
-        String fen = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - - ";
-        ChessBoard actual = FENParser.getInstance().parseFEN(fen);
-        ChessBoard expected = new ChessBoard(Board.getBlank(),
+    void chessBoardToFENTest() {
+        ChessBoard chessBoard = new ChessBoard(Board.getBlank(),
                 Color.white,
                 new CastleRequirements(false, false, false, false),
                 null,
@@ -35,14 +33,17 @@ class FENParserTest {
                 .put(new Pawn(Color.black, Position.of(6, 4)))
                 .put(new Rook(Color.black, Position.of(8, 5)))
                 .put(new King(Color.black, Position.of(8, 4)));
+
+        String expected = "8/2p5/3p4/KP5r/1R3p1k/8/4P1P1/8 w - -";
+        String actual = FENFactory.getInstance().chessBoardToFEN(chessBoard);
+
         assertEquals(expected, actual);
     }
 
     @Test
-    void parseFENOfStart() {
-        String fen = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ";
-        ChessBoard actual = FENParser.getInstance().parseFEN(fen);
-        ChessBoard expected = new ChessBoard();
+    void chessBoardToFENOfStart() {
+        String expected = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -";
+        String actual = FENFactory.getInstance().chessBoardToFEN(new ChessBoard());
         assertEquals(expected, actual);
     }
 }

@@ -1,8 +1,8 @@
 package data.json;
 
 import chess.moves.raw.RawMove;
-import chess.utility.AlgebraicUtility;
-import chess.utility.RawAlgebraicFactory;
+import chess.formats.algebraic.AlgebraicUtility;
+import chess.formats.algebraic.RawAlgebraicFactory;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
