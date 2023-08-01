@@ -71,20 +71,24 @@ public class JsonParser {
                 diagram.getBoard(),
                 moves,
                 (move, chessBoard) -> rawAlgebraicParser.rawAlgebraicToMoves(move));
-        if (executableMoves.isPresent() && !executableMoves.get().isEmpty()) {
-            ExecutableMove executableMove = executableMoves.get().poll();
-            diagram.getNextDiagrams().add(new Diagram(
-                    executableMove,
-                    diagram.getBoard(),
-                    diagram,
-                    new ArrayDeque<>(executableMoves.get().stream()
-                            .map(ExecutableMove::getRepresentation)
-                            .toList())
-            ));
-        } else {
+        if (executableMoves.isEmpty()) {
             Log.log().fail("Missing optional in JsonParser.fromList");
+            return;
         }
+        if (executableMoves.get().isEmpty()) {
+            return;
+        }
+        ExecutableMove executableMove = executableMoves.get().poll();
+        diagram.getNextDiagrams().add(new Diagram(
+                executableMove,
+                diagram.getBoard(),
+                diagram,
+                new ArrayDeque<>(executableMoves.get().stream()
+                        .map(ExecutableMove::getRepresentation)
+                        .toList())
+        ));
     }
+
 
     private void parseAnnotations(Diagram diagram, JsonNode jsonNode) {
         Annotations annotations = diagram.getAnnotations();
