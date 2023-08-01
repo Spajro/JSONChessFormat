@@ -21,7 +21,8 @@ public class GamesRepository {
             Diagram node = stack.pop();
             if (!node.getMetaData().isEmpty()) {
                 node.getMetaData().forEach(metaData -> result.put(metaData, node));
-            } else {
+            }
+            if (!node.isLazy()) {
                 stack.addAll(node.getNextDiagrams());
             }
         }
