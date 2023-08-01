@@ -46,9 +46,9 @@ public class Diagram {
         }
     }
 
-    public Diagram(ExecutableMove creatingMove,ChessBoard chessBoard,Diagram parent, ArrayDeque<RawMove> moves){
+    public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent, ArrayDeque<RawMove> moves) {
         this.parent = parent;
-        this.lazyMoves=moves;
+        this.lazyMoves = moves;
 
         if (creatingMove == null) {
             this.creatingMove = null;
@@ -66,7 +66,7 @@ public class Diagram {
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
         Log.log().info("Trying to make:" + move);
 
-        ChessBoard chessBoard=getBoard();
+        ChessBoard chessBoard = getBoard();
         MoveResult moveResult = chessBoard.makeMove(move);
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
@@ -117,7 +117,7 @@ public class Diagram {
     }
 
     public List<Diagram> getNextDiagrams() {
-        if(lazyMoves!=null){
+        if (lazyMoves != null) {
             expand();
         }
         return nextDiagrams;
@@ -202,7 +202,7 @@ public class Diagram {
     private int gamesInTree() {
 
         //TODO for debug purposes only
-        if (!getNonEndingGameData().isEmpty() || lazyMoves!=null) {
+        if (!getNonEndingGameData().isEmpty() || lazyMoves != null) {
             return metaData.size();
         } else {
             return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
@@ -211,9 +211,9 @@ public class Diagram {
 
     public void expand() {
         RawMove move = lazyMoves.poll();
-        if(move==null){
-            nextDiagrams=new ArrayList<>();
-            lazyMoves=null;
+        if (move == null) {
+            nextDiagrams = new ArrayList<>();
+            lazyMoves = null;
             return;
         }
         ChessBoard chessBoard = getBoard();
@@ -228,12 +228,16 @@ public class Diagram {
                 this,
                 lazyMoves
         );
-        nextDiagrams=new ArrayList<>();
-        lazyMoves=null;
+        nextDiagrams = new ArrayList<>();
+        lazyMoves = null;
         this.getNextDiagrams().add(lazy);
     }
 
-    public boolean isLazy(){
-        return lazyMoves!=null;
+    public boolean isLazy() {
+        return lazyMoves != null;
+    }
+
+    public List<RawMove> getLazyMoves() {
+        return lazyMoves.stream().toList();
     }
 }

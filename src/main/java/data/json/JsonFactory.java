@@ -1,6 +1,8 @@
 package data.json;
 
+import chess.moves.raw.RawMove;
 import chess.utility.AlgebraicUtility;
+import chess.utility.RawAlgebraicFactory;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -10,12 +12,11 @@ import data.model.Diagram;
 import data.model.metadata.GameData;
 import log.Log;
 
-import java.util.*;
-
 public class JsonFactory {
     private final DataModel dataModel;
     private final ListJsonFactory listJsonFactory = new ListJsonFactory();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
+    private final RawAlgebraicFactory rawAlgebraicFactory = new RawAlgebraicFactory();
 
     public JsonFactory(DataModel dataModel) {
         this.dataModel = dataModel;
@@ -36,19 +37,21 @@ public class JsonFactory {
         StringBuilder result = new StringBuilder();
         result.append('{')
                 .append("\"moveName\":\"")
-                .append(diagram.getMoveName())
+                .append(diagram
+                        .getCreatingMove()
+                        .map(this::toJson)
+                        .orElse(diagram.getMoveName())
+                )
                 .append("\",");
         if (!diagram.getMetaData().isEmpty()) {
             result.append("\"metadata\":")
                     .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
                     .append(',');
         }
-        if (isSubTreeOptimizable(diagram)) {
-            Optional<List<Diagram>> list = getPathToLast(diagram);
-            list.ifPresent(Collections::reverse);
-            list.ifPresent(diagrams -> result.append("\"movesList\":")
-                    .append(listJsonFactory.listToJson(diagrams, this::toOptimizedJson))
-                    .append(','));
+        if (diagram.isLazy()) {
+            result.append("\"movesList\":")
+                    .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson))
+                    .append(',');
         } else if (!diagram.getNextDiagrams().isEmpty()) {
             result.append("\"moves\":")
                     .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson))
@@ -62,6 +65,10 @@ public class JsonFactory {
         result.deleteCharAt(result.length() - 1);
         result.append('}');
         return result.toString();
+    }
+
+    private String toJson(RawMove rawMove) {
+        return "\"" + rawAlgebraicFactory.moveToRawAlgebraic(rawMove) + "\"";
     }
 
     private String toJson(GameData metaData) {
@@ -130,36 +137,5 @@ public class JsonFactory {
                 "\",\"color\":\"" +
                 GraphicAnnotation.drawColorToString(field.getColor()) +
                 "\"}";
-    }
-
-    private String toOptimizedJson(Diagram diagram) {
-        return "\"" + diagram.getMoveName() + "\"";
-    }
-
-    public boolean isSubTreeOptimizable(Diagram diagram) {
-        if (containsData(diagram)) {
-            return false;
-        } else {
-            return switch (diagram.getNextDiagrams().size()) {
-                case 0 -> true;
-                case 1 -> isSubTreeOptimizable(diagram.getNextDiagrams().get(0));
-                default -> false;
-            };
-        }
-    }
-
-    private boolean containsData(Diagram diagram) {
-        return !(diagram.getMetaData().isEmpty() && diagram.getAnnotations().isEmpty());
-    }
-
-    private Optional<List<Diagram>> getPathToLast(Diagram diagram) {
-        return switch (diagram.getNextDiagrams().size()) {
-            case 0 -> Optional.of(new ArrayList<>());
-            case 1 -> getPathToLast(diagram.getNextDiagrams().get(0)).map(list -> {
-                list.add(diagram);
-                return list;
-            });
-            default -> Optional.empty();
-        };
     }
 }
