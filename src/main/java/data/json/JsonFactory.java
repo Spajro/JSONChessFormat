@@ -36,13 +36,13 @@ public class JsonFactory {
     private String toJson(Diagram diagram) {
         StringBuilder result = new StringBuilder();
         result.append('{')
-                .append("\"moveName\":\"")
+                .append("\"moveName\":")
                 .append(diagram
                         .getCreatingMove()
                         .map(this::toJson)
-                        .orElse(diagram.getMoveName())
+                        .orElse("\"" + diagram.getMoveName() + "\"")
                 )
-                .append("\",");
+                .append(",");
         if (!diagram.getMetaData().isEmpty()) {
             result.append("\"metadata\":")
                     .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
@@ -93,6 +93,7 @@ public class JsonFactory {
                 "," +
                 "\"result\":" +
                 metaData.result() +
+                "," +
                 "\"length\":" +
                 metaData.length() +
                 '}';
