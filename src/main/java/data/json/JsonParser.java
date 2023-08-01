@@ -3,7 +3,7 @@ package data.json;
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.utility.AlgebraicUtility;
-import chess.utility.LongAlgebraicParser;
+import chess.utility.RawAlgebraicParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -21,7 +21,7 @@ import java.util.*;
 
 public class JsonParser {
     private final ObjectMapper mapper = new ObjectMapper();
-    private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
+    private final RawAlgebraicParser rawAlgebraicParser = new RawAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
     private final MoveParser moveParser = MoveParser.getInstance();
 
@@ -46,7 +46,7 @@ public class JsonParser {
 
     private void from(Diagram parent, JsonNode jsonNode) {
         String moveName = jsonNode.get("moveName").asText();
-        Diagram diagram = parent.makeMove(longAlgebraicParser.parseLongAlgebraic(moveName, parent.getBoard().getColor().swap()), null);
+        Diagram diagram = parent.makeMove(rawAlgebraicParser.rawAlgebraicToMoves(moveName), null);
         if (jsonNode.get("moves") != null) {
             jsonNode.get("moves").forEach(node -> from(diagram, node));
         } else if (jsonNode.get("movesList") != null) {
@@ -70,12 +70,12 @@ public class JsonParser {
         Optional<ArrayDeque<ExecutableMove>> executableMoves = moveParser.parseMoves(
                 diagram.getBoard(),
                 moves,
-                (move, chessBoard) -> longAlgebraicParser.parseLongAlgebraic(move, chessBoard.getColor()));
-        if (executableMoves.isPresent()) {
-            ExecutableMove executableMove=executableMoves.get().poll();
+                (move, chessBoard) -> rawAlgebraicParser.rawAlgebraicToMoves(move));
+        if (executableMoves.isPresent() && !executableMoves.get().isEmpty()) {
+            ExecutableMove executableMove = executableMoves.get().poll();
             diagram.getNextDiagrams().add(new Diagram(
                     executableMove,
-                    diagram.getBoard().makeMove(executableMove),
+                    diagram.getBoard(),
                     diagram,
                     new ArrayDeque<>(executableMoves.get().stream()
                             .map(ExecutableMove::getRepresentation)
