@@ -37,6 +37,7 @@ public class CommandLineHandler {
             case "load" -> {
                 try {
                     node = fileManager.loadJSON(input.poll());
+                    dataModel.setNewTree(node);
                 } catch (FileNotFoundException e) {
                     System.out.print("Loading failed");
                 }
