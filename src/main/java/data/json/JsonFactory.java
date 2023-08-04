@@ -10,7 +10,7 @@ import data.annotations.GraphicAnnotation;
 import data.model.DataModel;
 import data.model.Diagram;
 import data.model.metadata.GameData;
-import log.Log;
+import log.TimeLogSupplier;
 
 public class JsonFactory {
     private final DataModel dataModel;
@@ -23,14 +23,12 @@ public class JsonFactory {
     }
 
     public String toJson() {
-        long startTime = System.nanoTime();
-        String json = "{\"root\":" + toJson(dataModel.getActualNode().getRoot()) + "}";
-        long endTime = System.nanoTime();
-        long nanoDuration = (endTime - startTime);
-        double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
-        double nodesPerSec = dataModel.getGames().size() / secondDuration;
-        Log.debug("Preparing json time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
-        return json;
+        return new TimeLogSupplier<>(
+                () -> new TimeLogSupplier.SizedResult<>(
+                        dataModel.getGames().size(),
+                        "{\"root\":" + toJson(dataModel.getActualNode().getRoot()) + "}"),
+                "Preparing json time: "
+        ).apply();
     }
 
     private String toJson(Diagram diagram) {

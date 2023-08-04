@@ -6,7 +6,7 @@ import chess.formats.algebraic.ShortAlgebraicParser;
 import data.MoveParser;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
-import log.Log;
+import log.TimeLogSupplier;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -27,28 +27,27 @@ public class PGNParser {
 
     public List<ParsedPGN> parsePGN(String pgn) {
         String newLine = getEndLineCharacter(pgn).orElseThrow();
-        long startTime = System.nanoTime();
-        ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
-        ArrayList<ParsedPGN> result = new ArrayList<>();
-        for (int i = 0; i < parts.size() - 1; i += 2) {
-            Optional<ArrayDeque<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
-            int length;
-            if (moves.isEmpty()) {
-                length = -1;
-            } else {
-                length = moves.get().size();
-            }
-            result.add(new ParsedPGN(
-                    parseMetadata(parts.get(i), length),
-                    moves
-            ));
-        }
-        long endTime = System.nanoTime();
-        long nanoDuration = (endTime - startTime);
-        double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
-        double nodesPerSec = ((double) (parts.size() / 2) / secondDuration);
-        Log.debug("Parsing time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
-        return result;
+        return new TimeLogSupplier<>(
+                () -> {
+                    ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
+                    ArrayList<ParsedPGN> result = new ArrayList<>();
+                    for (int i = 0; i < parts.size() - 1; i += 2) {
+                        Optional<ArrayDeque<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
+                        int length;
+                        if (moves.isEmpty()) {
+                            length = -1;
+                        } else {
+                            length = moves.get().size();
+                        }
+                        result.add(new ParsedPGN(
+                                parseMetadata(parts.get(i), length),
+                                moves
+                        ));
+                    }
+                    return new TimeLogSupplier.SizedResult<>(parts.size() / 2, result);
+                },
+                "Parsing time: "
+        ).apply();
     }
 
     public MetaData parseMetadata(String metadata, int gameLength) {

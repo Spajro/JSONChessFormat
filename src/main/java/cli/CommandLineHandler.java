@@ -11,11 +11,14 @@ import chess.moves.raw.RawMove;
 import data.file.FileManager;
 import data.pgn.ParsedPGN;
 import log.Log;
+import log.TimeLogRunnable;
+import log.TimeLogSupplier;
 
 import java.io.*;
 import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 public class CommandLineHandler {
     private final DataModel dataModel = new DataModel();
@@ -34,14 +37,7 @@ public class CommandLineHandler {
             return;
         }
         switch (input.poll()) {
-            case "load" -> {
-                try {
-                    node = fileManager.loadJSON(input.poll());
-                    dataModel.setNewTree(node);
-                } catch (FileNotFoundException e) {
-                    System.out.print("Loading failed");
-                }
-            }
+            case "load" -> load(input.poll());
             case "save" -> fileManager.save(input.poll(), new JsonFactory(dataModel).toJson());
             case "move" -> makeMove(longAlgebraicParser.parseLongAlgebraic(input.poll(), node.getBoard().getColor()));
             case "delete" -> deleteDiagram();
@@ -57,6 +53,26 @@ public class CommandLineHandler {
             default -> System.out.print("Unknown input");
         }
         display();
+    }
+
+    private void load(String filename) {
+        Optional<Diagram> optionalDiagram = new TimeLogSupplier<Optional<Diagram>>(
+                () -> {
+                    try {
+                        Diagram diagram = fileManager.loadJSON(filename);
+                        dataModel.setNewTree(diagram);
+                        return new TimeLogSupplier.SizedResult<>(dataModel.getGames().size(), Optional.of(diagram));
+                    } catch (FileNotFoundException e) {
+                        return new TimeLogSupplier.SizedResult<>(1, Optional.empty());
+                    }
+                },
+                "Loading time: "
+        ).apply();
+        if (optionalDiagram.isPresent()) {
+            node = optionalDiagram.get();
+        } else {
+            Log.log().fail("Loading failed");
+        }
     }
 
     private void makeMove(RawMove M) {
@@ -142,18 +158,18 @@ public class CommandLineHandler {
     private void insertPgn(String filename) {
         try {
             Iterator<ParsedPGN> pgnParser = fileManager.loadPagedPGN(filename);
-            long startTime = System.nanoTime();
-            long size = 0;
-            while (pgnParser.hasNext()) {
-                ParsedPGN parsedPGN = pgnParser.next();
-                dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
-                size++;
-            }
-            long endTime = System.nanoTime();
-            long nanoDuration = (endTime - startTime);
-            double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
-            double nodesPerSec = size / secondDuration;
-            Log.debug("Inserting time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
+            new TimeLogRunnable(
+                    () -> {
+                        int size = 0;
+                        while (pgnParser.hasNext()) {
+                            ParsedPGN parsedPGN = pgnParser.next();
+                            dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
+                            size++;
+                        }
+                        return size;
+                    },
+                    "Inserting time: "
+            ).apply();
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }

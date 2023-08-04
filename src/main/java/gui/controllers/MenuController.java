@@ -16,6 +16,7 @@ import gui.board.BoardPanel;
 import gui.games.GamesFrame;
 import gui.option.OptionPanel;
 import log.Log;
+import log.TimeLogRunnable;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -100,20 +101,20 @@ public class MenuController {
     public void insertPGN(String filename) {
         try {
             Iterator<ParsedPGN> pgnParser = fileManager.loadPagedPGN(filename);
-            long startTime = System.nanoTime();
-            long size = 0;
-            while (pgnParser.hasNext()) {
-                ParsedPGN parsedPGN = pgnParser.next();
-                dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
-                size++;
-            }
-            boardPanel.setDiagram(dataModel.getActualNode());
-            dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
-            long endTime = System.nanoTime();
-            long nanoDuration = (endTime - startTime);
-            double secondDuration = ((double) nanoDuration / Math.pow(10, 9));
-            double nodesPerSec = size / secondDuration;
-            Log.debug("Inserting time: " + secondDuration + "s with speed: " + nodesPerSec + "gps"); //TODO FOR DEBUG
+            new TimeLogRunnable(
+                    () -> {
+                        int size = 0;
+                        while (pgnParser.hasNext()) {
+                            ParsedPGN parsedPGN = pgnParser.next();
+                            dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
+                            size++;
+                        }
+                        boardPanel.setDiagram(dataModel.getActualNode());
+                        dataModel.asTree().notifyListenersOnNewTree(dataModel.getActualNode().getRoot());
+                        return size;
+                    },
+                    "Inserting time: "
+            ).apply();
         } catch (FileNotFoundException e) {
             Log.log().warn("file not found");
         }
