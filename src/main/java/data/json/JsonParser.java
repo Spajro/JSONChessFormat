@@ -137,7 +137,7 @@ public class JsonParser {
     }
 
     private void parseMetadata(Diagram diagram, JsonNode jsonNode) {
-        jsonNode.get("metadata").forEach(node -> diagram.addMetadata(toMetadata(node)));
+        jsonNode.get("metadata").forEach(node -> diagram.getMetaData().add(toMetadata(node)));
     }
 
     private MetaData toMetadata(JsonNode jsonNode) {

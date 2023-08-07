@@ -15,7 +15,7 @@ import java.util.*;
 
 public class Diagram {
     private final String moveName;
-    private Diagram parent;
+    private final Diagram parent;
     private ArrayList<Diagram> nextDiagrams;
     private ArrayDeque<RawMove> lazyMoves;
     private final Annotations annotations = new Annotations();
@@ -72,7 +72,7 @@ public class Diagram {
 
         if (validMoveResult.isPresent()) {
             Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), chessBoard, this);
-            for (Diagram diagram : nextDiagrams) {
+            for (Diagram diagram : getNextDiagrams()) {
                 if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
                     if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
                         return diagram;
@@ -158,10 +158,6 @@ public class Diagram {
         return false;
     }
 
-    public void addMetadata(MetaData metaData) {
-        this.metaData.add(metaData);
-    }
-
     public List<MetaData> getMetaData() {
         return metaData;
     }
@@ -175,10 +171,6 @@ public class Diagram {
 
     public Optional<RawMove> getCreatingMove() {
         return Optional.ofNullable(creatingMove);
-    }
-
-    public void setParent(Diagram parent) {
-        this.parent = parent;
     }
 
     private int depth() {
@@ -200,9 +192,8 @@ public class Diagram {
     }
 
     private int gamesInTree() {
-
         //TODO for debug purposes only
-        if (!getNonEndingGameData().isEmpty() || lazyMoves != null) {
+        if (!getNonEndingGameData().isEmpty() || lazyMoves != null || nextDiagrams == null) {
             return metaData.size();
         } else {
             return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
@@ -234,10 +225,13 @@ public class Diagram {
     }
 
     public boolean isLazy() {
-        return lazyMoves != null;
+        return nextDiagrams == null;
     }
 
     public List<RawMove> getLazyMoves() {
+        if (lazyMoves == null) {
+            return null;
+        }
         return lazyMoves.stream().toList();
     }
 }
