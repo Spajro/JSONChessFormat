@@ -17,7 +17,7 @@ public class RawAlgebraicParser {
         Optional<Position> start = algebraicUtility.algebraicToPosition(move.substring(0, 2));
         Optional<Position> end = algebraicUtility.algebraicToPosition(move.substring(2, 4));
         if (move.length() == 4) {
-            return new RawMove(start.orElseThrow(), end.orElseThrow());
+            return RawMove.of(start.orElseThrow(), end.orElseThrow());
         }
         Optional<Piece.Type> promotion = algebraicUtility.algebraicToType(move.charAt(4));
         return new RawPromotion(start.orElseThrow(), end.orElseThrow(), promotion.orElseThrow());
