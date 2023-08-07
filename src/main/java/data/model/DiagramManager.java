@@ -1,6 +1,5 @@
 package data.model;
 
-import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 import data.model.games.GamesUpdateEvent;
@@ -13,36 +12,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class DiagramManager {
-    public GamesUpdateEvent merge(Diagram tree, Diagram node) {
-        if (tree.partiallyEquals(node)) {
-            return copyData(tree, node).join(
-                    node.getNextDiagrams().stream()
-                            .map(diagram -> {
-                                List<Diagram> matching = tree.getNextDiagrams().stream().filter(diagram::partiallyEquals).toList();
-                                switch (matching.size()) {
-                                    case 0 -> {
-                                        diagram.setParent(tree);
-                                        tree.getNextDiagrams().add(diagram);
-                                        return GamesUpdateEvent.empty();
-                                    }
-                                    case 1 -> {
-                                        return merge(matching.get(0), diagram);
-                                    }
-                                    default -> {
-                                        Log.log().fail("Too many matching nodes to insert");
-                                        return GamesUpdateEvent.empty();
-                                    }
-                                }
-                            })
-                            .reduce(GamesUpdateEvent.empty(),
-                                    GamesUpdateEvent::join)
-            );
-        } else {
-            Log.log().fail("Cant merge");
-            return GamesUpdateEvent.empty();
-        }
-    }
-
     public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData) {
         if (moves.isEmpty()) {
             tree.getMetaData().add(metaData);
@@ -54,29 +23,26 @@ public class DiagramManager {
         if (optionalDiagram.isPresent()) {
             return insert(optionalDiagram.get(), moves, metaData);
         } else {
-            ChessBoard chessBoard = tree.getBoard();
-
-            tree.getNextDiagrams().add(new Diagram(
+            Diagram diagram = new Diagram(
                     move,
-                    chessBoard,
+                    tree.getBoard(),
                     tree,
                     new ArrayDeque<>(moves.stream()
                             .map(ExecutableMove::getRepresentation)
                             .toList())
-            ));
-            tree.getNextDiagrams()
-                    .get(tree.getNextDiagrams().size() - 1)
-                    .getMetaData()
-                    .add(metaData);
+            );
+
+            tree.getNextDiagrams().add(diagram);
+            diagram.getMetaData().add(metaData);
+
             return GamesUpdateEvent.of(
                     List.of(metaData),
-                    tree.getNextDiagrams().get(tree.getNextDiagrams().size() - 1)
-            ).join(updateMetadata(tree.getNextDiagrams().get(tree.getNextDiagrams().size() - 1)));
+                    diagram
+            ).join(updateMetadata(diagram));
         }
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {
-
         for (Diagram nextDiagram : diagram.getNextDiagrams()) {
             if (nextDiagram.getCreatingMove().isPresent()) {
                 if (nextDiagram.getCreatingMove().get().equals(move)) {
@@ -85,12 +51,6 @@ public class DiagramManager {
             }
         }
         return Optional.empty();
-    }
-
-    private GamesUpdateEvent copyData(Diagram to, Diagram from) {
-        to.getAnnotations().addAll(from.getAnnotations());
-        to.getMetaData().addAll(from.getMetaData());
-        return GamesUpdateEvent.of(from.getMetaData(), to);
     }
 
     public GamesUpdateEvent updateMetadata(Diagram node) {
