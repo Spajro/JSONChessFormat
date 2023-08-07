@@ -1,13 +1,14 @@
 package data.json;
 
+import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.formats.algebraic.AlgebraicUtility;
 import chess.formats.algebraic.RawAlgebraicParser;
+import chess.results.ValidMoveResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import data.MoveParser;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
@@ -15,7 +16,6 @@ import data.annotations.GraphicAnnotation;
 import data.model.Diagram;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
-import log.Log;
 
 import java.util.*;
 
@@ -23,8 +23,6 @@ public class JsonParser {
     private final ObjectMapper mapper = new ObjectMapper();
     private final RawAlgebraicParser rawAlgebraicParser = new RawAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
-    private final MoveParser moveParser = MoveParser.getInstance();
-
     public Diagram parseJson(String json) {
         try {
             JsonNode root = mapper.readTree(json).get("root");
@@ -67,25 +65,29 @@ public class JsonParser {
             moves.add(iterator.next().asText());
             iterator.remove();
         }
-        Optional<ArrayDeque<ExecutableMove>> executableMoves = moveParser.parseMoves(
-                diagram.getBoard(),
-                moves,
-                (move, chessBoard) -> rawAlgebraicParser.rawAlgebraicToMoves(move));
-        if (executableMoves.isEmpty()) {
-            Log.log().fail("Missing optional in JsonParser.fromList");
+
+        if (moves.isEmpty()) {
             return;
         }
-        if (executableMoves.get().isEmpty()) {
-            return;
-        }
-        ExecutableMove executableMove = executableMoves.get().poll();
+
+        ArrayDeque<RawMove> rawMoves = new ArrayDeque<>();
+        moves.stream()
+                .map(rawAlgebraicParser::rawAlgebraicToMoves)
+                .forEachOrdered(rawMoves::add);
+
+        ChessBoard chessBoard = diagram.getBoard();
+
+        ExecutableMove executableMove = chessBoard
+                .makeMove(rawMoves.poll())
+                .validate(null)
+                .map(ValidMoveResult::getExecutableMove)
+                .orElseThrow();
+
         diagram.getNextDiagrams().add(new Diagram(
                 executableMove,
-                diagram.getBoard(),
+                chessBoard,
                 diagram,
-                new ArrayDeque<>(executableMoves.get().stream()
-                        .map(ExecutableMove::getRepresentation)
-                        .toList())
+                rawMoves
         ));
     }
 
