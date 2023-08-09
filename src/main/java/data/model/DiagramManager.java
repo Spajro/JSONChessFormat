@@ -17,29 +17,39 @@ public class DiagramManager {
             tree.getMetaData().add(metaData);
             return GamesUpdateEvent.of(List.of(metaData), tree);
         }
-        ExecutableMove move = moves.poll();
 
+        if (tree.isLazy() && tree.getLazyMoves().size() == 0) {
+            tree.setLazyMoves(new ArrayDeque<>(
+                    moves.stream()
+                            .map(ExecutableMove::getRepresentation)
+                            .toList()
+            ));
+            tree.getMetaData().add(metaData);
+            return GamesUpdateEvent.of(List.of(metaData), tree).join(updateMetadata(tree));
+        }
+
+        ExecutableMove move = moves.poll();
         Optional<Diagram> optionalDiagram = getByRawMove(tree, move.getRepresentation());
         if (optionalDiagram.isPresent()) {
             return insert(optionalDiagram.get(), moves, metaData);
-        } else {
-            Diagram diagram = new Diagram(
-                    move,
-                    tree.getBoard(),
-                    tree,
-                    new ArrayDeque<>(moves.stream()
-                            .map(ExecutableMove::getRepresentation)
-                            .toList())
-            );
-
-            tree.getNextDiagrams().add(diagram);
-            diagram.getMetaData().add(metaData);
-
-            return GamesUpdateEvent.of(
-                    List.of(metaData),
-                    diagram
-            ).join(updateMetadata(diagram));
         }
+
+        Diagram diagram = new Diagram(
+                move,
+                tree.getBoard(),
+                tree,
+                new ArrayDeque<>(moves.stream()
+                        .map(ExecutableMove::getRepresentation)
+                        .toList())
+        );
+
+        tree.getNextDiagrams().add(diagram);
+        diagram.getMetaData().add(metaData);
+
+        return GamesUpdateEvent.of(
+                List.of(metaData),
+                diagram
+        ).join(updateMetadata(diagram));
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {
@@ -54,11 +64,6 @@ public class DiagramManager {
     }
 
     public GamesUpdateEvent updateMetadata(Diagram node) {
-        if (node.getMetaData().isEmpty()) {
-            Log.log().warn("Cant update metadata for moves without it");
-            return GamesUpdateEvent.empty();
-        }
-
         Optional<Diagram> optionalParent = node.getParent();
         if (optionalParent.isEmpty()) {
             return GamesUpdateEvent.empty();
@@ -66,38 +71,27 @@ public class DiagramManager {
         Diagram parent = optionalParent.get();
 
         return switch (parent.getNextDiagrams().size()) {
-            case 1 -> moveMetaData(node, parent).join(updateMetadata(parent));
+            case 1 -> moveMetaData(parent, node);
             case 2 -> updateBrotherMetadata(node, parent);
             default -> GamesUpdateEvent.empty();
         };
     }
 
     private GamesUpdateEvent moveMetaData(Diagram from, Diagram to) {
-        GamesUpdateEvent event = GamesUpdateEvent.of(from.getMetaData(), to);
-        to.getMetaData().addAll(from.getMetaData());
-        from.getMetaData().clear();
+        List<MetaData> gameData = from.getMetaData()
+                .stream()
+                .filter(metaData -> !(metaData instanceof GameData) || ((GameData) metaData).length() != from.depth())
+                .toList();
+        GamesUpdateEvent event = GamesUpdateEvent.of(gameData, to);
+        to.getMetaData().addAll(gameData);
+        from.getMetaData().removeAll(gameData);
         return event;
     }
 
     private GamesUpdateEvent updateBrotherMetadata(Diagram diagram, Diagram parent) {
         Diagram brother = getBrother(diagram);
-        brother.getMetaData().addAll(getMetadataFromPathToRoot(parent));
+        moveMetaData(parent, brother);
         return GamesUpdateEvent.of(brother.getMetaData(), brother);
-    }
-
-    private List<MetaData> getMetadataFromPathToRoot(Diagram node) {
-        List<GameData> gameData = node.getNonEndingGameData();
-        if (!gameData.isEmpty()) {
-            List<MetaData> result = List.copyOf(gameData);
-            node.getMetaData().removeAll(gameData);
-            return result;
-        } else {
-            if (node.getParent().isEmpty()) {
-                return List.of();
-            } else {
-                return getMetadataFromPathToRoot(node.getParent().get());
-            }
-        }
     }
 
     private Diagram getBrother(Diagram diagram) {

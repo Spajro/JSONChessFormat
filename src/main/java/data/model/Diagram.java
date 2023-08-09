@@ -173,7 +173,7 @@ public class Diagram {
         return Optional.ofNullable(creatingMove);
     }
 
-    private int depth() {
+    public int depth() {
         Diagram diagram = this;
         int result = 0;
         while (diagram.parent != null) {
@@ -183,8 +183,8 @@ public class Diagram {
         return result;
     }
 
-    public List<GameData> getNonEndingGameData() {
-        return getMetaData().stream()
+    private List<GameData> getNonEndingGameData() {
+        return metaData.stream()
                 .filter(metaData -> metaData instanceof GameData)
                 .map(metaData -> (GameData) metaData)
                 .filter(gameData -> gameData.length() != depth())
@@ -233,5 +233,9 @@ public class Diagram {
             return null;
         }
         return lazyMoves.stream().toList();
+    }
+
+    public void setLazyMoves(ArrayDeque<RawMove> lazyMoves) {
+        this.lazyMoves = lazyMoves;
     }
 }
