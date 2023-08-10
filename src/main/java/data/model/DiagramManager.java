@@ -15,7 +15,7 @@ public class DiagramManager {
     public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData) {
         if (moves.isEmpty()) {
             tree.getMetaData().add(metaData);
-            return GamesUpdateEvent.of(List.of(metaData), tree);
+            return GamesUpdateEvent.of(metaData, tree);
         }
 
         if (tree.isLazy() && tree.getLazyMoves().size() == 0) {
@@ -25,7 +25,7 @@ public class DiagramManager {
                             .toList()
             ));
             tree.getMetaData().add(metaData);
-            return GamesUpdateEvent.of(List.of(metaData), tree).join(updateMetadata(tree));
+            return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
         }
 
         ExecutableMove move = moves.poll();
@@ -46,10 +46,7 @@ public class DiagramManager {
         tree.getNextDiagrams().add(diagram);
         diagram.getMetaData().add(metaData);
 
-        return GamesUpdateEvent.of(
-                List.of(metaData),
-                diagram
-        ).join(updateMetadata(diagram));
+        return GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram));
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {

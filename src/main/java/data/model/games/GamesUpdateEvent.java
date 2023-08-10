@@ -20,6 +20,12 @@ public record GamesUpdateEvent(Map<MetaData, Diagram> gamesMap) {
         return new GamesUpdateEvent(result);
     }
 
+    public static GamesUpdateEvent of(MetaData metadata, Diagram diagram) {
+        Map<MetaData, Diagram> result = new HashMap<>();
+        result.put(metadata, diagram);
+        return new GamesUpdateEvent(result);
+    }
+
     public static GamesUpdateEvent empty() {
         return new GamesUpdateEvent(Map.of());
     }
