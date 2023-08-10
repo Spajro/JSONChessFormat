@@ -28,20 +28,21 @@ public class ExecutableMoveGenerator {
     }
 
     public List<ExecutableMove> getAllPossibleExecutableMoves() {
+        List<Piece> pieces = utility.getPiecesOfColor(color);
         return Stream.concat(
                 Stream.concat(
                         Stream.concat(
-                                getAllPossibleSimpleMoves().stream(),
+                                getAllPossibleSimpleMoves(pieces).stream(),
                                 getAllPossibleCastles().stream()
                         ),
-                        getAllPossibleEnPassantCaptures().stream()
+                        getAllPossibleEnPassantCaptures(pieces).stream()
                 ),
-                getAllPossiblePromotions().stream()
+                getAllPossiblePromotions(pieces).stream()
         ).toList();
     }
 
-    private List<SimpleMove> getAllPossibleSimpleMoves() {
-        return utility.getPiecesOfColor(color).stream()
+    private List<SimpleMove> getAllPossibleSimpleMoves(List<Piece> pieces) {
+        return pieces.stream()
                 .flatMap(piece -> piece.getPossibleEndPositions(chessBoard).stream()
                         .map(position -> RawMove.of(piece.getPosition(), position)))
                 .map(validMoveFactory::createValidMove)
@@ -68,8 +69,8 @@ public class ExecutableMoveGenerator {
                 .toList();
     }
 
-    private List<EnPassantCapture> getAllPossibleEnPassantCaptures() {
-        return utility.getPiecesOfColor(color).stream()
+    private List<EnPassantCapture> getAllPossibleEnPassantCaptures(List<Piece> pieces) {
+        return pieces.stream()
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
                 .flatMap(pawn -> pawn.getAttackedPositions(chessBoard).stream().map(position -> RawMove.of(pawn.getPosition(), position)))
@@ -81,8 +82,8 @@ public class ExecutableMoveGenerator {
                 .toList();
     }
 
-    private List<Promotion> getAllPossiblePromotions() {
-        return utility.getPiecesOfColor(color).stream()
+    private List<Promotion> getAllPossiblePromotions(List<Piece> pieces) {
+        return pieces.stream()
                 .filter(piece -> piece instanceof Pawn)
                 .map(piece -> (Pawn) piece)
                 .filter(this::isOnPenultimateLine)
