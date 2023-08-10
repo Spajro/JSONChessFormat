@@ -99,7 +99,6 @@ class DiagramManagerTest {
 
         assertEquals(diagram1, event1.gamesMap().get(metaData1));
 
-        assertEquals(diagram1, event2.gamesMap().get(metaData1));
         assertEquals(diagram2, event2.gamesMap().get(metaData2));
 
         assertTrue(diagram1.getMetaData().contains(metaData1));

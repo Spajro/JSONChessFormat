@@ -69,26 +69,21 @@ public class DiagramManager {
 
         return switch (parent.getNextDiagrams().size()) {
             case 1 -> moveMetaData(parent, node);
-            case 2 -> updateBrotherMetadata(node, parent);
+            case 2 -> moveMetaData(parent, getBrother(node));
             default -> GamesUpdateEvent.empty();
         };
     }
 
     private GamesUpdateEvent moveMetaData(Diagram from, Diagram to) {
+        int depth = from.depth();
         List<MetaData> gameData = from.getMetaData()
                 .stream()
-                .filter(metaData -> !(metaData instanceof GameData) || ((GameData) metaData).length() != from.depth())
+                .filter(metaData -> !(metaData instanceof GameData) || ((GameData) metaData).length() != depth)
                 .toList();
         GamesUpdateEvent event = GamesUpdateEvent.of(gameData, to);
         to.getMetaData().addAll(gameData);
         from.getMetaData().removeAll(gameData);
         return event;
-    }
-
-    private GamesUpdateEvent updateBrotherMetadata(Diagram diagram, Diagram parent) {
-        Diagram brother = getBrother(diagram);
-        moveMetaData(parent, brother);
-        return GamesUpdateEvent.of(brother.getMetaData(), brother);
     }
 
     private Diagram getBrother(Diagram diagram) {
