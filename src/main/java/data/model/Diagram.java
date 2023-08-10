@@ -83,7 +83,7 @@ public class Diagram {
             nextDiagrams.add(nextDiagram);
             return nextDiagram;
         } else {
-            Log.log().info("Illegal Move");
+            Log.log().warn("Illegal Move");
             return this;
         }
     }
@@ -141,11 +141,11 @@ public class Diagram {
 
     @Override
     public String toString() {
-        return getMoveName() + " | " + gamesInTree();
+        return moveName;
     }
 
     public boolean partiallyEquals(Diagram diagram) {
-        return getMoveName().equals(diagram.getMoveName()) && parentsEquals(diagram);
+        return creatingMove.equals(diagram.getCreatingMove().orElse(null)) && parentsEquals(diagram);
     }
 
     private boolean parentsEquals(Diagram diagram) {
@@ -183,23 +183,6 @@ public class Diagram {
         return result;
     }
 
-    private List<GameData> getNonEndingGameData() {
-        return metaData.stream()
-                .filter(metaData -> metaData instanceof GameData)
-                .map(metaData -> (GameData) metaData)
-                .filter(gameData -> gameData.length() != depth())
-                .toList();
-    }
-
-    private int gamesInTree() {
-        //TODO for debug purposes only
-        if (!getNonEndingGameData().isEmpty() || lazyMoves != null || nextDiagrams == null) {
-            return metaData.size();
-        } else {
-            return metaData.size() + nextDiagrams.stream().mapToInt(Diagram::gamesInTree).sum();
-        }
-    }
-
     public void expand() {
         RawMove move = lazyMoves.poll();
         if (move == null) {
@@ -207,6 +190,7 @@ public class Diagram {
             lazyMoves = null;
             return;
         }
+
         ChessBoard chessBoard = getBoard();
         Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate(null);
         if (validMoveResult.isEmpty()) {
