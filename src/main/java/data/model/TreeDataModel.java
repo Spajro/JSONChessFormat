@@ -34,7 +34,7 @@ public class TreeDataModel implements TreeModel {
         if (((Diagram) node).isLazy()) {
             return false;
         }
-        return ((Diagram) node).getNextDiagrams().size() == 0;
+        return ((Diagram) node).getNextDiagrams().isEmpty();
     }
 
     @Override

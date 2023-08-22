@@ -42,10 +42,7 @@ public class AlgebraicUtility {
             return Optional.empty();
         }
         Optional<Integer> column = columnToNumber(position.charAt(0));
-        if (column.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(Position.of(column.get(), Character.getNumericValue(position.charAt(1))));
+        return column.map(integer -> Position.of(integer, Character.getNumericValue(position.charAt(1))));
     }
 
     public Optional<Type> parsePromotion(String move) {

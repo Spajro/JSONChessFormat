@@ -100,14 +100,11 @@ public class ShortAlgebraicParser {
         }
         Piece piece = optionalPiece.get();
         Set<Position> positionSet = piece.getPossibleStartPositions(chessBoard);
-        if (positionSet.size() < 1) {
+        if (positionSet.isEmpty()) {
             return Optional.empty();
         }
         Optional<Position> optionalStart = chooseByAmbiguous(positionSet, move.charAt(1));
-        if (optionalStart.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(RawMove.of(optionalStart.get(), end.get()));
+        return optionalStart.map(position -> RawMove.of(position, end.get()));
     }
 
     private Optional<RawMove> ambiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {
@@ -128,14 +125,11 @@ public class ShortAlgebraicParser {
         }
         Piece piece = optionalPiece.get();
         Set<Position> positionSet = piece.getPossibleStartPositions(chessBoard);
-        if (positionSet.size() < 1) {
+        if (positionSet.isEmpty()) {
             return Optional.empty();
         }
         Optional<Position> optionalStart = chooseByDoubleAmbiguous(positionSet, move.substring(1, 3));
-        if (optionalStart.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(RawMove.of(optionalStart.get(), end.get()));
+        return optionalStart.map(position -> RawMove.of(position, end.get()));
     }
 
     private Optional<RawMove> doubleAmbiguousPieceCaptureToMove(String move, ChessBoard chessBoard) {

@@ -23,12 +23,7 @@ public class PagedPGNParser implements Iterator<ParsedPGN> {
         String metadata = pgnGame.metadata();
         String moves = pgnGame.moves();
         Optional<ArrayDeque<ExecutableMove>> executableMoves = PGNParser.getInstance().parseMoves(moves);
-        int length;
-        if (executableMoves.isEmpty()) {
-            length = -1;
-        } else {
-            length = executableMoves.get().size();
-        }
+        int length = executableMoves.map(ArrayDeque::size).orElse(-1);
         return new ParsedPGN(
                 PGNParser.getInstance().parseMetadata(metadata, length),
                 executableMoves
