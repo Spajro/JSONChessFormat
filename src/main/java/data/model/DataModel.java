@@ -36,10 +36,6 @@ public class DataModel {
         games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
-    public void insertInPlace(ArrayDeque<ExecutableMove> rawMoves) {
-        diagramManager.insert(actualNode, rawMoves,null);
-    }
-
     public Optional<Diagram> getLast(Diagram diagram) {
         return switch (diagram.getNextDiagrams().size()) {
             case 0 -> Optional.of(diagram);

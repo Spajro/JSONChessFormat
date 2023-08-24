@@ -9,8 +9,7 @@ public class MenuFactory {
     public JMenuBar createMenu(MenuController controller, BoardPanel boardPanel, DialogManager dialogManager) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(controller, dialogManager));
-        menuBar.add(createFeatureMenu(boardPanel, controller,dialogManager));
-        menuBar.add(createEditionMenu(controller, dialogManager));
+        menuBar.add(createFeatureMenu(boardPanel, controller, dialogManager));
         return menuBar;
     }
 
@@ -40,7 +39,7 @@ public class MenuFactory {
         return fileMenu;
     }
 
-    private JMenu createFeatureMenu(BoardPanel boardPanel, MenuController controller,DialogManager dialogManager) {
+    private JMenu createFeatureMenu(BoardPanel boardPanel, MenuController controller, DialogManager dialogManager) {
         JMenu featureMenu = new JMenu("Features");
 
         JMenuItem coverageMenuItem = new JMenuItem("Coverage");
@@ -64,15 +63,5 @@ public class MenuFactory {
         featureMenu.add(insertPGNItem);
 
         return featureMenu;
-    }
-
-    private JMenu createEditionMenu(MenuController controller, DialogManager dialogManager) {
-        JMenu editionMenu = new JMenu("Edit");
-
-        JMenuItem addMovesItem = new JMenuItem("Add moves");
-        addMovesItem.addActionListener(e -> controller.makeMoves(dialogManager.getMoves()));
-        editionMenu.add(addMovesItem);
-
-        return editionMenu;
     }
 }

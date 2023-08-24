@@ -1,10 +1,7 @@
 package gui.controllers;
 
-import chess.moves.valid.executable.ExecutableMove;
 import chess.formats.fen.FENFactory;
 import chess.formats.fen.FENParser;
-import chess.formats.algebraic.ShortAlgebraicParser;
-import data.MoveParser;
 import data.file.FileManager;
 import data.json.JsonFactory;
 import data.model.DataModel;
@@ -21,10 +18,8 @@ import log.TimeLogRunnable;
 import javax.swing.*;
 import javax.swing.tree.TreePath;
 import java.io.FileNotFoundException;
-import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public class MenuController {
     private final DataModel dataModel;
@@ -32,7 +27,6 @@ public class MenuController {
     private final BoardPanel boardPanel;
     private OptionPanel optionPanel;
     private final GamesFrame gamesFrame;
-    private final ShortAlgebraicParser shortAlgebraicParser = new ShortAlgebraicParser();
 
     MenuController(DataModel dataModel, BoardPanel boardPanel) {
         this.dataModel = dataModel;
@@ -54,7 +48,7 @@ public class MenuController {
     public void loadDataFromPGN(String filename) {
         try {
             List<ParsedPGN> parsedPGNS = fileManager.loadPGN(filename);
-            if (parsedPGNS.size() == 0) {
+            if (parsedPGNS.isEmpty()) {
                 Log.log().warn("Empty pgn");
                 return;
             }
@@ -87,15 +81,6 @@ public class MenuController {
         textArea.setText(FENFactory.getInstance().chessBoardToFEN(dataModel.getActualNode().getBoard()));
         textArea.setEditable(false);
         JOptionPane.showMessageDialog(optionPanel, textArea);
-    }
-
-    public void makeMoves(String moves) {
-        Optional<ArrayDeque<ExecutableMove>> optionalMoves = MoveParser.getInstance()
-                .parseMoves(
-                        dataModel.getActualNode().getBoard(),
-                        List.of(moves.split(" ")),
-                        shortAlgebraicParser::parseShortAlgebraic);
-        optionalMoves.ifPresent(dataModel::insertInPlace);
     }
 
     public void insertPGN(String filename) {
