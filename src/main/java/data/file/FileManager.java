@@ -9,7 +9,6 @@ import log.Log;
 
 import java.io.*;
 import java.util.List;
-import java.util.Scanner;
 
 public class FileManager {
     private final JsonParser jsonParser = new JsonParser();
@@ -17,22 +16,18 @@ public class FileManager {
 
     public Diagram loadJSON(String filename) throws FileNotFoundException {
         Log.log().info("Loading JSON");
-        Scanner scanner = new Scanner(new File(filename + ".json"));
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
+        String text = readFile(filename + ".json");
         return jsonParser.parseJson(text.trim());
     }
 
     public List<ParsedPGN> loadPGN(String filename) throws FileNotFoundException {
         Log.log().info("Loading PGN");
-        Scanner scanner = new Scanner(new File(filename + ".pgn"));
-        String text = scanner.useDelimiter("\\A").next();
-        scanner.close();
+        String text = readFile(filename + ".pgn");
         return pgnParser.parsePGN(text);
     }
 
     public PagedPGNParser loadPagedPGN(String filename) throws FileNotFoundException {
-        Log.log().info("Loading PGN");
+        Log.log().info("Loading Paged PGN");
         return new PagedPGNParser(new PagedPGNReader(filename + ".pgn"));
     }
 
@@ -42,6 +37,23 @@ public class FileManager {
             BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".json"));
             writer.write(json);
             writer.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private String readFile(String filename) {
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(filename));
+            StringBuilder result = new StringBuilder();
+            while (true) {
+                int i = bufferedReader.read();
+                if (i == -1) {
+                    bufferedReader.close();
+                    return result.toString();
+                }
+                result.append((char) i);
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
