@@ -9,7 +9,7 @@ public class MenuFactory {
     public JMenuBar createMenu(MenuController controller, BoardPanel boardPanel, DialogManager dialogManager) {
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(createFileMenu(controller, dialogManager));
-        menuBar.add(createFeatureMenu(boardPanel, controller));
+        menuBar.add(createFeatureMenu(boardPanel, controller,dialogManager));
         menuBar.add(createEditionMenu(controller, dialogManager));
         return menuBar;
     }
@@ -40,7 +40,7 @@ public class MenuFactory {
         return fileMenu;
     }
 
-    private JMenu createFeatureMenu(BoardPanel boardPanel, MenuController controller) {
+    private JMenu createFeatureMenu(BoardPanel boardPanel, MenuController controller,DialogManager dialogManager) {
         JMenu featureMenu = new JMenu("Features");
 
         JMenuItem coverageMenuItem = new JMenuItem("Coverage");
@@ -59,6 +59,10 @@ public class MenuFactory {
         showGamesItem.addActionListener(e -> controller.showGames());
         featureMenu.add(showGamesItem);
 
+        JMenuItem insertPGNItem = new JMenuItem("Insert pgn");
+        insertPGNItem.addActionListener(e -> controller.insertPGN(dialogManager.getFilename()));
+        featureMenu.add(insertPGNItem);
+
         return featureMenu;
     }
 
@@ -68,10 +72,6 @@ public class MenuFactory {
         JMenuItem addMovesItem = new JMenuItem("Add moves");
         addMovesItem.addActionListener(e -> controller.makeMoves(dialogManager.getMoves()));
         editionMenu.add(addMovesItem);
-
-        JMenuItem insertPGNItem = new JMenuItem("Insert pgn");
-        insertPGNItem.addActionListener(e -> controller.insertPGN(dialogManager.getFilename()));
-        editionMenu.add(insertPGNItem);
 
         return editionMenu;
     }
