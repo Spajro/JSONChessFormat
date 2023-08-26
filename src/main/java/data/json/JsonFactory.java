@@ -26,7 +26,7 @@ public class JsonFactory {
         return new TimeLogSupplier<>(
                 () -> new TimeLogSupplier.SizedResult<>(
                         dataModel.getGames().size(),
-                        "{\"root\":" + toJson(dataModel.getActualNode().getRoot()) + "}"),
+                        toJson(dataModel.getActualNode().getRoot())),
                 "Preparing json time: "
         ).apply();
     }
