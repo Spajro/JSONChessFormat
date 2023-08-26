@@ -21,8 +21,30 @@ public class JsonParser {
     private final RawAlgebraicParser rawAlgebraicParser = new RawAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
 
+    private record ToParse(Diagram parent, Node node) {
+    }
+
     public Diagram parseJson(String json) {
-        return fromRoot(parseJsonToPojo(json));
+        Node jsonNode = parseJsonToPojo(json);
+        Diagram root = new Diagram();
+        migrate(root, jsonNode);
+
+        if (jsonNode.moves == null) {
+            return root;
+        }
+
+        ArrayDeque<ToParse> queue = new ArrayDeque<>();
+        jsonNode.moves.forEach(node -> queue.add(new ToParse(root, node)));
+
+        while (!queue.isEmpty()) {
+            ToParse toParse = queue.pop();
+            Diagram diagram = toParse.parent().makeMove(rawAlgebraicParser.rawAlgebraicToMoves(toParse.node.moveName), null);
+            migrate(diagram, toParse.node);
+            if (toParse.node.moves != null) {
+                toParse.node.moves.forEach(node -> queue.add(new ToParse(diagram, node)));
+            }
+        }
+        return root;
     }
 
     private Node parseJsonToPojo(String json) {
@@ -33,20 +55,8 @@ public class JsonParser {
         }
     }
 
-    private Diagram fromRoot(Node jsonNode) {
-        Diagram root = new Diagram();
-        migrate(root, jsonNode);
-        return root;
-    }
-
-    private void fromDescendant(Diagram parent, Node jsonNode) {
-        migrate(parent.makeMove(rawAlgebraicParser.rawAlgebraicToMoves(jsonNode.moveName), null), jsonNode);
-    }
-
     private void migrate(Diagram diagram, Node jsonNode) {
-        if (jsonNode.moves != null) {
-            jsonNode.moves.forEach(node -> fromDescendant(diagram, node));
-        } else if (jsonNode.movesList != null) {
+        if (jsonNode.movesList != null) {
             fromList(diagram, jsonNode.movesList);
         }
         if (jsonNode.jsonAnnotations != null) {
