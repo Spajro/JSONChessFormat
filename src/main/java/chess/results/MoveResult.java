@@ -11,7 +11,7 @@ public interface MoveResult {
 
     RawMove getMove();
 
-    default Optional<ValidMoveResult> validate(PromotionTypeProvider typeProvider) {
+    default Optional<ValidMoveResult> validate() {
         if (!this.isValid()) {
             return Optional.empty();
         }
@@ -20,8 +20,21 @@ public interface MoveResult {
             if (getMove() instanceof RawPromotion rawPromotion) {
                 validMoveResult = promotionResult.type(rawPromotion.getType());
             } else {
-                validMoveResult = promotionResult.type(typeProvider.getPromotionType());
+                throw new IllegalArgumentException("No promotion info");
             }
+        } else {
+            validMoveResult = (ValidMoveResult) this;
+        }
+        return Optional.ofNullable(validMoveResult);
+    }
+
+    default Optional<ValidMoveResult> validate(PromotionTypeProvider typeProvider) {
+        if (!this.isValid()) {
+            return Optional.empty();
+        }
+        ValidMoveResult validMoveResult;
+        if (this instanceof PromotionResult promotionResult) {
+            validMoveResult = promotionResult.type(typeProvider.getPromotionType());
         } else {
             validMoveResult = (ValidMoveResult) this;
         }

@@ -134,7 +134,7 @@ public class Diagram {
                 .toList();
 
         for (RawMove move : moves) {
-            result = result.makeMove(move).validate(null).orElseThrow().getResult();
+            result = result.makeMove(move).validate().orElseThrow().getResult();
         }
         return result;
     }
@@ -192,7 +192,7 @@ public class Diagram {
         }
 
         ChessBoard chessBoard = getBoard();
-        Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate(null);
+        Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate();
         if (validMoveResult.isEmpty()) {
             throw new IllegalStateException();
         }

@@ -88,7 +88,7 @@ class DiagramTest {
                 new Diagram(),
                 new ArrayDeque<>()
         );
-        ChessBoard expected = new ChessBoard().makeMove(raw).validate(null).orElseThrow().getResult();
+        ChessBoard expected = new ChessBoard().makeMove(raw).validate().orElseThrow().getResult();
 
         ChessBoard actual = diagram.getBoard();
 

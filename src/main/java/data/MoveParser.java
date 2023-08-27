@@ -30,7 +30,7 @@ public class MoveParser {
             }
             RawMove rawMove = parser.apply(move, chessBoard);
             MoveResult moveResult = chessBoard.makeMove(rawMove);
-            Optional<ValidMoveResult> validMoveResult = moveResult.validate(() -> AlgebraicUtility.getInstance().parsePromotion(move).orElseThrow());
+            Optional<ValidMoveResult> validMoveResult = moveResult.validate();
             if (validMoveResult.isPresent()) {
                 chessBoard = validMoveResult.get().getResult();
                 result.add(validMoveResult.get().getExecutableMove());

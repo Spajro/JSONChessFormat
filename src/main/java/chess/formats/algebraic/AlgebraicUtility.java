@@ -45,10 +45,6 @@ public class AlgebraicUtility {
         return column.map(integer -> Position.of(integer, Character.getNumericValue(position.charAt(1))));
     }
 
-    public Optional<Type> parsePromotion(String move) {
-        return algebraicToType(move.charAt(move.length() - 1));
-    }
-
     public Optional<Integer> columnToNumber(char column) {
         return Optional.ofNullable(switch (column) {
             case 'a' -> 1;
