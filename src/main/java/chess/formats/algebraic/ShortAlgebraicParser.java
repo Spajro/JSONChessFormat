@@ -41,7 +41,6 @@ public class ShortAlgebraicParser {
             case 5 -> listXor(List.of(
                             ambiguousPieceCaptureToMove(move, chessBoard),
                             doubleAmbiguousPieceToMove(move, chessBoard),
-                            ambiguousPawnPromotion(move, chessBoard),
                             pawnCapturePromotion(move, chessBoard)
                     )
             );
@@ -152,19 +151,6 @@ public class ShortAlgebraicParser {
         return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
     }
 
-    private Optional<RawMove> ambiguousPawnPromotion(String move, ChessBoard chessBoard) {
-        if (move.charAt(3) != '=') {
-            return Optional.empty();
-        }
-
-        Optional<RawMove> optionalRawMove = ambiguousPieceToMove("P" + move.substring(0, 3), chessBoard);
-        Optional<Piece.Type> optionalType = utility.algebraicToType(move.charAt(4));
-        if (optionalRawMove.isEmpty() || optionalType.isEmpty()) {
-            return Optional.empty();
-        }
-        return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
-    }
-
     private Optional<RawMove> pawnCapturePromotion(String move, ChessBoard chessBoard) {
         if (move.charAt(0) != 'x') {
             return Optional.empty();
@@ -174,11 +160,17 @@ public class ShortAlgebraicParser {
     }
 
     private Optional<RawMove> ambiguousPawnCapturePromotion(String move, ChessBoard chessBoard) {
-        if (move.charAt(1) != 'x') {
+        if (move.charAt(1) != 'x' || move.charAt(4) != '=') {
             return Optional.empty();
         }
 
-        return ambiguousPawnPromotion(move.charAt(0) + move.substring(2), chessBoard);
+        Optional<RawMove> optionalRawMove = ambiguousPieceCaptureToMove("P" + move.substring(0, 4), chessBoard);
+        Optional<Piece.Type> optionalType = utility.algebraicToType(move.charAt(5));
+        if (optionalRawMove.isEmpty() || optionalType.isEmpty()) {
+            return Optional.empty();
+        }
+
+        return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
     }
 
     private Optional<RawMove> getSinglePieceMove(Piece piece, ChessBoard chessBoard) {
@@ -244,12 +236,12 @@ public class ShortAlgebraicParser {
 
     private Optional<Piece> charToPiece(char piece, Position position, Color color) {
         return Optional.ofNullable(switch (piece) {
-            case 'P' -> PoolManager.getPiecePool().get(position,color, Piece.Type.PAWN);
-            case 'N' -> PoolManager.getPiecePool().get(position,color, Piece.Type.KNIGHT);
-            case 'B' -> PoolManager.getPiecePool().get(position,color, Piece.Type.BISHOP);
-            case 'R' -> PoolManager.getPiecePool().get(position,color, Piece.Type.ROOK);
-            case 'Q' -> PoolManager.getPiecePool().get(position,color, Piece.Type.QUEEN);
-            case 'K' -> PoolManager.getPiecePool().get(position,color, Piece.Type.KING);
+            case 'P' -> PoolManager.getPiecePool().get(position, color, Piece.Type.PAWN);
+            case 'N' -> PoolManager.getPiecePool().get(position, color, Piece.Type.KNIGHT);
+            case 'B' -> PoolManager.getPiecePool().get(position, color, Piece.Type.BISHOP);
+            case 'R' -> PoolManager.getPiecePool().get(position, color, Piece.Type.ROOK);
+            case 'Q' -> PoolManager.getPiecePool().get(position, color, Piece.Type.QUEEN);
+            case 'K' -> PoolManager.getPiecePool().get(position, color, Piece.Type.KING);
             default -> null;
         });
     }
