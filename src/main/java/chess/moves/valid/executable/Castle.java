@@ -1,7 +1,6 @@
 package chess.moves.valid.executable;
 
 import chess.board.lowlevel.Board;
-import chess.Position;
 import chess.moves.raw.RawMove;
 
 public class Castle implements ExecutableMove {
@@ -28,11 +27,6 @@ public class Castle implements ExecutableMove {
         newBoard.write(Board.EMPTY, rookMove.getStartPosition());
         return newBoard;
 
-    }
-
-    @Override
-    public Position getStartPosition() {
-        return kingMove.getStartPosition();
     }
 
     public Type getType() {
