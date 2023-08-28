@@ -33,20 +33,20 @@ public class ShortAlgebraicParser {
             );
             case 4 -> listXor(List.of(
                             pieceCaptureToMove(move, chessBoard),
+                            pawnPromotion(move, chessBoard),
                             ambiguousPieceToMove(move, chessBoard),
-                            ambiguousPieceCaptureToMove('P' + move, chessBoard),
-                            pawnPromotion(move, chessBoard)
+                            ambiguousPieceCaptureToMove('P' + move, chessBoard)
                     )
             );
             case 5 -> listXor(List.of(
+                            pawnCapturePromotion(move, chessBoard),
                             ambiguousPieceCaptureToMove(move, chessBoard),
-                            doubleAmbiguousPieceToMove(move, chessBoard),
-                            pawnCapturePromotion(move, chessBoard)
+                            doubleAmbiguousPieceToMove(move, chessBoard)
                     )
             );
             case 6 -> xor(
-                    doubleAmbiguousPieceCaptureToMove(move, chessBoard),
-                    ambiguousPawnCapturePromotion(move, chessBoard)
+                    ambiguousPawnCapturePromotion(move, chessBoard),
+                    doubleAmbiguousPieceCaptureToMove(move, chessBoard)
             );
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
         };
