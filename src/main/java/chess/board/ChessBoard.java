@@ -31,8 +31,6 @@ public class ChessBoard {
     private final BoardWrapper boardWrapper = new BoardWrapper(this);
     private final ChessBoardUtility utility = new ChessBoardUtility(this);
     private final CastleRequirementsFactory castleRequirementsFactory = new CastleRequirementsFactory(this);
-    private final ValidMoveFactory validMoveFactory = new ValidMoveFactory(this);
-    private final ExecutableMoveGenerator generator;
     private final Position whiteKingPosition;
     private final Position blackKingPosition;
 
@@ -41,7 +39,6 @@ public class ChessBoard {
         color = Color.white;
         castleRequirements = new CastleRequirements();
         lastMove = null;
-        generator = new ExecutableMoveGenerator(this);
         whiteKingPosition = Position.of(5, 1);
         blackKingPosition = Position.of(5, 8);
     }
@@ -56,7 +53,6 @@ public class ChessBoard {
         this.color = color;
         this.castleRequirements = castleRequirements;
         this.lastMove = moveCreatingBoard;
-        generator = new ExecutableMoveGenerator(this);
         this.whiteKingPosition = whiteKingPosition;
         this.blackKingPosition = blackKingPosition;
     }
@@ -106,7 +102,7 @@ public class ChessBoard {
     }
 
     public MoveResult makeMove(RawMove move) {
-        Optional<ValidMove> optionalValidMove = validMoveFactory.createValidMove(move);
+        Optional<ValidMove> optionalValidMove = new ValidMoveFactory(this).createValidMove(move);
         if (optionalValidMove.isPresent()) {
             ValidMove validMove = optionalValidMove.get();
             if (validMove.isExecutable()) {
@@ -192,7 +188,7 @@ public class ChessBoard {
     }
 
     public ExecutableMoveGenerator getGenerator() {
-        return generator;
+        return new ExecutableMoveGenerator(this);
     }
 
     public Position getKingPosition(Color color) {
