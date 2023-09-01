@@ -28,7 +28,7 @@ public class CommandLineHandler {
     private final LongAlgebraicParser longAlgebraicParser = new LongAlgebraicParser();
 
     public void handle(String data) {
-        if (data.equals("")) {
+        if (data.isEmpty()) {
             return;
         }
         ArrayDeque<String> input = new ArrayDeque<>(List.of(data.split(" ")));
@@ -163,8 +163,12 @@ public class CommandLineHandler {
                         int size = 0;
                         while (pgnParser.hasNext()) {
                             ParsedPGN parsedPGN = pgnParser.next();
-                            dataModel.insert(parsedPGN.moves().orElseThrow(), parsedPGN.metadata());
-                            size++;
+                            if (parsedPGN.moves().isEmpty()) {
+                                Log.log().warn("Unable to parse game: " + parsedPGN.metadata().toString());
+                            } else {
+                                dataModel.insert(parsedPGN.moves().get(), parsedPGN.metadata());
+                                size++;
+                            }
                         }
                         return size;
                     },
