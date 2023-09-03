@@ -64,8 +64,6 @@ public class Diagram {
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
-        Log.log().info("Trying to make:" + move);
-
         ChessBoard chessBoard = getBoard();
         MoveResult moveResult = chessBoard.makeMove(move);
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);

@@ -20,17 +20,19 @@ public class DataModel {
         treeDataModel.setActualNode(actualNode);
     }
 
-    public void makeMove(RawMove m) {
+    public void makeMove(RawMove move) {
+        Log.log().info("Make move: " + move);
         Diagram tempNode = actualNode;
-        actualNode = actualNode.makeMove(m, promotionTypeProvider);
+        actualNode = actualNode.makeMove(move, promotionTypeProvider);
         if (tempNode != actualNode) {
             treeDataModel.setActualNode(actualNode);
             treeDataModel.notifyListenersOnInsert(actualNode);
+            games.update(diagramManager.updateMetadata(tempNode));
         }
     }
 
     public void insert(ArrayDeque<ExecutableMove> moves, MetaData metaData) {
-        Log.log().info("DataModel insertion");
+        Log.log().info("Insert: " + metaData);
         Diagram actualRoot = actualNode.getRoot();
         games.update(diagramManager.insert(actualRoot, moves, metaData));
         games.update(diagramManager.updateMetadata(games.get(metaData)));
@@ -66,7 +68,6 @@ public class DataModel {
     public TreeDataModel asTree() {
         return treeDataModel;
     }
-
 
     public GamesRepository getGames() {
         return games;
