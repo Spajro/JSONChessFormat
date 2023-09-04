@@ -1,6 +1,7 @@
 package data.model;
 
 import chess.moves.raw.RawMove;
+import chess.moves.valid.ValidMove;
 import chess.moves.valid.executable.ExecutableMove;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
@@ -18,17 +19,32 @@ public class DiagramManager {
             return GamesUpdateEvent.of(metaData, tree);
         }
 
-        if (tree.isLazy() && tree.getLazyMoves().size() == 0) {
-            tree.setLazyMoves(new ArrayDeque<>(
-                    moves.stream()
-                            .map(ExecutableMove::getRepresentation)
-                            .toList()
-            ));
-            tree.getMetaData().add(metaData);
-            return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
+        if (tree.isLazy()) {
+            if (tree.getLazyMoves().isEmpty()) {
+                tree.setLazyMoves(new ArrayDeque<>(
+                        moves.stream()
+                                .map(ExecutableMove::getRepresentation)
+                                .toList()
+                ));
+                tree.getMetaData().add(metaData);
+                return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
+            }
+
+            if (moves.stream().map(ValidMove::getRepresentation).toList().equals(tree.getLazyMoves())) {
+                tree.getMetaData().add(metaData);
+                return GamesUpdateEvent.of(metaData, tree);
+            }
         }
 
+
         ExecutableMove move = moves.poll();
+
+        if (tree.isLazy() && tree.getLazyMoves().get(0).equals(move.getRepresentation())) {
+            tree.expand();
+            Diagram diagram = tree.getNextDiagrams().get(0);
+            return updateMetadata(diagram).join(insert(diagram, moves, metaData));
+        }
+
         Optional<Diagram> optionalDiagram = getByRawMove(tree, move.getRepresentation());
         if (optionalDiagram.isPresent()) {
             return insert(optionalDiagram.get(), moves, metaData);
@@ -43,13 +59,22 @@ public class DiagramManager {
                         .toList())
         );
 
-        tree.getNextDiagrams().add(diagram);
-        diagram.getMetaData().add(metaData);
+        tree.getNextDiagrams().
 
-        return GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram));
+                add(diagram);
+        diagram.getMetaData().
+
+                add(metaData);
+
+        return GamesUpdateEvent.of(metaData, diagram).
+
+                join(updateMetadata(diagram));
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {
+        if (diagram.isLazy()) {
+            return Optional.empty();
+        }
         for (Diagram nextDiagram : diagram.getNextDiagrams()) {
             if (nextDiagram.getCreatingMove().isPresent()) {
                 if (nextDiagram.getCreatingMove().get().equals(move)) {

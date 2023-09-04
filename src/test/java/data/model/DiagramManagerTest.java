@@ -224,4 +224,41 @@ class DiagramManagerTest {
         assertTrue(diagram.getMetaData().contains(metaData1));
         assertTrue(diagram.getMetaData().contains(metaData2));
     }
+
+    @Test
+    void insert2IdenticalGamesTest() {
+        Diagram tree = new Diagram();
+        RawMove raw1 = RawMove.of(Position.of(4, 2), Position.of(4, 4));
+        RawMove raw2 = RawMove.of(Position.of(4, 7), Position.of(4, 5));
+        RawMove raw3 = RawMove.of(Position.of(5, 2), Position.of(5, 4));
+        ExecutableMove executable1 = new SimpleMove(raw1, Board.getStart());
+        ExecutableMove executable2 = new SimpleMove(raw2, executable1.makeMove());
+        ExecutableMove executable3 = new SimpleMove(raw3, executable2.makeMove());
+        ArrayDeque<ExecutableMove> moves1 = new ArrayDeque<>(List.of(executable1, executable2, executable3));
+        ArrayDeque<ExecutableMove> moves2 = new ArrayDeque<>(List.of(executable1, executable2, executable3));
+        MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 2);
+        MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 2);
+
+        GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
+        GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+
+        assertFalse(tree.isLazy());
+        assertEquals(1, tree.getNextDiagrams().size());
+
+        Diagram diagram = tree.getNextDiagrams().get(0);
+        assertTrue(diagram.getCreatingMove().isPresent());
+        assertEquals(raw1, diagram.getCreatingMove().get());
+
+        assertTrue(diagram.isLazy());
+        assertEquals(2, diagram.getLazyMoves().size());
+        assertEquals(raw2,diagram.getLazyMoves().get(0));
+        assertEquals(raw3,diagram.getLazyMoves().get(1));
+
+        assertEquals(diagram, event1.gamesMap().get(metaData1));
+
+        assertEquals(diagram, event2.gamesMap().get(metaData2));
+
+        assertTrue(diagram.getMetaData().contains(metaData1));
+        assertTrue(diagram.getMetaData().contains(metaData2));
+    }
 }
