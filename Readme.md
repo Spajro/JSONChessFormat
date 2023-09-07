@@ -1,4 +1,4 @@
-### ChessOpeningsBase
+### JSONChessFormat
 Application designed to support analyse of chess openings and games with usage of JSON based format.
 
 #### Usage
