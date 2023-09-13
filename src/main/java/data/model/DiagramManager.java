@@ -36,9 +36,9 @@ public class DiagramManager {
         RawMove move = moves.poll();
 
         if (tree.isLazy() && tree.getLazyMovesList().get(0).equals(move)) {
-            expand(tree);
+            GamesUpdateEvent event = expand(tree);
             Diagram diagram = tree.getNextDiagrams().get(0);
-            return updateMetadata(diagram).join(insert(diagram, moves, metaData));
+            return event.join(updateMetadata(diagram).join(insert(diagram, moves, metaData)));
         }
 
         Optional<Diagram> optionalDiagram = getByRawMove(tree, move);
@@ -52,22 +52,24 @@ public class DiagramManager {
                 tree,
                 moves
         );
-
+        GamesUpdateEvent event;
         if (tree.isLazy()) {
-            expand(tree);
+            event = expand(tree);
+        } else {
+            event = GamesUpdateEvent.empty();
         }
         tree.getNextDiagrams().add(diagram);
         diagram.getMetaData().add(metaData);
 
-        return GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram));
+        return event.join(GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram)));
     }
 
-    public void expand(Diagram diagram) {
+    public GamesUpdateEvent expand(Diagram diagram) {
         RawMove move = diagram.getLazyMovesDeque().poll();
         if (move == null) {
             diagram.expandNextDiagrams();
             diagram.setLazyMoves(null);
-            return;
+            return GamesUpdateEvent.empty();
         }
 
         ChessBoard chessBoard = diagram.getBoard();
@@ -85,6 +87,7 @@ public class DiagramManager {
         diagram.expandNextDiagrams();
         diagram.setLazyMoves(null);
         diagram.getNextDiagrams().add(lazy);
+        return moveMetaData(diagram, lazy);
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {

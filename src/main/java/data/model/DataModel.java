@@ -10,13 +10,12 @@ import java.util.*;
 public class DataModel {
     private Diagram actualNode;
     private final GamesRepository games = new GamesRepository();
-    private final TreeDataModel treeDataModel = new TreeDataModel();
+    private final TreeDataModel treeDataModel = new TreeDataModel(this);
     private final DiagramManager diagramManager = new DiagramManager();
     private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
         actualNode = new Diagram();
-        treeDataModel.setActualNode(actualNode);
     }
 
     public void makeMove(RawMove move) {
@@ -24,7 +23,6 @@ public class DataModel {
         Diagram tempNode = actualNode;
         actualNode = actualNode.makeMove(move, promotionTypeProvider);
         if (tempNode != actualNode) {
-            treeDataModel.setActualNode(actualNode);
             treeDataModel.notifyListenersOnInsert(actualNode);
             games.update(diagramManager.updateMetadata(tempNode));
         }
@@ -47,12 +45,10 @@ public class DataModel {
 
     public void setActualNode(Diagram actualNode) {
         this.actualNode = actualNode;
-        treeDataModel.setActualNode(actualNode);
     }
 
     public void setNewTree(Diagram tree) {
         this.actualNode = tree;
-        treeDataModel.setActualNode(tree);
         games.setNewTree(tree.getRoot());
     }
 
@@ -73,8 +69,8 @@ public class DataModel {
     }
 
     public void expandIfLazy(Diagram diagram) {
-        if(diagram.isLazy()){
-            diagramManager.expand(diagram);
+        if (diagram.isLazy()) {
+            games.update(diagramManager.expand(diagram));
         }
     }
 }

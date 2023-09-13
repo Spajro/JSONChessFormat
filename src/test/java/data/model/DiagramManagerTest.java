@@ -262,7 +262,7 @@ class DiagramManagerTest {
                             raw3))
             );
 
-            new DiagramManager().expand(diagram);
+            GamesUpdateEvent event=new DiagramManager().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(1, diagram.getNextDiagrams().size());
@@ -286,7 +286,7 @@ class DiagramManagerTest {
                     new ArrayDeque<>()
             );
 
-            new DiagramManager().expand(diagram);
+            GamesUpdateEvent event=new DiagramManager().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(0, diagram.getNextDiagrams().size());

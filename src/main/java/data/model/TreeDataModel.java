@@ -7,17 +7,16 @@ import javax.swing.tree.TreePath;
 import java.util.ArrayList;
 
 public class TreeDataModel implements TreeModel {
-    private Diagram actualNode;
-    private final DiagramManager diagramManager=new DiagramManager();
+    private final DataModel dataModel;
     private final ArrayList<TreeModelListener> treeModelListeners = new ArrayList<>();
 
-    public void setActualNode(Diagram actualNode) {
-        this.actualNode = actualNode;
+    public TreeDataModel(DataModel dataModel) {
+        this.dataModel = dataModel;
     }
 
     @Override
     public Object getRoot() {
-        return actualNode.getRoot();
+        return dataModel.getActualNode().getRoot();
     }
 
     @Override
@@ -27,10 +26,8 @@ public class TreeDataModel implements TreeModel {
 
     @Override
     public int getChildCount(Object parent) {
-        Diagram diagram=(Diagram) parent;
-        if(diagram.isLazy()){
-            diagramManager.expand(diagram);
-        }
+        Diagram diagram = (Diagram) parent;
+        dataModel.expandIfLazy(diagram);
         return diagram.getNextDiagrams().size();
     }
 
