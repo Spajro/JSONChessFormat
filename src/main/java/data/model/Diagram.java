@@ -1,6 +1,5 @@
 package data.model;
 
-import chess.moves.valid.executable.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
 import chess.formats.algebraic.LongAlgebraicFactory;
@@ -29,15 +28,10 @@ public class Diagram {
         nextDiagrams = new ArrayList<>();
     }
 
-    public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent) {
+    public Diagram(RawMove creatingMove, ChessBoard chessBoard, Diagram parent) {
         nextDiagrams = new ArrayList<>();
         this.parent = parent;
-
-        if (creatingMove == null) {
-            this.creatingMove = null;
-        } else {
-            this.creatingMove = creatingMove.getRepresentation();
-        }
+        this.creatingMove = creatingMove;
 
         if (parent != null) {
             moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
@@ -46,21 +40,11 @@ public class Diagram {
         }
     }
 
-    public Diagram(ExecutableMove creatingMove, ChessBoard chessBoard, Diagram parent, ArrayDeque<RawMove> moves) {
+    public Diagram(RawMove creatingMove, ChessBoard chessBoard, Diagram parent, ArrayDeque<RawMove> moves) {
         this.parent = parent;
         this.lazyMoves = moves;
-
-        if (creatingMove == null) {
-            this.creatingMove = null;
-        } else {
-            this.creatingMove = creatingMove.getRepresentation();
-        }
-
-        if (parent != null) {
-            moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
-        } else {
-            moveName = "Root";
-        }
+        this.creatingMove = creatingMove;
+        this.moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
     }
 
     public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
@@ -69,7 +53,7 @@ public class Diagram {
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
         if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(validMoveResult.get().getExecutableMove(), chessBoard, this);
+            Diagram nextDiagram = new Diagram(move, chessBoard, this);
             for (Diagram diagram : getNextDiagrams()) {
                 if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
                     if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
@@ -196,7 +180,7 @@ public class Diagram {
         }
 
         Diagram lazy = new Diagram(
-                validMoveResult.get().getExecutableMove(),
+                move,
                 chessBoard,
                 this,
                 lazyMoves

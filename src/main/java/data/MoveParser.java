@@ -2,10 +2,8 @@ package data;
 
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
-import chess.moves.valid.executable.ExecutableMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
-import chess.formats.algebraic.AlgebraicUtility;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -22,8 +20,8 @@ public class MoveParser {
         return MOVE_PARSER;
     }
 
-    public Optional<ArrayDeque<ExecutableMove>> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
-        ArrayDeque<ExecutableMove> result=new ArrayDeque<>();
+    public Optional<ArrayDeque<RawMove>> parseMoves(ChessBoard chessBoard, List<String> moves, BiFunction<String, ChessBoard, RawMove> parser) {
+        ArrayDeque<RawMove> result=new ArrayDeque<>();
         for (String move : moves) {
             if (isGameEnd(move)) {
                 break;
@@ -33,7 +31,7 @@ public class MoveParser {
             Optional<ValidMoveResult> validMoveResult = moveResult.validate();
             if (validMoveResult.isPresent()) {
                 chessBoard = validMoveResult.get().getResult();
-                result.add(validMoveResult.get().getExecutableMove());
+                result.add(rawMove);
             } else {
                 return Optional.empty();
             }

@@ -1,6 +1,7 @@
 package data.pgn;
 
 import chess.board.ChessBoard;
+import chess.moves.raw.RawMove;
 import chess.moves.valid.executable.ExecutableMove;
 import chess.formats.algebraic.ShortAlgebraicParser;
 import data.MoveParser;
@@ -32,7 +33,7 @@ public class PGNParser {
                     ArrayList<String> parts = new ArrayList<>(List.of(pgn.split(newLine + newLine)));
                     ArrayList<ParsedPGN> result = new ArrayList<>();
                     for (int i = 0; i < parts.size() - 1; i += 2) {
-                        Optional<ArrayDeque<ExecutableMove>> moves = parseMoves(parts.get(i + 1));
+                        Optional<ArrayDeque<RawMove>> moves = parseMoves(parts.get(i + 1));
                         int length;
                         if (moves.isEmpty()) {
                             length = -1;
@@ -70,7 +71,7 @@ public class PGNParser {
         );
     }
 
-    public Optional<ArrayDeque<ExecutableMove>> parseMoves(String input) {
+    public Optional<ArrayDeque<RawMove>> parseMoves(String input) {
         if (input.charAt(0) == ' ') {
             input = input.substring(1);
         }

@@ -1,7 +1,6 @@
 package data.model;
 
 import chess.moves.raw.RawMove;
-import chess.moves.valid.executable.ExecutableMove;
 import data.model.games.GamesRepository;
 import data.model.metadata.MetaData;
 import log.Log;
@@ -31,7 +30,7 @@ public class DataModel {
         }
     }
 
-    public void insert(ArrayDeque<ExecutableMove> moves, MetaData metaData) {
+    public void insert(ArrayDeque<RawMove> moves, MetaData metaData) {
         Log.log().info("Insert: " + metaData);
         Diagram actualRoot = actualNode.getRoot();
         games.update(diagramManager.insert(actualRoot, moves, metaData));

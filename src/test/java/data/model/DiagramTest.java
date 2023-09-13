@@ -2,9 +2,7 @@ package data.model;
 
 import chess.Position;
 import chess.board.ChessBoard;
-import chess.board.lowlevel.Board;
 import chess.moves.raw.RawMove;
-import chess.moves.valid.executable.SimpleMove;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;
@@ -20,9 +18,7 @@ class DiagramTest {
         RawMove raw2 = RawMove.of(Position.of(4, 7), Position.of(4, 5));
         RawMove raw3 = RawMove.of(Position.of(5, 2), Position.of(5, 4));
         Diagram diagram = new Diagram(
-                new SimpleMove(
-                        raw1,
-                        Board.getStart()),
+                raw1,
                 new ChessBoard(),
                 new Diagram(),
                 new ArrayDeque<>(List.of(
@@ -48,9 +44,7 @@ class DiagramTest {
     void expandEmptyLazyMovesTest() {
         RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         Diagram diagram = new Diagram(
-                new SimpleMove(
-                        raw,
-                        Board.getStart()),
+                raw,
                 new ChessBoard(),
                 new Diagram(),
                 new ArrayDeque<>()
@@ -66,9 +60,7 @@ class DiagramTest {
     void expandIllegalMoveShouldThrowTest() {
         RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         Diagram diagram = new Diagram(
-                new SimpleMove(
-                        raw,
-                        Board.getStart()),
+                raw,
                 new ChessBoard(),
                 new Diagram(),
                 new ArrayDeque<>(List.of(raw))
@@ -81,9 +73,7 @@ class DiagramTest {
     void getChesBoardTest() {
         RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         Diagram diagram = new Diagram(
-                new SimpleMove(
-                        raw,
-                        Board.getStart()),
+                raw,
                 new ChessBoard(),
                 new Diagram(),
                 new ArrayDeque<>()

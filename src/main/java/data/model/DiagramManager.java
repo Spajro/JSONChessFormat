@@ -1,8 +1,6 @@
 package data.model;
 
 import chess.moves.raw.RawMove;
-import chess.moves.valid.ValidMove;
-import chess.moves.valid.executable.ExecutableMove;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 public class DiagramManager {
-    public GamesUpdateEvent insert(Diagram tree, ArrayDeque<ExecutableMove> moves, MetaData metaData) {
+    public GamesUpdateEvent insert(Diagram tree, ArrayDeque<RawMove> moves, MetaData metaData) {
         if (moves.isEmpty()) {
             tree.getMetaData().add(metaData);
             return GamesUpdateEvent.of(metaData, tree);
@@ -21,31 +19,27 @@ public class DiagramManager {
 
         if (tree.isLazy()) {
             if (tree.getLazyMoves().isEmpty()) {
-                tree.setLazyMoves(new ArrayDeque<>(
-                        moves.stream()
-                                .map(ExecutableMove::getRepresentation)
-                                .toList()
-                ));
+                tree.setLazyMoves(moves);
                 tree.getMetaData().add(metaData);
                 return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
             }
 
-            if (moves.stream().map(ValidMove::getRepresentation).toList().equals(tree.getLazyMoves())) {
+            if (moves.stream().toList().equals(tree.getLazyMoves())) {
                 tree.getMetaData().add(metaData);
                 return GamesUpdateEvent.of(metaData, tree);
             }
         }
 
 
-        ExecutableMove move = moves.poll();
+        RawMove move = moves.poll();
 
-        if (tree.isLazy() && tree.getLazyMoves().get(0).equals(move.getRepresentation())) {
+        if (tree.isLazy() && tree.getLazyMoves().get(0).equals(move)) {
             tree.expand();
             Diagram diagram = tree.getNextDiagrams().get(0);
             return updateMetadata(diagram).join(insert(diagram, moves, metaData));
         }
 
-        Optional<Diagram> optionalDiagram = getByRawMove(tree, move.getRepresentation());
+        Optional<Diagram> optionalDiagram = getByRawMove(tree, move);
         if (optionalDiagram.isPresent()) {
             return insert(optionalDiagram.get(), moves, metaData);
         }
@@ -54,9 +48,7 @@ public class DiagramManager {
                 move,
                 tree.getBoard(),
                 tree,
-                new ArrayDeque<>(moves.stream()
-                        .map(ExecutableMove::getRepresentation)
-                        .toList())
+                moves
         );
 
         tree.getNextDiagrams().

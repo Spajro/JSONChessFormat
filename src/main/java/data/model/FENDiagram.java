@@ -1,13 +1,13 @@
 package data.model;
 
 import chess.board.ChessBoard;
-import chess.moves.valid.executable.ExecutableMove;
+import chess.moves.raw.RawMove;
 
 public class FENDiagram extends Diagram {
     private final ChessBoard chessBoard;
 
-    public FENDiagram(ExecutableMove creatingMove, Diagram parent, ChessBoard chessBoard) {
-        super(creatingMove, chessBoard, parent);
+    public FENDiagram(RawMove creatingMove, ChessBoard chessBoard) {
+        super(creatingMove, chessBoard, null);
         this.chessBoard = chessBoard;
     }
 
