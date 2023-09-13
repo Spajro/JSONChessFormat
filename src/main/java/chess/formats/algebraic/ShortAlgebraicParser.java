@@ -33,19 +33,19 @@ public class ShortAlgebraicParser {
             );
             case 4 -> listXor(List.of(
                             pieceCaptureToMove(move, chessBoard),
-                            pawnPromotion(move, chessBoard),
+                            pawnPromotionToMove(move, chessBoard),
                             ambiguousPieceToMove(move, chessBoard),
                             ambiguousPieceCaptureToMove('P' + move, chessBoard)
                     )
             );
             case 5 -> listXor(List.of(
-                            pawnCapturePromotion(move, chessBoard),
+                            pawnCapturePromotionToMove(move, chessBoard),
                             ambiguousPieceCaptureToMove(move, chessBoard),
                             doubleAmbiguousPieceToMove(move, chessBoard)
                     )
             );
             case 6 -> xor(
-                    ambiguousPawnCapturePromotion(move, chessBoard),
+                    ambiguousPawnCapturePromotionToMove(move, chessBoard),
                     doubleAmbiguousPieceCaptureToMove(move, chessBoard)
             );
             default -> throw new IllegalStateException("Unexpected algebraic length: " + move.length());
@@ -138,7 +138,7 @@ public class ShortAlgebraicParser {
         return doubleAmbiguousPieceToMove(move.substring(0, 3) + move.substring(4), chessBoard);
     }
 
-    private Optional<RawMove> pawnPromotion(String move, ChessBoard chessBoard) {
+    private Optional<RawMove> pawnPromotionToMove(String move, ChessBoard chessBoard) {
         if (move.charAt(2) != '=') {
             return Optional.empty();
         }
@@ -151,15 +151,15 @@ public class ShortAlgebraicParser {
         return Optional.of(new RawPromotion(optionalRawMove.get(), optionalType.get()));
     }
 
-    private Optional<RawMove> pawnCapturePromotion(String move, ChessBoard chessBoard) {
+    private Optional<RawMove> pawnCapturePromotionToMove(String move, ChessBoard chessBoard) {
         if (move.charAt(0) != 'x') {
             return Optional.empty();
         }
 
-        return pawnPromotion(move.substring(1), chessBoard);
+        return pawnPromotionToMove(move.substring(1), chessBoard);
     }
 
-    private Optional<RawMove> ambiguousPawnCapturePromotion(String move, ChessBoard chessBoard) {
+    private Optional<RawMove> ambiguousPawnCapturePromotionToMove(String move, ChessBoard chessBoard) {
         if (move.charAt(1) != 'x' || move.charAt(4) != '=') {
             return Optional.empty();
         }
