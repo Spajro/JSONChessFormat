@@ -46,21 +46,18 @@ public class JsonFactory {
                     .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
                     .append(',');
         }
-        if (diagram.isLazy()) {
-            result.append("\"movesList\":")
-                    .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson))
-                    .append(',');
-        } else if (!diagram.getNextDiagrams().isEmpty()) {
-            result.append("\"moves\":")
-                    .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson))
-                    .append(',');
-        }
         if (!diagram.getAnnotations().isEmpty()) {
             result.append("\"annotations\":")
                     .append(toJson(diagram.getAnnotations()))
                     .append(',');
         }
-        result.deleteCharAt(result.length() - 1);
+        if (diagram.isLazy()) {
+            result.append("\"movesList\":")
+                    .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson));
+        } else if (!diagram.getNextDiagrams().isEmpty()) {
+            result.append("\"moves\":")
+                    .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson));
+        }
         result.append('}');
         return result.toString();
     }
