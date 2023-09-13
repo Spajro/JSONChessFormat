@@ -1,6 +1,8 @@
 package data.model;
 
+import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import chess.results.ValidMoveResult;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
@@ -18,13 +20,13 @@ public class DiagramManager {
         }
 
         if (tree.isLazy()) {
-            if (tree.getLazyMoves().isEmpty()) {
+            if (tree.getLazyMovesList().isEmpty()) {
                 tree.setLazyMoves(moves);
                 tree.getMetaData().add(metaData);
                 return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
             }
 
-            if (moves.stream().toList().equals(tree.getLazyMoves())) {
+            if (moves.stream().toList().equals(tree.getLazyMovesList())) {
                 tree.getMetaData().add(metaData);
                 return GamesUpdateEvent.of(metaData, tree);
             }
@@ -33,8 +35,8 @@ public class DiagramManager {
 
         RawMove move = moves.poll();
 
-        if (tree.isLazy() && tree.getLazyMoves().get(0).equals(move)) {
-            tree.expand();
+        if (tree.isLazy() && tree.getLazyMovesList().get(0).equals(move)) {
+            expand(tree);
             Diagram diagram = tree.getNextDiagrams().get(0);
             return updateMetadata(diagram).join(insert(diagram, moves, metaData));
         }
@@ -51,16 +53,38 @@ public class DiagramManager {
                 moves
         );
 
-        tree.getNextDiagrams().
+        if (tree.isLazy()) {
+            expand(tree);
+        }
+        tree.getNextDiagrams().add(diagram);
+        diagram.getMetaData().add(metaData);
 
-                add(diagram);
-        diagram.getMetaData().
+        return GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram));
+    }
 
-                add(metaData);
+    public void expand(Diagram diagram) {
+        RawMove move = diagram.getLazyMovesDeque().poll();
+        if (move == null) {
+            diagram.expandNextDiagrams();
+            diagram.setLazyMoves(null);
+            return;
+        }
 
-        return GamesUpdateEvent.of(metaData, diagram).
+        ChessBoard chessBoard = diagram.getBoard();
+        Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate();
+        if (validMoveResult.isEmpty()) {
+            throw new IllegalStateException();
+        }
 
-                join(updateMetadata(diagram));
+        Diagram lazy = new Diagram(
+                move,
+                chessBoard,
+                diagram,
+                diagram.getLazyMovesDeque()
+        );
+        diagram.expandNextDiagrams();
+        diagram.setLazyMoves(null);
+        diagram.getNextDiagrams().add(lazy);
     }
 
     private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {

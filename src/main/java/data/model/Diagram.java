@@ -99,9 +99,6 @@ public class Diagram {
     }
 
     public List<Diagram> getNextDiagrams() {
-        if (lazyMoves != null) {
-            expand();
-        }
         return nextDiagrams;
     }
 
@@ -165,43 +162,26 @@ public class Diagram {
         return result;
     }
 
-    public void expand() {
-        RawMove move = lazyMoves.poll();
-        if (move == null) {
-            nextDiagrams = new ArrayList<>();
-            lazyMoves = null;
-            return;
-        }
-
-        ChessBoard chessBoard = getBoard();
-        Optional<ValidMoveResult> validMoveResult = chessBoard.makeMove(move).validate();
-        if (validMoveResult.isEmpty()) {
-            throw new IllegalStateException();
-        }
-
-        Diagram lazy = new Diagram(
-                move,
-                chessBoard,
-                this,
-                lazyMoves
-        );
-        nextDiagrams = new ArrayList<>();
-        lazyMoves = null;
-        this.getNextDiagrams().add(lazy);
-    }
-
     public boolean isLazy() {
         return nextDiagrams == null;
     }
 
-    public List<RawMove> getLazyMoves() {
+    public List<RawMove> getLazyMovesList() {
         if (lazyMoves == null) {
             return null;
         }
         return lazyMoves.stream().toList();
     }
 
+    public ArrayDeque<RawMove> getLazyMovesDeque() {
+        return lazyMoves;
+    }
+
     public void setLazyMoves(ArrayDeque<RawMove> lazyMoves) {
         this.lazyMoves = lazyMoves;
+    }
+
+    public void expandNextDiagrams() {
+        nextDiagrams = new ArrayList<>();
     }
 }

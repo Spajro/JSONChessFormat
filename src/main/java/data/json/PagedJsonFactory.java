@@ -66,7 +66,7 @@ public class PagedJsonFactory implements Iterator<String> {
             }
             if (diagram.isLazy()) {
                 result.append("\"movesList\":")
-                        .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson))
+                        .append(listJsonFactory.listToJson(diagram.getLazyMovesList(), this::toJson))
                         .append('}');
                 return result.toString();
             } else if (!diagram.getNextDiagrams().isEmpty()) {

@@ -71,4 +71,10 @@ public class DataModel {
     public GamesRepository getGames() {
         return games;
     }
+
+    public void expandIfLazy(Diagram diagram) {
+        if(diagram.isLazy()){
+            diagramManager.expand(diagram);
+        }
+    }
 }

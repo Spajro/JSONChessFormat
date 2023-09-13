@@ -32,7 +32,8 @@ public class Controller {
     }
 
     public void setActualNode(Diagram lastPathComponent) {
-        Log.log().info(lastPathComponent.toString() + " is set as actual node, " + lastPathComponent.getNextDiagrams().size() + " nextDiagrams");
+        dataModel.expandIfLazy(lastPathComponent);
+        Log.log().info(lastPathComponent + " is set as actual node, " + lastPathComponent.getNextDiagrams().size() + " nextDiagrams");
         dataModel.setActualNode(lastPathComponent);
         boardPanel.setDiagram(lastPathComponent);
         optionPanel.setText(lastPathComponent.getAnnotations().getTextAnnotation());

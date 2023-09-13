@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class TreeDataModel implements TreeModel {
     private Diagram actualNode;
+    private final DiagramManager diagramManager=new DiagramManager();
     private final ArrayList<TreeModelListener> treeModelListeners = new ArrayList<>();
 
     public void setActualNode(Diagram actualNode) {
@@ -26,7 +27,11 @@ public class TreeDataModel implements TreeModel {
 
     @Override
     public int getChildCount(Object parent) {
-        return ((Diagram) parent).getNextDiagrams().size();
+        Diagram diagram=(Diagram) parent;
+        if(diagram.isLazy()){
+            diagramManager.expand(diagram);
+        }
+        return diagram.getNextDiagrams().size();
     }
 
     @Override

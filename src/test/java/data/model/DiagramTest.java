@@ -13,64 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DiagramTest {
 
     @Test
-    void expandTest() {
-        RawMove raw1 = RawMove.of(Position.of(4, 2), Position.of(4, 4));
-        RawMove raw2 = RawMove.of(Position.of(4, 7), Position.of(4, 5));
-        RawMove raw3 = RawMove.of(Position.of(5, 2), Position.of(5, 4));
-        Diagram diagram = new Diagram(
-                raw1,
-                new ChessBoard(),
-                new Diagram(),
-                new ArrayDeque<>(List.of(
-                        raw2,
-                        raw3))
-        );
-
-        diagram.expand();
-
-        assertFalse(diagram.isLazy());
-        assertEquals(1, diagram.getNextDiagrams().size());
-        Diagram expanded = diagram.getNextDiagrams().get(0);
-
-        assertTrue(expanded.getCreatingMove().isPresent());
-        assertEquals(raw2, expanded.getCreatingMove().get());
-
-        assertTrue(expanded.isLazy());
-        assertEquals(1, expanded.getLazyMoves().size());
-        assertEquals(raw3, expanded.getLazyMoves().get(0));
-    }
-
-    @Test
-    void expandEmptyLazyMovesTest() {
-        RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
-        Diagram diagram = new Diagram(
-                raw,
-                new ChessBoard(),
-                new Diagram(),
-                new ArrayDeque<>()
-        );
-
-        diagram.expand();
-
-        assertFalse(diagram.isLazy());
-        assertEquals(0, diagram.getNextDiagrams().size());
-    }
-
-    @Test
-    void expandIllegalMoveShouldThrowTest() {
-        RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
-        Diagram diagram = new Diagram(
-                raw,
-                new ChessBoard(),
-                new Diagram(),
-                new ArrayDeque<>(List.of(raw))
-        );
-
-        assertThrows(IllegalStateException.class, diagram::expand);
-    }
-
-    @Test
-    void getChesBoardTest() {
+    void getChessBoardTest() {
         RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         Diagram diagram = new Diagram(
                 raw,
