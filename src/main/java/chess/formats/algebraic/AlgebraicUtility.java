@@ -19,7 +19,7 @@ public class AlgebraicUtility {
         return algebraicUtility;
     }
 
-    Optional<RawMove> algebraicCastleToMove(String move, Color color) {
+    Optional<RawMove> algebraicToCastle(String move, Color color) {
         if (move.equals("O-O")) {
             if (color.isWhite()) {
                 return Optional.of(RawMove.of(Position.of(5, 1), Position.of(7, 1)));
@@ -33,6 +33,18 @@ public class AlgebraicUtility {
             } else {
                 return Optional.of(RawMove.of(Position.of(5, 8), Position.of(3, 8)));
             }
+        }
+        return Optional.empty();
+    }
+
+    Optional<String> castleToAlgebraic(RawMove rawMove) {
+        if (rawMove.equals(RawMove.of(Position.of(5, 1), Position.of(7, 1)))
+                || rawMove.equals(RawMove.of(Position.of(5, 8), Position.of(7, 8)))) {
+            return Optional.of("O-O");
+        }
+        if (rawMove.equals(RawMove.of(Position.of(5, 1), Position.of(3, 1)))
+                || rawMove.equals(RawMove.of(Position.of(5, 8), Position.of(3, 8)))) {
+            return Optional.of("O-O-O");
         }
         return Optional.empty();
     }
