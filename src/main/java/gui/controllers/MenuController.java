@@ -3,7 +3,6 @@ package gui.controllers;
 import chess.formats.fen.FENFactory;
 import chess.formats.fen.FENParser;
 import data.file.FileManager;
-import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
 import data.model.FENDiagram;
@@ -67,7 +66,7 @@ public class MenuController {
     }
 
     public void saveDataToJSON(String filename) {
-        fileManager.save(filename, new JsonFactory(dataModel).toJson());
+        fileManager.save(filename, dataModel);
     }
 
     public void loadChessBoardFromFEN(String fen) {

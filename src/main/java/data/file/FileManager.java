@@ -1,11 +1,14 @@
 package data.file;
 
+import data.json.PagedJsonFactory;
+import data.model.DataModel;
 import data.model.Diagram;
 import data.pgn.PGNParser;
 import data.json.JsonParser;
 import data.pgn.PagedPGNParser;
 import data.pgn.ParsedPGN;
 import log.Log;
+import log.TimeLogRunnable;
 
 import java.io.*;
 import java.util.List;
@@ -31,15 +34,15 @@ public class FileManager {
         return new PagedPGNParser(new PagedPGNReader(filename + ".pgn"));
     }
 
-    public void save(String filename, String json) {
+    public void save(String filename, DataModel dataModel) {
         Log.log().info("Saving JSON");
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(filename + ".json"));
-            writer.write(json);
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        new TimeLogRunnable(
+                () -> {
+                    new PagedWriter(new PagedJsonFactory(dataModel.getActualNode().getRoot()), filename + ".json").write();
+                    return dataModel.getGames().size();
+                },
+                "Saving json to file "
+        ).apply();
     }
 
     private String readFile(String filename) {

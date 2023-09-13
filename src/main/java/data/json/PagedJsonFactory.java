@@ -1,66 +1,92 @@
 package data.json;
 
-import chess.moves.raw.RawMove;
 import chess.formats.algebraic.AlgebraicUtility;
 import chess.formats.algebraic.RawAlgebraicFactory;
+import chess.moves.raw.RawMove;
 import data.annotations.Annotations;
 import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
-import data.model.DataModel;
 import data.model.Diagram;
 import data.model.metadata.GameData;
-import log.TimeLogSupplier;
 
-public class JsonFactory {
-    private final DataModel dataModel;
+import java.util.Iterator;
+import java.util.Stack;
+
+public class PagedJsonFactory implements Iterator<String> {
     private final ListJsonFactory listJsonFactory = new ListJsonFactory();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
     private final RawAlgebraicFactory rawAlgebraicFactory = new RawAlgebraicFactory();
+    private final Stack<Token> stack = new Stack<>();
 
-    public JsonFactory(DataModel dataModel) {
-        this.dataModel = dataModel;
+    private interface Token {
     }
 
-    public String toJson() {
-        return new TimeLogSupplier<>(
-                () -> new TimeLogSupplier.SizedResult<>(
-                        dataModel.getGames().size(),
-                        toJson(dataModel.getActualNode().getRoot())),
-                "Preparing json time: "
-        ).apply();
+    private record Start(Diagram diagram) implements Token {
     }
 
-    private String toJson(Diagram diagram) {
-        StringBuilder result = new StringBuilder();
-        result.append('{')
-                .append("\"moveName\":")
-                .append(diagram
-                        .getCreatingMove()
-                        .map(this::toJson)
-                        .orElse("\"" + diagram.getMoveName() + "\"")
-                )
-                .append(",");
-        if (!diagram.getMetaData().isEmpty()) {
-            result.append("\"metadata\":")
-                    .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
-                    .append(',');
-        }
-        if (!diagram.getAnnotations().isEmpty()) {
-            result.append("\"annotations\":")
-                    .append(toJson(diagram.getAnnotations()))
-                    .append(',');
-        }
-        if (diagram.isLazy()) {
-            result.append("\"movesList\":")
-                    .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson));
-        } else if (!diagram.getNextDiagrams().isEmpty()) {
-            result.append("\"moves\":")
-                    .append(listJsonFactory.listToJson(diagram.getNextDiagrams(), this::toJson));
-        }
-        result.append('}');
-        return result.toString();
+    private record Bracket() implements Token {
     }
+
+    private record Coma() implements Token {
+    }
+
+    public PagedJsonFactory(Diagram diagram) {
+        stack.add(new Start(diagram));
+    }
+
+    @Override
+    public boolean hasNext() {
+        return !stack.isEmpty();
+    }
+
+    @Override
+    public String next() {
+        Token token = stack.pop();
+        if (token instanceof Start start) {
+            Diagram diagram = start.diagram();
+            StringBuilder result = new StringBuilder();
+            result.append('{')
+                    .append("\"moveName\":")
+                    .append(diagram
+                            .getCreatingMove()
+                            .map(this::toJson)
+                            .orElse("\"" + diagram.getMoveName() + "\"")
+                    )
+                    .append(",");
+            if (!diagram.getMetaData().isEmpty()) {
+                result.append("\"metadata\":")
+                        .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
+                        .append(',');
+            }
+            if (!diagram.getAnnotations().isEmpty()) {
+                result.append("\"annotations\":")
+                        .append(toJson(diagram.getAnnotations()))
+                        .append(',');
+            }
+            if (diagram.isLazy()) {
+                result.append("\"movesList\":")
+                        .append(listJsonFactory.listToJson(diagram.getLazyMoves(), this::toJson))
+                        .append('}');
+                return result.toString();
+            } else if (!diagram.getNextDiagrams().isEmpty()) {
+                result.append("\"moves\":[");
+                stack.add(new Bracket());
+                stack.add(new Start(diagram.getNextDiagrams().get(0)));
+                diagram.getNextDiagrams().subList(1, diagram.getNextDiagrams().size()).forEach(d -> {
+                    stack.add(new Coma());
+                    stack.add(new Start(d));
+                });
+                return result.toString();
+            }
+        } else if (token instanceof Bracket) {
+            return "]}";
+        } else if (token instanceof Coma) {
+            return ",";
+        }
+        throw new IllegalStateException();
+    }
+
 
     private String toJson(RawMove rawMove) {
         return "\"" + rawAlgebraicFactory.moveToRawAlgebraic(rawMove) + "\"";

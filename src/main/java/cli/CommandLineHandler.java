@@ -3,7 +3,6 @@ package cli;
 import chess.board.fields.Field;
 import chess.formats.algebraic.AlgebraicUtility;
 import chess.formats.algebraic.LongAlgebraicParser;
-import data.json.JsonFactory;
 import data.model.DataModel;
 import data.model.Diagram;
 import chess.Position;
@@ -38,7 +37,7 @@ public class CommandLineHandler {
         }
         switch (input.poll()) {
             case "load" -> load(input.poll());
-            case "save" -> fileManager.save(input.poll(), new JsonFactory(dataModel).toJson());
+            case "save" -> fileManager.save(input.poll(), dataModel);
             case "move" -> makeMove(longAlgebraicParser.parseLongAlgebraic(input.poll(), node.getBoard().getColor()));
             case "delete" -> deleteDiagram();
             case "farBack" -> goBack(Integer.parseInt(input.poll()));
