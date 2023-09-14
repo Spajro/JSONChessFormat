@@ -3,7 +3,7 @@ package data.json;
 import java.util.List;
 import java.util.function.Function;
 
-class ListJsonFactory {
+public class ListJsonFactory {
     public <T> String listToJson(List<T> list, Function<T, String> toJson) {
         StringBuilder result = new StringBuilder("[");
         list.forEach(e -> result.append(toJson.apply(e)).append(','));
