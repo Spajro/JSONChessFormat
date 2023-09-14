@@ -42,49 +42,50 @@ public class PagedJsonFactory implements Iterator<String> {
 
     @Override
     public String next() {
-        Token token = stack.pop();
-        if (token instanceof Start start) {
-            Diagram diagram = start.diagram();
-            StringBuilder result = new StringBuilder();
-            result.append('{')
-                    .append("\"moveName\":")
-                    .append(diagram
-                            .getCreatingMove()
-                            .map(this::toJson)
-                            .orElse("\"" + diagram.getMoveName() + "\"")
-                    )
-                    .append(",");
-            if (!diagram.getMetaData().isEmpty()) {
-                result.append("\"metadata\":")
-                        .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
-                        .append(',');
-            }
-            if (!diagram.getAnnotations().isEmpty()) {
-                result.append("\"annotations\":")
-                        .append(toJson(diagram.getAnnotations()))
-                        .append(',');
-            }
-            if (diagram.isLazy()) {
-                result.append("\"movesList\":")
-                        .append(listJsonFactory.listToJson(diagram.getLazyMovesList(), this::toJson))
-                        .append('}');
+        StringBuilder result = new StringBuilder();
+        while (!stack.isEmpty()) {
+            Token token = stack.pop();
+            if (token instanceof Start start) {
+                Diagram diagram = start.diagram();
+                result.append('{')
+                        .append("\"moveName\":")
+                        .append(diagram
+                                .getCreatingMove()
+                                .map(this::toJson)
+                                .orElse("\"" + diagram.getMoveName() + "\"")
+                        )
+                        .append(",");
+                if (!diagram.getMetaData().isEmpty()) {
+                    result.append("\"metadata\":")
+                            .append(listJsonFactory.listToJson(diagram.getGameData(), this::toJson))
+                            .append(',');
+                }
+                if (!diagram.getAnnotations().isEmpty()) {
+                    result.append("\"annotations\":")
+                            .append(toJson(diagram.getAnnotations()))
+                            .append(',');
+                }
+                if (diagram.isLazy()) {
+                    result.append("\"movesList\":")
+                            .append(listJsonFactory.listToJson(diagram.getLazyMovesList(), this::toJson))
+                            .append('}');
+                } else if (!diagram.getNextDiagrams().isEmpty()) {
+                    result.append("\"moves\":[");
+                    stack.add(new Bracket());
+                    stack.add(new Start(diagram.getNextDiagrams().get(0)));
+                    diagram.getNextDiagrams().subList(1, diagram.getNextDiagrams().size()).forEach(d -> {
+                        stack.add(new Coma());
+                        stack.add(new Start(d));
+                    });
+                }
                 return result.toString();
-            } else if (!diagram.getNextDiagrams().isEmpty()) {
-                result.append("\"moves\":[");
-                stack.add(new Bracket());
-                stack.add(new Start(diagram.getNextDiagrams().get(0)));
-                diagram.getNextDiagrams().subList(1, diagram.getNextDiagrams().size()).forEach(d -> {
-                    stack.add(new Coma());
-                    stack.add(new Start(d));
-                });
-                return result.toString();
+            } else if (token instanceof Bracket) {
+                result.append("]}");
+            } else if (token instanceof Coma) {
+                result.append(',');
             }
-        } else if (token instanceof Bracket) {
-            return "]}";
-        } else if (token instanceof Coma) {
-            return ",";
         }
-        throw new IllegalStateException();
+        return result.toString();
     }
 
 
