@@ -32,7 +32,6 @@ public class DiagramManager {
             }
         }
 
-
         RawMove move = moves.poll();
 
         if (tree.isLazy() && tree.getLazyMovesList().get(0).equals(move)) {
@@ -41,9 +40,14 @@ public class DiagramManager {
             return event.join(updateMetadata(diagram).join(insert(diagram, moves, metaData)));
         }
 
-        Optional<Diagram> optionalDiagram = getByRawMove(tree, move);
-        if (optionalDiagram.isPresent()) {
-            return insert(optionalDiagram.get(), moves, metaData);
+        if (!tree.isLazy()) {
+            for (Diagram nextDiagram : tree.getNextDiagrams()) {
+                if (nextDiagram.getCreatingMove().isPresent()) {
+                    if (nextDiagram.getCreatingMove().get().equals(move)) {
+                        return insert(nextDiagram, moves, metaData);
+                    }
+                }
+            }
         }
 
         Diagram diagram = new Diagram(
@@ -88,20 +92,6 @@ public class DiagramManager {
         diagram.setLazyMoves(null);
         diagram.getNextDiagrams().add(lazy);
         return moveMetaData(diagram, lazy);
-    }
-
-    private Optional<Diagram> getByRawMove(Diagram diagram, RawMove move) {
-        if (diagram.isLazy()) {
-            return Optional.empty();
-        }
-        for (Diagram nextDiagram : diagram.getNextDiagrams()) {
-            if (nextDiagram.getCreatingMove().isPresent()) {
-                if (nextDiagram.getCreatingMove().get().equals(move)) {
-                    return Optional.of(nextDiagram);
-                }
-            }
-        }
-        return Optional.empty();
     }
 
     public GamesUpdateEvent updateMetadata(Diagram node) {
