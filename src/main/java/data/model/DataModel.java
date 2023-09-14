@@ -24,7 +24,6 @@ public class DataModel {
         actualNode = actualNode.makeMove(move, promotionTypeProvider);
         if (tempNode != actualNode) {
             treeDataModel.notifyListenersOnInsert(actualNode);
-            games.update(diagramManager.updateMetadata(tempNode));
         }
     }
 
@@ -32,7 +31,6 @@ public class DataModel {
         Log.log().info("Insert: " + metaData);
         Diagram actualRoot = actualNode.getRoot();
         games.update(diagramManager.insert(actualRoot, moves, metaData));
-        games.update(diagramManager.updateMetadata(games.get(metaData)));
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {

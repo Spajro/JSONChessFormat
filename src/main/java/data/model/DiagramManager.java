@@ -6,7 +6,6 @@ import chess.results.ValidMoveResult;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
-import log.Log;
 
 import java.util.ArrayDeque;
 import java.util.List;
@@ -23,7 +22,7 @@ public class DiagramManager {
             if (tree.getLazyMovesList().isEmpty()) {
                 tree.setLazyMoves(moves);
                 tree.getMetaData().add(metaData);
-                return GamesUpdateEvent.of(metaData, tree).join(updateMetadata(tree));
+                return GamesUpdateEvent.of(metaData, tree);
             }
 
             if (moves.stream().toList().equals(tree.getLazyMovesList())) {
@@ -37,7 +36,7 @@ public class DiagramManager {
         if (tree.isLazy() && tree.getLazyMovesList().get(0).equals(move)) {
             GamesUpdateEvent event = expand(tree);
             Diagram diagram = tree.getNextDiagrams().get(0);
-            return event.join(updateMetadata(diagram).join(insert(diagram, moves, metaData)));
+            return event.join(insert(diagram, moves, metaData));
         }
 
         if (!tree.isLazy()) {
@@ -65,7 +64,7 @@ public class DiagramManager {
         tree.getNextDiagrams().add(diagram);
         diagram.getMetaData().add(metaData);
 
-        return event.join(GamesUpdateEvent.of(metaData, diagram).join(updateMetadata(diagram)));
+        return event.join(GamesUpdateEvent.of(metaData, diagram));
     }
 
     public GamesUpdateEvent expand(Diagram diagram) {
@@ -94,20 +93,6 @@ public class DiagramManager {
         return moveMetaData(diagram, lazy);
     }
 
-    public GamesUpdateEvent updateMetadata(Diagram node) {
-        Optional<Diagram> optionalParent = node.getParent();
-        if (optionalParent.isEmpty()) {
-            return GamesUpdateEvent.empty();
-        }
-        Diagram parent = optionalParent.get();
-
-        return switch (parent.getNextDiagrams().size()) {
-            case 1 -> moveMetaData(parent, node);
-            case 2 -> moveMetaData(parent, getBrother(node));
-            default -> GamesUpdateEvent.empty();
-        };
-    }
-
     private GamesUpdateEvent moveMetaData(Diagram from, Diagram to) {
         int depth = from.depth();
         List<MetaData> gameData = from.getMetaData()
@@ -118,18 +103,5 @@ public class DiagramManager {
         to.getMetaData().addAll(gameData);
         from.getMetaData().removeAll(gameData);
         return event;
-    }
-
-    private Diagram getBrother(Diagram diagram) {
-        Diagram parent = diagram.getParent().orElseThrow();
-        Diagram diagram1 = parent.getNextDiagrams().get(0);
-        Diagram diagram2 = parent.getNextDiagrams().get(1);
-        if (diagram == diagram1) {
-            return diagram2;
-        } else if (diagram == diagram2) {
-            return diagram1;
-        }
-        Log.log().fail("Too many diagrams to choose from");
-        return diagram1;
     }
 }
