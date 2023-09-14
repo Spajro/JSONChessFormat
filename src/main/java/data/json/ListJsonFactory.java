@@ -3,11 +3,11 @@ package data.json;
 import java.util.List;
 import java.util.function.Function;
 
-public class ListJsonFactory {
+class ListJsonFactory {
     public <T> String listToJson(List<T> list, Function<T, String> toJson) {
         StringBuilder result = new StringBuilder("[");
-        list.forEach(e -> result.append(toJson.apply(e)).append(","));
-        if (list.size() > 0) {
+        list.forEach(e -> result.append(toJson.apply(e)).append(','));
+        if (!list.isEmpty()) {
             result.deleteCharAt(result.length() - 1);
         }
         result.append("]");
