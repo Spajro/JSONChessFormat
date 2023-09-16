@@ -6,6 +6,7 @@ import data.file.FileManager;
 import data.model.DataModel;
 import data.model.Diagram;
 import data.model.FENDiagram;
+import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 import data.pgn.ParsedPGN;
 import gui.board.BoardPanel;
@@ -67,6 +68,10 @@ public class MenuController {
 
     public void saveDataToJSON(String filename) {
         fileManager.save(filename, dataModel);
+    }
+
+    public void export(String filename, GameData gameData) {
+        fileManager.export(filename, dataModel.getGames().get(gameData), gameData);
     }
 
     public void loadChessBoardFromFEN(String fen) {

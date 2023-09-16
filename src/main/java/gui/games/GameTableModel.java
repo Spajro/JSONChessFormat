@@ -1,7 +1,6 @@
 package gui.games;
 
 import data.model.metadata.GameData;
-import data.model.metadata.MetaData;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public class GameTableModel extends AbstractTableModel {
         this.gameDataList = new ArrayList<>(gameData);
     }
 
-    public MetaData getMetaDataForRow(int index) {
+    public GameData getGameDataForRow(int index) {
         return gameDataList.get(index);
     }
 }

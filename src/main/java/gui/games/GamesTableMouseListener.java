@@ -1,5 +1,6 @@
 package gui.games;
 
+import gui.DialogManager;
 import gui.controllers.MenuController;
 
 import javax.swing.*;
@@ -11,34 +12,28 @@ public class GamesTableMouseListener implements MouseListener {
     private final JTable table;
     private final GameTableModel gameTableModel;
     private final MenuController controller;
+    private final DialogManager dialogManager;
 
-    public GamesTableMouseListener(JTable table, MenuController controller) {
+    public GamesTableMouseListener(JTable table, MenuController controller, DialogManager dialogManager) {
         this.table = table;
         this.controller = controller;
         this.gameTableModel = (GameTableModel) table.getModel();
+        this.dialogManager = dialogManager;
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        Rectangle r = table.getBounds();
-        if (r != null && r.contains(e.getPoint())) {
-            int index = table.rowAtPoint(e.getPoint());
 
-            if (e.getClickCount() == 2) {
-                controller.selectGame(gameTableModel.getMetaDataForRow(index));
-
-            } else if (e.getClickCount() == 3) {
-                controller.selectGameEnd(gameTableModel.getMetaDataForRow(index));
-            }
-        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        popup(e);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        popup(e);
     }
 
     @Override
@@ -47,5 +42,17 @@ public class GamesTableMouseListener implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+    }
+
+    private void popup(MouseEvent e) {
+        if (!e.isPopupTrigger()) {
+            return;
+        }
+        Rectangle r = table.getBounds();
+        if (r.contains(e.getPoint())) {
+            int index = table.rowAtPoint(e.getPoint());
+            new GamesPopUpMenu(controller, gameTableModel.getGameDataForRow(index), dialogManager)
+                    .show(e.getComponent(), e.getX(), e.getY());
+        }
     }
 }

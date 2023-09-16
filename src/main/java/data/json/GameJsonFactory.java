@@ -43,12 +43,19 @@ public class GameJsonFactory {
 
     private String toJson(Node node) {
         StringBuilder result = new StringBuilder("{");
-        result.append("\"move\":")
-                .append(rawMoveJsonFactory.toJson(node.rawMove()));
+
+        result.append("\"move\":");
+        if (node.rawMove() == null) {
+            result.append("\"Root\"");
+        } else {
+            result.append(rawMoveJsonFactory.toJson(node.rawMove()));
+        }
+
         if (node.annotations() != null && !node.annotations().isEmpty()) {
             result.append(',')
                     .append(annotationsJsonFactory.toJson(node.annotations()));
         }
+
         result.append("}");
         return result.toString();
     }
