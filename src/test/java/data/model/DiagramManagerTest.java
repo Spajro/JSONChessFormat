@@ -17,6 +17,53 @@ import static org.junit.jupiter.api.Assertions.*;
 class DiagramManagerTest {
 
     @Nested
+    class MakeMoveTests {
+        @Test
+        void makeMoveTest() {
+            RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
+            Diagram root = new Diagram();
+
+            Diagram actual = new DiagramManager().makeMove(root, raw, null);
+
+            assertEquals(1, root.getNextDiagrams().size());
+            Diagram diagram = root.getNextDiagrams().get(0);
+            assertEquals(diagram, actual);
+
+            assertTrue(actual.getCreatingMove().isPresent());
+            assertEquals(raw, actual.getCreatingMove().get());
+
+            assertTrue(actual.getParent().isPresent());
+            assertEquals(root, actual.getParent().get());
+        }
+
+        @Test
+        void makeMoveTwiceTest() {
+            RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
+            Diagram root = new Diagram();
+
+            Diagram diagram1 = new DiagramManager().makeMove(root, raw, null);
+            Diagram diagram2 = new DiagramManager().makeMove(root, raw, null);
+
+
+            assertEquals(1, root.getNextDiagrams().size());
+            Diagram diagram = root.getNextDiagrams().get(0);
+
+            assertEquals(diagram, diagram1);
+            assertEquals(diagram, diagram2);
+        }
+
+        @Test
+        void invalidMakeMoveTest() {
+            RawMove raw = RawMove.of(Position.of(4, 1), Position.of(4, 4));
+            Diagram root = new Diagram();
+
+            Diagram actual = new DiagramManager().makeMove(root, raw, null);
+
+            assertEquals(root, actual);
+        }
+    }
+
+    @Nested
     class InsertTests {
         @Test
         void insertIntoEmptyTreeTest() {
@@ -262,7 +309,7 @@ class DiagramManagerTest {
                             raw3))
             );
 
-            GamesUpdateEvent event=new DiagramManager().expand(diagram);//TODO
+            GamesUpdateEvent event = new DiagramManager().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(1, diagram.getNextDiagrams().size());
@@ -286,7 +333,7 @@ class DiagramManagerTest {
                     new ArrayDeque<>()
             );
 
-            GamesUpdateEvent event=new DiagramManager().expand(diagram);//TODO
+            GamesUpdateEvent event = new DiagramManager().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(0, diagram.getNextDiagrams().size());
@@ -302,7 +349,7 @@ class DiagramManagerTest {
                     new ArrayDeque<>(List.of(raw))
             );
 
-            assertThrows(IllegalStateException.class, ()-> new DiagramManager().expand(diagram));
+            assertThrows(IllegalStateException.class, () -> new DiagramManager().expand(diagram));
         }
     }
 }

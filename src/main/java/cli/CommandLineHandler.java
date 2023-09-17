@@ -74,8 +74,9 @@ public class CommandLineHandler {
         }
     }
 
-    private void makeMove(RawMove M) {
-        node = node.makeMove(M, null);
+    private void makeMove(RawMove rawMove) {
+        dataModel.makeMove(rawMove);
+        node=dataModel.getActualNode();
     }
 
     private void deleteDiagram() {

@@ -21,7 +21,7 @@ public class DataModel {
     public void makeMove(RawMove move) {
         Log.log().info("Make move: " + move);
         Diagram tempNode = actualNode;
-        actualNode = actualNode.makeMove(move, promotionTypeProvider);
+        actualNode = diagramManager.makeMove(actualNode, move, promotionTypeProvider);
         if (tempNode != actualNode) {
             treeDataModel.notifyListenersOnInsert(actualNode);
         }

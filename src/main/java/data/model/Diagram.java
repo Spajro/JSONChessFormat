@@ -1,14 +1,11 @@
 package data.model;
 
-import chess.results.MoveResult;
-import chess.results.ValidMoveResult;
 import chess.formats.algebraic.LongAlgebraicFactory;
 import data.annotations.Annotations;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
-import log.Log;
 
 import java.util.*;
 
@@ -45,29 +42,6 @@ public class Diagram {
         this.lazyMoves = moves;
         this.creatingMove = creatingMove;
         this.moveName = LongAlgebraicFactory.getInstance().moveToLongAlgebraic(chessBoard, creatingMove);
-    }
-
-    public Diagram makeMove(RawMove move, PromotionTypeProvider typeProvider) {
-        ChessBoard chessBoard = getBoard();
-        MoveResult moveResult = chessBoard.makeMove(move);
-        Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
-
-        if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(move, chessBoard, this);
-            for (Diagram diagram : getNextDiagrams()) {
-                if (diagram.creatingMove != null && nextDiagram.creatingMove != null) {
-                    if (diagram.creatingMove.equals(nextDiagram.creatingMove)) {
-                        return diagram;
-                    }
-                }
-            }
-
-            nextDiagrams.add(nextDiagram);
-            return nextDiagram;
-        } else {
-            Log.log().warn("Illegal Move");
-            return this;
-        }
     }
 
     public List<Diagram> getPathFromRoot() {
