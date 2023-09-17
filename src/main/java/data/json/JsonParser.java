@@ -11,7 +11,7 @@ import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.json.pojo.*;
 import data.model.Diagram;
-import data.model.DiagramManager;
+import data.model.DiagramController;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 
@@ -21,7 +21,7 @@ public class JsonParser {
     private final ObjectMapper mapper = new ObjectMapper();
     private final RawAlgebraicParser rawAlgebraicParser = new RawAlgebraicParser();
     private final AlgebraicUtility algebraicUtility = AlgebraicUtility.getInstance();
-    private final DiagramManager diagramManager = new DiagramManager();
+    private final DiagramController diagramController = new DiagramController();
 
     private record ToParse(Diagram parent, Node node) {
     }
@@ -40,7 +40,7 @@ public class JsonParser {
 
         while (!queue.isEmpty()) {
             ToParse toParse = queue.pop();
-            Diagram diagram = diagramManager.makeMove(toParse.parent(), rawAlgebraicParser.rawAlgebraicToMoves(toParse.node().moveName), null);
+            Diagram diagram = diagramController.makeMove(toParse.parent(), rawAlgebraicParser.rawAlgebraicToMoves(toParse.node().moveName), null);
             migrate(diagram, toParse.node);
             if (toParse.node.moves != null) {
                 toParse.node.moves.forEach(node -> queue.add(new ToParse(diagram, node)));

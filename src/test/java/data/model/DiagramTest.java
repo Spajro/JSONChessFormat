@@ -37,8 +37,8 @@ class DiagramTest {
         RawMove raw1 = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         RawMove raw2 = RawMove.of(Position.of(4, 7), Position.of(4, 5));
         Diagram root = new Diagram();
-        Diagram son = new DiagramManager().makeMove(root, raw1, null);
-        Diagram grandson = new DiagramManager().makeMove(son, raw2, null);
+        Diagram son = new DiagramController().makeMove(root, raw1, null);
+        Diagram grandson = new DiagramController().makeMove(son, raw2, null);
 
         assertEquals(0, root.depth());
         assertEquals(1, son.depth());
@@ -50,8 +50,8 @@ class DiagramTest {
         RawMove raw1 = RawMove.of(Position.of(4, 2), Position.of(4, 4));
         RawMove raw2 = RawMove.of(Position.of(4, 7), Position.of(4, 5));
         Diagram root = new Diagram();
-        Diagram son = new DiagramManager().makeMove(root, raw1, null);
-        Diagram grandson = new DiagramManager().makeMove(son, raw2, null);
+        Diagram son = new DiagramController().makeMove(root, raw1, null);
+        Diagram grandson = new DiagramController().makeMove(son, raw2, null);
 
         assertEquals(root, root.getRoot());
         assertEquals(root, son.getRoot());

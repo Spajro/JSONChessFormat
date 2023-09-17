@@ -13,7 +13,7 @@ import java.util.ArrayDeque;
 import java.util.List;
 import java.util.Optional;
 
-public class DiagramManager {
+public class DiagramController {
 
     public Diagram makeMove(Diagram diagram, RawMove move, PromotionTypeProvider typeProvider) {
         ChessBoard chessBoard = diagram.getBoard();

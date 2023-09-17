@@ -11,7 +11,7 @@ public class DataModel {
     private Diagram actualNode;
     private final GamesRepository games = new GamesRepository();
     private final TreeDataModel treeDataModel = new TreeDataModel(this);
-    private final DiagramManager diagramManager = new DiagramManager();
+    private final DiagramController diagramController = new DiagramController();
     private PromotionTypeProvider promotionTypeProvider;
 
     public DataModel() {
@@ -21,7 +21,7 @@ public class DataModel {
     public void makeMove(RawMove move) {
         Log.log().info("Make move: " + move);
         Diagram tempNode = actualNode;
-        actualNode = diagramManager.makeMove(actualNode, move, promotionTypeProvider);
+        actualNode = diagramController.makeMove(actualNode, move, promotionTypeProvider);
         if (tempNode != actualNode) {
             treeDataModel.notifyListenersOnInsert(actualNode);
         }
@@ -30,7 +30,7 @@ public class DataModel {
     public void insert(ArrayDeque<RawMove> moves, MetaData metaData) {
         Log.log().info("Insert: " + metaData);
         Diagram actualRoot = actualNode.getRoot();
-        games.update(diagramManager.insert(actualRoot, moves, metaData));
+        games.update(diagramController.insert(actualRoot, moves, metaData));
     }
 
     public Optional<Diagram> getLast(Diagram diagram) {
@@ -68,7 +68,7 @@ public class DataModel {
 
     public void expandIfLazy(Diagram diagram) {
         if (diagram.isLazy()) {
-            games.update(diagramManager.expand(diagram));
+            games.update(diagramController.expand(diagram));
         }
     }
 }

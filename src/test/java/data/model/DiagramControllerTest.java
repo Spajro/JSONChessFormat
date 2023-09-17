@@ -14,7 +14,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class DiagramManagerTest {
+class DiagramControllerTest {
 
     @Nested
     class MakeMoveTests {
@@ -23,7 +23,7 @@ class DiagramManagerTest {
             RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram actual = new DiagramManager().makeMove(root, raw, null);
+            Diagram actual = new DiagramController().makeMove(root, raw, null);
 
             assertEquals(1, root.getNextDiagrams().size());
             Diagram diagram = root.getNextDiagrams().get(0);
@@ -41,8 +41,8 @@ class DiagramManagerTest {
             RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram diagram1 = new DiagramManager().makeMove(root, raw, null);
-            Diagram diagram2 = new DiagramManager().makeMove(root, raw, null);
+            Diagram diagram1 = new DiagramController().makeMove(root, raw, null);
+            Diagram diagram2 = new DiagramController().makeMove(root, raw, null);
 
 
             assertEquals(1, root.getNextDiagrams().size());
@@ -57,7 +57,7 @@ class DiagramManagerTest {
             RawMove raw = RawMove.of(Position.of(4, 1), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram actual = new DiagramManager().makeMove(root, raw, null);
+            Diagram actual = new DiagramController().makeMove(root, raw, null);
 
             assertEquals(root, actual);
         }
@@ -73,7 +73,7 @@ class DiagramManagerTest {
             ArrayDeque<RawMove> moves = new ArrayDeque<>(List.of(raw1, raw2));
             MetaData metaData = new GameData("event", "site", "date", "round", "white", "black", "result", 2);
 
-            GamesUpdateEvent event = new DiagramManager().insert(tree, moves, metaData);
+            GamesUpdateEvent event = new DiagramController().insert(tree, moves, metaData);
 
 
             assertEquals(1, tree.getNextDiagrams().size());
@@ -97,7 +97,7 @@ class DiagramManagerTest {
             ArrayDeque<RawMove> moves = new ArrayDeque<>();
             MetaData metaData = new GameData("event", "site", "date", "round", "white", "black", "result", 0);
 
-            GamesUpdateEvent event = new DiagramManager().insert(tree, moves, metaData);
+            GamesUpdateEvent event = new DiagramController().insert(tree, moves, metaData);
 
             assertNull(tree.getLazyMovesList());
             assertTrue(tree.getNextDiagrams().isEmpty());
@@ -116,8 +116,8 @@ class DiagramManagerTest {
             MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 2);
             MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 2);
 
-            GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
-            GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+            GamesUpdateEvent event1 = new DiagramController().insert(tree, moves1, metaData1);
+            GamesUpdateEvent event2 = new DiagramController().insert(tree, moves2, metaData2);
 
             assertFalse(tree.isLazy());
             assertEquals(2, tree.getNextDiagrams().size());
@@ -159,8 +159,8 @@ class DiagramManagerTest {
             MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 2);
             MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 2);
 
-            GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
-            GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+            GamesUpdateEvent event1 = new DiagramController().insert(tree, moves1, metaData1);
+            GamesUpdateEvent event2 = new DiagramController().insert(tree, moves2, metaData2);
 
             assertFalse(tree.isLazy());
             assertEquals(1, tree.getNextDiagrams().size());
@@ -205,8 +205,8 @@ class DiagramManagerTest {
             MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 1);
             MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 2);
 
-            GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
-            GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+            GamesUpdateEvent event1 = new DiagramController().insert(tree, moves1, metaData1);
+            GamesUpdateEvent event2 = new DiagramController().insert(tree, moves2, metaData2);
 
             assertFalse(tree.isLazy());
             assertEquals(1, tree.getNextDiagrams().size());
@@ -236,8 +236,8 @@ class DiagramManagerTest {
             MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 2);
             MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 1);
 
-            GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
-            GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+            GamesUpdateEvent event1 = new DiagramController().insert(tree, moves1, metaData1);
+            GamesUpdateEvent event2 = new DiagramController().insert(tree, moves2, metaData2);
 
             assertFalse(tree.isLazy());
             assertEquals(1, tree.getNextDiagrams().size());
@@ -269,8 +269,8 @@ class DiagramManagerTest {
             MetaData metaData1 = new GameData("event1", "site", "date", "round", "white", "black", "result", 2);
             MetaData metaData2 = new GameData("event2", "site", "date", "round", "white", "black", "result", 2);
 
-            GamesUpdateEvent event1 = new DiagramManager().insert(tree, moves1, metaData1);
-            GamesUpdateEvent event2 = new DiagramManager().insert(tree, moves2, metaData2);
+            GamesUpdateEvent event1 = new DiagramController().insert(tree, moves1, metaData1);
+            GamesUpdateEvent event2 = new DiagramController().insert(tree, moves2, metaData2);
 
             assertFalse(tree.isLazy());
             assertEquals(1, tree.getNextDiagrams().size());
@@ -309,7 +309,7 @@ class DiagramManagerTest {
                             raw3))
             );
 
-            GamesUpdateEvent event = new DiagramManager().expand(diagram);//TODO
+            GamesUpdateEvent event = new DiagramController().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(1, diagram.getNextDiagrams().size());
@@ -333,7 +333,7 @@ class DiagramManagerTest {
                     new ArrayDeque<>()
             );
 
-            GamesUpdateEvent event = new DiagramManager().expand(diagram);//TODO
+            GamesUpdateEvent event = new DiagramController().expand(diagram);//TODO
 
             assertFalse(diagram.isLazy());
             assertEquals(0, diagram.getNextDiagrams().size());
@@ -349,7 +349,7 @@ class DiagramManagerTest {
                     new ArrayDeque<>(List.of(raw))
             );
 
-            assertThrows(IllegalStateException.class, () -> new DiagramManager().expand(diagram));
+            assertThrows(IllegalStateException.class, () -> new DiagramController().expand(diagram));
         }
     }
 }
