@@ -15,27 +15,34 @@ import java.util.Optional;
 
 public class DiagramController {
 
-    public Diagram makeMove(Diagram diagram, RawMove move, PromotionTypeProvider typeProvider) {
+    public record Result(Diagram diagram, GamesUpdateEvent event) {
+    }
+
+    public Result makeMove(Diagram diagram, RawMove move, PromotionTypeProvider typeProvider) {
         ChessBoard chessBoard = diagram.getBoard();
         MoveResult moveResult = chessBoard.makeMove(move);
         Optional<ValidMoveResult> validMoveResult = moveResult.validate(typeProvider);
 
-        if (validMoveResult.isPresent()) {
-            Diagram nextDiagram = new Diagram(move, chessBoard, diagram);
-            for (Diagram diagram1 : diagram.getNextDiagrams()) {
-                if (diagram1.getCreatingMove().isPresent() && nextDiagram.getCreatingMove().isPresent()) {
-                    if (diagram1.getCreatingMove().equals(nextDiagram.getCreatingMove())) {
-                        return diagram1;
-                    }
-                }
-            }
-
-            diagram.getNextDiagrams().add(nextDiagram);
-            return nextDiagram;
-        } else {
+        if (validMoveResult.isEmpty()) {
             Log.log().warn("Illegal Move");
-            return diagram;
+            return new Result(diagram, GamesUpdateEvent.empty());
         }
+        GamesUpdateEvent gamesUpdateEvent;
+        if (diagram.isLazy()) {
+            gamesUpdateEvent = expand(diagram);
+        } else {
+            gamesUpdateEvent = GamesUpdateEvent.empty();
+        }
+
+        for (Diagram diagram1 : diagram.getNextDiagrams()) {
+            if (diagram1.getCreatingMove().isPresent() && diagram1.getCreatingMove().get().equals(move)) {
+                return new Result(diagram1, gamesUpdateEvent);
+            }
+        }
+
+        Diagram nextDiagram = new Diagram(move, chessBoard, diagram);
+        diagram.getNextDiagrams().add(nextDiagram);
+        return new Result(nextDiagram, gamesUpdateEvent);
     }
 
     public GamesUpdateEvent insert(Diagram tree, ArrayDeque<RawMove> moves, MetaData metaData) {

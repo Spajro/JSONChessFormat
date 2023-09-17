@@ -23,7 +23,7 @@ class DiagramControllerTest {
             RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram actual = new DiagramController().makeMove(root, raw, null);
+            Diagram actual = new DiagramController().makeMove(root, raw, null).diagram();
 
             assertEquals(1, root.getNextDiagrams().size());
             Diagram diagram = root.getNextDiagrams().get(0);
@@ -41,8 +41,8 @@ class DiagramControllerTest {
             RawMove raw = RawMove.of(Position.of(4, 2), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram diagram1 = new DiagramController().makeMove(root, raw, null);
-            Diagram diagram2 = new DiagramController().makeMove(root, raw, null);
+            Diagram diagram1 = new DiagramController().makeMove(root, raw, null).diagram();
+            Diagram diagram2 = new DiagramController().makeMove(root, raw, null).diagram();
 
 
             assertEquals(1, root.getNextDiagrams().size());
@@ -57,7 +57,7 @@ class DiagramControllerTest {
             RawMove raw = RawMove.of(Position.of(4, 1), Position.of(4, 4));
             Diagram root = new Diagram();
 
-            Diagram actual = new DiagramController().makeMove(root, raw, null);
+            Diagram actual = new DiagramController().makeMove(root, raw, null).diagram();
 
             assertEquals(root, actual);
         }

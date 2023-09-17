@@ -40,7 +40,7 @@ public class JsonParser {
 
         while (!queue.isEmpty()) {
             ToParse toParse = queue.pop();
-            Diagram diagram = diagramController.makeMove(toParse.parent(), rawAlgebraicParser.rawAlgebraicToMoves(toParse.node().moveName), null);
+            Diagram diagram = diagramController.makeMove(toParse.parent(), rawAlgebraicParser.rawAlgebraicToMoves(toParse.node().moveName), null).diagram();
             migrate(diagram, toParse.node);
             if (toParse.node.moves != null) {
                 toParse.node.moves.forEach(node -> queue.add(new ToParse(diagram, node)));

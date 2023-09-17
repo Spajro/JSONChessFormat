@@ -20,11 +20,12 @@ public class DataModel {
 
     public void makeMove(RawMove move) {
         Log.log().info("Make move: " + move);
-        Diagram tempNode = actualNode;
-        actualNode = diagramController.makeMove(actualNode, move, promotionTypeProvider);
-        if (tempNode != actualNode) {
+        DiagramController.Result result = diagramController.makeMove(actualNode, move, promotionTypeProvider);
+        if (result.diagram() != actualNode) {
+            actualNode = result.diagram();
             treeDataModel.notifyListenersOnInsert(actualNode);
         }
+        games.update(result.event());
     }
 
     public void insert(ArrayDeque<RawMove> moves, MetaData metaData) {
