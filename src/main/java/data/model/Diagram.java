@@ -97,20 +97,6 @@ public class Diagram {
         return moveName;
     }
 
-    public boolean partiallyEquals(Diagram diagram) {
-        return creatingMove.equals(diagram.getCreatingMove().orElse(null)) && parentsEquals(diagram);
-    }
-
-    private boolean parentsEquals(Diagram diagram) {
-        if (parent == null && diagram.parent == null) {
-            return true;
-        }
-        if (parent != null && diagram.parent != null) {
-            return parent.partiallyEquals(diagram.parent);
-        }
-        return false;
-    }
-
     public List<MetaData> getMetaData() {
         return metaData;
     }
