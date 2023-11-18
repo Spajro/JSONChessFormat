@@ -1,8 +1,10 @@
-package data.model;
+package data.model.diagrams;
 
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import data.model.DiagramController;
+import data.model.diagrams.Diagram;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayDeque;

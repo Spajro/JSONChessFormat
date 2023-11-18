@@ -3,7 +3,7 @@ package data.file;
 import data.json.GameJsonFactory;
 import data.json.PagedJsonFactory;
 import data.model.DataModel;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import data.model.metadata.GameData;
 import data.pgn.PGNParser;
 import data.json.JsonParser;

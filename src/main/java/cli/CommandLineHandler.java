@@ -4,7 +4,7 @@ import chess.board.fields.Field;
 import chess.formats.algebraic.AlgebraicUtility;
 import chess.formats.algebraic.LongAlgebraicParser;
 import data.model.DataModel;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import chess.Position;
 import chess.moves.raw.RawMove;
 import data.file.FileManager;

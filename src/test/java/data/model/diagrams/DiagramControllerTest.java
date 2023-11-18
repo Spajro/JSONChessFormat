@@ -1,8 +1,10 @@
-package data.model;
+package data.model.diagrams;
 
 import chess.Position;
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
+import data.model.DiagramController;
+import data.model.diagrams.Diagram;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;

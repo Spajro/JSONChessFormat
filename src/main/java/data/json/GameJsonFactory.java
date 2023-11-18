@@ -7,7 +7,7 @@ import data.json.factories.AnnotationsJsonFactory;
 import data.json.factories.GameDataJsonFactory;
 import data.json.factories.JsonFactory;
 import data.json.factories.RawMoveJsonFactory;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import data.model.metadata.GameData;
 
 import java.util.ArrayList;

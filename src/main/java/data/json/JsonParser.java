@@ -10,7 +10,7 @@ import data.annotations.ArrowAnnotation;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
 import data.json.pojo.*;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import data.model.DiagramController;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;

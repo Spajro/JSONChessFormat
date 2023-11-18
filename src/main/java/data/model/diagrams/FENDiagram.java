@@ -1,4 +1,4 @@
-package data.model;
+package data.model.diagrams;
 
 import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;

@@ -4,6 +4,7 @@ import chess.board.ChessBoard;
 import chess.moves.raw.RawMove;
 import chess.results.MoveResult;
 import chess.results.ValidMoveResult;
+import data.model.diagrams.Diagram;
 import data.model.games.GamesUpdateEvent;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;

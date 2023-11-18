@@ -1,7 +1,7 @@
 package gui.controllers;
 
 import data.model.DataModel;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import data.model.PromotionTypeProvider;
 import gui.DialogPromotionTypeProvider;
 import gui.board.BoardPanel;

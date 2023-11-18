@@ -1,6 +1,6 @@
 package data.model.games;
 
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import data.model.metadata.GameData;
 import data.model.metadata.MetaData;
 

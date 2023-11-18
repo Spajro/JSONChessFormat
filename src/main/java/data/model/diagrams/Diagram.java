@@ -1,4 +1,4 @@
-package data.model;
+package data.model.diagrams;
 
 import chess.formats.algebraic.LongAlgebraicFactory;
 import data.annotations.Annotations;

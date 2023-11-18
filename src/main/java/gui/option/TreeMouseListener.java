@@ -1,6 +1,6 @@
 package gui.option;
 
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import gui.controllers.Controller;
 
 import javax.swing.*;

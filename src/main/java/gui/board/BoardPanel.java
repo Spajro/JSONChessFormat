@@ -8,7 +8,7 @@ import chess.moves.valid.ValidMove;
 import chess.pieces.Piece;
 import data.annotations.FieldAnnotation;
 import data.annotations.GraphicAnnotation;
-import data.model.Diagram;
+import data.model.diagrams.Diagram;
 import gui.DisplayConfiguration;
 import gui.scaling.*;
 
