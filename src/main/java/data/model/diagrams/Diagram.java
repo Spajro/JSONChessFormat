@@ -95,6 +95,9 @@ public class Diagram {
 
     @Override
     public String toString() {
+        if (isBest) {
+            return "!! " + moveName;
+        }
         return moveName;
     }
 
@@ -162,7 +165,7 @@ public class Diagram {
                 .forEach(Diagram::setBestAsFalse);
     }
 
-    public void setBestAsFalse() {
+    private void setBestAsFalse() {
         isBest = false;
     }
 

@@ -2,6 +2,7 @@ package gui.option;
 
 import data.model.diagrams.Diagram;
 import gui.controllers.Controller;
+import log.Log;
 
 import javax.swing.*;
 import javax.swing.tree.TreePath;
@@ -12,9 +13,9 @@ public class TreeMouseListener implements MouseListener {
     Controller controller;
     JTree tree;
 
-    public TreeMouseListener(JTree tree,Controller controller) {
+    public TreeMouseListener(JTree tree, Controller controller) {
         this.tree = tree;
-        this.controller=controller;
+        this.controller = controller;
         controller.setTreeMouseListener(this);
     }
 
@@ -22,8 +23,11 @@ public class TreeMouseListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         int selRow = tree.getRowForLocation(e.getX(), e.getY());
         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
-        if(selRow != -1 && e.getClickCount() == 2) {
+        if (selRow != -1 && e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
             controller.setActualNode((Diagram) selPath.getLastPathComponent());
+        }
+        if (selRow != -1 && e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON3) {
+            ((Diagram) selPath.getLastPathComponent()).setAsBest();
         }
     }
 
@@ -47,7 +51,7 @@ public class TreeMouseListener implements MouseListener {
 
     }
 
-    public void treeNodeInserted(TreePath treePath){
+    public void treeNodeInserted(TreePath treePath) {
         tree.setSelectionPath(treePath);
         tree.repaint();
     }
