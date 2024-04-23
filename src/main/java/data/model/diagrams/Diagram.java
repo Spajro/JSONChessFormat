@@ -17,6 +17,7 @@ public class Diagram {
     private final Annotations annotations = new Annotations();
     private final RawMove creatingMove;
     private final ArrayList<MetaData> metaData = new ArrayList<>();
+    private boolean isBest = false;
 
     public Diagram() {
         parent = null;
@@ -143,5 +144,29 @@ public class Diagram {
 
     public void expandNextDiagrams() {
         nextDiagrams = new ArrayList<>();
+    }
+
+    public void setAsBest() {
+        if (parent == null) {
+            return;
+        }
+
+        isBest = true;
+
+        if (parent.isLazy()) {
+            return;
+        }
+
+        parent.nextDiagrams.stream()
+                .filter(d -> d != this)
+                .forEach(Diagram::setBestAsFalse);
+    }
+
+    public void setBestAsFalse() {
+        isBest = false;
+    }
+
+    public boolean isBest() {
+        return isBest;
     }
 }
